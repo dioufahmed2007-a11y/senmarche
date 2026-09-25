@@ -1,0 +1,16 @@
+{
+  "project": "SenMarché",
+  "current_phase": "demarrage",
+  "current_step": 0,
+  "current_task": "Mise en place de l'automatisation",
+  "status": "idle",
+  "last_completed_task": null,
+  "blocked_by": null,
+  "files_in_scope": [],
+  "files_modified": [],
+  "pending_tests": [],
+  "next_action": "Configurer les credentials n8n (GitHub, Discord)",
+  "last_model": null,
+  "review_attempts": 0,
+  "last_update": "2026-09-25T00:00:00Z"
+}
