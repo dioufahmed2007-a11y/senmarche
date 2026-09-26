@@ -74,7 +74,6 @@
     linear-gradient(150deg,#0D0E18 0%,#0A0B15 60%,#0D0E18 100%);
   display:flex;align-items:center;justify-content:center;overflow:hidden;
 }
-/* Grille décorative — identité visuelle de la marque */
 .hero-visual-fallback::before{
   content:'';position:absolute;inset:0;
   background-image:
@@ -108,7 +107,7 @@
 /* ── UNIVERS — tuiles strictes, sans emoji ── */
 .tiles-wrap{padding:0 var(--pad)}
 .tiles{
-  display:grid;grid-template-columns:repeat(3,1fr);
+  display:grid;grid-template-columns:repeat(2,1fr);
   border:1px solid var(--border);border-radius:6px;overflow:hidden;
 }
 @media(max-width:760px){.tiles{grid-template-columns:1fr}}
@@ -209,7 +208,6 @@
 </head>
 <body>
 
-
 <!-- NAV -->
 <nav class="nav" id="nav">
   <a href="/" class="nav-logo">Sen·Export <em>Boutique</em></a>
@@ -232,26 +230,6 @@
     <a href="compte.html" class="nav-icon" aria-label="Compte">
       <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </a>
-        <a href="fille.html" class="tile" id="tile-fille">
-      <div class="tile-bg"></div>
-      <div class="tile-overlay"></div>
-      <span class="tile-num">04</span>
-      <div class="tile-content">
-        <div class="tile-label">Robes & Abayas</div>
-        <h3 class="tile-title">Univers Fille</h3>
-        <span class="tile-cta">Découvrir →</span>
-      </div>
-    </a>
-    <a href="sport.html" class="tile" id="tile-sport">
-      <div class="tile-bg"></div>
-      <div class="tile-overlay"></div>
-      <span class="tile-num">05</span>
-      <div class="tile-content">
-        <div class="tile-label">Foot & Combat</div>
-        <h3 class="tile-title">Univers Sport</h3>
-        <span class="tile-cta">Découvrir →</span>
-    </div>
-   </a>
   </div>
 </nav>
 
@@ -268,7 +246,6 @@
   </div>
   <div class="hero-visual" id="hero-visual">
     <div class="hero-visual-fallback">
-      <!-- Motif identitaire : trajectoire France→Thiès — s'efface si une vraie photo est disponible -->
       <svg viewBox="0 0 600 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <defs>
           <radialGradient id="hglow" cx="60%" cy="45%" r="50%">
@@ -310,7 +287,89 @@
   </div>
 </header>
 
-<!-- BANDE DE CONFIANCE — chiffres clés -->
+<!-- DERNIÈRES ARRIVÉES -->
+<section>
+  <div class="wrap">
+    <div class="sec-label reveal">Disponible maintenant</div>
+    <h2 class="sec-title reveal d1">Dernières <em>arrivées</em></h2>
+  </div>
+  <div class="arrivals-wrap">
+  <div class="arrivals-grid prod-grid" id="arrivals-grid">
+    <div class="skel" style="aspect-ratio:4/5"></div>
+    <div class="skel" style="aspect-ratio:4/5"></div>
+    <div class="skel" style="aspect-ratio:4/5"></div>
+  </div>
+  </div>
+  <div class="wrap" style="text-align:center;padding-top:2.5rem">
+    <a href="catalogue.html" class="btn btn-ghost">Voir tout le catalogue</a>
+  </div>
+</section>
+
+<!-- UNIVERS — tuiles -->
+<section style="padding:clamp(2rem,5vw,3rem) 0">
+  <div class="tiles-wrap">
+   <div class="tiles">
+    <a href="mode.html" class="tile" id="tile-mode">
+      <div class="tile-bg" id="tile-mode-bg"></div>
+      <div class="tile-overlay"></div>
+      <span class="tile-num">01</span>
+      <div class="tile-content">
+        <div class="tile-label">Arrivages réguliers</div>
+        <h3 class="tile-title">Style &amp; Vêtements</h3>
+        <span class="tile-cta">Explorer →</span>
+      </div>
+    </a>
+    <a href="fille.html" class="tile" id="tile-fille">
+      <div class="tile-bg" id="tile-fille-bg"></div>
+      <div class="tile-overlay"></div>
+      <span class="tile-num">02</span>
+      <div class="tile-content">
+        <div class="tile-label">Mode féminine</div>
+        <h3 class="tile-title">Univers Fille</h3>
+        <span class="tile-cta">Découvrir →</span>
+      </div>
+    </a>
+    <a href="sport.html" class="tile" id="tile-sport">
+      <div class="tile-bg" id="tile-sport-bg"></div>
+      <div class="tile-overlay"></div>
+      <span class="tile-num">03</span>
+      <div class="tile-content">
+        <div class="tile-label">Équipement sportif</div>
+        <h3 class="tile-title">Univers Sport</h3>
+        <span class="tile-cta">Découvrir →</span>
+      </div>
+    </a>
+    <a href="maison.html" class="tile" id="tile-maison">
+      <div class="tile-bg" id="tile-maison-bg"></div>
+      <div class="tile-overlay"></div>
+      <span class="tile-num">04</span>
+      <div class="tile-content">
+        <div class="tile-label">Bientôt disponible</div>
+        <h3 class="tile-title">Maison &amp; Électroménager</h3>
+        <span class="tile-cta">Découvrir →</span>
+      </div>
+    </a>
+  </div>
+  </div>
+</section>
+
+<!-- TÉMOIGNAGES — bande sobre -->
+<section style="padding-top:0">
+  <div class="wrap" style="padding-bottom:0">
+    <div class="sec-label reveal">Ce qu'ils en disent</div>
+    <h2 class="sec-title reveal d1" style="margin-bottom:0">Ils ont commandé, <em>ils reviennent.</em></h2>
+  </div>
+  <div style="height:2.5rem"></div>
+  <div class="temo-wrap">
+  <div class="temo-strip" id="temo-strip">
+    <div class="temo-cell"><div class="skel" style="height:120px"></div></div>
+    <div class="temo-cell"><div class="skel" style="height:120px"></div></div>
+    <div class="temo-cell"><div class="skel" style="height:120px"></div></div>
+  </div>
+  </div>
+</section>
+
+<!-- RÉASSURANCE (Trust-bar + Trust-grid) -->
 <div class="trust-bar">
   <div class="trust-bar-inner">
     <div class="trust-stat">
@@ -335,99 +394,6 @@
   </div>
 </div>
 
-<!-- UNIVERS — tuiles -->
-<section style="padding:clamp(2rem,5vw,3rem) 0">
-  <div class="tiles-wrap">
-   <div class="tiles">
-    <a href="mode.html" class="tile" id="tile-mode">
-      <div class="tile-bg" id="tile-mode-bg"></div>
-      <div class="tile-overlay"></div>
-      <span class="tile-num">01</span>
-      <div class="tile-content">
-        <div class="tile-label">Arrivages réguliers</div>
-        <h3 class="tile-title">Style &amp; Vêtements</h3>
-        <span class="tile-cta">Explorer →</span>
-      </div>
-    </a>
-    <a href="maison.html" class="tile" id="tile-maison">
-      <div class="tile-bg" id="tile-maison-bg"></div>
-      <div class="tile-overlay"></div>
-      <span class="tile-num">02</span>
-      <div class="tile-content">
-        <div class="tile-label">Bientôt disponible</div>
-        <h3 class="tile-title">Maison &amp; Électroménager</h3>
-        <span class="tile-cta">Découvrir →</span>
-      </div>
-    </a>
-    <a href="catalogue.html" class="tile" id="tile-catalogue">
-      <div class="tile-bg" id="tile-catalogue-bg"></div>
-      <div class="tile-overlay"></div>
-      <span class="tile-num">03</span>
-      <div class="tile-content">
-        <div class="tile-label">Tout, sans filtre</div>
-        <h3 class="tile-title">Catalogue complet</h3>
-        <span class="tile-cta">Tout voir →</span>
-      </div>
-    </a>
-    <a href="fille.html" class="tile" id="tile-fille">
-      <div class="tile-bg" id="tile-fille-bg"></div>
-      <div class="tile-overlay"></div>
-      <span class="tile-num">04</span>
-      <div class="tile-content">
-        <div class="tile-label">Robes & Abayas</div>
-        <h3 class="tile-title">Univers Fille</h3>
-        <span class="tile-cta">Découvrir →</span>
-      </div>
-    </a>
-    <a href="sport.html" class="tile" id="tile-sport">
-      <div class="tile-bg" id="tile-sport-bg"></div>
-      <div class="tile-overlay"></div>
-      <span class="tile-num">05</span>
-      <div class="tile-content">
-        <div class="tile-label">Foot & Combat</div>
-        <h3 class="tile-title">Univers Sport</h3>
-        <span class="tile-cta">Découvrir →</span>
-      </div>
-    </a>
-  </div>
-</section>
-
-<!-- DERNIÈRES ARRIVÉES -->
-<section>
-  <div class="wrap">
-    <div class="sec-label reveal">Disponible maintenant</div>
-    <h2 class="sec-title reveal d1">Dernières <em>arrivées</em></h2>
-  </div>
-  <div class="arrivals-wrap">
-  <div class="arrivals-grid prod-grid" id="arrivals-grid">
-    <div class="skel" style="aspect-ratio:4/5"></div>
-    <div class="skel" style="aspect-ratio:4/5"></div>
-    <div class="skel" style="aspect-ratio:4/5"></div>
-    <div class="skel" style="aspect-ratio:4/5"></div>
-  </div>
-  </div>
-  <div class="wrap" style="text-align:center;padding-top:2.5rem">
-    <a href="catalogue.html" class="btn btn-ghost">Voir tout le catalogue</a>
-  </div>
-</section>
-
-<!-- TÉMOIGNAGES — bande sobre -->
-<section style="padding-top:0">
-  <div class="wrap" style="padding-bottom:0">
-    <div class="sec-label reveal">Ce qu'ils en disent</div>
-    <h2 class="sec-title reveal d1" style="margin-bottom:0">Ils ont commandé, <em>ils reviennent.</em></h2>
-  </div>
-  <div style="height:2.5rem"></div>
-  <div class="temo-wrap">
-  <div class="temo-strip" id="temo-strip">
-    <div class="temo-cell"><div class="skel" style="height:120px"></div></div>
-    <div class="temo-cell"><div class="skel" style="height:120px"></div></div>
-    <div class="temo-cell"><div class="skel" style="height:120px"></div></div>
-  </div>
-  </div>
-</section>
-
-<!-- POURQUOI SENEXPORT -->
 <section>
   <div class="wrap">
     <div class="sec-label reveal">Pourquoi SenExport</div>
@@ -453,7 +419,7 @@
       <div class="trust-cell reveal d3">
         <span class="trust-num">04</span>
         <h3 class="trust-title">Programme fidélité</h3>
-        <p class="trust-desc">1% de chaque achat est automatiquement mis de côté en FCFA dans votre cagnotte, utilisable sur le site ou au dépôt.</p>
+        <p class="trust-desc">Cumulez du cashback à chaque achat, détails du programme bientôt disponibles.</p>
       </div>
     </div>
   </div>
@@ -473,6 +439,16 @@
       Pas de promesse marketing exagérée, pas de fausse urgence. Juste des produits réels, à des prix justes,
       avec un paiement qui n'a lieu qu'une fois le colis entre vos mains.
     </p>
+  </div>
+</section>
+
+<!-- ACCÈS CATALOGUE GLOBAL -->
+<section style="text-align:center;padding:clamp(2.5rem,6vw,4rem) 0;background:var(--bg);border-bottom:1px solid var(--border)">
+  <div class="wrap">
+    <div class="sec-label reveal" style="justify-content:center">Tout voir</div>
+    <h2 class="sec-title reveal d1" style="font-size:clamp(1.6rem,3.5vw,2.3rem)">Le <em>Catalogue complet</em></h2>
+    <p class="reveal d2" style="font-size:.95rem;color:var(--stone);max-width:500px;margin:0 auto 2rem;line-height:1.7">Parcourez l'intégralité de nos arrivages sans filtre.</p>
+    <a href="catalogue.html" class="btn btn-primary btn-lg">Accéder au catalogue</a>
   </div>
 </section>
 
@@ -500,7 +476,7 @@
       </div>
       <div class="faq-item reveal">
         <button class="faq-q"><span>Comment fonctionne le programme fidélité ?</span><span class="ic">+</span></button>
-        <div class="faq-a"><p>Chaque achat récupéré vous créédite automatiquement <strong>1% du montant</strong> en cagnotte, directement en FCFA — pas de points à convertir. Vous utilisez votre solde sur le site au moment de commander, ou au dépôt en présentant votre QR code. Des bonus supplémentaires (500 à 5 000 FCFA) sont offerts à chaque palier franchi.</p></div>
+        <div class="faq-a"><p>Le programme de cashback vous permet de cumuler des avantages à chaque achat, utilisables sur le site ou au dépôt. Les règles détaillées et les paliers seront annoncés très prochainement.</p></div>
       </div>
     </div>
   </div>
@@ -514,7 +490,7 @@
       <p style="font-size:.84rem;color:var(--stone);line-height:1.65;max-width:240px;margin-bottom:1.25rem">Produits français importés. Dépôt à Thiès, Sénégal.</p>
       <div class="pay-tags"><span class="pay-tag">Wave</span><span class="pay-tag">Orange Money</span><span class="pay-tag">Espèces</span></div>
     </div>
-    <nav class="footer-col"><h4>Univers</h4><ul><li><a href="mode.html">Mode</a></li><li><a href="maison.html">Maison</a></li><li><a href="catalogue.html">Catalogue</a></li><li><a href="collections.html">Collections</a></li></ul></nav>
+    <nav class="footer-col"><h4>Univers</h4><ul><li><a href="mode.html">Mode</a></li><li><a href="fille.html">Fille</a></li><li><a href="sport.html">Sport</a></li><li><a href="maison.html">Maison</a></li><li><a href="catalogue.html">Catalogue</a></li></ul></nav>
     <nav class="footer-col"><h4>Compte</h4><ul><li><a href="compte.html">Mon compte</a></li><li><a href="panier.html">Panier</a></li><li><a href="favoris.html">Favoris</a></li><li><a href="connexion.html">Connexion</a></li></ul></nav>
     <nav class="footer-col"><h4>Contact</h4><ul><li><a href="https://wa.me/221778038874" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="a-propos.html">À propos</a></li><li><a href="demande-speciale.html">Demande spéciale</a></li><li><a href="cgv.html">CGV</a></li></ul></nav>
   </div>
@@ -535,16 +511,13 @@
 (async function(){
   if (typeof SE !== 'undefined' && SE.initSupabase) SE.initSupabase();
 
-  /* Onboarding première connexion (une seule fois, ne réapparaît jamais) */
   document.addEventListener('se:auth-changed', () => SE.Onboarding && SE.Onboarding.maybeShow());
   setTimeout(() => SE.Onboarding && SE.Onboarding.maybeShow(), 1500);
 
-  /* ── Nav scroll state ── */
   window.addEventListener('scroll', () => {
     document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
   }, {passive:true});
 
-  /* ── Cart badge ── */
   function syncBadge(){
     try{
       const n = SE?.Cart?.count?.() ?? 0;
@@ -556,12 +529,10 @@
   document.addEventListener('cart:updated', syncBadge);
   setInterval(syncBadge, 3000);
 
-  /* ── Charger les articles une fois ── */
   let articles = [];
   try{ articles = (typeof SE!=='undefined' && SE.Articles) ? await SE.Articles.load() : []; }
   catch(e){ articles = []; }
 
-  /* ── Hero visual : images.js en priorité, sinon premier article Supabase ── */
   (function(){
     const img = document.getElementById('hero-visual-img');
     const tag = document.getElementById('hero-visual-tag');
@@ -586,13 +557,13 @@
     }
   })();
 
-  /* ── Tuiles univers : images.js en priorité, sinon articles Supabase ── */
   (function(){
     const imgs = window.SE_IMAGES || {};
     const tiles = [
       ['tile-mode-bg',    imgs.tileMode,    articles[0]],
       ['tile-maison-bg',  imgs.tileMaison,  null],
-      ['tile-catalogue-bg', imgs.tileCatalogue, articles[1]],
+      ['tile-fille-bg',   imgs.tileFille,   null],
+      ['tile-sport-bg',   imgs.tileSport,   null]
     ];
     tiles.forEach(([id, configured, fallbackArt]) => {
       const el = document.getElementById(id);
@@ -602,10 +573,9 @@
     });
   })();
 
-  /* ── Grille arrivées (vraie grille produit 4:5) ── */
   (function(){
     const grid = document.getElementById('arrivals-grid');
-    const items = articles.slice(0, 8);
+    const items = articles.slice(0, 3);
     if (!items.length){
       grid.innerHTML = [
         '<div style="grid-column:1/-1;padding:3rem 1.5rem;text-align:center;border:1px dashed var(--border);border-radius:12px">',
@@ -644,7 +614,6 @@
     });
   })();
 
-  /* ── FAQ accordéon ── */
   (function(){
     document.querySelectorAll('.faq-item').forEach(item => {
       const q = item.querySelector('.faq-q');
@@ -669,7 +638,6 @@
     });
   })();
 
-  /* ── Témoignages — bande sobre ── */
   (function(){
     const FALLBACK = [
       {nom:'Fatou D.', note:5, texte:"Livraison rapide, colis bien protégé. La veste est exactement comme décrite.", commande:'Mode'},
