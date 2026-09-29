@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SenMarché — Le monde dans votre panier</title>
-<meta name="description" content="Produits français importés à Thiès. Paiement à la récupération.">
+<meta name="description" content="Articles sélectionnés et vérifiés avant envoi. Paiement à la récupération.">
 <meta name="theme-color" content="#D4AF37">
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="manifest" href="manifest.json">
@@ -222,6 +222,22 @@
 .empty-links a:hover{border-color:var(--or);background:var(--bg2)}
 .empty-links a span{color:var(--or)}
 
+/* ── VITRINE PHOTO ── */
+.showcase{
+  display:flex;gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:0 var(--pad) 1rem;scrollbar-width:thin;
+}
+.showcase-item{
+  flex:0 0 clamp(200px,26vw,280px);scroll-snap-align:start;position:relative;
+  aspect-ratio:4/5;border-radius:10px;overflow:hidden;background:var(--bg2);border:1px solid var(--border);
+}
+.showcase-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s var(--ease)}
+.showcase-item:hover img{transform:scale(1.05)}
+.showcase-item::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(8,9,14,.85),transparent 55%)}
+.showcase-cap{position:absolute;z-index:1;left:0;right:0;bottom:0;padding:1rem;color:#fff;display:flex;flex-direction:column;gap:.15rem}
+.showcase-cap b{font-family:var(--ff-d);font-size:1.05rem;font-weight:500;line-height:1.2}
+.showcase-cap span{font-size:.78rem;color:var(--or)}
+
 /* ── COMMENT ÇA MARCHE — vraie séquence, donc numérotée ── */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding:0 var(--pad)}
 @media(max-width:760px){.steps{grid-template-columns:1fr}}
@@ -229,6 +245,7 @@
   border:1px solid var(--border);border-radius:10px;padding:1.75rem 1.5rem;
   background:var(--bg2);display:flex;flex-direction:column;gap:.6rem;position:relative;
 }
+.step-ic{position:absolute;top:1.5rem;right:1.5rem;width:30px;height:30px;color:var(--or);opacity:.85}
 .step-n{font-family:var(--ff-d);font-style:italic;font-size:3rem;font-weight:300;color:var(--or);line-height:1}
 .step h3{font-family:var(--ff-d);font-size:1.2rem;font-weight:500;color:var(--ink)}
 .step p{font-size:.85rem;color:var(--stone);line-height:1.65}
@@ -262,10 +279,21 @@
 }
 @media(max-width:860px){.story{grid-template-columns:1fr}}
 .story-text p{font-size:.95rem;color:var(--stone);line-height:1.85;margin-bottom:1.25rem;max-width:520px}
+.story-side{display:flex;flex-direction:column;gap:1rem}
+.story-photo{margin:0;border-radius:10px;overflow:hidden;aspect-ratio:16/10;background:var(--bg)}
+.story-photo img{width:100%;height:100%;object-fit:cover;display:block}
 .story-facts{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .story-fact{background:var(--bg);padding:1.4rem 1.5rem;display:flex;align-items:baseline;gap:1.1rem}
 .story-fact b{font-family:var(--ff-d);font-size:2rem;font-weight:700;color:#B8882A;letter-spacing:-.02em;min-width:5.5rem;line-height:1}
 .story-fact span{font-size:.85rem;color:var(--stone);line-height:1.5}
+
+/* ── CATALOGUE : photo de fond quand elle existe ── */
+.cta-cat.has-img{position:relative;background-size:cover!important;background-position:center!important;padding:clamp(4rem,10vw,7rem) 0!important}
+.cta-cat.has-img::before{content:'';position:absolute;inset:0;background:rgba(8,9,14,.68)}
+.cta-cat.has-img .wrap{position:relative;z-index:1}
+.cta-cat.has-img .sec-title{color:#fff}
+.cta-cat.has-img p{color:rgba(255,255,255,.85)!important}
+.cta-cat.has-img .btn-primary{background:var(--or);color:#111;border-color:var(--or)}
 
 /* ── FAQ ── */
 .faq-list{max-width:760px;margin:0 auto}
@@ -313,7 +341,7 @@
   <div class="hero-copy">
     <div class="hero-eyebrow">Sen·Marché</div>
     <h1 class="hero-title">Le monde<br><em>dans votre</em> panier.</h1>
-    <p class="hero-sub">Produits sélectionnés depuis la France, vérifiés avant envoi. Récupération à Thiès, paiement sur place.</p>
+    <p class="hero-sub">Produits sélectionnés et vérifiés avant envoi. Récupération en point de retrait, paiement sur place.</p>
     <div class="hero-ctas">
       <a href="catalogue.html" class="btn btn-primary btn-lg">Voir le catalogue</a>
       <a href="mode.html" class="btn btn-ghost btn-lg">Découvrir Mode →</a>
@@ -347,8 +375,6 @@
         <circle cx="518" cy="158" r="6" fill="#D4AF37" opacity=".9"/>
         <circle cx="518" cy="158" r="16" fill="none" stroke="#D4AF37" stroke-width=".6" opacity=".4"/>
         <circle cx="518" cy="158" r="28" fill="none" stroke="#D4AF37" stroke-width=".3" opacity=".2"/>
-        <text x="38" y="386" font-family="Georgia,serif" font-size="12" fill="#D4AF37" opacity=".55" font-style="italic">France</text>
-        <text x="530" y="162" font-family="Georgia,serif" font-size="12" fill="#D4AF37" opacity=".55" font-style="italic">Thiès</text>
         <circle cx="200" cy="75" r="1.5" fill="#D4AF37" opacity=".4"/>
         <circle cx="320" cy="45" r="1" fill="#D4AF37" opacity=".3"/>
         <circle cx="430" cy="85" r="1.5" fill="#D4AF37" opacity=".35"/>
@@ -365,7 +391,7 @@
 <!-- BANDE DÉFILANTE (contenu dupliqué exprès pour la boucle) -->
 <div class="ticker" aria-label="Nos engagements">
   <div class="ticker-track">
-    <span>Vérifié avant envoi</span><span>Aucune avance à payer</span><span>Retrait à Thiès</span><span>Suivi WhatsApp</span><span>Wave · Orange Money · Espèces</span>
+    <span>Vérifié avant envoi</span><span>Aucune avance à payer</span><span>Retrait sur place</span><span>Suivi WhatsApp</span><span>Wave · Orange Money · Espèces</span>
     <span aria-hidden="true">Vérifié avant envoi</span><span aria-hidden="true">Aucune avance à payer</span><span aria-hidden="true">Retrait à Thiès</span><span aria-hidden="true">Suivi WhatsApp</span><span aria-hidden="true">Wave · Orange Money · Espèces</span>
   </div>
 </div>
@@ -445,6 +471,15 @@
   </div>
 </section>
 
+<!-- VITRINE PHOTO -->
+<section id="showcase" hidden style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-label reveal">Aussi au catalogue</div>
+    <h2 class="sec-title reveal d1">À <em>découvrir</em></h2>
+  </div>
+  <div class="showcase" id="showcase-row"></div>
+</section>
+
 <!-- COMMENT ÇA MARCHE -->
 <section style="padding-top:0">
   <div class="wrap">
@@ -453,19 +488,19 @@
   </div>
   <div class="steps">
     <div class="step reveal">
-      <span class="step-n">1</span>
+      <svg class="step-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="step-n">1</span>
       <h3>Vous choisissez</h3>
       <p>Ajoutez vos articles au panier et validez la commande. Aucun paiement à cette étape.</p>
     </div>
     <div class="step reveal d1">
-      <span class="step-n">2</span>
+      <svg class="step-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg><span class="step-n">2</span>
       <h3>On prépare</h3>
-      <p>On contrôle l'article en France, puis on l'expédie. Vous suivez tout sur WhatsApp.</p>
+      <p>On vérifie votre article avant l'envoi. Vous suivez l'avancement sur WhatsApp.</p>
     </div>
     <div class="step reveal d2">
-      <span class="step-n">3</span>
+      <svg class="step-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="13" rx="2"/><circle cx="12" cy="12.5" r="2.5"/><path d="M6 6V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/></svg><span class="step-n">3</span>
       <h3>Vous récupérez et payez</h3>
-      <p>Retrait à Thiès. Vous vérifiez l'article, puis vous réglez en espèces, Wave ou Orange Money.</p>
+      <p>Vous inspectez l'article au retrait, puis vous réglez en espèces, Wave ou Orange Money.</p>
     </div>
   </div>
 </section>
@@ -505,8 +540,8 @@
     </div>
     <div class="trust-bar-sep"></div>
     <div class="trust-stat">
-      <span class="trust-stat-num">Thiès</span>
-      <span class="trust-stat-lbl">Retrait direct au dépôt</span>
+      <span class="trust-stat-num">WhatsApp</span>
+      <span class="trust-stat-lbl">Suivi de votre commande</span>
     </div>
   </div>
 </div>
@@ -526,7 +561,7 @@
       <div class="trust-cell reveal d1">
         <span class="trust-num">02</span>
         <h3 class="trust-title">Vérifié avant envoi</h3>
-        <p class="trust-desc">Chaque article est contrôlé en France avant son départ pour Thiès. Pas de mauvaise surprise à l'arrivée.</p>
+        <p class="trust-desc">Chaque article est contrôlé avant l'envoi. Pas de mauvaise surprise à l'arrivée.</p>
       </div>
       <div class="trust-cell reveal d2">
         <span class="trust-num">03</span>
@@ -542,32 +577,34 @@
   </div>
 </section>
 
-<!-- À PROPOS — texte + chiffres -->
+<!-- À PROPOS — texte + photo + chiffres -->
 <section style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
   <div class="story">
     <div class="story-text">
       <div class="sec-label reveal">Notre histoire</div>
-      <h2 class="sec-title reveal d1" style="font-size:clamp(1.6rem,3.5vw,2.3rem)">Pourquoi importer depuis <em>la France ?</em></h2>
+      <h2 class="sec-title reveal d1" style="font-size:clamp(1.6rem,3.5vw,2.3rem)">Pourquoi <em>SenMarché ?</em></h2>
       <p class="reveal d2">
-        Beaucoup de produits vendus en France sont introuvables ou vendus bien plus cher une fois arrivés au Sénégal,
-        à qualité égale. SenMarché fait le pont entre les deux : on sélectionne, on vérifie, on importe, et vous
-        récupérez à Thiès sans intermédiaire qui gonfle le prix.
+        Trouver de bons produits à un prix juste n'est pas toujours simple. SenMarché sélectionne, vérifie
+        chaque article avant l'envoi, et vous le remet sans intermédiaire qui gonfle le prix.
       </p>
       <p class="reveal d3">
         Pas de promesse marketing exagérée, pas de fausse urgence. Juste des produits réels, à des prix justes,
         avec un paiement qui n'a lieu qu'une fois le colis entre vos mains.
       </p>
     </div>
-    <div class="story-facts reveal d2">
-      <div class="story-fact"><b>0 F</b><span>à payer avant d'avoir le colis en main</span></div>
-      <div class="story-fact"><b>48h</b><span>pour préparer votre commande</span></div>
-      <div class="story-fact"><b>1 lieu</b><span>de retrait, au dépôt de Thiès</span></div>
+    <div class="story-side reveal d2">
+      <figure class="story-photo" id="story-photo" hidden><img id="story-img" alt=""></figure>
+      <div class="story-facts">
+        <div class="story-fact"><b>0 F</b><span>à payer avant d'avoir le colis en main</span></div>
+        <div class="story-fact"><b>100%</b><span>des articles vérifiés avant l'envoi</span></div>
+        <div class="story-fact"><b>3</b><span>moyens de paiement : espèces, Wave, Orange Money</span></div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ACCÈS CATALOGUE GLOBAL -->
-<section style="text-align:center;padding:clamp(2.5rem,6vw,4rem) 0;background:var(--bg);border-bottom:1px solid var(--border)">
+<section id="cta-catalogue" class="cta-cat" style="text-align:center;padding:clamp(2.5rem,6vw,4rem) 0;background:var(--bg);border-bottom:1px solid var(--border)">
   <div class="wrap">
     <div class="sec-label reveal" style="justify-content:center">Tout voir</div>
     <h2 class="sec-title reveal d1" style="font-size:clamp(1.6rem,3.5vw,2.3rem)">Le <em>Catalogue complet</em></h2>
@@ -596,7 +633,7 @@
       </div>
       <div class="faq-item reveal d3">
         <button class="faq-q"><span>Je cherche un produit qui n'est pas au catalogue ?</span><span class="ic">+</span></button>
-        <div class="faq-a"><p>Utilisez la page « Demande spéciale » : décrivez ce que vous cherchez, on vous trouve ça en France et on vous envoie un devis sous 48h.</p></div>
+        <div class="faq-a"><p>Utilisez la page « Demande spéciale » : décrivez ce que vous cherchez, on le cherche pour vous et on vous envoie un devis sous 48h.</p></div>
       </div>
       <div class="faq-item reveal">
         <button class="faq-q"><span>Comment fonctionne le programme fidélité ?</span><span class="ic">+</span></button>
@@ -611,7 +648,7 @@
   <div class="footer-grid">
     <div class="footer-brand">
       <div style="font-family:var(--ff-d);font-size:1.4rem;font-weight:500;margin-bottom:.9rem">Sen·Marché</div>
-      <p style="font-size:.84rem;color:var(--stone);line-height:1.65;max-width:240px;margin-bottom:1.25rem">Produits français importés. Dépôt à Thiès, Sénégal.</p>
+      <p style="font-size:.84rem;color:var(--stone);line-height:1.65;max-width:240px;margin-bottom:1.25rem">Des articles sélectionnés et vérifiés, payés à la récupération.</p>
       <div class="pay-tags"><span class="pay-tag">Wave</span><span class="pay-tag">Orange Money</span><span class="pay-tag">Espèces</span></div>
     </div>
     <nav class="footer-col"><h4>Univers</h4><ul><li><a href="mode.html">Mode</a></li><li><a href="fille.html">Fille</a></li><li><a href="sport.html">Sport</a></li><li><a href="maison.html">Maison</a></li><li><a href="catalogue.html">Catalogue</a></li></ul></nav>
@@ -619,7 +656,7 @@
     <nav class="footer-col"><h4>Contact</h4><ul><li><a href="https://wa.me/221778038874" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="a-propos.html">À propos</a></li><li><a href="demande-speciale.html">Demande spéciale</a></li><li><a href="cgv.html">CGV</a></li></ul></nav>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 SenMarché · Fait à Thiès</p>
+    <p>© 2026 SenMarché</p>
     <a href="cgv.html">Conditions générales</a>
   </div>
 </footer>
@@ -704,6 +741,41 @@
     });
   })();
 
+  /* PHOTO "HISTOIRE", VITRINE, FOND CATALOGUE — uniquement si une vraie photo existe */
+  (function(){
+    const imgs = window.SE_IMAGES || {};
+    const withPhoto = articles.filter(a => a && a.photo_url);
+
+    const storySrc = imgs.story || (withPhoto[3] ? SE.imgUrl(withPhoto[3].photo_url, 800) : '');
+    if(storySrc){
+      const fig = document.getElementById('story-photo'), im = document.getElementById('story-img');
+      im.onload = () => { fig.hidden = false; };
+      im.onerror = () => { fig.hidden = true; };
+      im.src = storySrc;
+    }
+
+    const rest = withPhoto.slice(3, 9);
+    if(rest.length >= 3){
+      document.getElementById('showcase-row').innerHTML = rest.map(a => `
+        <a class="showcase-item" href="produit.html?ref=${a.reference}" aria-label="${a.nom}">
+          <img src="${SE.imgUrl(a.photo_url,500)}" alt="${a.nom}" loading="lazy" onerror="this.closest('.showcase-item').remove()">
+          <div class="showcase-cap"><b>${a.nom}</b><span>${SE.fprix(a.prix_vente_fcfa||0)}</span></div>
+        </a>`).join('');
+      document.getElementById('showcase').hidden = false;
+    }
+
+    const ctaSrc = imgs.catalogueBg || (withPhoto[1] ? SE.imgUrl(withPhoto[1].photo_url, 1400) : '');
+    if(ctaSrc){
+      const t = new Image();
+      t.onload = () => {
+        const el = document.getElementById('cta-catalogue');
+        el.style.background = `url('${ctaSrc}')`;
+        el.classList.add('has-img');
+      };
+      t.src = ctaSrc;
+    }
+  })();
+
   /* ARRIVAGES */
   (function(){
     const grid = document.getElementById('arrivals-grid');
@@ -712,7 +784,7 @@
       grid.innerHTML = `<div class="empty-arrivals">
         <div>
           <h3>Le prochain arrivage se prépare</h3>
-          <p>Pas d'article en vitrine pour le moment. Parcourez un rayon, ou dites-nous ce que vous cherchez et on le trouve en France.</p>
+          <p>Pas d'article en vitrine pour le moment. Parcourez un rayon, ou dites-nous ce que vous cherchez et on le cherche pour vous.</p>
           <a href="demande-speciale.html" class="btn btn-primary">Faire une demande spéciale</a>
         </div>
         <div class="empty-links">
