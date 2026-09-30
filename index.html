@@ -16,240 +16,270 @@
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="styles-dark.css">
 <style>
-/* ═════════ PALETTE & POLICES (cette page) ═════════ */
+/* ═════════ TOKENS DE COULEUR — aucune couleur en dur plus bas ═════════
+   Toutes les sections lisent ces variables. Le mode sombre ne redéfinit
+   que ce bloc (voir plus bas). */
 :root{
   --ff-d:'Bricolage Grotesque',system-ui,sans-serif;
   --ff-m:'Figtree',system-ui,sans-serif;
-  --vert:#0E4D3A; --bissap:#A3193F; --safran:#F2A900; --indigo:#1F2C6B; --creme:#FBF3E0; --nuit:#101119;
+
+  /* couleurs de marque (fonds) */
+  --vert:#0E4D3A; --safran:#F2A900; --bissap:#A3193F; --indigo:#1F2C6B; --nuit:#101119;
+  /* texte posé sur chaque fond */
+  --on-vert:#FBF3E0; --on-safran:#1A1207; --on-bissap:#FFFFFF; --on-indigo:#FFFFFF; --on-nuit:#FFFFFF;
+  /* versions lisibles quand la couleur sert de TEXTE sur fond neutre */
+  --acc-vert:#0E4D3A; --acc-bissap:#A3193F; --acc-indigo:#1F2C6B; --acc-safran:#8A5A00;
+  /* cartes posées sur un fond coloré */
+  --card:#FBF3E0; --on-card:#1A1207; --on-card-soft:#4A4032;
+  /* voile de fond neutre teinté (suit --bg du site) */
+  --tint-vert:color-mix(in srgb,var(--vert) 9%,var(--bg));
+  --tint-bissap:color-mix(in srgb,var(--bissap) 8%,var(--bg));
+  --tint-indigo:color-mix(in srgb,var(--indigo) 9%,var(--bg));
+  --tint-safran:color-mix(in srgb,var(--safran) 14%,var(--bg));
+
   --wax-w:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23fff' stroke-opacity='.11' stroke-width='1.5'%3E%3Ccircle cx='40' cy='40' r='30'/%3E%3Ccircle cx='40' cy='40' r='20'/%3E%3Ccircle cx='40' cy='40' r='10'/%3E%3Cpath d='M0 0l16 16M80 0L64 16M0 80l16-16M80 80L64 64'/%3E%3C/g%3E%3C/svg%3E");
   --wax-d:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23000' stroke-opacity='.13' stroke-width='1.5'%3E%3Ccircle cx='40' cy='40' r='30'/%3E%3Ccircle cx='40' cy='40' r='20'/%3E%3Ccircle cx='40' cy='40' r='10'/%3E%3Cpath d='M0 0l16 16M80 0L64 16M0 80l16-16M80 80L64 64'/%3E%3C/g%3E%3C/svg%3E");
 }
+/* MODE SOMBRE — couvre les façons courantes de l'activer (à confirmer avec theme.js) */
+:root[data-theme="dark"],:root.dark,:root.theme-dark,:root.dark-mode,
+body[data-theme="dark"],body.dark,body.theme-dark,body.dark-mode{
+  --vert:#0A3A2C; --safran:#E39B00; --bissap:#7E1230; --indigo:#171F52; --nuit:#0A0B12;
+  --acc-vert:#5CCB9F; --acc-bissap:#FF86A5; --acc-indigo:#93A4FF; --acc-safran:#F2B93B;
+  --card:#1D1E2C; --on-card:#F3EFE6; --on-card-soft:#C7C1B3;
+  --tint-vert:color-mix(in srgb,var(--vert) 32%,var(--bg));
+  --tint-bissap:color-mix(in srgb,var(--bissap) 30%,var(--bg));
+  --tint-indigo:color-mix(in srgb,var(--indigo) 34%,var(--bg));
+  --tint-safran:color-mix(in srgb,var(--safran) 16%,var(--bg));
+}
+
+[hidden]{display:none!important}
 body{font-family:'Figtree',system-ui,sans-serif}
 button,.btn,input{font-family:inherit}
 .sec-label{text-transform:none;letter-spacing:.02em;font-family:var(--ff-m);font-size:.9rem;font-weight:600}
 .sec-title{font-family:var(--ff-d);font-weight:800;letter-spacing:-.03em;line-height:1.02}
 .sec-title em{font-style:normal;color:inherit}
-.btn-saf{background:var(--safran);color:#1a1207;border:1px solid var(--safran);font-weight:700}
+.btn-saf{background:var(--safran);color:var(--on-safran);border:1px solid var(--safran);font-weight:700}
 .btn-saf:hover{filter:brightness(1.06)}
 .blk{padding:clamp(3rem,8vw,5.5rem) 0}
+.wax{position:relative;overflow:hidden}
+.wax::before{content:'';position:absolute;inset:0;background-image:var(--wax-w);pointer-events:none}
+.wax.wax-d::before{background-image:var(--wax-d)}
+.wax>*{position:relative}
 
-/* ═════════ HERO — vert profond ═════════ */
+/* Fondu entre deux zones qui portent des images */
+.blend{height:clamp(56px,9vw,110px);background:linear-gradient(to bottom,var(--a),var(--b))}
+
+/* ═════════ HERO ═════════ */
 .hero{display:grid;grid-template-columns:1fr 1fr;min-height:var(--hero-h)}
 @media(max-width:860px){.hero{grid-template-columns:1fr;min-height:auto}}
 .hero-copy{
-  position:relative;overflow:hidden;background:var(--vert);
+  background:var(--vert);color:var(--on-vert);
   display:flex;flex-direction:column;justify-content:center;
   padding:clamp(2.5rem,6vw,5rem) clamp(1.5rem,5vw,4rem);order:1;
 }
-.hero-copy::before{content:'';position:absolute;inset:0;background-image:var(--wax-w);pointer-events:none}
-.hero-copy>*{position:relative}
 @media(max-width:860px){.hero-copy{order:2;padding:2.25rem var(--pad) 2.75rem}}
-.hero-eyebrow{
-  font-size:.9rem;font-weight:600;color:var(--safran);margin-bottom:1rem;
-  display:flex;align-items:center;gap:.65rem;
-  opacity:0;animation:fadeUp .7s var(--ease) .05s forwards;
-}
+.hero-eyebrow{font-size:.9rem;font-weight:600;color:var(--safran);margin-bottom:1rem;display:flex;align-items:center;gap:.65rem;opacity:0;animation:fadeUp .7s var(--ease) .05s forwards}
 .hero-eyebrow::before{content:'';width:28px;height:2px;background:var(--safran)}
-.hero-title{
-  font-family:var(--ff-d);font-size:clamp(3.2rem,10vw,7rem);
-  font-weight:800;line-height:.94;letter-spacing:-.045em;color:var(--creme);
-  margin-bottom:1.25rem;max-width:640px;
-  opacity:0;animation:fadeUp .7s var(--ease) .15s forwards;
-}
+.hero-title{font-family:var(--ff-d);font-size:clamp(3.2rem,10vw,7rem);font-weight:800;line-height:.94;letter-spacing:-.045em;color:var(--on-vert);margin-bottom:1.25rem;max-width:640px;opacity:0;animation:fadeUp .7s var(--ease) .15s forwards}
 .hero-title .hl{color:var(--safran)}
-.hero-sub{
-  font-size:1rem;color:rgba(251,243,224,.82);max-width:380px;line-height:1.65;margin-bottom:2rem;
-  opacity:0;animation:fadeUp .7s var(--ease) .25s forwards;
-}
+.hero-sub{font-size:1rem;color:color-mix(in srgb,var(--on-vert) 82%,transparent);max-width:380px;line-height:1.65;margin-bottom:2rem;opacity:0;animation:fadeUp .7s var(--ease) .25s forwards}
 .hero-ctas{display:flex;gap:.85rem;flex-wrap:wrap;opacity:0;animation:fadeUp .7s var(--ease) .35s forwards}
-.hero .btn-ghost{color:var(--creme);border-color:rgba(251,243,224,.55);background:transparent}
-.hero .btn-ghost:hover{background:rgba(251,243,224,.1)}
+.hero .btn-primary{background:var(--safran);color:var(--on-safran);border-color:var(--safran)}
+.hero .btn-ghost{color:var(--on-vert);border-color:color-mix(in srgb,var(--on-vert) 55%,transparent);background:transparent}
+.hero .btn-ghost:hover{background:color-mix(in srgb,var(--on-vert) 12%,transparent)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 
 .hero-visual{position:relative;order:2;min-height:var(--hero-h);background:var(--nuit);overflow:hidden}
 @media(max-width:860px){.hero-visual{order:1;aspect-ratio:4/3;min-height:200px}}
 .hero-visual img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .6s ease;position:absolute;inset:0;z-index:1}
 .hero-visual img.loaded{opacity:1}
+/* la photo du hero se fond dans le vert du bloc texte */
+.hero-visual::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,color-mix(in srgb,var(--vert) 55%,transparent) 0%,transparent 35%)}
+@media(max-width:860px){.hero-visual::after{background:linear-gradient(0deg,var(--vert) 0%,transparent 40%)}}
 .hero-visual-fallback{
   position:absolute;inset:0;
   background:
-    radial-gradient(ellipse 90% 80% at 70% 40%, rgba(242,169,0,.18) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 60% at 20% 80%, rgba(163,25,63,.22) 0%, transparent 55%),
-    linear-gradient(150deg,#161428 0%,#0E0F1B 100%);
+    radial-gradient(ellipse 90% 80% at 70% 40%,color-mix(in srgb,var(--safran) 24%,transparent) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 60% at 20% 80%,color-mix(in srgb,var(--bissap) 40%,transparent) 0%,transparent 55%),
+    var(--nuit);
   display:flex;align-items:center;justify-content:center;overflow:hidden;
 }
 .hero-visual-fallback svg{position:absolute;inset:0;width:100%;height:100%}
-.hero-visual-mark{
-  position:relative;z-index:2;font-family:var(--ff-d);font-size:clamp(3.5rem,9vw,8rem);font-weight:800;
-  color:rgba(242,169,0,.2);letter-spacing:-.05em;text-align:center;padding:2rem;line-height:.85;
-}
-.hero-visual-tag{
-  position:absolute;bottom:1.5rem;left:1.5rem;z-index:2;font-size:.75rem;font-weight:600;
-  color:#fff;background:rgba(8,9,14,.55);backdrop-filter:blur(6px);
-  padding:.4rem .85rem;border-radius:999px;border:1px solid rgba(255,255,255,.15);
-}
+.sv-saf{stop-color:var(--safran)}.f-saf{fill:var(--safran)}.s-saf{stroke:var(--safran)}.f-bis{fill:var(--bissap)}.s-bis{stroke:var(--bissap)}
+.hero-visual-mark{position:relative;z-index:2;font-family:var(--ff-d);font-size:clamp(3.5rem,9vw,8rem);font-weight:800;color:color-mix(in srgb,var(--safran) 22%,transparent);letter-spacing:-.05em;text-align:center;padding:2rem;line-height:.85}
+.hero-visual-tag{position:absolute;bottom:1.5rem;left:1.5rem;z-index:3;font-size:.75rem;font-weight:600;color:var(--on-nuit);background:color-mix(in srgb,var(--nuit) 60%,transparent);backdrop-filter:blur(6px);padding:.4rem .85rem;border-radius:999px}
 
-/* ═════════ BANDE DÉFILANTE — safran ═════════ */
-.ticker{background:var(--safran);color:#1a1207;overflow:hidden}
+/* ═════════ BANDE — safran ═════════ */
+.ticker{background:var(--safran);color:var(--on-safran);overflow:hidden}
 .ticker-track{display:flex;width:max-content;animation:tickerMove 34s linear infinite}
 .ticker-track span{font-size:.9rem;font-weight:700;padding:.85rem 1.4rem;white-space:nowrap;display:flex;align-items:center;gap:1.4rem}
 .ticker-track span::after{content:'✦';color:var(--bissap);font-size:.8rem}
 @keyframes tickerMove{to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.ticker-track{animation:none;flex-wrap:wrap;width:auto;justify-content:center}}
 
-/* ═════════ ARRIVAGES (état vide utile) ═════════ */
+/* ═════════ ARRIVAGES ═════════ */
 .arrivals-wrap{padding:0 var(--pad)}
-.empty-arrivals{
-  grid-column:1/-1;border:2px dashed var(--safran);border-radius:14px;
-  padding:clamp(1.5rem,4vw,2.5rem);display:grid;grid-template-columns:1.1fr 1fr;gap:2rem;align-items:center;
-}
+.empty-arrivals{grid-column:1/-1;border:2px dashed var(--safran);border-radius:14px;padding:clamp(1.5rem,4vw,2.5rem);display:grid;grid-template-columns:1.1fr 1fr;gap:2rem;align-items:center}
 @media(max-width:760px){.empty-arrivals{grid-template-columns:1fr}}
 .empty-arrivals h3{font-family:var(--ff-d);font-size:clamp(1.5rem,3vw,2rem);font-weight:800;color:var(--ink);margin-bottom:.6rem;line-height:1.1;letter-spacing:-.02em}
 .empty-arrivals p{font-size:.92rem;color:var(--stone);line-height:1.7;margin-bottom:1.25rem;max-width:420px}
 .empty-links{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
-.empty-links a{
-  padding:1rem;border-radius:10px;font-size:.9rem;font-weight:700;color:#fff;
-  display:flex;justify-content:space-between;align-items:center;gap:.5rem;transition:transform .2s var(--ease);
-}
-.empty-links a:nth-child(1){background:var(--vert)}
-.empty-links a:nth-child(2){background:var(--bissap)}
-.empty-links a:nth-child(3){background:var(--indigo)}
-.empty-links a:nth-child(4){background:var(--nuit)}
+.empty-links a{padding:1rem;border-radius:10px;font-size:.9rem;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:.5rem;transition:transform .2s var(--ease)}
+.empty-links a:nth-child(1){background:var(--vert);color:var(--on-vert)}
+.empty-links a:nth-child(2){background:var(--bissap);color:var(--on-bissap)}
+.empty-links a:nth-child(3){background:var(--indigo);color:var(--on-indigo)}
+.empty-links a:nth-child(4){background:var(--nuit);color:var(--on-nuit)}
 .empty-links a:hover{transform:translateY(-2px)}
 
-/* ═════════ RAYONS — tuiles colorées ═════════ */
+/* ═════════ VITRINE PHOTO (teinte vert doux) ═════════ */
+.showcase-sec{background:var(--tint-vert)}
+.showcase-sec .sec-label{color:var(--acc-vert)}
+.showcase{display:flex;gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:2rem var(--pad) 1rem;scrollbar-width:thin}
+.showcase-item{flex:0 0 clamp(210px,26vw,290px);scroll-snap-align:start;position:relative;aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:var(--nuit)}
+.showcase-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s var(--ease)}
+.showcase-item:hover img{transform:scale(1.05)}
+.showcase-item::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,color-mix(in srgb,var(--nuit) 88%,transparent),transparent 55%)}
+.showcase-cap{position:absolute;z-index:1;left:0;right:0;bottom:0;padding:1rem;color:var(--on-nuit);display:flex;flex-direction:column;gap:.35rem;align-items:flex-start}
+.showcase-cap b{font-family:var(--ff-d);font-size:1.05rem;font-weight:700;line-height:1.2}
+.showcase-cap span{font-size:.8rem;font-weight:700;color:var(--on-safran);background:var(--safran);padding:.15rem .6rem;border-radius:999px}
+
+/* ═════════ RAYONS ═════════ */
 .tiles-wrap{padding:0 var(--pad)}
 .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
 @media(min-width:1100px){.tiles{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:560px){.tiles{grid-template-columns:1fr}}
-.tile{position:relative;aspect-ratio:4/5;overflow:hidden;color:inherit;border-radius:14px;isolation:isolate}
+.tile{position:relative;aspect-ratio:4/5;overflow:hidden;color:var(--on-nuit);border-radius:14px;isolation:isolate}
 @media(max-width:560px){.tile{aspect-ratio:16/11}}
-.tile-bg{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 65% at 70% 25%, var(--tone) 0%, transparent 65%),linear-gradient(160deg,var(--t1) 0%,#0B0C16 100%);
-  background-size:cover;background-position:center;transition:transform .7s var(--ease);
-}
+.tile-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 65% at 70% 25%,var(--tone) 0%,transparent 65%),linear-gradient(160deg,var(--t1) 0%,var(--nuit) 100%);background-size:cover;background-position:center;transition:transform .7s var(--ease)}
 .tile:hover .tile-bg{transform:scale(1.04)}
-.tile-deco{position:absolute;inset:0;z-index:1;pointer-events:none;background-image:var(--wax-w);background-size:70px 70px;opacity:.9}
-.tile-mark{
-  position:absolute;z-index:1;top:6%;right:6%;font-family:var(--ff-d);font-weight:800;
-  font-size:clamp(7rem,16vw,11rem);line-height:.8;letter-spacing:-.05em;color:rgba(255,255,255,.12);pointer-events:none;
-}
+.tile-deco{position:absolute;inset:0;z-index:1;pointer-events:none;background-image:var(--wax-w);background-size:70px 70px}
+.tile-mark{position:absolute;z-index:1;top:6%;right:6%;font-family:var(--ff-d);font-weight:800;font-size:clamp(7rem,16vw,11rem);line-height:.8;letter-spacing:-.05em;color:color-mix(in srgb,var(--on-nuit) 13%,transparent);pointer-events:none}
 .tile.has-img .tile-deco,.tile.has-img .tile-mark{display:none}
-.tile-overlay{position:absolute;inset:0;z-index:2;background:linear-gradient(to top,rgba(8,9,14,.9) 0%,rgba(8,9,14,.3) 50%,rgba(8,9,14,0) 100%)}
-.tile-badge{
-  position:absolute;z-index:3;top:1.1rem;left:1.1rem;font-size:.72rem;font-weight:700;
-  color:#1a1207;background:var(--safran);padding:.3rem .7rem;border-radius:999px;
-}
+/* photo teintée par la couleur du rayon : mélange harmonieux */
+.tile.has-img::before{content:'';position:absolute;inset:0;z-index:2;background:linear-gradient(160deg,color-mix(in srgb,var(--t1) 55%,transparent),transparent 60%)}
+.tile-overlay{position:absolute;inset:0;z-index:2;background:linear-gradient(to top,color-mix(in srgb,var(--nuit) 92%,transparent) 0%,color-mix(in srgb,var(--nuit) 30%,transparent) 50%,transparent 100%)}
+.tile-badge{position:absolute;z-index:3;top:1.1rem;left:1.1rem;font-size:.72rem;font-weight:700;color:var(--on-safran);background:var(--safran);padding:.3rem .7rem;border-radius:999px}
 .tile-content{position:absolute;z-index:3;bottom:0;left:0;right:0;padding:1.5rem}
 .tile-label{font-size:.8rem;font-weight:600;color:var(--safran);margin-bottom:.4rem}
-.tile-title{font-family:var(--ff-d);font-size:clamp(1.7rem,3.2vw,2.4rem);font-weight:800;color:#fff;line-height:1;margin-bottom:.9rem;letter-spacing:-.035em}
-.tile-cta{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:700;color:#fff;border-bottom:2px solid var(--safran);padding-bottom:.15rem;transition:gap .2s}
+.tile-title{font-family:var(--ff-d);font-size:clamp(1.7rem,3.2vw,2.4rem);font-weight:800;color:var(--on-nuit);line-height:1;margin-bottom:.9rem;letter-spacing:-.035em}
+.tile-cta{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:700;color:var(--on-nuit);border-bottom:2px solid var(--safran);padding-bottom:.15rem;transition:gap .2s}
 .tile:hover .tile-cta{gap:.8rem}
 .tile:focus-visible{outline:3px solid var(--safran);outline-offset:3px}
 
-/* ═════════ VITRINE PHOTO — nuit ═════════ */
-.showcase-sec{background:var(--nuit);color:#fff}
-.showcase-sec .sec-title{color:#fff}
-.showcase-sec .sec-label{color:var(--safran)}
-.showcase{display:flex;gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:2rem var(--pad) 1rem;scrollbar-width:thin}
-.showcase-item{flex:0 0 clamp(210px,26vw,290px);scroll-snap-align:start;position:relative;aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:#1a1b28}
-.showcase-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s var(--ease)}
-.showcase-item:hover img{transform:scale(1.05)}
-.showcase-item::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(8,9,14,.85),transparent 55%)}
-.showcase-cap{position:absolute;z-index:1;left:0;right:0;bottom:0;padding:1rem;color:#fff;display:flex;flex-direction:column;gap:.35rem;align-items:flex-start}
-.showcase-cap b{font-family:var(--ff-d);font-size:1.05rem;font-weight:700;line-height:1.2}
-.showcase-cap span{font-size:.8rem;font-weight:700;color:#1a1207;background:var(--safran);padding:.15rem .6rem;border-radius:999px}
-
 /* ═════════ COMMENT ÇA MARCHE — safran ═════════ */
-.steps-sec{background:var(--safran);position:relative;overflow:hidden;color:#1a1207}
-.steps-sec::before{content:'';position:absolute;inset:0;background-image:var(--wax-d);pointer-events:none}
-.steps-sec .wrap{position:relative}
-.steps-sec .sec-label{color:#1a1207}
-.steps-sec .sec-title{color:#1a1207;max-width:560px}
+.steps-sec{background:var(--safran);color:var(--on-safran)}
+.steps-head{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(1.5rem,4vw,3rem);align-items:end}
+@media(max-width:760px){.steps-head{grid-template-columns:1fr}}
+.steps-sec .sec-label{color:var(--on-safran)}
+.steps-sec .sec-title{color:var(--on-safran);max-width:560px}
+/* photo qui se dissout dans le fond safran */
+.fade-photo{position:relative;margin:0;border-radius:18px;overflow:hidden;aspect-ratio:16/10}
+.fade-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.fade-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--safran) 0%,color-mix(in srgb,var(--safran) 30%,transparent) 40%,transparent 75%),linear-gradient(0deg,color-mix(in srgb,var(--safran) 50%,transparent),transparent 45%)}
+@media(max-width:760px){.fade-photo::after{background:linear-gradient(0deg,var(--safran) 0%,transparent 60%)}}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.25rem}
 @media(max-width:760px){.steps{grid-template-columns:1fr}}
-.step{background:var(--creme);border-radius:16px;padding:1.75rem 1.5rem;display:flex;flex-direction:column;gap:.6rem;color:#1a1207}
-.step-badge{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;color:#fff;margin-bottom:.4rem}
+.step{background:var(--card);border-radius:16px;padding:1.75rem 1.5rem;display:flex;flex-direction:column;gap:.6rem;color:var(--on-card)}
+.step-badge{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;margin-bottom:.4rem}
 .step-badge svg{width:28px;height:28px}
-.step:nth-child(1) .step-badge{background:var(--vert)}
-.step:nth-child(2) .step-badge{background:var(--bissap)}
-.step:nth-child(3) .step-badge{background:var(--indigo)}
-.step-tag{font-size:.8rem;font-weight:700;color:#7a5a00}
+.step:nth-child(1) .step-badge{background:var(--vert);color:var(--on-vert)}
+.step:nth-child(2) .step-badge{background:var(--bissap);color:var(--on-bissap)}
+.step:nth-child(3) .step-badge{background:var(--indigo);color:var(--on-indigo)}
+.step-tag{font-size:.8rem;font-weight:700;color:var(--acc-safran)}
 .step h3{font-family:var(--ff-d);font-size:1.35rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
-.step p{font-size:.92rem;color:#4a4032;line-height:1.65}
+.step p{font-size:.92rem;color:var(--on-card-soft);line-height:1.65}
 
-/* ═════════ TÉMOIGNAGES — bissap ═════════ */
-.temo-sec{background:var(--bissap);position:relative;overflow:hidden;color:#fff}
-.temo-sec::before{content:'';position:absolute;inset:0;background-image:var(--wax-w);pointer-events:none}
-.temo-sec .wrap{position:relative}
-.temo-sec .sec-label{color:#FFD9A0}
-.temo-sec .sec-title{color:#fff;max-width:620px}
-.temo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.25rem}
-@media(max-width:760px){.temo-strip{grid-template-columns:1fr}}
-.temo-cell{background:var(--creme);color:#1a1207;border-radius:16px;padding:1.6rem;display:flex;flex-direction:column;gap:1rem}
-.temo-top{display:flex;align-items:center;gap:.8rem}
-.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--ff-d);font-weight:800;font-size:1.1rem;flex-shrink:0}
-.temo-who{display:flex;flex-direction:column;line-height:1.25;flex:1}
-.temo-who .name{font-weight:700;font-size:.95rem}
-.temo-who .meta{font-size:.78rem;color:#6b5f4c}
-.temo-stars{font-size:.85rem;color:#D98E00;letter-spacing:.1em;white-space:nowrap}
-.temo-quote{font-size:1rem;line-height:1.6;color:#2a2418;flex:1}
-
-/* ═════════ CONFIANCE — indigo ═════════ */
-.trust-sec{background:var(--indigo);color:#fff}
-.trust-sec .sec-label{color:var(--safran)}
-.trust-sec .sec-title{color:#fff;max-width:640px}
-.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2.25rem}
-@media(max-width:900px){.trust-grid{grid-template-columns:repeat(2,1fr)}}
-.trust-cell{border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:1.5rem 1.25rem;display:flex;flex-direction:column;gap:.5rem;background:rgba(255,255,255,.05)}
-.trust-stat-num{font-family:var(--ff-d);font-size:clamp(1.9rem,4vw,2.6rem);font-weight:800;letter-spacing:-.03em;color:var(--safran);line-height:1}
-.trust-title{font-family:var(--ff-d);font-size:1.1rem;font-weight:700}
-.trust-desc{font-size:.88rem;color:rgba(255,255,255,.78);line-height:1.6}
-.trust-note{margin-top:1.5rem;display:inline-block;font-size:.88rem;font-weight:600;background:var(--safran);color:#1a1207;padding:.55rem 1rem;border-radius:999px}
-
-/* ═════════ HISTOIRE — collage ═════════ */
+/* ═════════ HISTOIRE — fond neutre + collage ═════════ */
 .story{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(2rem,6vw,4.5rem);align-items:center}
 @media(max-width:860px){.story{grid-template-columns:1fr}}
+.story-text .sec-label{color:var(--acc-bissap)}
 .story-text .sec-title{font-size:clamp(1.9rem,4.5vw,3rem);margin-bottom:1.25rem}
 .story-text p{font-size:1rem;color:var(--stone);line-height:1.8;margin-bottom:1.1rem;max-width:520px}
 .collage{position:relative;width:100%;max-width:500px;aspect-ratio:1/1;margin:0 auto}
 .collage-block{position:absolute;border-radius:20px;overflow:hidden}
-.collage-block.b1{top:0;left:0;width:78%;height:78%;background:var(--vert)}
-.collage-block.b1::before,.collage-block.b2::before{content:'';position:absolute;inset:0;background-image:var(--wax-w)}
-.collage-block.b2{bottom:0;right:0;width:58%;height:46%;background:var(--safran)}
-.collage-block.b2::before{background-image:var(--wax-d)}
-.collage-mark{position:absolute;top:8%;left:8%;font-family:var(--ff-d);font-weight:800;font-size:clamp(7rem,20vw,11rem);line-height:.8;letter-spacing:-.06em;color:rgba(251,243,224,.22)}
-.collage-photo{position:absolute;margin:0;border-radius:14px;overflow:hidden;border:4px solid var(--bg,#fff);box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.collage-block.b1{top:0;left:0;width:78%;height:78%;background:linear-gradient(150deg,var(--vert),var(--indigo))}
+.collage-block.b2{bottom:0;right:0;width:58%;height:46%;background:linear-gradient(150deg,var(--safran),var(--bissap))}
+.collage-block::before{content:'';position:absolute;inset:0;background-image:var(--wax-w)}
+.collage-mark{position:absolute;top:8%;left:8%;font-family:var(--ff-d);font-weight:800;font-size:clamp(7rem,20vw,11rem);line-height:.8;letter-spacing:-.06em;color:color-mix(in srgb,var(--on-vert) 22%,transparent)}
+.collage-photo{position:absolute;margin:0;border-radius:14px;overflow:hidden;border:4px solid var(--bg);box-shadow:0 12px 30px color-mix(in srgb,var(--nuit) 25%,transparent)}
 .collage-photo img{width:100%;height:100%;object-fit:cover;display:block}
+/* les deux photos partagent un même dégradé de marque */
+.collage-photo::after{content:'';position:absolute;inset:0;mix-blend-mode:soft-light}
+.collage-photo.pa::after{background:linear-gradient(160deg,var(--vert),transparent 70%)}
+.collage-photo.pb::after{background:linear-gradient(200deg,var(--bissap),transparent 70%)}
 .collage-photo.pa{top:6%;left:5%;width:64%;height:68%}
 .collage-photo.pb{bottom:3%;right:4%;width:44%;height:38%}
 
-/* ═════════ CATALOGUE — nuit + photo ═════════ */
-.cta-cat{position:relative;overflow:hidden;background:var(--nuit);color:#fff;text-align:center;padding:clamp(3.5rem,9vw,6.5rem) 0}
+/* ═════════ TÉMOIGNAGES — bissap ═════════ */
+.temo-sec{background:var(--bissap);color:var(--on-bissap);position:relative;overflow:hidden}
+.temo-band{position:absolute;top:0;left:0;right:0;height:clamp(180px,30vw,300px);background-size:cover;background-position:center;opacity:.5;-webkit-mask-image:linear-gradient(to bottom,#000 0%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,transparent 100%)}
+.temo-band::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--bissap),transparent 60%)}
+.temo-sec .wrap{position:relative}
+.temo-sec .sec-label{color:color-mix(in srgb,var(--safran) 70%,var(--on-bissap))}
+.temo-sec .sec-title{color:var(--on-bissap);max-width:620px}
+.temo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.25rem}
+@media(max-width:760px){.temo-strip{grid-template-columns:1fr}}
+.temo-cell{background:var(--card);color:var(--on-card);border-radius:16px;padding:1.6rem;display:flex;flex-direction:column;gap:1rem}
+.temo-top{display:flex;align-items:center;gap:.8rem}
+.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--ff-d);font-weight:800;font-size:1.1rem;flex-shrink:0}
+.avatar.c0{background:var(--vert);color:var(--on-vert)}
+.avatar.c1{background:var(--indigo);color:var(--on-indigo)}
+.avatar.c2{background:var(--safran);color:var(--on-safran)}
+.temo-who{display:flex;flex-direction:column;line-height:1.25;flex:1}
+.temo-who .name{font-weight:700;font-size:.95rem}
+.temo-who .meta{font-size:.78rem;color:var(--on-card-soft)}
+.temo-stars{font-size:.85rem;color:var(--acc-safran);letter-spacing:.1em;white-space:nowrap}
+.temo-quote{font-size:1rem;line-height:1.6;color:var(--on-card);flex:1}
+
+/* ═════════ CONFIANCE — fond neutre, visuel indigo ═════════ */
+.trust-layout{display:grid;grid-template-columns:.9fr 1.3fr;gap:clamp(1.5rem,5vw,4rem);align-items:stretch}
+@media(max-width:860px){.trust-layout{grid-template-columns:1fr}}
+.trust-visual{position:relative;overflow:hidden;border-radius:20px;min-height:340px;background:linear-gradient(160deg,var(--indigo),var(--vert));color:var(--on-indigo);display:flex;align-items:flex-end}
+@media(max-width:860px){.trust-visual{min-height:240px;aspect-ratio:16/10}}
+.trust-visual::before{content:'';position:absolute;inset:0;background-image:var(--wax-w);z-index:1}
+.trust-visual img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.trust-visual::after{content:'';position:absolute;inset:0;z-index:2;background:linear-gradient(to top,var(--indigo) 0%,color-mix(in srgb,var(--indigo) 40%,transparent) 45%,color-mix(in srgb,var(--vert) 25%,transparent) 100%)}
+.trust-visual-cap{position:relative;z-index:3;padding:1.5rem}
+.trust-visual-cap b{display:block;font-family:var(--ff-d);font-size:clamp(2.6rem,6vw,4rem);font-weight:800;letter-spacing:-.04em;line-height:1;color:var(--safran)}
+.trust-visual-cap span{font-size:.95rem;font-weight:600}
+.trust-main .sec-label{color:var(--acc-indigo)}
+.trust-main .sec-title{font-size:clamp(1.9rem,4.5vw,3rem);margin-bottom:1.75rem}
+.trust-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+@media(max-width:520px){.trust-grid{grid-template-columns:1fr}}
+.trust-cell{border-radius:14px;padding:1.3rem 1.2rem;display:flex;flex-direction:column;gap:.4rem;background:var(--tint,var(--bg2));border-left:5px solid var(--acc,var(--safran))}
+.trust-cell:nth-child(1){--tint:var(--tint-vert);--acc:var(--vert);--num:var(--acc-vert)}
+.trust-cell:nth-child(2){--tint:var(--tint-safran);--acc:var(--safran);--num:var(--acc-safran)}
+.trust-cell:nth-child(3){--tint:var(--tint-indigo);--acc:var(--indigo);--num:var(--acc-indigo)}
+.trust-cell:nth-child(4){--tint:var(--tint-bissap);--acc:var(--bissap);--num:var(--acc-bissap)}
+.trust-stat-num{font-family:var(--ff-d);font-size:clamp(1.7rem,3.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;color:var(--num);line-height:1}
+.trust-title{font-family:var(--ff-d);font-size:1.05rem;font-weight:700;color:var(--ink)}
+.trust-desc{font-size:.88rem;color:var(--stone);line-height:1.6}
+
+/* ═════════ CATALOGUE — photo dissoute dans les sections voisines ═════════ */
+.cta-cat{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--indigo),var(--vert));color:var(--on-indigo);text-align:center;padding:clamp(4.5rem,11vw,8rem) 0}
 .cta-cat::before{content:'';position:absolute;inset:0;background-image:var(--wax-w);background-size:90px 90px}
 .cta-cat.has-img{background-size:cover;background-position:center}
-.cta-cat.has-img::before{background-image:none;background-color:rgba(8,9,14,.68)}
+.cta-cat.has-img::before{background-image:none;background:linear-gradient(135deg,color-mix(in srgb,var(--indigo) 82%,transparent),color-mix(in srgb,var(--vert) 70%,transparent))}
+.cta-cat::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(var(--bg),transparent 90px),linear-gradient(to top,var(--bg),transparent 90px)}
 .cta-cat .wrap{position:relative;z-index:1}
 .cta-cat .sec-label{color:var(--safran);justify-content:center}
-.cta-cat .sec-title{color:#fff;font-size:clamp(2rem,5.5vw,3.6rem)}
-.cta-cat p{font-size:1rem;color:rgba(255,255,255,.82);max-width:480px;margin:0 auto 2rem;line-height:1.7}
+.cta-cat .sec-title{color:var(--on-indigo);font-size:clamp(2rem,5.5vw,3.6rem)}
+.cta-cat p{font-size:1rem;color:color-mix(in srgb,var(--on-indigo) 85%,transparent);max-width:480px;margin:0 auto 2rem;line-height:1.7}
 
-/* ═════════ FAQ — deux colonnes ═════════ */
+/* ═════════ FAQ ═════════ */
 .faq-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:clamp(2rem,6vw,4.5rem);align-items:start}
 @media(max-width:860px){.faq-layout{grid-template-columns:1fr}}
 .faq-side{position:sticky;top:6rem}
 @media(max-width:860px){.faq-side{position:static}}
+.faq-side .sec-label{color:var(--acc-bissap)}
 .faq-side .sec-title{font-size:clamp(1.9rem,4.5vw,3rem);margin-bottom:1.5rem}
-.faq-help{background:var(--vert);color:#fff;border-radius:16px;padding:1.5rem;position:relative;overflow:hidden}
-.faq-help::before{content:'';position:absolute;inset:0;background-image:var(--wax-w)}
-.faq-help>*{position:relative}
+.faq-help{background:var(--vert);color:var(--on-vert);border-radius:16px;padding:1.5rem}
 .faq-help b{display:block;font-family:var(--ff-d);font-size:1.15rem;font-weight:800;margin-bottom:.4rem}
-.faq-help p{font-size:.9rem;color:rgba(255,255,255,.85);line-height:1.6;margin-bottom:1rem}
+.faq-help p{font-size:.9rem;color:color-mix(in srgb,var(--on-vert) 85%,transparent);line-height:1.6;margin-bottom:1rem}
 .faq-list{max-width:none;margin:0}
 .faq-item{border-bottom:1px solid var(--border)}
 .faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.3rem 0;background:none;border:none;cursor:pointer;text-align:left;font-family:var(--ff-d);font-size:1.1rem;color:var(--ink);font-weight:700;letter-spacing:-.01em}
-.faq-q .ic{width:32px;height:32px;border-radius:50%;background:var(--bissap);color:#fff;display:grid;place-items:center;font-size:1.15rem;flex-shrink:0;transition:transform .25s var(--ease)}
+.faq-q .ic{width:32px;height:32px;border-radius:50%;background:var(--bissap);color:var(--on-bissap);display:grid;place-items:center;font-size:1.15rem;flex-shrink:0;transition:transform .25s var(--ease)}
 .faq-item.open .faq-q .ic{transform:rotate(45deg)}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .4s var(--ease)}
 .faq-a p{padding:0 0 1.3rem;font-size:.95rem;color:var(--stone);line-height:1.7;max-width:600px}
@@ -259,7 +289,7 @@ button,.btn,input{font-family:inherit}
 
 <!-- NAV -->
 <nav class="nav" id="nav">
-  <a href="/" class="nav-logo">Sen<span style="color:var(--bissap)">·</span>Marché</a>
+  <a href="/" class="nav-logo">Sen<span style="color:var(--acc-bissap)">·</span>Marché</a>
   <ul class="nav-links">
     <li><a href="mode.html">Mode</a></li>
     <li><a href="maison.html">Maison</a></li>
@@ -275,9 +305,9 @@ button,.btn,input{font-family:inherit}
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- HERO (vert) -->
 <header class="hero">
-  <div class="hero-copy">
+  <div class="hero-copy wax">
     <div class="hero-eyebrow">Sen·Marché</div>
     <h1 class="hero-title">Le monde <span class="hl">dans votre</span> panier.</h1>
     <p class="hero-sub">Produits sélectionnés et vérifiés avant envoi. Récupération en point de retrait, paiement sur place.</p>
@@ -289,13 +319,11 @@ button,.btn,input{font-family:inherit}
   <div class="hero-visual" id="hero-visual">
     <div class="hero-visual-fallback">
       <svg viewBox="0 0 600 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs>
-          <linearGradient id="hline" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#F2A900" stop-opacity="0"/><stop offset="35%" stop-color="#F2A900" stop-opacity=".8"/><stop offset="100%" stop-color="#F2A900" stop-opacity=".05"/></linearGradient>
-        </defs>
+        <defs><linearGradient id="hline" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" class="sv-saf" stop-opacity="0"/><stop offset="35%" class="sv-saf" stop-opacity=".8"/><stop offset="100%" class="sv-saf" stop-opacity=".05"/></linearGradient></defs>
         <path d="M 60 380 C 180 300, 320 220, 520 160" stroke="url(#hline)" stroke-width="1.6" fill="none"/>
         <path d="M 40 420 C 200 340, 360 260, 560 185" stroke="url(#hline)" stroke-width="1" fill="none" opacity=".6"/>
-        <circle cx="70" cy="360" r="6" fill="#F2A900"/><circle cx="70" cy="360" r="16" fill="none" stroke="#F2A900" stroke-width=".8" opacity=".4"/>
-        <circle cx="518" cy="158" r="7" fill="#A3193F"/><circle cx="518" cy="158" r="18" fill="none" stroke="#A3193F" stroke-width=".8" opacity=".6"/><circle cx="518" cy="158" r="30" fill="none" stroke="#A3193F" stroke-width=".5" opacity=".35"/>
+        <circle cx="70" cy="360" r="6" class="f-saf"/><circle cx="70" cy="360" r="16" fill="none" class="s-saf" stroke-width=".8" opacity=".4"/>
+        <circle cx="518" cy="158" r="7" class="f-bis"/><circle cx="518" cy="158" r="18" fill="none" class="s-bis" stroke-width=".8" opacity=".6"/><circle cx="518" cy="158" r="30" fill="none" class="s-bis" stroke-width=".5" opacity=".35"/>
       </svg>
       <span class="hero-visual-mark">Sen·Marché</span>
     </div>
@@ -304,7 +332,7 @@ button,.btn,input{font-family:inherit}
   </div>
 </header>
 
-<!-- BANDE -->
+<!-- BANDE (safran) -->
 <div class="ticker" aria-label="Nos engagements">
   <div class="ticker-track">
     <span>Vérifié avant envoi</span><span>Aucune avance à payer</span><span>Retrait sur place</span><span>Suivi WhatsApp</span><span>Wave · Orange Money · Espèces</span>
@@ -312,45 +340,50 @@ button,.btn,input{font-family:inherit}
   </div>
 </div>
 
-<!-- DERNIÈRES ARRIVÉES -->
+<!-- DERNIÈRES ARRIVÉES (neutre) -->
 <section>
   <div class="wrap">
-    <div class="sec-label reveal">Disponible maintenant</div>
+    <div class="sec-label reveal" style="color:var(--acc-vert)">Disponible maintenant</div>
     <h2 class="sec-title reveal d1">Dernières arrivées</h2>
   </div>
   <div class="arrivals-wrap">
     <div class="arrivals-grid prod-grid" id="arrivals-grid">
-      <div class="skel" style="aspect-ratio:4/5"></div>
-      <div class="skel" style="aspect-ratio:4/5"></div>
-      <div class="skel" style="aspect-ratio:4/5"></div>
+      <div class="skel" style="aspect-ratio:4/5"></div><div class="skel" style="aspect-ratio:4/5"></div><div class="skel" style="aspect-ratio:4/5"></div>
     </div>
   </div>
-  <div class="wrap" style="text-align:center;padding-top:2.5rem">
-    <a href="catalogue.html" class="btn btn-ghost">Voir tout le catalogue</a>
-  </div>
+  <div class="wrap" style="text-align:center;padding-top:2.5rem"><a href="catalogue.html" class="btn btn-ghost">Voir tout le catalogue</a></div>
 </section>
 
-<!-- RAYONS -->
-<section style="padding:clamp(2rem,5vw,3rem) 0">
+<!-- VITRINE PHOTO (teinte vert, visible s'il y a assez de photos) -->
+<section id="showcase" class="showcase-sec blk" hidden style="margin-top:clamp(2rem,5vw,3rem)">
   <div class="wrap">
-    <div class="sec-label reveal">Nos rayons</div>
+    <div class="sec-label">Aussi au catalogue</div>
+    <h2 class="sec-title">À découvrir</h2>
+  </div>
+  <div class="showcase" id="showcase-row"></div>
+</section>
+
+<!-- RAYONS (neutre) -->
+<section style="padding:clamp(2.5rem,6vw,4rem) 0 clamp(2rem,5vw,3rem)">
+  <div class="wrap">
+    <div class="sec-label reveal" style="color:var(--acc-indigo)">Nos rayons</div>
     <h2 class="sec-title reveal d1">Par où commencer ?</h2>
   </div>
   <div class="tiles-wrap">
     <div class="tiles">
-      <a href="mode.html" class="tile" id="tile-mode" style="--tone:rgba(242,169,0,.4);--t1:#3d2a05">
+      <a href="mode.html" class="tile" id="tile-mode" style="--tone:color-mix(in srgb,var(--safran) 55%,transparent);--t1:color-mix(in srgb,var(--safran) 38%,var(--nuit))">
         <div class="tile-bg" id="tile-mode-bg"></div><div class="tile-deco"></div><span class="tile-mark" aria-hidden="true">M</span><div class="tile-overlay"></div>
         <div class="tile-content"><div class="tile-label">Arrivages réguliers</div><h3 class="tile-title">Style &amp; Vêtements</h3><span class="tile-cta">Explorer →</span></div>
       </a>
-      <a href="fille.html" class="tile" id="tile-fille" style="--tone:rgba(230,80,130,.45);--t1:#4d0d26">
+      <a href="fille.html" class="tile" id="tile-fille" style="--tone:color-mix(in srgb,var(--bissap) 70%,transparent);--t1:color-mix(in srgb,var(--bissap) 60%,var(--nuit))">
         <div class="tile-bg" id="tile-fille-bg"></div><div class="tile-deco"></div><span class="tile-mark" aria-hidden="true">F</span><div class="tile-overlay"></div>
         <div class="tile-content"><div class="tile-label">Mode féminine</div><h3 class="tile-title">Univers Fille</h3><span class="tile-cta">Découvrir →</span></div>
       </a>
-      <a href="sport.html" class="tile" id="tile-sport" style="--tone:rgba(80,110,240,.45);--t1:#11185a">
+      <a href="sport.html" class="tile" id="tile-sport" style="--tone:color-mix(in srgb,var(--indigo) 80%,transparent);--t1:color-mix(in srgb,var(--indigo) 65%,var(--nuit))">
         <div class="tile-bg" id="tile-sport-bg"></div><div class="tile-deco"></div><span class="tile-mark" aria-hidden="true">S</span><div class="tile-overlay"></div>
         <div class="tile-content"><div class="tile-label">Équipement sportif</div><h3 class="tile-title">Univers Sport</h3><span class="tile-cta">Découvrir →</span></div>
       </a>
-      <a href="maison.html" class="tile" id="tile-maison" style="--tone:rgba(30,180,120,.4);--t1:#0a3d2c">
+      <a href="maison.html" class="tile" id="tile-maison" style="--tone:color-mix(in srgb,var(--vert) 80%,transparent);--t1:color-mix(in srgb,var(--vert) 65%,var(--nuit))">
         <div class="tile-bg" id="tile-maison-bg"></div><div class="tile-deco"></div><span class="tile-mark" aria-hidden="true">H</span><span class="tile-badge">Bientôt</span><div class="tile-overlay"></div>
         <div class="tile-content"><div class="tile-label">Bientôt disponible</div><h3 class="tile-title">Maison &amp; Électroménager</h3><span class="tile-cta">Découvrir →</span></div>
       </a>
@@ -358,45 +391,64 @@ button,.btn,input{font-family:inherit}
   </div>
 </section>
 
-<!-- VITRINE PHOTO (visible seulement s'il y a assez de photos) -->
-<section id="showcase" class="showcase-sec blk" hidden>
-  <div class="wrap">
-    <div class="sec-label reveal">Aussi au catalogue</div>
-    <h2 class="sec-title reveal d1">À découvrir</h2>
-  </div>
-  <div class="showcase" id="showcase-row"></div>
-</section>
+<div class="blend" style="--a:var(--bg);--b:var(--safran)"></div>
 
-<!-- COMMENT ÇA MARCHE -->
-<section class="steps-sec blk">
+<!-- COMMENT ÇA MARCHE (safran) -->
+<section class="steps-sec blk" style="padding-top:0">
   <div class="wrap">
-    <div class="sec-label">Comment ça marche</div>
-    <h2 class="sec-title">Trois étapes, zéro avance.</h2>
+    <div class="steps-head">
+      <div>
+        <div class="sec-label">Comment ça marche</div>
+        <h2 class="sec-title">Trois étapes, zéro avance.</h2>
+      </div>
+      <figure class="fade-photo" id="steps-photo" hidden><img alt=""></figure>
+    </div>
     <div class="steps">
       <div class="step">
         <span class="step-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
-        <span class="step-tag">Étape 1</span>
-        <h3>Vous choisissez</h3>
+        <span class="step-tag">Étape 1</span><h3>Vous choisissez</h3>
         <p>Ajoutez vos articles au panier et validez la commande. Aucun paiement à cette étape.</p>
       </div>
       <div class="step">
         <span class="step-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></span>
-        <span class="step-tag">Étape 2</span>
-        <h3>On prépare</h3>
+        <span class="step-tag">Étape 2</span><h3>On prépare</h3>
         <p>On vérifie votre article avant l'envoi. Vous suivez l'avancement sur WhatsApp.</p>
       </div>
       <div class="step">
         <span class="step-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="13" rx="2"/><circle cx="12" cy="12.5" r="2.5"/><path d="M6 6V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/></svg></span>
-        <span class="step-tag">Étape 3</span>
-        <h3>Vous récupérez et payez</h3>
+        <span class="step-tag">Étape 3</span><h3>Vous récupérez et payez</h3>
         <p>Vous inspectez l'article au retrait, puis vous réglez en espèces, Wave ou Orange Money.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TÉMOIGNAGES -->
-<section class="temo-sec blk">
+<!-- HISTOIRE (neutre) -->
+<section class="blk">
+  <div class="wrap">
+    <div class="story">
+      <div class="story-text">
+        <div class="sec-label">Notre histoire</div>
+        <h2 class="sec-title">Des produits réels, à des prix justes.</h2>
+        <p>Trouver de bons produits à un prix juste n'est pas toujours simple. SenMarché sélectionne, vérifie chaque article avant l'envoi, et vous le remet sans intermédiaire qui gonfle le prix.</p>
+        <p>Pas de promesse marketing exagérée, pas de fausse urgence. Un paiement qui n'a lieu qu'une fois le colis entre vos mains.</p>
+      </div>
+      <div class="collage">
+        <div class="collage-block b1"></div>
+        <div class="collage-block b2"></div>
+        <span class="collage-mark" aria-hidden="true">M</span>
+        <figure class="collage-photo pa" id="col-a" hidden><img alt=""></figure>
+        <figure class="collage-photo pb" id="col-b" hidden><img alt=""></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="blend" style="--a:var(--bg);--b:var(--bissap)"></div>
+
+<!-- TÉMOIGNAGES (bissap) -->
+<section class="temo-sec blk" style="padding-top:0">
+  <div class="temo-band" id="temo-band" hidden></div>
   <div class="wrap">
     <div class="sec-label">Ce qu'ils en disent</div>
     <h2 class="sec-title">Ils ont commandé, ils reviennent.</h2>
@@ -408,43 +460,30 @@ button,.btn,input{font-family:inherit}
   </div>
 </section>
 
-<!-- CONFIANCE -->
-<section class="trust-sec blk">
-  <div class="wrap">
-    <div class="sec-label">Pourquoi SenMarché</div>
-    <h2 class="sec-title">Acheter en confiance, recevoir sans surprise.</h2>
-    <div class="trust-grid">
-      <div class="trust-cell"><span class="trust-stat-num">0 F</span><h3 class="trust-title">Aucune avance</h3><p class="trust-desc">Vous payez uniquement à la récupération du colis. Aucun virement à l'avance, aucun risque.</p></div>
-      <div class="trust-cell"><span class="trust-stat-num">100%</span><h3 class="trust-title">Vérifié avant envoi</h3><p class="trust-desc">Chaque article est contrôlé avant l'envoi. Pas de mauvaise surprise à l'arrivée.</p></div>
-      <div class="trust-cell"><span class="trust-stat-num">48h</span><h3 class="trust-title">Préparation</h3><p class="trust-desc">Le délai de préparation de votre commande, avant le retrait.</p></div>
-      <div class="trust-cell"><span class="trust-stat-num">WhatsApp</span><h3 class="trust-title">Suivi en direct</h3><p class="trust-desc">L'avancement de votre commande vous est envoyé, de la réception au retrait.</p></div>
-    </div>
-    <span class="trust-note">✦ Programme fidélité : cashback à chaque achat, détails bientôt disponibles</span>
-  </div>
-</section>
+<div class="blend" style="--a:var(--bissap);--b:var(--bg)"></div>
 
-<!-- HISTOIRE -->
-<section class="blk">
+<!-- CONFIANCE (neutre + visuel indigo) -->
+<section class="blk" style="padding-top:0">
   <div class="wrap">
-    <div class="story">
-      <div class="story-text">
-        <div class="sec-label">Notre histoire</div>
-        <h2 class="sec-title">Des produits réels, à des prix justes.</h2>
-        <p>Trouver de bons produits à un prix juste n'est pas toujours simple. SenMarché sélectionne, vérifie chaque article avant l'envoi, et vous le remet sans intermédiaire qui gonfle le prix.</p>
-        <p>Pas de promesse marketing exagérée, pas de fausse urgence. Un paiement qui n'a lieu qu'une fois le colis entre vos mains.</p>
+    <div class="trust-layout">
+      <div class="trust-visual" id="trust-visual">
+        <div class="trust-visual-cap"><b>100%</b><span>des articles vérifiés avant l'envoi</span></div>
       </div>
-      <div class="collage" id="collage">
-        <div class="collage-block b1"></div>
-        <div class="collage-block b2"></div>
-        <span class="collage-mark" aria-hidden="true">M</span>
-        <figure class="collage-photo pa" id="col-a" hidden><img alt=""></figure>
-        <figure class="collage-photo pb" id="col-b" hidden><img alt=""></figure>
+      <div class="trust-main">
+        <div class="sec-label">Pourquoi SenMarché</div>
+        <h2 class="sec-title">Acheter en confiance, recevoir sans surprise.</h2>
+        <div class="trust-grid">
+          <div class="trust-cell"><span class="trust-stat-num">0 F</span><h3 class="trust-title">Aucune avance</h3><p class="trust-desc">Vous payez uniquement à la récupération du colis. Aucun virement à l'avance.</p></div>
+          <div class="trust-cell"><span class="trust-stat-num">48h</span><h3 class="trust-title">Préparation</h3><p class="trust-desc">Le délai de préparation de votre commande, avant le retrait.</p></div>
+          <div class="trust-cell"><span class="trust-stat-num">WhatsApp</span><h3 class="trust-title">Suivi en direct</h3><p class="trust-desc">L'avancement de votre commande vous est envoyé, de la réception au retrait.</p></div>
+          <div class="trust-cell"><span class="trust-stat-num">Cashback</span><h3 class="trust-title">Programme fidélité</h3><p class="trust-desc">À chaque achat. Détails du programme bientôt disponibles.</p></div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CATALOGUE -->
+<!-- CATALOGUE (indigo → vert, photo si dispo) -->
 <section id="cta-catalogue" class="cta-cat">
   <div class="wrap">
     <div class="sec-label">Tout voir</div>
@@ -454,13 +493,13 @@ button,.btn,input{font-family:inherit}
   </div>
 </section>
 
-<!-- FAQ -->
+<!-- FAQ (neutre) -->
 <section class="blk">
   <div class="wrap faq-layout">
     <div class="faq-side">
       <div class="sec-label">Questions fréquentes</div>
       <h2 class="sec-title">Avant de commander</h2>
-      <div class="faq-help">
+      <div class="faq-help wax">
         <b>Une autre question ?</b>
         <p>Écrivez-nous sur WhatsApp, on vous répond directement.</p>
         <a href="https://wa.me/221778038874" target="_blank" rel="noopener" class="btn btn-saf">Écrire sur WhatsApp</a>
@@ -480,7 +519,7 @@ button,.btn,input{font-family:inherit}
 <footer class="footer">
   <div class="footer-grid">
     <div class="footer-brand">
-      <div style="font-family:var(--ff-d);font-size:1.5rem;font-weight:800;margin-bottom:.9rem">Sen<span style="color:var(--safran)">·</span>Marché</div>
+      <div style="font-family:var(--ff-d);font-size:1.5rem;font-weight:800;margin-bottom:.9rem">Sen<span style="color:var(--acc-safran)">·</span>Marché</div>
       <p style="font-size:.84rem;color:var(--stone);line-height:1.65;max-width:240px;margin-bottom:1.25rem">Des articles sélectionnés et vérifiés, payés à la récupération.</p>
       <div class="pay-tags"><span class="pay-tag">Wave</span><span class="pay-tag">Orange Money</span><span class="pay-tag">Espèces</span></div>
     </div>
@@ -488,10 +527,7 @@ button,.btn,input{font-family:inherit}
     <nav class="footer-col"><h4>Compte</h4><ul><li><a href="compte.html">Mon compte</a></li><li><a href="panier.html">Panier</a></li><li><a href="favoris.html">Favoris</a></li><li><a href="connexion.html">Connexion</a></li></ul></nav>
     <nav class="footer-col"><h4>Contact</h4><ul><li><a href="https://wa.me/221778038874" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="a-propos.html">À propos</a></li><li><a href="demande-speciale.html">Demande spéciale</a></li><li><a href="cgv.html">CGV</a></li></ul></nav>
   </div>
-  <div class="footer-bottom">
-    <p>© 2026 SenMarché</p>
-    <a href="cgv.html">Conditions générales</a>
-  </div>
+  <div class="footer-bottom"><p>© 2026 SenMarché</p><a href="cgv.html">Conditions générales</a></div>
 </footer>
 
 <a href="https://wa.me/221778038874" class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp">
@@ -529,46 +565,50 @@ button,.btn,input{font-family:inherit}
   const withPhoto = articles.filter(a => a && a.photo_url);
   const imgs = window.SE_IMAGES || {};
 
+  /* Photos de décor : d'abord celles que tu configures dans images.js,
+     sinon on pioche dans les articles en évitant les 3 premiers (déjà affichés
+     dans « Dernières arrivées ») et en donnant une photo différente à chaque zone. */
+  const n = withPhoto.length, off = n > 3 ? 3 : 0;
+  function pick(k, w){ return n ? SE.imgUrl(withPhoto[(off + k) % n].photo_url, w) : ''; }
+  function whenLoaded(src, ok){ if(!src) return; const t = new Image(); t.onload = () => ok(src); t.src = src; }
+
   /* HERO */
   (function(){
-    const img = document.getElementById('hero-visual-img');
-    const tag = document.getElementById('hero-visual-tag');
-    function loadImg(src, label){
-      if(!src) return;
-      img.src = src; img.alt = label || 'SenMarché';
-      img.onload = () => { img.classList.add('loaded'); };
-      img.onerror = () => { img.style.display = 'none'; };
-      if(label){ tag.textContent = label; tag.style.display = ''; }
-    }
-    if(imgs.hero){ loadImg(imgs.hero, ''); }
-    else if(withPhoto[0]){ loadImg(SE.imgUrl(withPhoto[0].photo_url, 1000), withPhoto[0].nom); }
+    const img = document.getElementById('hero-visual-img'), tag = document.getElementById('hero-visual-tag');
+    const src = imgs.hero || pick(0, 1000);
+    if(!src) return;
+    img.src = src; img.alt = 'SenMarché';
+    img.onload = () => img.classList.add('loaded');
+    img.onerror = () => { img.style.display = 'none'; };
+    if(!imgs.hero && withPhoto.length){ const a = withPhoto[off % n]; tag.textContent = a.nom; tag.style.display = ''; }
   })();
 
-  /* TUILES */
+  /* RAYONS */
+  [['tile-mode',imgs.tileMode,1],['tile-maison',imgs.tileMaison,null],['tile-fille',imgs.tileFille,null],['tile-sport',imgs.tileSport,null]]
+  .forEach(([id, configured, k]) => {
+    const tile = document.getElementById(id), bg = document.getElementById(id + '-bg');
+    if(!tile || !bg) return;
+    const src = configured || (k !== null ? pick(k, 700) : '');
+    whenLoaded(src, s => { bg.style.backgroundImage = `url('${s}')`; tile.classList.add('has-img'); });
+  });
+
+  /* ZONES DE DÉCOR : chaque zone ne s'affiche que si sa photo se charge */
   (function(){
-    [['tile-mode',imgs.tileMode,articles[0]],['tile-maison',imgs.tileMaison,null],['tile-fille',imgs.tileFille,null],['tile-sport',imgs.tileSport,null]]
-    .forEach(([id, configured, fallbackArt]) => {
-      const tile = document.getElementById(id), bg = document.getElementById(id + '-bg');
-      if(!tile || !bg) return;
-      const src = configured || (fallbackArt && fallbackArt.photo_url ? SE.imgUrl(fallbackArt.photo_url, 700) : '');
-      if(!src) return;
-      const t = new Image();
-      t.onload = () => { bg.style.backgroundImage = `url('${src}')`; tile.classList.add('has-img'); };
-      t.src = src;
+    const fill = (id, src) => whenLoaded(src, s => { const f = document.getElementById(id); f.querySelector('img').src = s; f.hidden = false; });
+    fill('steps-photo', imgs.steps || pick(2, 900));
+    fill('col-a', imgs.story || pick(3, 800));
+    fill('col-b', imgs.storyB || pick(4, 600));
+
+    whenLoaded(imgs.temo || pick(5, 1400), s => { const b = document.getElementById('temo-band'); b.style.backgroundImage = `url('${s}')`; b.hidden = false; });
+
+    whenLoaded(imgs.trust || pick(6, 900), s => {
+      const v = document.getElementById('trust-visual'), im = new Image();
+      im.src = s; im.alt = ''; v.prepend(im);
     });
-  })();
 
-  /* COLLAGE, VITRINE, FOND CATALOGUE — seulement avec de vraies photos */
-  (function(){
-    const photos = [];
-    if(imgs.story) photos.push(imgs.story);
-    [3,4,2,1].forEach(i => { if(withPhoto[i]) photos.push(SE.imgUrl(withPhoto[i].photo_url, 800)); });
-    [['col-a',photos[0]],['col-b',photos[1]]].forEach(([id,src]) => {
-      if(!src) return;
-      const fig = document.getElementById(id), im = fig.querySelector('img');
-      im.onload = () => { fig.hidden = false; };
-      im.onerror = () => { fig.hidden = true; };
-      im.src = src;
+    whenLoaded(imgs.catalogueBg || pick(7, 1400), s => {
+      const el = document.getElementById('cta-catalogue');
+      el.style.backgroundImage = `url('${s}')`; el.classList.add('has-img');
     });
 
     const rest = withPhoto.slice(3, 9);
@@ -579,17 +619,6 @@ button,.btn,input{font-family:inherit}
           <div class="showcase-cap"><b>${a.nom}</b><span>${SE.fprix(a.prix_vente_fcfa||0)}</span></div>
         </a>`).join('');
       document.getElementById('showcase').hidden = false;
-    }
-
-    const ctaSrc = imgs.catalogueBg || (withPhoto[1] ? SE.imgUrl(withPhoto[1].photo_url, 1400) : '');
-    if(ctaSrc){
-      const t = new Image();
-      t.onload = () => {
-        const el = document.getElementById('cta-catalogue');
-        el.style.backgroundImage = `url('${ctaSrc}')`;
-        el.classList.add('has-img');
-      };
-      t.src = ctaSrc;
     }
   })();
 
@@ -605,20 +634,17 @@ button,.btn,input{font-family:inherit}
           <a href="demande-speciale.html" class="btn btn-saf">Faire une demande spéciale</a>
         </div>
         <div class="empty-links">
-          <a href="mode.html">Mode <span>→</span></a>
-          <a href="fille.html">Fille <span>→</span></a>
-          <a href="sport.html">Sport <span>→</span></a>
-          <a href="catalogue.html">Catalogue <span>→</span></a>
+          <a href="mode.html">Mode <span>→</span></a><a href="fille.html">Fille <span>→</span></a>
+          <a href="sport.html">Sport <span>→</span></a><a href="catalogue.html">Catalogue <span>→</span></a>
         </div>
       </div>`;
       return;
     }
     grid.innerHTML = items.map(a => {
-      const stock = a.quantite || 0;
-      const low = stock > 0 && stock <= 3;
+      const stock = a.quantite || 0, low = stock > 0 && stock <= 3;
       return `<article class="prod-card">
         <a href="produit.html?ref=${a.reference}" class="prod-img" aria-label="${a.nom}">
-          <img src="${SE.imgUrl(a.photo_url,500)}" alt="${a.nom}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/500x625/12131c/F2A900?text=SenMarch%C3%A9'">
+          <img src="${SE.imgUrl(a.photo_url,500)}" alt="${a.nom}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/500x625?text=SenMarch%C3%A9'">
           ${low ? `<span class="prod-badge stock">${stock} restant${stock>1?'s':''}</span>` : ''}
           <button class="prod-quick" data-ref="${a.reference}">+ Ajouter au panier</button>
         </a>
@@ -640,20 +666,16 @@ button,.btn,input{font-family:inherit}
   })();
 
   /* FAQ */
-  (function(){
-    document.querySelectorAll('.faq-item').forEach(item => {
-      const q = item.querySelector('.faq-q'), a = item.querySelector('.faq-a');
-      q.addEventListener('click', () => {
-        const isOpen = item.classList.contains('open');
-        document.querySelectorAll('.faq-item.open').forEach(other => {
-          if (other !== item){ other.classList.remove('open'); other.querySelector('.faq-a').style.maxHeight = '0px'; }
-        });
-        if (isOpen){ item.classList.remove('open'); a.style.maxHeight = '0px'; }
-        else { item.classList.add('open'); a.style.maxHeight = a.scrollHeight + 'px'; }
-        if (window.SE_Sound) SE_Sound.play('click');
-      });
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const q = item.querySelector('.faq-q'), a = item.querySelector('.faq-a');
+    q.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(o => { if (o !== item){ o.classList.remove('open'); o.querySelector('.faq-a').style.maxHeight = '0px'; } });
+      if (isOpen){ item.classList.remove('open'); a.style.maxHeight = '0px'; }
+      else { item.classList.add('open'); a.style.maxHeight = a.scrollHeight + 'px'; }
+      if (window.SE_Sound) SE_Sound.play('click');
     });
-  })();
+  });
 
   /* TÉMOIGNAGES */
   (function(){
@@ -662,20 +684,15 @@ button,.btn,input{font-family:inherit}
       {nom:'Moussa K.', note:5, texte:"Article reçu en parfait état. Le suivi WhatsApp est clair, on sait toujours où on en est.", commande:'Catalogue'},
       {nom:'Aïssatou B.', note:4, texte:"Qualité supérieure à ce que j'imaginais pour le prix. Je reviendrai.", commande:'Maison'},
     ];
-    const COLORS = [['#0E4D3A','#fff'],['#1F2C6B','#fff'],['#F2A900','#1a1207']];
-    function stars(n){ return '★'.repeat(n) + '☆'.repeat(5-n); }
-    function cell(t, i){
-      const c = COLORS[i % COLORS.length];
-      const ini = (t.nom || '?').trim().charAt(0).toUpperCase();
-      return `<div class="temo-cell">
+    const stars = k => '★'.repeat(k) + '☆'.repeat(5-k);
+    const cell = (t, i) => `<div class="temo-cell">
         <div class="temo-top">
-          <span class="avatar" style="background:${c[0]};color:${c[1]}">${ini}</span>
+          <span class="avatar c${i % 3}">${(t.nom || '?').trim().charAt(0).toUpperCase()}</span>
           <div class="temo-who"><span class="name">${t.nom}</span><span class="meta">${t.commande||'Client vérifié'}</span></div>
           <span class="temo-stars">${stars(t.note||5)}</span>
         </div>
         <blockquote class="temo-quote">"${t.texte}"</blockquote>
       </div>`;
-    }
     const strip = document.getElementById('temo-strip');
     (async () => {
       try{
@@ -687,7 +704,6 @@ button,.btn,input{font-family:inherit}
       strip.innerHTML = FALLBACK.map(cell).join('');
     })();
   })();
-
 })();
 </script>
 <script src="theme.js"></script>
