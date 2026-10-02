@@ -50,10 +50,11 @@
   /* sections colorées : fond + texte (redéfinis plus bas pour le téléphone) */
   --steps-solid:var(--m-safran); --steps-fg:var(--m-on-safran); --steps-label:var(--m-on-safran);
   --temo-solid:var(--m-bissap);  --temo-fg:var(--m-on-bissap);  --temo-label:var(--m-safran-2);
+  --steps-ti:var(--m-bissap); --temo-ti:var(--m-safran-2);
   --mesh-o:1;
 
-  --wax-w:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23fff' stroke-opacity='.11' stroke-width='1.5'%3E%3Ccircle cx='40' cy='40' r='30'/%3E%3Ccircle cx='40' cy='40' r='20'/%3E%3Ccircle cx='40' cy='40' r='10'/%3E%3Cpath d='M0 0l16 16M80 0L64 16M0 80l16-16M80 80L64 64'/%3E%3C/g%3E%3C/svg%3E");
-  --wax-d:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23000' stroke-opacity='.12' stroke-width='1.5'%3E%3Ccircle cx='40' cy='40' r='30'/%3E%3Ccircle cx='40' cy='40' r='20'/%3E%3Ccircle cx='40' cy='40' r='10'/%3E%3Cpath d='M0 0l16 16M80 0L64 16M0 80l16-16M80 80L64 64'/%3E%3C/g%3E%3C/svg%3E");
+  --wax-w:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23fff' stroke-opacity='.07' stroke-width='1.5'%3E%3Ccircle cx='40' cy='40' r='30'/%3E%3Ccircle cx='40' cy='40' r='20'/%3E%3Ccircle cx='40' cy='40' r='10'/%3E%3Cpath d='M0 0l16 16M80 0L64 16M0 80l16-16M80 80L64 64'/%3E%3C/g%3E%3C/svg%3E");
+  --wax-d:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23000' stroke-opacity='.08' stroke-width='1.5'%3E%3Ccircle cx='40' cy='40' r='30'/%3E%3Ccircle cx='40' cy='40' r='20'/%3E%3Ccircle cx='40' cy='40' r='10'/%3E%3Cpath d='M0 0l16 16M80 0L64 16M0 80l16-16M80 80L64 64'/%3E%3C/g%3E%3C/svg%3E");
 }
 /* MODE SOMBRE — theme.js pose data-se-theme="dark" sur <html> */
 :root[data-se-theme="dark"]{
@@ -74,6 +75,7 @@
   :root{
     --steps-solid:var(--m-tint-safran); --steps-fg:var(--ink); --steps-label:var(--m-acc-safran);
     --temo-solid:var(--m-tint-bissap);  --temo-fg:var(--ink);  --temo-label:var(--m-acc-bissap);
+    --steps-ti:var(--m-acc-bissap); --temo-ti:var(--m-acc-bissap);
     --mesh-o:.4;
   }
 }
@@ -93,6 +95,7 @@ body.se-home img,body.se-home svg{max-width:100%}
 .eyebrow{display:inline-flex;align-items:center;gap:.55rem;font:700 .88rem/1 var(--m-body);letter-spacing:.02em;color:var(--eb,var(--m-acc-vert));margin-bottom:.9rem}
 .eyebrow::before{content:'';width:.55em;height:.55em;background:currentColor;border-radius:50%}
 body.se-home .t-h2{font-family:var(--m-display);font-weight:800;font-variation-settings:"wdth" 92;letter-spacing:-.03em;line-height:1.02;font-size:clamp(2rem,5.2vw,3.3rem);color:var(--tc,var(--ink));margin:0 0 1rem;max-width:20ch;text-wrap:balance}
+.t-h2 i{font-family:var(--m-serif);font-style:italic;font-weight:500;font-variation-settings:normal;letter-spacing:-.02em;color:var(--ti,var(--m-acc-bissap))}
 .b-m{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;padding:.95rem 1.6rem;border-radius:12px;font:700 .92rem/1 var(--m-body);text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .2s,box-shadow .2s,filter .2s}
 .b-m:hover{transform:translateY(-2px)}
 .b-saf{background:var(--m-safran);color:var(--m-on-safran)}
@@ -179,15 +182,16 @@ body.se-home .hero-title .ht-s{font-family:var(--m-serif);font-style:italic;font
 @media(max-width:560px){.tiles{grid-template-columns:1fr}.tile{aspect-ratio:16/11}.tile-deco{display:none}}
 
 /* ═════════ ÉTAPES — safran (teinte douce sur téléphone) ═════════ */
-.steps-sec{background-color:var(--steps-solid);color:var(--steps-fg);--eb:var(--steps-label);--tc:var(--steps-fg)}
+.steps-sec{background-color:var(--steps-solid);color:var(--steps-fg);--eb:var(--steps-label);--tc:var(--steps-fg);--ti:var(--steps-ti)}
 .steps-sec::before{content:'';position:absolute;inset:0;opacity:var(--mesh-o);background:radial-gradient(60% 55% at 100% 100%,color-mix(in srgb,var(--m-bissap-2) 38%,transparent),transparent 70%),radial-gradient(50% 60% at 0% 70%,color-mix(in srgb,var(--m-safran-2) 80%,transparent),transparent 70%);pointer-events:none}
 .steps-sec::after{content:'';position:absolute;inset:0;background-image:var(--wax-d);pointer-events:none}
 .steps-head{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(1.5rem,5vw,4rem);align-items:center;margin-bottom:clamp(1.8rem,4vw,3rem)}
 .z-steps{--z1:var(--m-vert);--z2:var(--m-safran-2);--z3:var(--m-bissap);border-radius:22px;aspect-ratio:16/10;box-shadow:0 22px 50px -24px color-mix(in srgb,var(--m-nuit) 55%,transparent)}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
-.step{background:var(--m-card);color:var(--m-on-card);padding:1.7rem 1.5rem;display:flex;flex-direction:column;gap:.5rem;border-radius:20px;--sc:var(--m-vert)}
+.step{position:relative;background:var(--m-card);color:var(--m-on-card);padding:1.7rem 1.5rem;display:flex;flex-direction:column;gap:.5rem;border-radius:20px;--sc:var(--m-vert)}
 .step:nth-child(2){--sc:var(--m-bissap)}
 .step:nth-child(3){--sc:var(--m-indigo)}
+.step-n{position:absolute;top:.8rem;right:1.2rem;font:italic 500 5rem/.8 var(--m-serif);color:transparent;-webkit-text-stroke:2px var(--sc);opacity:.5;pointer-events:none}
 .step-badge{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--sc);color:#fff;margin-bottom:.4rem}
 .step-badge svg{width:26px;height:26px}
 .step-tag{font:700 .8rem/1 var(--m-body);color:var(--sc)}
@@ -212,7 +216,7 @@ body.se-home .hero-title .ht-s{font-family:var(--m-serif);font-style:italic;font
 @media(max-width:860px){.story{grid-template-columns:1fr}.collage{max-width:400px}}
 
 /* ═════════ TÉMOIGNAGES — bissap (teinte douce sur téléphone) ═════════ */
-.temo-sec{background-color:var(--temo-solid);color:var(--temo-fg);--eb:var(--temo-label);--tc:var(--temo-fg)}
+.temo-sec{background-color:var(--temo-solid);color:var(--temo-fg);--eb:var(--temo-label);--tc:var(--temo-fg);--ti:var(--temo-ti)}
 .temo-sec::before{content:'';position:absolute;inset:0;opacity:var(--mesh-o);background:radial-gradient(55% 60% at 0% 100%,color-mix(in srgb,var(--m-indigo-2) 40%,transparent),transparent 68%),radial-gradient(50% 55% at 100% 30%,color-mix(in srgb,var(--m-bissap-2) 70%,transparent),transparent 70%);pointer-events:none}
 .z-temo{position:absolute;top:0;left:0;right:0;height:clamp(180px,30vw,300px);--z1:transparent;--z2:var(--m-safran);--z3:var(--m-bissap-2);-webkit-mask-image:linear-gradient(to bottom,#000 10%,transparent 100%);mask-image:linear-gradient(to bottom,#000 10%,transparent 100%);opacity:.5}
 .z-temo::before,.z-temo::after{display:none}
@@ -260,6 +264,7 @@ body.se-home .hero-title .ht-s{font-family:var(--m-serif);font-style:italic;font
 .cta-cat .zveil{position:absolute;inset:0;background:linear-gradient(180deg,color-mix(in srgb,var(--m-indigo) 70%,transparent),color-mix(in srgb,var(--m-vert) 62%,transparent))}
 .cta-cat .eyebrow{--eb:var(--m-safran-2)}
 body.se-home .cta-cat .cta-title{font-family:var(--m-display);font-weight:800;font-variation-settings:"wdth" 90;letter-spacing:-.035em;line-height:.98;font-size:clamp(2.4rem,7vw,4.6rem);color:var(--m-on-indigo);margin:0 auto 1rem;max-width:14ch;text-wrap:balance}
+.cta-cat .cta-title i{font-family:var(--m-serif);font-style:italic;font-weight:500;font-variation-settings:normal;letter-spacing:-.02em;color:var(--m-safran-2)}
 .cta-cat p{color:color-mix(in srgb,var(--m-on-indigo) 86%,transparent);max-width:44ch;margin:0 auto 1.8rem;line-height:1.7;font-size:1rem}
 
 /* ═════════ FAQ ═════════ */
@@ -281,6 +286,7 @@ body.se-home .cta-cat .cta-title{font-family:var(--m-display);font-weight:800;fo
 
 /* ═════════ TÉLÉPHONE — réglages à part ═════════ */
 @media(max-width:640px){
+  .step-n{font-size:4rem}
   .sec{padding:3.2rem 0}
   .plain{padding:2.4rem 0}
   body.se-home .t-h2{font-size:clamp(1.9rem,9vw,2.5rem)}
@@ -343,7 +349,7 @@ body.se-home .cta-cat .cta-title{font-family:var(--m-display);font-weight:800;fo
 <section class="plain">
   <div class="m-wrap">
     <div class="plain-head">
-      <div class="rv"><span class="eyebrow" style="--eb:var(--m-acc-vert)">Disponible maintenant</span><h2 class="t-h2">Dernières arrivées</h2></div>
+      <div class="rv"><span class="eyebrow" style="--eb:var(--m-acc-vert)">Disponible maintenant</span><h2 class="t-h2">Dernières <i>arrivées</i></h2></div>
       <a href="catalogue.html" class="b-m b-line rv" style="color:var(--ink)">Tout le catalogue</a>
     </div>
     <div class="prod-grid" id="arrivals-grid">
@@ -373,21 +379,21 @@ body.se-home .cta-cat .cta-title{font-family:var(--m-display);font-weight:800;fo
 <section class="sec steps-sec">
   <div class="m-wrap">
     <div class="steps-head">
-      <div class="rv"><span class="eyebrow">Comment ça marche</span><h2 class="t-h2">Trois étapes, zéro avance.</h2></div>
+      <div class="rv"><span class="eyebrow">Comment ça marche</span><h2 class="t-h2">Trois étapes, <i>zéro avance.</i></h2></div>
       <div class="zone z-steps rv" id="z-steps"><span class="zmark" aria-hidden="true">1·2·3</span></div>
     </div>
     <div class="steps">
       <div class="step rv">
         <span class="step-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
-        <span class="step-tag">Étape 1</span>
+        <span class="step-n" aria-hidden="true">1</span><span class="step-tag">Étape 1</span>
         <h3>Vous choisissez</h3><p>Ajoutez vos articles au panier et validez la commande. Aucun paiement à cette étape.</p></div>
       <div class="step rv">
         <span class="step-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></span>
-        <span class="step-tag">Étape 2</span>
+        <span class="step-n" aria-hidden="true">2</span><span class="step-tag">Étape 2</span>
         <h3>On prépare</h3><p>On vérifie votre article avant l'envoi. Vous suivez l'avancement sur WhatsApp.</p></div>
       <div class="step rv">
         <span class="step-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="13" rx="2"/><circle cx="12" cy="12.5" r="2.5"/><path d="M6 6V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/></svg></span>
-        <span class="step-tag">Étape 3</span>
+        <span class="step-n" aria-hidden="true">3</span><span class="step-tag">Étape 3</span>
         <h3>Vous récupérez et payez</h3><p>Vous inspectez l'article au retrait, puis vous réglez en espèces, Wave ou Orange Money.</p></div>
     </div>
   </div>
@@ -399,7 +405,7 @@ body.se-home .cta-cat .cta-title{font-family:var(--m-display);font-weight:800;fo
     <div class="story">
       <div class="story-text rv">
         <span class="eyebrow">Notre histoire</span>
-        <h2 class="t-h2">Des produits réels, à des prix justes.</h2>
+        <h2 class="t-h2">Des produits réels, <i>à des prix justes.</i></h2>
         <p>Trouver de bons produits à un prix juste n'est pas toujours simple. SenMarché sélectionne, vérifie chaque article avant l'envoi, et vous le remet sans intermédiaire qui gonfle le prix.</p>
         <p>Pas de promesse marketing exagérée, pas de fausse urgence. Un paiement qui n'a lieu qu'une fois le colis entre vos mains.</p>
       </div>
@@ -417,7 +423,7 @@ body.se-home .cta-cat .cta-title{font-family:var(--m-display);font-weight:800;fo
 <section class="sec temo-sec">
   <div class="zone z-temo" id="z-temo"></div>
   <div class="m-wrap">
-    <div class="rv"><span class="eyebrow">Ce qu'ils en disent</span><h2 class="t-h2">Ils ont commandé, ils reviennent.</h2></div>
+    <div class="rv"><span class="eyebrow">Ce qu'ils en disent</span><h2 class="t-h2">Ils ont commandé, <i>ils reviennent.</i></h2></div>
     <div class="temo-strip" id="temo-strip">
       <div class="temo-cell"><div class="skel" style="height:120px"></div></div><div class="temo-cell"><div class="skel" style="height:120px"></div></div><div class="temo-cell"><div class="skel" style="height:120px"></div></div>
     </div>
@@ -431,7 +437,7 @@ body.se-home .cta-cat .cta-title{font-family:var(--m-display);font-weight:800;fo
       <div class="zone z-trust rv" id="z-trust"><div class="zt"></div>
         <div class="trust-cap"><b>100%</b><span>des articles vérifiés avant l'envoi</span></div></div>
       <div class="trust-main">
-        <div class="rv"><span class="eyebrow">Pourquoi SenMarché</span><h2 class="t-h2">Acheter en confiance, sans surprise.</h2></div>
+        <div class="rv"><span class="eyebrow">Pourquoi SenMarché</span><h2 class="t-h2">Acheter en confiance, <i>sans surprise.</i></h2></div>
         <div class="trust-grid">
           <div class="trust-cell rv"><span class="trust-num">0 F</span><h3>Aucune avance</h3><p>Vous payez uniquement à la récupération du colis. Aucun virement à l'avance.</p></div>
           <div class="trust-cell rv"><span class="trust-num">48h</span><h3>Préparation</h3><p>Le délai de préparation de votre commande, avant le retrait.</p></div>
@@ -448,7 +454,7 @@ body.se-home .cta-cat .cta-title{font-family:var(--m-display);font-weight:800;fo
   <div class="zone z-cta" id="z-cta"></div><div class="zveil"></div>
     <div class="m-wrap">
     <span class="eyebrow">Tout voir</span>
-    <h2 class="cta-title">Tout le catalogue, sans filtre.</h2>
+    <h2 class="cta-title">Tout le catalogue <i>sans filtre.</i></h2>
     <p>Parcourez l'intégralité de nos arrivages.</p>
     <a href="catalogue.html" class="b-m b-saf">Accéder au catalogue</a>
   </div>
