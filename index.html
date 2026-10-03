@@ -158,6 +158,22 @@ body.se-home .hero-title .ht-s{font-family:var(--m-serif);font-style:italic;font
 .empty-links a:nth-child(4){background:var(--m-nuit);color:var(--m-on-nuit)}
 .empty-links a:hover{transform:translateY(-2px)}
 
+/* ═════════ ARRIVAGES — cartes séparées + tuile image dans la 4e case ═════════ */
+.prod-grid.arr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;background:none;border:none;border-radius:0;overflow:visible}
+@media(max-width:860px){.prod-grid.arr-grid{grid-template-columns:repeat(2,1fr)}}
+.arr-grid .prod-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden}
+.arr-grid .prod-img.noimg{background:var(--m-g-vert);display:grid;place-items:center}
+.arr-grid .prod-img.noimg::before{content:'';position:absolute;inset:0;background-image:var(--wax-w)}
+.arr-grid .prod-img.noimg::after{content:'Sen·Marché';position:relative;font:800 1.5rem/1 var(--m-display);letter-spacing:-.03em;color:color-mix(in srgb,var(--m-on-vert) 70%,transparent)}
+.arr-cta{position:relative;display:flex;align-items:flex-end;min-height:260px;border-radius:18px;text-decoration:none;color:var(--m-on-vert);--z1:var(--m-vert);--z2:var(--m-safran-2);--z3:var(--m-bissap)}
+.arr-cta .zt{background:linear-gradient(to top,color-mix(in srgb,var(--m-nuit) 88%,transparent),color-mix(in srgb,var(--m-nuit) 20%,transparent) 60%,transparent)}
+.arr-cta-body{position:relative;z-index:3;padding:1.4rem;display:flex;flex-direction:column;gap:.35rem}
+.arr-cta-body span{font:600 .85rem/1 var(--m-body);color:var(--m-safran-2)}
+.arr-cta-body b{font:800 clamp(1.5rem,2.6vw,2rem)/1 var(--m-display);letter-spacing:-.03em;color:var(--m-on-nuit)}
+.arr-cta-body em{font:700 .9rem/1 var(--m-body);font-style:normal;color:var(--m-on-nuit);border-bottom:2px solid var(--m-safran);align-self:flex-start;padding-bottom:.2rem;margin-top:.5rem;transition:padding .2s}
+.arr-cta:hover .arr-cta-body em{padding-right:.5rem}
+@media(max-width:860px){.arr-cta{min-height:0;aspect-ratio:4/5}}
+
 /* ═════════ RAYONS — grille nette, une couleur par rayon ═════════ */
 .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
 @media(min-width:1100px){.tiles{grid-template-columns:repeat(4,1fr)}}
@@ -352,8 +368,8 @@ body.se-home .cta-cat .cta-title{font-family:var(--m-display);font-weight:800;fo
       <div class="rv"><span class="eyebrow" style="--eb:var(--m-acc-vert)">Disponible maintenant</span><h2 class="t-h2">Dernières <i>arrivées</i></h2></div>
       <a href="catalogue.html" class="b-m b-line rv" style="color:var(--ink)">Tout le catalogue</a>
     </div>
-    <div class="prod-grid" id="arrivals-grid">
-      <div class="skel" style="aspect-ratio:4/5"></div><div class="skel" style="aspect-ratio:4/5"></div><div class="skel" style="aspect-ratio:4/5"></div>
+    <div class="prod-grid arr-grid" id="arrivals-grid">
+      <div class="skel" style="aspect-ratio:4/5"></div><div class="skel" style="aspect-ratio:4/5"></div><div class="skel" style="aspect-ratio:4/5"></div><div class="skel" style="aspect-ratio:4/5"></div>
     </div>
   </div>
 </section>
@@ -570,7 +586,7 @@ body.se-home .cta-cat .cta-title{font-family:var(--m-display);font-weight:800;fo
       const stock = a.quantite || 0, low = stock > 0 && stock <= 3;
       return `<article class="prod-card">
         <a href="produit.html?ref=${a.reference}" class="prod-img" aria-label="${a.nom}">
-          <img src="${SE.imgUrl(a.photo_url,500)}" alt="${a.nom}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/500x625?text=SenMarch%C3%A9'">
+          <img src="${SE.imgUrl(a.photo_url,500)}" alt="${a.nom}" loading="lazy" onerror="var p=this.parentNode;this.remove();p.classList.add('noimg')">
           ${low ? `<span class="prod-badge stock">${stock} restant${stock>1?'s':''}</span>` : ''}
           <button class="prod-quick" data-ref="${a.reference}">+ Ajouter au panier</button>
         </a>
@@ -578,7 +594,8 @@ body.se-home .cta-cat .cta-title{font-family:var(--m-display);font-weight:800;fo
           <a href="produit.html?ref=${a.reference}" style="color:inherit"><h3 class="prod-name">${a.nom}</h3></a>
           <span class="prod-price">${SE.fprix(a.prix_vente_fcfa||0)}</span></div>
       </article>`;
-    }).join('');
+    }).join('') + `<a href="catalogue.html" class="arr-cta zone" id="z-arr"><div class="zt"></div><div class="arr-cta-body"><span>Et bien plus encore</span><b>Tout le catalogue</b><em>Découvrir →</em></div></a>`;
+    zone('z-arr', imgs.arrivalsCta || pick(8, 700));
     grid.querySelectorAll('.prod-quick').forEach(btn => btn.addEventListener('click', e => {
       e.preventDefault(); e.stopPropagation();
       try{ SE.Cart.add(btn.dataset.ref); syncBadge(); }catch(err){}
