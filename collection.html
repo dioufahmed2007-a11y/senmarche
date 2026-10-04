@@ -3,612 +3,238 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Collection — SenExport Boutique</title>
-<meta name="theme-color" content="var(--bg)">
+<title>Collection — SenMarché</title>
+<meta name="description" content="Une collection SenMarché : pièces sélectionnées, vérifiées avant envoi. Paiement à la récupération.">
+<meta name="theme-color" content="#FAF6F0">
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="manifest" href="manifest.json">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Fraunces:ital,opsz,wght@1,9..144,400..600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="styles-dark.css">
-
-<style>
-  :root { --ease-lux: cubic-bezier(0.22, 1, 0.36, 1); }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { font-size: 16px; scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--ink); font-family: var(--ff-b); overflow-x: hidden; }
-  img { max-width: 100%; display: block; }
-  button { cursor: pointer; background: none; border: none; font-family: inherit; color: inherit; }
-  a { color: inherit; text-decoration: none; }
-  .container { width: 100%; padding: 0 2rem; max-width: 1400px; margin: 0 auto; }
-  @media (max-width: 640px) { .container { padding: 0 1.25rem; } }
-
-  .chapter-mark { display: flex; align-items: center; gap: 1rem; margin: 0 auto 2rem; max-width: 1400px; padding: 0 2rem; opacity: 0; transform: translateY(10px); transition: opacity .6s ease, transform .6s ease; }
-  .chapter-mark.visible { opacity: 1; transform: none; }
-  @media (max-width: 640px) { .chapter-mark { padding: 0 1.25rem; } }
-  .chapter-mark .num { font-family: var(--ff-m); font-size: 0.7rem; color: var(--or); letter-spacing: 0.1em; }
-  .chapter-mark .line { flex: 1; height: 1px; background: var(--or-line); }
-  .chapter-mark .lbl { font-family: var(--ff-m); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone); }
-
-  /* NAV LATERALE */
-  .chapter-dots { position: fixed; right: 1.5rem; top: 50%; transform: translateY(-50%); z-index: 200; display: none; flex-direction: column; gap: 1rem; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; }
-  .chapter-dots.show-nav { opacity: 1; pointer-events: auto; }
-  @media (min-width: 1100px) { .chapter-dots { display: flex; } }
-  .chapter-dots a { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: .3s var(--ease-lux); position: relative; }
-  .chapter-dots a.active { background: var(--or); transform: scale(1.8); }
-  .chapter-dots a::before { content: attr(data-label); position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-family: var(--ff-m); font-size: .62rem; letter-spacing: .05em; text-transform: uppercase; color: var(--stone); white-space: nowrap; opacity: 0; transition: .2s; pointer-events: none; }
-  .chapter-dots a:hover::before, .chapter-dots a.active::before { opacity: 1; color: var(--or); }
-
-  /* NAV PRINCIPALE */
-  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 300; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; mix-blend-mode: difference; background: transparent; transition: background .35s ease, backdrop-filter .35s ease, padding .35s ease; }
-  .nav a, .nav svg { color: #fff; }
-  .nav.scrolled { mix-blend-mode: normal; background: var(--bg); border-bottom: 1px solid var(--border); padding: 1.1rem 2rem; backdrop-filter: blur(12px); }
-  .nav.scrolled a, .nav.scrolled svg { color: var(--ink); }
-  .nav-logo { font-family: var(--ff-d); font-size: 1.2rem; }
-  .nav-logo em { color: var(--or); font-style: italic; }
-  .nav-links { display: none; list-style: none; gap: 2rem; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; }
-  .nav-links a { color: var(--stone); transition: .2s; }
-  .nav-links a:hover { color: var(--or); }
-  @media (min-width: 860px) { .nav-links { display: flex; } }
-  .nav-right { display: flex; gap: 1rem; align-items: center; }
-  .nav-icon { color: var(--ink); position: relative; }
-  .nav-badge { position: absolute; top: -5px; right: -5px; background: var(--or); color: #000; font-size: .6rem; width: 15px; height: 15px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; }
-
-  /* 1. HERO */
-  .col-hero { height: 92vh; min-height: 600px; display: flex; align-items: flex-end; position: relative; overflow: hidden; }
-  .col-hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; filter: grayscale(25%) contrast(1.08) saturate(.9); z-index: 0; transform: scale(1.03); }
-  .col-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 45%, var(--bg) 100%); z-index: 1; }
-  .col-hero-content { position: relative; z-index: 3; padding: 2rem; max-width: 1400px; margin: 0 auto; padding-bottom: 4rem; }
-  @media (max-width: 640px) { .col-hero-content { padding: 1.25rem; padding-bottom: 3rem; } }
-  .col-badge { font-family: var(--ff-m); font-size: 0.7rem; color: var(--or); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1rem; display: block; }
-  .col-title { font-family: var(--ff-d); font-size: clamp(3rem, 10vw, 6rem); color: #fff; font-weight: 300; line-height: 0.9; text-transform: uppercase; }
-  .col-title em { color: var(--or); font-style: italic; font-weight: 700; }
-
-  /* 2. MANIFESTE */
-  .manifesto { position: relative; padding: 6rem 2rem; text-align: center; border-bottom: 1px solid var(--border); overflow: hidden; }
-  @media (max-width: 640px) { .manifesto { padding: 4rem 1.25rem; } }
-  .manifesto-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: .14; filter: grayscale(50%); }
-  .manifesto-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, var(--bg) 0%, rgba(0,0,0,0.6) 45%, var(--bg) 100%); }
-  .manifesto-text { position: relative; z-index: 2; font-family: var(--ff-d); font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 300; line-height: 1.4; color: var(--ink); max-width: 800px; margin: 0 auto; }
-  .manifesto-text em { color: var(--or); font-style: italic; }
-
-  /* 3. PIÈCE HÉROÏNE */
-  .hero-piece-section { position: relative; padding: 6rem 0 7rem; min-height: 90vh; display: flex; flex-direction: column; justify-content: center; }
-  .hero-piece { display: grid; grid-template-columns: 1fr; max-width: 1400px; margin: 0 auto; padding: 0 2rem; gap: 2rem; align-items: center; }
-  @media (min-width: 900px) { .hero-piece { grid-template-columns: 1.1fr 1fr; gap: 5rem; align-items: stretch; min-height: 68vh; } }
-  @media (max-width: 899px) { .hero-piece { padding: 0 1.25rem; } }
-
-  .hero-piece-img-wrap { position: relative; overflow: hidden; aspect-ratio: 4/5; }
-  @media (min-width: 900px) { .hero-piece-img-wrap { aspect-ratio: auto; height: 100%; } }
-  .hero-piece-img-wrap::before, .hero-piece-img-wrap::after { content: ''; position: absolute; width: 32px; height: 32px; z-index: 2; pointer-events: none; }
-  .hero-piece-img-wrap::before { top: 16px; left: 16px; border-top: 2px solid var(--or); border-left: 2px solid var(--or); }
-  .hero-piece-img-wrap::after { bottom: 16px; right: 16px; border-bottom: 2px solid var(--or); border-right: 2px solid var(--or); }
-  .hero-piece-img { width: 100%; height: 100%; object-fit: cover; transition: transform 8s ease; }
-  .hero-piece:hover .hero-piece-img { transform: scale(1.04); }
-  .hero-piece-img-wrap.is-out .hero-piece-img { filter: grayscale(100%) brightness(0.6); }
-
-  .hero-piece-content { display: flex; flex-direction: column; justify-content: center; }
-  .hero-piece-badge { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--ff-m); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--or); border: 1px solid var(--or-line); padding: .5rem 1rem; border-radius: 99px; margin-bottom: 1.5rem; width: fit-content; }
-  .hero-piece-badge::before { content: '✦'; }
-  .hero-piece-label { font-family: var(--ff-m); font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone); margin-bottom: .8rem; }
-  .hero-piece-name { font-family: var(--ff-d); font-size: clamp(2.4rem, 6vw, 4.4rem); font-weight: 300; line-height: 1; margin-bottom: 1.8rem; color: var(--ink); }
-  .hero-piece-desc { font-size: 1.05rem; color: var(--stone); line-height: 1.8; margin-bottom: 2.2rem; max-width: 460px; }
-  .hero-piece-footer { display: flex; align-items: center; gap: 1.5rem; margin-top: auto; flex-wrap: wrap; }
-  .hero-piece-prix-block { display: flex; flex-direction: column; gap: 0.3rem; }
-  .hero-piece-prix { font-family: var(--ff-d); font-size: 1.9rem; color: var(--ink); }
-  .hero-piece-rare { font-family: var(--ff-m); font-size: 0.68rem; color: var(--or); letter-spacing: 0.08em; opacity: 0.9; text-transform: uppercase; }
-  .btn-hero-piece { background: var(--ink); color: var(--bg); padding: 1rem 2.1rem; font-weight: 700; text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.1em; border-radius: 2px; transition: 0.3s var(--ease-lux); border: 1px solid var(--ink); text-align: center; }
-  .btn-hero-piece:hover { background: transparent; color: var(--ink); }
-  .btn-hero-piece.disabled { background: transparent; color: var(--muted); border-color: var(--border); cursor: not-allowed; }
-
-  /* 4. GRILLE ASYMÉTRIQUE */
-  .section-head { padding: 4rem 2rem 2rem; max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--or-line); }
-  @media (max-width: 640px) { .section-head { padding: 3rem 1.25rem 1.5rem; flex-wrap: wrap; gap: 0.5rem; } }
-  .section-head h2 { font-family: var(--ff-d); font-size: 2rem; font-weight: 400; color: var(--ink); }
-  .section-head h2 em { color: var(--or); font-style: italic; }
-  .section-head .meta { font-family: var(--ff-m); font-size: 0.75rem; color: var(--stone); text-transform: uppercase; letter-spacing: 0.1em; }
-
-  .prod-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 2rem 2rem 6rem; max-width: 1400px; margin: 0 auto; }
-  @media (max-width: 640px) { .prod-grid { padding: 1.5rem 1.25rem 4rem; gap: 8px; } }
-  @media (min-width: 900px) { .prod-grid { grid-template-columns: repeat(12, 1fr); gap: 10px; } }
-
-  .p-card { position: relative; overflow: hidden; background: var(--bg2); aspect-ratio: 3/4; border-radius: 4px; }
-  @media (min-width: 900px) {
-    .p-card:nth-child(6n+1) { grid-column: span 5; }
-    .p-card:nth-child(6n+2) { grid-column: span 4; }
-    .p-card:nth-child(6n+3) { grid-column: span 3; }
-    .p-card:nth-child(6n+4) { grid-column: span 4; }
-    .p-card:nth-child(6n+5) { grid-column: span 5; aspect-ratio: 16/9; }
-    .p-card:nth-child(6n+6) { grid-column: span 3; }
-  }
-
-  .p-card-link { position: absolute; inset: 0; z-index: 1; }
-  .p-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease-lux), filter 0.5s ease; filter: grayscale(20%); }
-  .p-card:hover img { transform: scale(1.05); filter: grayscale(0%); }
-  .p-card--out img { filter: grayscale(75%) brightness(.55) !important; transform: none !important; }
-  .p-out { position: absolute; top: 1rem; left: 1rem; z-index: 3; font-family: var(--ff-m); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; border: 1px solid rgba(255,255,255,.4); padding: 4px 10px; border-radius: 2px; background: rgba(0,0,0,.45); backdrop-filter: blur(4px); }
-  .p-index { position: absolute; top: 1rem; left: 1rem; z-index: 3; font-family: var(--ff-m); font-size: 0.65rem; color: rgba(255,255,255,.65); letter-spacing: .04em; }
-  .p-body { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(to top, rgba(0,0,0,0.92), transparent); z-index: 2; display: flex; justify-content: space-between; align-items: flex-end; pointer-events: none; transform: translateY(65%); transition: transform .45s var(--ease-lux); }
-  .p-card:hover .p-body { transform: translateY(0); }
-  @media (hover: none) { .p-body { transform: translateY(0); } }
-  @media (max-width: 640px) { .p-body { padding: 1rem; transform: translateY(0); } }
-  .p-info-text h3 { font-family: var(--ff-d); font-size: 1.2rem; font-weight: 400; margin-bottom: 0.25rem; color: #fff; }
-  .p-info-text span { font-family: var(--ff-m); font-size: 0.7rem; color: rgba(255,255,255,0.85); text-transform: uppercase; }
-  .p-info-text .p-rare { display: block; font-size: 0.65rem; color: var(--or); text-transform: none; letter-spacing: 0.02em; margin-top: 0.2rem; }
-  .p-prix { font-family: var(--ff-d); font-size: 1.1rem; color: var(--or); font-weight: 600; }
-  .p-quick-add { position: absolute; top: 1rem; right: 1rem; z-index: 3; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.3); color: #fff; background: rgba(0,0,0,0.25); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 300; opacity: 0; transform: translateY(-4px); transition: 0.3s var(--ease-lux); }
-  .p-card:hover .p-quick-add { opacity: 1; transform: translateY(0); }
-  .p-quick-add:hover { background: var(--or); border-color: var(--or); color: #000; }
-  @media (hover: none) { .p-quick-add { opacity: 1; transform: none; } }
-
-  /* 5. L'ENGAGEMENT */
-  .engagement { padding: 6rem 2rem; border-top: 1px solid var(--border); }
-  @media (max-width: 640px) { .engagement { padding: 4rem 1.25rem; } }
-  .engagement-grid { max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 4rem; }
-  .engagement-item .eng-label { font-family: var(--ff-m); font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--or); margin-bottom: 1rem; display: block; }
-  .engagement-item p { font-family: var(--ff-d); font-size: clamp(1.15rem, 2vw, 1.4rem); font-weight: 300; line-height: 1.65; color: var(--ink); }
-  .engagement-item p em { color: var(--or); font-style: italic; }
-
-  /* 6. LOOKBOOK */
-  .lookbook-section { padding: 6rem 0; background: var(--bg); border-top: 1px solid var(--border); }
-  @media (max-width: 640px) { .lookbook-section { padding: 4rem 0; } }
-  .look-card { display: grid; grid-template-columns: 1fr; max-width: 1400px; margin: 0 auto; border: 1px solid var(--border); overflow: hidden; background: var(--card); }
-  @media (min-width: 900px) { .look-card { grid-template-columns: 1fr 1fr; } }
-  .look-collage { position: relative; height: 500px; overflow: hidden; background: var(--bg2); display: grid; }
-  @media (max-width: 640px) { .look-collage { height: 380px; } }
-  .look-collage img { width: 100%; height: 100%; object-fit: cover; box-shadow: 0 20px 40px rgba(0,0,0,.5); }
-  .look-collage .lc-left { grid-column: 1; }
-  .look-collage .lc-right { grid-column: 2; border-left: 5px solid var(--bg); }
-
-  .look-content { padding: 4rem 3rem; display: flex; flex-direction: column; justify-content: center; }
-  @media (max-width: 640px) { .look-content { padding: 2.5rem 1.5rem; } }
-  .look-title { font-family: var(--ff-d); font-size: 2.5rem; font-weight: 300; margin-bottom: 2rem; line-height: 1; color: var(--ink); }
-  @media (max-width: 640px) { .look-title { font-size: 1.8rem; margin-bottom: 1.5rem; } }
-  .look-title em { color: var(--or); font-style: italic; }
-  .look-items { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2.5rem; }
-  .look-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--border); transition: 0.2s; }
-  .look-item:hover { padding-left: 0.5rem; border-color: var(--or); }
-  .look-item span { font-size: 1rem; }
-  .look-item strong { font-family: var(--ff-m); font-size: 0.9rem; color: var(--or); }
-  .look-total { display: flex; justify-content: space-between; font-family: var(--ff-d); font-size: 1.3rem; margin-bottom: 2rem; color: var(--ink); }
-  .btn-buy-look { width: 100%; padding: 1.2rem; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; transition: 0.3s var(--ease-lux); background: var(--ink); color: var(--bg); border: 1px solid var(--ink); }
-  .btn-buy-look:hover { background: var(--or); color: #000; border-color: var(--or); }
-
-  /* 7. PROCHAIN CHAPITRE */
-  .next-chapter { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 6rem 2rem; border-top: 1px solid var(--border); background: var(--bg2); }
-  @media (max-width: 640px) { .next-chapter { padding: 4rem 1.25rem; } }
-  .next-chapter h2 { font-family: var(--ff-d); font-size: clamp(2rem, 6vw, 4rem); font-weight: 300; margin-bottom: 1rem; line-height: 0.9; color: var(--ink); }
-  .next-chapter h2 em { color: var(--or); font-style: italic; }
-  .next-chapter p { color: var(--stone); max-width: 500px; margin: 0 auto 2rem; font-size: 1.05rem; line-height: 1.6; }
-  .btn-next { font-family: var(--ff-m); color: var(--or); border: 1px solid var(--or); padding: 1rem 3rem; font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; transition: 0.3s var(--ease-lux); display: inline-block; }
-  .btn-next:hover { background: var(--or); color: #000; }
-
-  footer.col-footer { border-top: 1px solid var(--border); padding: 3rem 2rem; display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: space-between; align-items: center; }
-  @media (max-width: 640px) { footer.col-footer { padding: 2rem 1.25rem; flex-direction: column; text-align: center; } }
-  footer.col-footer .f-brand { font-family: var(--ff-d); font-size: 1.1rem; color: var(--ink); }
-  footer.col-footer .f-brand em { color: var(--or); font-style: italic; }
-  footer.col-footer .f-links { display: flex; gap: 1.5rem; font-family: var(--ff-m); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--stone); }
-  footer.col-footer .f-links a:hover { color: var(--or); }
-
-  /* PANIER */
-  @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-  .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-  .drawer-overlay.open { opacity: 1; pointer-events: auto; }
-  .cart-drawer { position: fixed; top: 0; right: 0; width: 100%; height: 100vh; background: var(--bg); border-left: 1px solid var(--border); transform: translateX(100%); transition: transform 0.5s var(--ease-lux); z-index: 10000; display: flex; flex-direction: column; }
-  @media (min-width: 640px) { .cart-drawer { width: 450px; } }
-  .cart-drawer.open { transform: translateX(0); }
-  .drawer-head { padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-  .drawer-head h3 { font-family: var(--ff-d); font-size: 1.4rem; font-weight: 400; color: var(--ink); }
-  .drawer-close { font-size: 1.5rem; color: var(--stone); transition: 0.2s; }
-  .drawer-close:hover { color: var(--or); transform: rotate(90deg); }
-  .cart-drawer-inner { overflow-y: auto; flex: 1; padding: 1.5rem; }
-  .drawer-item { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); animation: slideIn 0.4s var(--ease-lux); }
-  .drawer-item img { width: 80px; height: 100px; object-fit: cover; }
-  .drawer-item-info { flex: 1; }
-  .drawer-item-info h4 { font-size: 0.9rem; color: var(--ink); margin-bottom: 0.5rem; font-weight: 400; }
-  .drawer-item-info p { font-family: var(--ff-m); font-size: 0.8rem; color: var(--or); }
-  .drawer-qty-controls { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
-  .qty-btn { background: var(--card2); border: 1px solid var(--border); color: var(--ink); width: 26px; height: 26px; border-radius: 4px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; }
-  .qty-btn:hover:not(:disabled) { background: var(--or); color: var(--bg); border-color: var(--or); }
-  .qty-btn:disabled { background: var(--bg2); color: var(--muted); cursor: not-allowed; border-color: var(--border); }
-  .qty-val { font-family: var(--ff-m); font-size: 0.85rem; color: var(--ink); min-width: 20px; text-align: center; }
-  .remove-btn { background: none; border: none; color: var(--red); font-size: 0.65rem; cursor: pointer; margin-left: auto; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px; }
-  .remove-btn:hover { text-decoration: underline; }
-  .drawer-footer { padding: 1.5rem; border-top: 1px solid var(--border); }
-  .drawer-total { display: flex; justify-content: space-between; margin-bottom: 1.5rem; font-family: var(--ff-d); font-size: 1.3rem; color: var(--ink); }
-  .drawer-btn { display: block; width: 100%; padding: 1.2rem; background: var(--or); color: #000; text-align: center; text-transform: uppercase; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.1em; transition: 0.2s; border: 1px solid var(--or); }
-  .drawer-btn:hover { background: transparent; color: var(--or); }
-  .drawer-empty { text-align: center; color: var(--stone); padding: 4rem 1rem; font-style: italic; }
-</style>
+<link rel="stylesheet" href="marche.css">
+<link rel="stylesheet" href="marche-ui.css">
+<script src="theme.js"></script>
 </head>
-<body>
-
-<nav class="chapter-dots" id="chapter-dots" aria-label="Chapitres de la page"></nav>
-
-<div class="drawer-overlay" id="drawer-overlay"></div>
-<div class="cart-drawer" id="cart-drawer">
-  <div class="drawer-head"><h3>Panier</h3><button class="drawer-close" id="drawer-close">×</button></div>
-  <div class="cart-drawer-inner" id="drawer-body"><div class="drawer-empty">Votre panier est vide.</div></div>
-  <div class="drawer-footer" id="drawer-footer" style="display: none;">
-    <div class="drawer-total"><span>Total</span><span id="drawer-total-val">0 FCFA</span></div>
-    <a href="panier.html" class="drawer-btn">Commander</a>
-  </div>
-</div>
-
-<nav class="nav" id="main-nav">
-  <a href="index.html" class="nav-logo">Sen·Export <em>Boutique</em></a>
-  <ul class="nav-links">
-    <li><a href="index.html">Accueil</a></li>
-    <li><a href="mode.html">Mode</a></li>
-    <li><a href="catalogue.html">Catalogue</a></li>
-    <li><a href="maison.html">Maison</a></li>
-  </ul>
+<body class="se-page">
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav-logo">Sen<span style="color:var(--m-acc-bissap)">·</span>Marché</a>
+  <ul class="nav-links"><li><a href="mode.html">Mode</a></li><li><a href="maison.html">Maison</a></li><li><a href="fille.html">Fille</a></li><li><a href="sport.html">Sport</a></li><li><a href="catalogue.html">Catalogue</a></li><li><a href="collections.html" class="active">Collections</a></li></ul>
   <div class="nav-right">
-    <a href="favoris.html" class="nav-icon" aria-label="Favoris"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg></a>
-    <a href="panier.html" class="nav-icon" id="nav-cart-icon" aria-label="Panier"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="nav-badge" id="cart-count"></span></a>
-    <a href="compte.html" class="nav-icon" aria-label="Compte"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+    <a href="favoris.html" class="nav-icon" aria-label="Favoris"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg></a>
+    <a href="panier.html" class="nav-icon" id="nav-cart-icon" aria-label="Panier"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="nav-badge" id="cart-count"></span></a>
+    <a href="compte.html" class="nav-icon" aria-label="Compte"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
   </div>
 </nav>
 
-<div class="col-hero">
-  <div class="col-hero-bg" id="col-hero-bg"></div>
-  <div class="col-hero-overlay"></div>
-  <div class="col-hero-content">
-    <span class="col-badge" id="col-badge">Chargement...</span>
-    <h1 class="col-title" id="col-title">Collection</h1>
+<header class="chero" id="chero">
+  <div class="chero-bg" id="chero-bg"></div>
+  <div class="chero-shade"></div>
+  <div class="snow" id="snow" aria-hidden="true"></div>
+  <div class="chero-body">
+    <span class="chero-badge" id="col-badge">Chargement…</span>
+    <h1 class="chero-title disp" id="col-title">Collection</h1>
+    <p class="chero-desc" id="col-desc"></p>
   </div>
-</div>
+</header>
 
-<div id="dynamic-content"></div>
+<nav class="cdots" id="cdots" aria-label="Chapitres de la page"></nav>
+<main id="dynamic-content"></main>
+<div class="after"></div>
 
-<footer class="col-footer">
-  <div class="f-brand">Sen·Export <em>Boutique</em></div>
-  <div class="f-links"><a href="mode.html">Mode</a><a href="catalogue.html">Catalogue</a><a href="https://wa.me/221778038874" target="_blank">WhatsApp</a></div>
-  <div style="font-family:var(--ff-m); font-size:.7rem; color:var(--muted);">© 2026 SenExport</div>
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div style="font-family:var(--m-display);font-size:1.5rem;font-weight:800;margin-bottom:.9rem">Sen<span style="color:var(--m-safran)">·</span>Marché</div>
+      <p style="font-size:.84rem;color:var(--stone);line-height:1.65;max-width:240px;margin-bottom:1.25rem">Des articles sélectionnés et vérifiés, payés à la récupération.</p>
+      <div class="pay-tags"><span class="pay-tag">Wave</span><span class="pay-tag">Orange Money</span><span class="pay-tag">Espèces</span></div>
+    </div>
+    <nav class="footer-col"><h4>Univers</h4><ul><li><a href="mode.html">Mode</a></li><li><a href="fille.html">Fille</a></li><li><a href="sport.html">Sport</a></li><li><a href="maison.html">Maison</a></li><li><a href="catalogue.html">Catalogue</a></li></ul></nav>
+    <nav class="footer-col"><h4>Compte</h4><ul><li><a href="compte.html">Mon compte</a></li><li><a href="panier.html">Panier</a></li><li><a href="favoris.html">Favoris</a></li><li><a href="connexion.html">Connexion</a></li></ul></nav>
+    <nav class="footer-col"><h4>Contact</h4><ul><li><a href="https://wa.me/221778038874" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="a-propos.html">À propos</a></li><li><a href="demande-speciale.html">Demande spéciale</a></li><li><a href="cgv.html">CGV</a></li></ul></nav>
+  </div>
+  <div class="footer-bottom"><p>© 2026 SenMarché</p><a href="cgv.html">Conditions générales</a></div>
 </footer>
-
+<a href="https://wa.me/221778038874" class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="images.js"></script>
 <script src="app.js"></script>
-<script src="theme.js"></script>
+<script src="marche-ui.js"></script>
 <script src="animations.js"></script>
-
 <script>
 (() => {
   'use strict';
+  const { esc, fprix, imgUrl, photo } = MUI;
+  const WA = '221778038874';
+  const OUTFITS = [{ titre: 'Le total look <i>Streetwear</i>', refs: ['SW-001', 'SW-002'] }];
+  const colId = new URLSearchParams(location.search).get('id');
+  const root = document.getElementById('dynamic-content');
+  const dotsNav = document.getElementById('cdots');
 
-  function esc(s) { if (s == null) return ''; return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
-  function fprix(n) { return Math.round(n||0).toLocaleString('fr-FR') + ' FCFA'; }
+  const head = (num, title, meta) => `<div class="sh rv"><span class="sh-n">${num}</span><h2>${title}</h2>${meta ? `<span class="sh-meta">${esc(meta)}</span>` : ''}</div>`;
+  const wa = (txt) => `https://wa.me/${WA}?text=${encodeURIComponent(txt)}`;
 
-  function imgUrl(u, w = 800) {
-    if (!u) return `https://placehold.co/${w}x${Math.round(w*1.25)}/08090E/D4AF37?text=SenExport`;
-    if (u.startsWith('http')) {
-      if (u.includes('unsplash.com')) {
-        const separator = u.includes('?') ? '&' : '?';
-        return `${u}${separator}w=${w}&auto=format&fit=crop`;
-      }
-      return u;
+  function setHero(col) {
+    document.title = `${col.nom} — SenMarché`;
+    document.getElementById('col-title').innerHTML = esc(col.nom).replace(/(\d{4})/, '<em>$1</em>');
+    document.getElementById('col-desc').textContent = col.description || '';
+    if (col.image_url) {
+      const src = imgUrl(col.image_url, 1600), t = new Image();
+      t.onload = () => { const bg = document.getElementById('chero-bg'); bg.style.backgroundImage = `url('${src}')`; bg.classList.add('on'); };
+      t.src = src;
     }
-    if (u.startsWith('photo-')) return `https://images.unsplash.com/${u}?w=${w}&auto=format&fit=crop`;
-    return `https://axgpohmhzmdgozndlntj.supabase.co/storage/v1/object/public/photos/${u}`;
-  }
-
-  const OUTFITS = [
-    { titre: 'Le total look <em>Streetwear</em>', refs: ['SW-001', 'SW-002'] }
-  ];
-
-  const params = new URLSearchParams(window.location.search);
-  const colId = params.get('id');
-  const dynamicContent = document.getElementById('dynamic-content');
-  const chapterDotsNav = document.getElementById('chapter-dots');
-
-  const drawer = document.getElementById('cart-drawer');
-  const overlay = document.getElementById('drawer-overlay');
-  const openDrawer = () => { drawer.classList.add('open'); overlay.classList.add('open'); document.body.style.overflow = 'hidden'; };
-  const closeDrawer = () => { drawer.classList.remove('open'); overlay.classList.remove('open'); document.body.style.overflow = ''; };
-  overlay.addEventListener('click', closeDrawer);
-  document.getElementById('drawer-close').addEventListener('click', closeDrawer);
-
-  const mainNav = document.getElementById('main-nav');
-  function updateNav() {
-    const heroEl = document.querySelector('.col-hero');
-    const heroH = heroEl ? heroEl.offsetHeight : 600;
-    mainNav.classList.toggle('scrolled', window.scrollY > heroH - 90);
-  }
-  window.addEventListener('scroll', updateNav, { passive: true });
-  updateNav();
-
-  function updateDrawer() {
-    try {
-      const rawItems = SE.Cart.all();
-      const body = document.getElementById('drawer-body');
-      const footer = document.getElementById('drawer-footer');
-      const totalEl = document.getElementById('drawer-total-val');
-      if (!rawItems || rawItems.length === 0) { body.innerHTML = '<div class="drawer-empty">Votre panier est vide.</div>'; footer.style.display = 'none'; }
-      else {
-        let total = 0;
-        body.innerHTML = rawItems.map(i => {
-          const a = SE.Articles.cache ? SE.Articles.cache.find(x => x.reference === i.ref) : null;
-          const nom = a ? a.nom : i.ref;
-          const prix = a ? (a.prix_vente_fcfa || 0) : 0;
-          const stock = a ? (a.quantite || 0) : 0;
-          const photo = imgUrl(a && a.photo_url ? a.photo_url : null, 100);
-          total += prix * (i.qte || 1);
-          const isMax = (i.qte || 1) >= stock;
-          return `
-            <div class="drawer-item">
-              <img src="${esc(photo)}" alt="${esc(nom)}">
-              <div class="drawer-item-info">
-                <h4>${esc(nom)}</h4>
-                <p>${fprix(prix)} FCFA</p>
-                <div class="drawer-qty-controls">
-                  <button class="qty-btn" data-action="dec" data-ref="${esc(i.ref)}">−</button>
-                  <span class="qty-val">${i.qte || 1}</span>
-                  <button class="qty-btn" data-action="inc" data-ref="${esc(i.ref)}" ${isMax ? 'disabled' : ''}>+</button>
-                  <button class="remove-btn" data-action="rm" data-ref="${esc(i.ref)}">Retirer</button>
-                </div>
-              </div>
-            </div>`;
-        }).join('');
-        totalEl.textContent = fprix(total);
-        footer.style.display = 'block';
+    if (col.theme_visuel === 'snow') {
+      const layer = document.getElementById('snow');
+      for (let i = 0; i < 36; i++) {
+        const f = document.createElement('i'), s = Math.random() * 4 + 2;
+        f.style.cssText = `width:${s}px;height:${s}px;left:${Math.random() * 100}%;animation-duration:${Math.random() * 5 + 5}s;animation-delay:${Math.random() * 5}s;opacity:${Math.random()}`;
+        layer.appendChild(f);
       }
-    } catch(e) { console.warn('Drawer err', e); }
-  }
-
-  document.getElementById('drawer-body').addEventListener('click', e => {
-    const btn = e.target.closest('[data-action]');
-    if (!btn) return;
-    const ref = btn.dataset.ref;
-    const action = btn.dataset.action;
-    const item = SE.Cart.all().find(i => i.ref === ref);
-    if (action === 'inc' && item) {
-      const article = SE.Articles.cache ? SE.Articles.cache.find(x => x.reference === ref) : null;
-      const stock = article ? (article.quantite || 0) : 0;
-      if (item.qte < stock) SE.Cart.setQte(ref, item.qte + 1);
-    } else if (action === 'dec' && item) {
-      if (item.qte > 1) SE.Cart.setQte(ref, item.qte - 1);
-      else SE.Cart.remove(ref);
-    } else if (action === 'rm' && item) {
-      SE.Cart.remove(ref);
     }
-    updateUI();
-    updateDrawer();
-  });
-
-  function updateUI() {
-    try { const n = SE?.Cart?.count?.() ?? 0; const b = document.getElementById('cart-count'); b.textContent = n; b.style.display = n>0?'flex':'none'; } catch(e) {}
   }
 
-  function chapterMark(num, label) { return `<div class="chapter-mark"><span class="num">${num}</span><span class="line"></span><span class="lbl">${esc(label)}</span></div>`; }
+  function renderTease(col) {
+    const cd = col.date_lancement ? `<div class="chrono" id="chrono">
+        <div class="chrono-unit"><span class="chrono-val" data-cd="j">00</span><span class="chrono-lbl">Jours</span></div>
+        <div class="chrono-unit"><span class="chrono-val" data-cd="h">00</span><span class="chrono-lbl">Heures</span></div>
+        <div class="chrono-unit"><span class="chrono-val" data-cd="m">00</span><span class="chrono-lbl">Min</span></div>
+        <div class="chrono-unit"><span class="chrono-val" data-cd="s">00</span><span class="chrono-lbl">Sec</span></div></div>` : '';
+    root.innerHTML = `<section class="chap"><div class="m-wrap"><div class="tease rv">
+        <span class="eyebrow">Prochain arrivage</span>
+        <h2 class="t-big">Arrivage <i>bientôt</i></h2>
+        <p class="tease-text">${esc(col.description || 'Préparez-vous. Le prochain drop arrive très bientôt.')}</p>
+        ${cd}
+        <a class="btn-s btn-wa" href="${wa('Je veux être informé du prochain drop SenMarché.')}" target="_blank" rel="noopener">Être averti en avant-première</a>
+      </div></div></section>`;
+    MUI.countdown(col.date_lancement, document.getElementById('chrono'));
+    MUI.reveal();
+  }
 
-  function renderNextChapter(nextCol, num) {
-    if (nextCol) return `<div id="chapter-${num}" class="next-chapter">${chapterMark(num,'Le prochain chapitre')}<h2>Une nouvelle <em>histoire</em> arrive</h2><p>${esc(nextCol.description)}</p><a href="https://wa.me/221778038874" class="btn-next" target="_blank">Être averti en avant-première</a></div>`;
-    return `<div id="chapter-${num}" class="next-chapter">${chapterMark(num,'La suite')}<h2>L'aventure <em>continue</em></h2><a href="https://wa.me/221778038874" class="btn-next" target="_blank">Être averti sur WhatsApp</a></div>`;
+  function nextBlock(nextCol, num) {
+    const inner = nextCol
+      ? `<span class="eyebrow">Le prochain chapitre</span><h2>Une nouvelle <i>histoire</i> arrive</h2><p>${esc(nextCol.description || '')}</p><a href="${wa('Je veux être averti en avant-première du prochain drop SenMarché.')}" class="btn-s" target="_blank" rel="noopener">Être averti en avant-première</a>`
+      : `<span class="eyebrow">La suite</span><h2>L'aventure <i>continue</i></h2><a href="${wa('Je veux être averti des prochains arrivages SenMarché.')}" class="btn-s btn-wa" target="_blank" rel="noopener">Être averti sur WhatsApp</a>`;
+    return `<section class="chap" id="chapter-${num}"><div class="m-wrap"><div class="next rv">${inner}</div></div></section>`;
   }
 
   async function init() {
+    MUI.init();
     await SE.Articles.load();
     const allArts = SE.Articles.cache || [];
-
     if (!colId) { location.href = 'mode.html'; return; }
 
     try {
       const { data: cols } = await SE.sb.from('collections').select('*').eq('id', colId).limit(1);
-      if (!cols || cols.length === 0) { location.href = 'mode.html'; return; }
+      if (!cols || !cols.length) { location.href = 'mode.html'; return; }
       const col = cols[0];
+      setHero(col);
 
-      document.title = `${esc(col.nom)} — SenExport`;
-      document.getElementById('col-hero-bg').style.backgroundImage = `url('${imgUrl(col.image_url, 1600)}')`;
-      document.getElementById('col-title').innerHTML = esc(col.nom).replace(/(\d{4})/, '<em>$1</em>');
-
-      // GESTION DES 4 STATUTS DE COLLECTION
       if (col.statut === 'a_venir') {
-        document.getElementById('col-hero-bg').style.filter = 'blur(8px) brightness(0.4)';
-        document.getElementById('col-badge').textContent = '✦ Prochain Arrivage';
-        dynamicContent.innerHTML = `<div class="next-chapter"><h2>Arrivage <em>Bientôt</em></h2><p>${esc(col.description || 'Préparez-vous. Le prochain drop arrive.')}</p><a href="https://wa.me/221778038874" class="btn-next" target="_blank">Être averti en avant-première</a></div>`;
-        return;
+        document.getElementById('col-badge').textContent = '✦ Prochain arrivage';
+        renderTease(col); return;
       }
-
       if (col.statut === 'epuisee') {
-        document.getElementById('col-hero-bg').style.filter = 'grayscale(100%) brightness(0.4)';
-        document.getElementById('col-badge').textContent = 'Archives Épuisées';
-        dynamicContent.innerHTML = `<div class="next-chapter"><h2>Cette histoire est <em>terminée</em></h2><p>Toutes les pièces de cette collection ont trouvé preneur. Le prochain chapitre est déjà en préparation.</p></div>`;
-        return;
+        document.getElementById('col-badge').textContent = 'Archives épuisées';
+        root.innerHTML = `<section class="chap"><div class="m-wrap"><div class="next rv"><span class="eyebrow">Collection terminée</span><h2>Cette histoire est <i>terminée</i></h2><p>Toutes les pièces de cette collection ont trouvé preneur. Le prochain chapitre est déjà en préparation.</p><a href="collections.html" class="btn-s">Voir les collections</a></div></div></section>`;
+        MUI.reveal(); return;
       }
-
-      document.getElementById('col-badge').textContent = col.statut === 'en_cours' ? 'Disponible Maintenant' : 'Archives';
+      document.getElementById('col-badge').textContent = col.statut === 'en_cours' ? '● Disponible maintenant' : 'Archives';
 
       const { data: liens } = await SE.sb.from('collection_articles').select('article_ref').eq('collection_id', col.id);
-      let collectionArticles = [];
-      if (liens && liens.length > 0) {
-        const refs = liens.map(l => l.article_ref);
-        const { data: arts } = await SE.sb.from('articles').select('*').in('reference', refs);
-        if (arts) collectionArticles = arts;
+      let colArts = [];
+      if (liens && liens.length) {
+        const { data: arts } = await SE.sb.from('articles').select('*').in('reference', liens.map(l => l.article_ref));
+        if (arts) colArts = arts;
       }
-
-      let gridArticles = collectionArticles;
-      if (col.statut === 'passee') gridArticles = collectionArticles.filter(a => (a.quantite || 0) > 0);
-
-      const heroArt = col.hero_piece_ref ? collectionArticles.find(a => a.reference === col.hero_piece_ref) : gridArticles[0];
-      if (heroArt) gridArticles = gridArticles.filter(a => a.reference !== heroArt.reference);
-
-      const outfitArts = OUTFITS[0].refs.map(ref => allArts.find(a => a.reference === ref)).filter(Boolean);
-
+      let grid = colArts;
+      if (col.statut === 'passee') grid = colArts.filter(a => (a.quantite || 0) > 0);
+      const heroArt = col.hero_piece_ref ? colArts.find(a => a.reference === col.hero_piece_ref) : grid[0];
+      if (heroArt) grid = grid.filter(a => a.reference !== heroArt.reference);
+      const outfitArts = OUTFITS[0].refs.map(r => allArts.find(a => a.reference === r)).filter(Boolean);
       const { data: nextDrops } = await SE.sb.from('collections').select('*').eq('statut', 'a_venir').limit(1);
-      const nextCol = nextDrops && nextDrops.length > 0 ? nextDrops[0] : null;
+      const nextCol = nextDrops && nextDrops.length ? nextDrops[0] : null;
 
       const chapters = [];
 
-      if (col.story_text) {
-        chapters.push({
-          label: 'Le manifeste',
-          render: (num) => `<div id="chapter-${num}" class="manifesto"><div class="manifesto-bg" style="background-image:url('${imgUrl(col.image_url, 1000)}')"></div>${chapterMark(num,'Le manifeste')}<p class="manifesto-text">${col.story_text}</p></div>`
-        });
-      }
+      if (col.story_text) chapters.push({ label: 'Le manifeste', html: n => `<section class="manifest" id="chapter-${n}"><div class="manifest-bg" style="background-image:url('${esc(imgUrl(col.image_url, 1000))}')"></div><span class="eyebrow">Le manifeste</span><p class="manifest-text rv">${col.story_text}</p></section>` });
 
       if (heroArt) {
-        const qte = heroArt.quantite || 0;
-        const isHeroOut = qte <= 0;
-        const heroBtn = isHeroOut 
-          ? `<span class="btn-hero-piece disabled">Indisponible</span>` 
-          : `<a href="produit.html?ref="${esc(heroArt.reference)}" class="btn-hero-piece">Découvrir la pièce</a>`;
-        const heroNote = isHeroOut 
-          ? `<span class="hero-piece-rare" style="color:var(--red)">Épuisé</span>` 
-          : (qte <= 3 ? `<span class="hero-piece-rare">Il n'en reste que ${qte}</span>` : '');
-
-        chapters.push({
-          label: 'La pièce maîtresse',
-          render: (num) => `
-            <div id="chapter-${num}" class="hero-piece-section">
-              ${chapterMark(num, 'La pièce maîtresse')}
-              <div class="hero-piece">
-                <div class="hero-piece-img-wrap ${isHeroOut ? 'is-out' : ''}"><img src="${imgUrl(heroArt.photo_url, 800)}" class="hero-piece-img" alt="${esc(heroArt.nom)}"></div>
-                <div class="hero-piece-content">
-                  <span class="hero-piece-badge">Pièce maîtresse</span>
-                  <span class="hero-piece-label">Édition limitée — réf. ${esc(heroArt.reference)}</span>
-                  <h2 class="hero-piece-name">${esc(heroArt.nom)}</h2>
-                  <p class="hero-piece-desc">${esc(heroArt.description || 'Une pièce centrale de cette collection.')}</p>
-                  <div class="hero-piece-footer">
-                    <div class="hero-piece-prix-block"><span class="hero-piece-prix">${fprix(heroArt.prix_vente_fcfa)}</span>${heroNote}</div>
-                    ${heroBtn}
-                  </div>
-                </div>
-              </div>
-            </div>`
-        });
-      }
-
-      if (gridArticles.length > 0) {
-        chapters.push({
-          label: 'Le reste du casting',
-          render: (num) => {
-            let gridHTML = `<div id="chapter-${num}">${chapterMark(num,'Le reste du casting')}<div class="section-head"><h2>À <em>explorer</em></h2><span class="meta">${gridArticles.length} pièces</span></div><div class="prod-grid">`;
-            gridArticles.forEach((a, i) => {
-              const qte = a.quantite || 0;
-              const isOut = qte <= 0;
-              const rareNote = !isOut && qte <= 3 ? `<span class="p-rare">Dernières pièces</span>` : '';
-              const cornerTag = isOut ? `<span class="p-out">Épuisé</span>` : `<span class="p-index">N°${String(i+1).padStart(2,'0')}</span>`;
-              const quickAdd = isOut ? '' : `<button class="p-quick-add" data-cart-add="${esc(a.reference)}" aria-label="Ajouter au panier">+</button>`;
-              gridHTML += `
-                <div class="p-card ${isOut ? 'p-card--out' : ''}">
-                  <a href="produit.html?ref=${esc(a.reference)}" class="p-card-link" aria-label="${esc(a.nom)}"></a>
-                  <img src="${imgUrl(a.photo_url, 400)}" alt="${esc(a.nom)}" loading="lazy">
-                  ${cornerTag}
-                  <div class="p-body"><div class="p-info-text"><h3>${esc(a.nom)}</h3><span>Voir l'article${rareNote}</span></div><span class="p-prix">${fprix(a.prix_vente_fcfa)}</span></div>
-                  ${quickAdd}
-                </div>`;
-            });
-            gridHTML += `</div></div>`;
-            return gridHTML;
-          }
-        });
-      }
-
-      chapters.push({
-        label: "L'engagement",
-        render: (num) => `
-          <div id="chapter-${num}" class="engagement">
-            ${chapterMark(num, "L'engagement")}
-            <div class="engagement-grid">
-              <div class="engagement-item">
-                <span class="eng-label">Vérifié à la main</span>
-                <p>Chaque pièce est contrôlée avant l'envoi. Ce que vous voyez ici est <em>exactement</em> ce que vous recevrez — pas de retouche trompeuse, pas de surprise à l'ouverture.</p>
-              </div>
-              <div class="engagement-item">
-                <span class="eng-label">Paiement à la réception</span>
-                <p>Vous ne payez rien à la commande. Wave, Orange Money ou espèces, uniquement au moment où vous avez la pièce entre les mains à Thiès.</p>
+        const qte = heroArt.quantite || 0, out = qte <= 0;
+        chapters.push({ label: 'La pièce maîtresse', html: n => `<section class="chap" id="chapter-${n}"><div class="m-wrap">${head(n, 'La pièce <i>maîtresse</i>')}
+          <div class="piece rv">
+            <div class="piece-img ${out ? 'is-out' : ''} ${heroArt.photo_url ? '' : 'noimg'}">${photo(heroArt.photo_url, 900, heroArt.nom)}</div>
+            <div>
+              <span class="piece-badge">Pièce maîtresse</span>
+              <div class="piece-label">Édition limitée · réf. ${esc(heroArt.reference)}</div>
+              <h3 class="piece-name">${esc(heroArt.nom)}</h3>
+              <p class="piece-desc">${esc(heroArt.description || 'Une pièce centrale de cette collection.')}</p>
+              <div class="piece-foot">
+                <div><span class="piece-prix">${fprix(heroArt.prix_vente_fcfa)}</span>${out ? '<span class="piece-rare">Épuisé</span>' : (qte <= 3 ? `<span class="piece-rare">Il n'en reste que ${qte}</span>` : '')}</div>
+                ${out ? '<span class="btn-s is-off">Indisponible</span>' : `<a href="produit.html?ref=${esc(heroArt.reference)}" class="btn-s">Découvrir la pièce</a>`}
               </div>
             </div>
-          </div>`
-      });
-
-      if (outfitArts.length > 0) {
-        chapters.push({
-          label: 'Comment le porter',
-          render: (num) => {
-            let totalPrix = 0, itemsHTML = '';
-            outfitArts.forEach(art => { totalPrix += art.prix_vente_fcfa; itemsHTML += `<a href="produit.html?ref=${esc(art.reference)}" class="look-item"><span>${esc(art.nom)}</span><strong>${fprix(art.prix_vente_fcfa)}</strong></a>`; });
-
-            const twoCols = !!outfitArts[1];
-            const collageHTML = `<div class="look-collage" style="grid-template-columns:${twoCols ? '1.5fr 1fr' : '1fr'}">
-              <img class="lc-left" src="${imgUrl(outfitArts[0].photo_url, 600)}" alt="${esc(outfitArts[0].nom)}">
-              ${twoCols ? `<img class="lc-right" src="${imgUrl(outfitArts[1].photo_url, 400)}" alt="${esc(outfitArts[1].nom)}">` : ''}
-            </div>`;
-
-            return `<div id="chapter-${num}" class="lookbook-section"><div class="container">${chapterMark(num,'Comment le porter')}</div><div class="look-card">${collageHTML}<div class="look-content"><h3 class="look-title">${OUTFITS[0].titre}</h3><div class="look-items">${itemsHTML}</div><div class="look-total"><span>Total Look</span><b>${fprix(totalPrix)}</b></div><button class="btn-buy-look" data-refs="${OUTFITS[0].refs.join(',')}">Acheter le look</button></div></div></div>`;
-          }
-        });
+          </div></div></section>` });
       }
 
-      chapters.push({
-        label: nextCol ? 'Le prochain chapitre' : 'La suite',
-        render: (num) => renderNextChapter(nextCol, num)
-      });
+      if (grid.length) chapters.push({ label: 'À explorer', html: n => `<section class="chap" id="chapter-${n}"><div class="m-wrap">${head(n, 'À <i>explorer</i>', grid.length + ' pièces')}
+          <div class="mosaic rv">${grid.map((a, i) => {
+            const qte = a.quantite || 0, out = qte <= 0;
+            return `<div class="mc-card ${out ? 'is-out' : ''} ${a.photo_url ? '' : 'noimg'}">
+              <a class="mc-link" href="produit.html?ref=${esc(a.reference)}" aria-label="${esc(a.nom)}"></a>${photo(a.photo_url, 500, a.nom)}
+              ${out ? '<span class="mc-tag out">Épuisé</span>' : `<span class="mc-tag">N°${String(i + 1).padStart(2, '0')}</span>`}
+              <div class="mc-body"><div><h3>${esc(a.nom)}</h3><small>${!out && qte <= 3 ? 'Dernières pièces' : 'Voir l\'article'}</small></div><span class="mc-prix">${fprix(a.prix_vente_fcfa)}</span></div>
+              ${out ? '' : `<button class="mc-add" data-cart-add="${esc(a.reference)}" aria-label="Ajouter au panier">+</button>`}</div>`;
+          }).join('')}</div></div></section>` });
 
-      let html = '';
-      let dotsHTML = '';
-      chapters.forEach((ch, i) => {
-        const num = String(i + 1).padStart(2, '0');
-        html += ch.render(num);
-        dotsHTML += `<a href="#chapter-${num}" data-label="${esc(ch.label)}"></a>`;
-      });
+      chapters.push({ label: "L'engagement", html: n => `<section class="chap" id="chapter-${n}"><div class="m-wrap">${head(n, 'Notre <i>engagement</i>')}
+          <div class="eng rv">
+            <div class="eng-card"><span class="eyebrow">Vérifié avant l'envoi</span><p>Chaque pièce est contrôlée avant l'envoi. Ce que vous voyez ici est <em>exactement</em> ce que vous recevrez : pas de retouche trompeuse, pas de surprise à l'ouverture.</p></div>
+            <div class="eng-card"><span class="eyebrow">Paiement à la récupération</span><p>Vous ne payez rien à la commande. Wave, Orange Money ou espèces, uniquement au moment du retrait, quand vous avez la pièce entre les mains.</p></div>
+          </div></div></section>` });
 
-      dynamicContent.innerHTML = html;
-      chapterDotsNav.innerHTML = dotsHTML;
+      if (outfitArts.length) chapters.push({ label: 'Comment le porter', html: n => {
+        const total = outfitArts.reduce((s, a) => s + (a.prix_vente_fcfa || 0), 0);
+        const items = outfitArts.map(a => `<a href="produit.html?ref=${esc(a.reference)}" class="look-item"><span>${esc(a.nom)}</span><strong>${fprix(a.prix_vente_fcfa)}</strong></a>`).join('');
+        const two = outfitArts.length > 1;
+        const collage = `<div class="look-collage" style="grid-template-columns:${two ? '1.5fr 1fr' : '1fr'}">${outfitArts.slice(0, 2).map(a => `<div class="${a.photo_url ? '' : 'noimg'}">${photo(a.photo_url, 600, a.nom)}</div>`).join('')}</div>`;
+        return `<section class="chap" id="chapter-${n}"><div class="m-wrap">${head(n, 'Comment le <i>porter</i>')}
+          <div class="look rv">${collage}<div class="look-content"><h3 class="look-title">${OUTFITS[0].titre}</h3><div class="look-items">${items}</div>
+          <div class="look-total"><span>Total look</span><b>${fprix(total)}</b></div><button class="btn-s btn-buy-look" data-refs="${OUTFITS[0].refs.join(',')}">Acheter le look</button></div></div></div></section>`;
+      } });
 
-      document.querySelectorAll('[data-cart-add]').forEach(btn => btn.addEventListener('click', e => { e.preventDefault(); SE.Cart.add(btn.dataset.cartAdd); btn.textContent='✓'; setTimeout(()=>btn.textContent='+',1200); updateUI(); updateDrawer(); setTimeout(openDrawer,350); }));
-      document.querySelectorAll('.btn-buy-look').forEach(btn => btn.addEventListener('click', () => { btn.dataset.refs.split(',').forEach(r=>SE.Cart.add(r,1)); updateUI(); updateDrawer(); setTimeout(openDrawer,400); }));
+      chapters.push({ label: nextCol ? 'Le prochain chapitre' : 'La suite', html: n => nextBlock(nextCol, n) });
 
-      const dotLinks = document.querySelectorAll('.chapter-dots a');
-      let navTimeout;
-      
-      const dotObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          const dot = document.querySelector(`.chapter-dots a[href="#${entry.target.id}"]`);
-          if (dot && entry.isIntersecting) {
-            dotLinks.forEach(d => { d.classList.remove('active'); d.removeAttribute('aria-current'); });
-            dot.classList.add('active'); 
-            dot.setAttribute('aria-current', 'true');
-            
-            chapterDotsNav.classList.add('show-nav');
-            clearTimeout(navTimeout);
-            navTimeout = setTimeout(() => {
-              chapterDotsNav.classList.remove('show-nav');
-            }, 2500);
-          }
-        });
-      }, { threshold: 0.35 });
-      document.querySelectorAll('[id^="chapter-"]').forEach(el => dotObserver.observe(el));
-      
-      chapterDotsNav.addEventListener('mouseenter', () => {
-        clearTimeout(navTimeout);
-        chapterDotsNav.classList.add('show-nav');
-      });
-      chapterDotsNav.addEventListener('mouseleave', () => {
-        navTimeout = setTimeout(() => {
-          chapterDotsNav.classList.remove('show-nav');
-        }, 1000);
-      });
+      let html = '', dots = '';
+      chapters.forEach((ch, i) => { const n = String(i + 1).padStart(2, '0'); html += ch.html(n); dots += `<a href="#chapter-${n}" data-label="${esc(ch.label)}"></a>`; });
+      root.innerHTML = html; dotsNav.innerHTML = dots;
+      MUI.reveal();
 
-      const markObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-      }, { threshold: 0.3 });
-      document.querySelectorAll('.chapter-mark').forEach(el => markObserver.observe(el));
+      document.querySelectorAll('.btn-buy-look').forEach(b => b.addEventListener('click', () => {
+        b.dataset.refs.split(',').forEach(r => SE.Cart.add(r, 1)); MUI.badge(); MUI.cart.update(); setTimeout(MUI.cart.open, 350);
+      }));
 
+      /* navigation par chapitres : visible un instant à chaque changement */
+      const links = dotsNav.querySelectorAll('a'); let hide;
+      const obs = new IntersectionObserver(es => es.forEach(en => {
+        const d = dotsNav.querySelector(`a[href="#${en.target.id}"]`);
+        if (d && en.isIntersecting) {
+          links.forEach(l => l.classList.remove('active')); d.classList.add('active');
+          dotsNav.classList.add('show'); clearTimeout(hide); hide = setTimeout(() => dotsNav.classList.remove('show'), 2500);
+        }
+      }), { threshold: .35 });
+      document.querySelectorAll('[id^="chapter-"]').forEach(el => obs.observe(el));
+      dotsNav.addEventListener('mouseenter', () => { clearTimeout(hide); dotsNav.classList.add('show'); });
+      dotsNav.addEventListener('mouseleave', () => { hide = setTimeout(() => dotsNav.classList.remove('show'), 1000); });
     } catch (e) {
       console.error('[Collection] Erreur:', e);
-      dynamicContent.innerHTML = renderNextChapter(null, '01');
+      root.innerHTML = `<section class="chap"><div class="m-wrap"><div class="empty-note"><h3>Erreur de chargement</h3><p>Veuillez réessayer plus tard.</p></div></div></section>`;
     }
   }
-
-  if (document.readyState === 'complete') init();
-  else window.addEventListener('load', init);
+  if (document.readyState === 'complete') init(); else window.addEventListener('load', init);
 })();
 </script>
 </body>
