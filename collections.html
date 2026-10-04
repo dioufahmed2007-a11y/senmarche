@@ -3,412 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Collection — SenExport Boutique</title>
-<meta name="theme-color" content="var(--bg)">
+<title>Collections & drops — SenMarché</title>
+<meta name="description" content="Les collections en cours, les prochains arrivages et les archives SenMarché.">
+<meta name="theme-color" content="#FAF6F0">
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="manifest" href="manifest.json">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Fraunces:ital,opsz,wght@1,9..144,400..600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="styles-dark.css">
-
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { font-size: 16px; scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--ink); font-family: var(--ff-b); overflow-x: hidden; padding-top: 56px; padding-bottom: 4rem; }
-  img { max-width: 100%; display: block; }
-  button { cursor: pointer; -webkit-appearance: none; appearance: none; font-family: inherit; }
-  .container { width: 100%; padding: 0 1rem; max-width: 1400px; margin: 0 auto; }
-
-  /* HERO */
-  .col-hero { height: 80vh; min-height: 550px; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; margin-top: -56px; }
-  .col-hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; filter: grayscale(20%) contrast(1.1); z-index: 0; transition: filter 0.5s ease; }
-  .col-hero.past .col-hero-bg { filter: grayscale(80%) brightness(0.5); }
-  .col-hero.upcoming .col-hero-bg { filter: blur(8px) brightness(0.3); }
-  .col-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.85)); z-index: 1; }
-  .col-hero-content { position: relative; z-index: 3; padding: 2rem; max-width: 800px; }
-  .col-badge { font-family: var(--ff-m); font-size: 0.7rem; color: #000; background: var(--or); padding: 0.4rem 1.2rem; border-radius: 99px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 700; margin-bottom: 1.5rem; display: inline-block; }
-  .col-title { font-family: var(--ff-d); font-size: clamp(2.5rem, 10vw, 5rem); color: #fff; font-weight: 300; line-height: 1; text-transform: uppercase; margin-bottom: 1.5rem; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-  .col-title em { color: var(--or); font-style: italic; font-weight: 700; }
-  .col-desc { color: rgba(255,255,255,0.9); max-width: 600px; margin: 0 auto; font-size: 1rem; line-height: 1.6; }
-  .hero-cta { display: inline-block; margin-top: 2rem; background: var(--or); color: #000; text-decoration: none; padding: 1rem 2.5rem; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 8px; transition: 0.3s; border: 1px solid var(--or); }
-  .hero-cta:hover { background: transparent; color: var(--or); }
-
-  /* AMBIANT (Neige) */
-  .ambient-layer { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
-  .snowflake { position: absolute; top: -10px; background: #fff; border-radius: 50%; opacity: 0.8; animation: fall linear infinite; }
-  @keyframes fall { 0% { transform: translateY(-10vh) translateX(0); opacity: 0; } 20% { opacity: 0.8; } 100% { transform: translateY(100vh) translateX(50px); opacity: 0; } }
-
-  /* TEASER */
-  .teaser-carousel { position: relative; height: 400px; overflow: hidden; margin-bottom: 4rem; }
-  .teaser-slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 1.5s ease-in-out; display: flex; align-items: center; justify-content: center; }
-  .teaser-slide.active { opacity: 1; }
-  .teaser-video { width: 100%; height: 100%; object-fit: cover; }
-  .teaser-caption { font-family: var(--ff-d); font-size: clamp(1.5rem, 4vw, 3rem); color: #fff; text-transform: uppercase; text-align: center; text-shadow: 0 2px 10px rgba(0,0,0,0.8); padding: 2rem; z-index: 2; position: absolute; }
-  .teaser-caption em { color: var(--or); font-style: italic; }
-
-  /* GRILLE */
-  .section-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--or-line); }
-  .section-head h2 { font-family: var(--ff-d); font-size: 1.8rem; font-weight: 400; color: var(--ink); margin: 0; }
-  .section-head h2 em { color: var(--or); font-style: italic; }
-  .section-head .meta { font-family: var(--ff-m); font-size: 0.7rem; color: var(--stone); text-transform: uppercase; letter-spacing: 0.1em; }
-  .prod-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 1rem 0 3rem; margin: 0; }
-  @media (min-width: 768px) { .prod-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
-  .p-card { background: var(--card2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease); text-decoration: none; }
-  .p-card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,0.2); border-color: var(--or-line); }
-  .p-image-wrap { aspect-ratio: 4/5; overflow: hidden; background: var(--bg2); display: block; position: relative; }
-  .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
-  .p-card:hover .p-image-wrap img { transform: scale(1.05); }
-  .p-body { padding: 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; background: var(--card2); }
-  .p-name { font-size: 0.8rem; color: var(--ink); font-weight: 500; line-height: 1.4; text-decoration: none; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.24rem; }
-  .p-prix { font-family: var(--ff-d); font-size: 1.3rem; font-weight: 800; color: var(--prix); margin-top: auto; margin-bottom: 8px; }
-
-  /* GUIDES */
-  .guide-section { padding: 2rem 0 4rem; }
-  .guide-card { display: grid; grid-template-columns: 1fr; margin-bottom: 2rem; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--card); }
-  @media (min-width: 768px) { .guide-card { grid-template-columns: 1fr 1fr; } .guide-card.reverse .guide-img { order: 2; } }
-  .guide-img { height: 300px; background-size: cover; background-position: center; }
-  .guide-content { padding: 2rem; display: flex; flex-direction: column; justify-content: center; }
-  .guide-title { font-family: var(--ff-d); font-size: 1.5rem; color: var(--ink); margin-bottom: 1rem; font-weight: 400; }
-  .guide-title em { color: var(--or); font-style: italic; }
-  .guide-links { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
-  .guide-link { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: var(--bg2); border-radius: 8px; text-decoration: none; color: var(--ink); transition: 0.2s; border: 1px solid transparent; }
-  .guide-link:hover { border-color: var(--or); color: var(--or); }
-  .guide-link span { font-size: 0.85rem; font-weight: 500; }
-  .guide-link strong { font-family: var(--ff-m); font-size: 0.8rem; color: var(--prix); }
-
-  /* CTA */
-  .final-cta { text-align: center; padding: 4rem 1rem; border-top: 1px solid var(--border); margin-top: 2rem; }
-  .final-cta h3 { font-family: var(--ff-d); font-size: 2rem; color: var(--ink); margin-bottom: 1.5rem; font-weight: 400; }
-  .final-cta h3 em { color: var(--or); font-style: italic; }
-  .final-btn { display: inline-block; background: var(--ink); color: var(--bg); padding: 1rem 2.5rem; text-decoration: none; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em; border-radius: 8px; transition: 0.3s; border: 1px solid var(--ink); }
-  .final-btn:hover { background: transparent; color: var(--ink); }
-
-  /* TEASING */
-  .teasing-section { padding: 5rem 1rem; text-align: center; }
-  .teasing-title { font-family: var(--ff-d); font-size: clamp(2rem, 5vw, 3rem); color: var(--ink); margin-bottom: 1rem; }
-  .teasing-title em { color: var(--or); font-style: italic; }
-  .teasing-text { color: var(--stone); margin-bottom: 3rem; max-width: 500px; margin-left: auto; margin-right: auto; }
-  .chrono-big { display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap; }
-  .chrono-unit { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; min-width: 90px; }
-  .chrono-val { font-family: var(--ff-d); font-size: 2.5rem; font-weight: 700; color: var(--or); line-height: 1; }
-  .chrono-lbl { font-family: var(--ff-m); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; margin-top: 0.5rem; display: block; }
-  .teasing-cta { display: inline-block; padding: 1rem 2rem; background: #25D366; color: #fff; text-decoration: none; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.1em; border-radius: 8px; transition: 0.2s; }
-  .teasing-cta:hover { background: #1ebe57; transform: translateY(-2px); }
-  .empty-state { text-align: center; padding: 5rem 1rem; color: var(--stone); }
-</style>
+<link rel="stylesheet" href="marche.css">
+<link rel="stylesheet" href="marche-ui.css">
+<script src="theme.js"></script>
 </head>
-<body>
-
+<body class="se-page">
 <nav class="nav" id="nav">
-  <a href="index.html" class="nav-logo">Sen·Export <em>Boutique</em></a>
-  <ul class="nav-links"><li><a href="index.html">Accueil</a></li><li><a href="mode.html">Mode</a></li><li><a href="catalogue.html">Catalogue</a></li><li><a href="maison.html">Maison</a></li></ul>
+  <a href="index.html" class="nav-logo">Sen<span style="color:var(--m-acc-bissap)">·</span>Marché</a>
+  <ul class="nav-links"><li><a href="mode.html">Mode</a></li><li><a href="maison.html">Maison</a></li><li><a href="fille.html">Fille</a></li><li><a href="sport.html">Sport</a></li><li><a href="catalogue.html">Catalogue</a></li><li><a href="collections.html" class="active">Collections</a></li></ul>
   <div class="nav-right">
-    <a href="favoris.html" class="nav-icon" aria-label="Favoris"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg></a>
-    <a href="panier.html" class="nav-icon" id="nav-cart-icon" aria-label="Panier"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="nav-badge" id="cart-count"></span></a>
+    <a href="favoris.html" class="nav-icon" aria-label="Favoris"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg></a>
+    <a href="panier.html" class="nav-icon" id="nav-cart-icon" aria-label="Panier"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="nav-badge" id="cart-count"></span></a>
+    <a href="compte.html" class="nav-icon" aria-label="Compte"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
   </div>
 </nav>
 
-<div class="col-hero" id="col-hero">
-  <div class="col-hero-bg" id="col-hero-bg"></div>
-  <div class="col-hero-overlay"></div>
-  <div class="ambient-layer" id="ambient-layer"></div>
-  <div class="col-hero-content">
-    <span class="col-badge" id="col-badge">Chargement...</span>
-    <h1 class="col-title" id="col-title">Collection</h1>
-    <p class="col-desc" id="col-desc"></p>
-    <a href="#products" class="hero-cta" id="hero-cta">Découvrir la sélection</a>
+<header class="chero chero--compact" id="chero">
+  <div class="chero-shade"></div>
+  <div class="chero-body">
+    <span class="chero-badge">Arrivages</span>
+    <h1 class="chero-title disp">Collections &amp; <em>drops</em></h1>
+    <p class="chero-desc">Ce qui est disponible maintenant, ce qui arrive bientôt, et les pièces des collections précédentes.</p>
   </div>
-</div>
+</header>
 
-<div class="container">
-  <div id="dynamic-content">
-    <div class="empty-state"><p>Chargement de la collection...</p></div>
-  </div>
-</div>
+<main>
+  <section class="chap"><div class="m-wrap">
+    <div id="se-collections" data-header="off"></div>
+    <div style="text-align:center;margin-top:2rem"><a href="archives.html" class="btn-s btn-dark">Voir les archives →</a></div>
+  </div></section>
+</main>
+<div class="after"></div>
 
 <footer class="footer">
   <div class="footer-grid">
-    <div class="footer-brand"><div>Sen·Export <em style="color:var(--or); font-style:italic; font-weight:300;">Boutique</em></div><p>Les meilleurs produits sélectionnés pour vous. Paiement à la récupération.</p></div>
-    <nav class="footer-col"><h4>Boutique</h4><ul><li><a href="mode.html">Mode</a></li><li><a href="maison.html">Maison</a></li><li><a href="catalogue.html">Catalogue</a></li></ul></nav>
-    <nav class="footer-col"><h4>Compte</h4><ul><li><a href="compte.html">Mon compte</a></li><li><a href="panier.html">Panier</a></li></ul></nav>
-    <nav class="footer-col"><h4>Contact</h4><ul><li><a href="https://wa.me/221778038874" target="_blank">WhatsApp</a></li></ul></nav>
+    <div class="footer-brand">
+      <div style="font-family:var(--m-display);font-size:1.5rem;font-weight:800;margin-bottom:.9rem">Sen<span style="color:var(--m-safran)">·</span>Marché</div>
+      <p style="font-size:.84rem;color:var(--stone);line-height:1.65;max-width:240px;margin-bottom:1.25rem">Des articles sélectionnés et vérifiés, payés à la récupération.</p>
+      <div class="pay-tags"><span class="pay-tag">Wave</span><span class="pay-tag">Orange Money</span><span class="pay-tag">Espèces</span></div>
+    </div>
+    <nav class="footer-col"><h4>Univers</h4><ul><li><a href="mode.html">Mode</a></li><li><a href="fille.html">Fille</a></li><li><a href="sport.html">Sport</a></li><li><a href="maison.html">Maison</a></li><li><a href="catalogue.html">Catalogue</a></li></ul></nav>
+    <nav class="footer-col"><h4>Compte</h4><ul><li><a href="compte.html">Mon compte</a></li><li><a href="panier.html">Panier</a></li><li><a href="favoris.html">Favoris</a></li><li><a href="connexion.html">Connexion</a></li></ul></nav>
+    <nav class="footer-col"><h4>Contact</h4><ul><li><a href="https://wa.me/221778038874" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="a-propos.html">À propos</a></li><li><a href="demande-speciale.html">Demande spéciale</a></li><li><a href="cgv.html">CGV</a></li></ul></nav>
   </div>
-  <div class="footer-bottom"><p>© 2026 SenExport Boutique</p><a href="cgv.html">CGV</a></div>
+  <div class="footer-bottom"><p>© 2026 SenMarché</p><a href="cgv.html">Conditions générales</a></div>
 </footer>
-
+<a href="https://wa.me/221778038874" class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="images.js"></script>
 <script src="app.js"></script>
-<script src="theme.js"></script>
-
-<script>
-(() => {
-  'use strict';
-
-  function esc(s) {
-    if (s === null || s === undefined) return '';
-    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  }
-
-  function fprix(n) { return Math.round(n||0).toLocaleString('fr-FR') + ' FCFA'; }
-  function imgUrl(u) {
-    if (!u) return 'https://placehold.co/600x800/08090E/D4AF37?text=SenExport';
-    if (u.startsWith('http')) return u;
-    return `https://axgpohmhzmdgozndlntj.supabase.co/storage/v1/object/public/photos/${u}`;
-  }
-
-  const STYLE_GUIDES = [
-    {
-      img: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1200&auto=format&fit=crop',
-      titre: 'Le total look <em>Streetwear</em>',
-      refs: ['SW-001', 'SW-002', 'SW-003'] 
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?q=80&w=1200&auto=format&fit=crop',
-      titre: 'Élégance <em>au quotidien</em>',
-      refs: ['SW-004', 'SW-005'] 
-    }
-  ];
-
-  const params = new URLSearchParams(window.location.search);
-  const colId = params.get('id');
-  const status = params.get('status');
-  const dynamicContent = document.getElementById('dynamic-content');
-
-  function generateAmbient(type) {
-    const layer = document.getElementById('ambient-layer');
-    if (!layer) return;
-    layer.innerHTML = '';
-    if (type === 'snow') {
-      for (let i = 0; i < 40; i++) {
-        const flake = document.createElement('div');
-        flake.className = 'snowflake';
-        const size = Math.random() * 4 + 2 + 'px';
-        flake.style.width = size;
-        flake.style.height = size;
-        flake.style.left = Math.random() * 100 + '%';
-        flake.style.animationDuration = (Math.random() * 5 + 5) + 's';
-        flake.style.animationDelay = (Math.random() * 5) + 's';
-        flake.style.opacity = Math.random();
-        layer.appendChild(flake);
-      }
-    }
-  }
-
-  function renderTeaser(col) {
-    if (col.video_url) {
-      return `
-        <div class="teaser-carousel">
-          <video class="teaser-video" autoplay muted loop playsinline>
-            <source src="${esc(col.video_url)}" type="video/mp4">
-          </video>
-        </div>
-      `;
-    } else if (col.teaser_images && col.teaser_images.length > 0) {
-      let slidesHTML = col.teaser_images.map((img, i) => `
-        <div class="teaser-slide ${i === 0 ? 'active' : ''}" style="background-image:url('${esc(img)}')">
-          <div class="teaser-caption">${i === 0 ? 'L\'hiver ne fait que <em>commencer</em>' : ''}</div>
-        </div>
-      `).join('');
-
-      let current = 0;
-      setInterval(() => {
-        const allSlides = document.querySelectorAll('.teaser-slide');
-        if (allSlides.length === 0) return;
-        allSlides[current].classList.remove('active');
-        current = (current + 1) % allSlides.length;
-        allSlides[current].classList.add('active');
-      }, 4000);
-
-      return `<div class="teaser-carousel">${slidesHTML}</div>`;
-    }
-    return ''; 
-  }
-
-  function renderProducts(articles) {
-    if (articles.length === 0) {
-      return `
-        <div class="empty-state" id="products">
-          <h3>Collection épuisée</h3>
-          <p>Toutes les pièces de cette collection ont trouvé preneur.</p>
-        </div>
-      `;
-    }
-
-    let gridHTML = `
-      <div class="section-head" id="products">
-        <h2>Pièces <em>Disponibles</em></h2>
-        <span class="meta">${articles.length} articles</span>
-      </div>
-      <div class="prod-grid">
-    `;
-
-    articles.forEach(a => {
-      const prix = a.prix_vente_fcfa || 0;
-      const photo = imgUrl(a.photo_url);
-      gridHTML += `
-        <a href="produit.html?ref=${esc(a.reference)}" class="p-card">
-          <div class="p-image-wrap"><img src="${esc(photo)}" alt="${esc(a.nom)}" loading="lazy"></div>
-          <div class="p-body">
-            <span class="p-name">${esc(a.nom)}</span>
-            <span class="p-prix">${fprix(prix)}</span>
-          </div>
-        </a>`;
-    });
-
-    gridHTML += `</div>`;
-    return gridHTML;
-  }
-
-  function renderGuides(allArts) {
-    if (STYLE_GUIDES.length === 0) return '';
-    
-    let guidesHTML = `<div class="section-head"><h2>Comment le <em>porter</em></h2></div><div class="guide-section">`;
-    
-    STYLE_GUIDES.forEach((g, i) => {
-      let linksHTML = '';
-      g.refs.forEach(ref => {
-        const art = allArts.find(a => a.reference === ref);
-        if (art) {
-          linksHTML += `
-            <a href="produit.html?ref=${esc(art.reference)}" class="guide-link">
-              <span>${esc(art.nom)}</span>
-              <strong>${fprix(art.prix_vente_fcfa || 0)}</strong>
-            </a>`;
-        }
-      });
-
-      guidesHTML += `
-        <div class="guide-card ${i % 2 !== 0 ? 'reverse' : ''}">
-          <div class="guide-img" style="background-image:url('${esc(g.img)}')"></div>
-          <div class="guide-content">
-            <h3 class="guide-title">${g.titre}</h3>
-            <div class="guide-links">${linksHTML}</div>
-          </div>
-        </div>
-      `;
-    });
-
-    guidesHTML += `</div>`;
-    return guidesHTML;
-  }
-
-  function renderTeasing(col) {
-    dynamicContent.innerHTML = `
-      <div class="teasing-section">
-        <h2 class="teasing-title">Arrivage <em>Bientôt</em></h2>
-        <p class="teasing-text">${esc(col.description || 'Préparez-vous. Le prochain drop arrive très bientôt. Soyez le premier à être informé.')}</p>
-        <div class="chrono-big" id="chrono">
-          <div class="chrono-unit"><span class="chrono-val" id="cd-j">00</span><span class="chrono-lbl">Jours</span></div>
-          <div class="chrono-unit"><span class="chrono-val" id="cd-h">00</span><span class="chrono-lbl">Heures</span></div>
-          <div class="chrono-unit"><span class="chrono-val" id="cd-m">00</span><span class="chrono-lbl">Min</span></div>
-          <div class="chrono-unit"><span class="chrono-val" id="cd-s">00</span><span class="chrono-lbl">Sec</span></div>
-        </div>
-        <a href="https://wa.me/221778038874?text=Je%20veux%20etre%20informé%20du%20prochain%20drop" class="teasing-cta" target="_blank">Notifiez-moi sur WhatsApp</a>
-      </div>
-    `;
-
-    if (col.date_lancement) {
-      const DROP_DATE = new Date(col.date_lancement).getTime();
-      function tickChrono() {
-        const now = new Date().getTime();
-        const diff = DROP_DATE - now;
-        if (diff <= 0) return;
-        document.getElementById('cd-j').textContent = String(Math.floor(diff / 86400000)).padStart(2, '0');
-        document.getElementById('cd-h').textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
-        document.getElementById('cd-m').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
-        document.getElementById('cd-s').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
-      }
-      tickChrono(); setInterval(tickChrono, 1000);
-    }
-  }
-
-  async function init() {
-    await SE.Articles.load();
-    const allArts = SE.Articles.cache || [];
-
-    if (status === 'upcoming') {
-      const heroBg = document.getElementById('col-hero-bg');
-      const hero = document.getElementById('col-hero');
-      const badge = document.getElementById('col-badge');
-      const title = document.getElementById('col-title');
-      const desc = document.getElementById('col-desc');
-      const cta = document.getElementById('hero-cta');
-      
-      heroBg.style.backgroundImage = `url('https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2000&auto=format&fit=crop')`;
-      hero.classList.add('upcoming');
-      badge.textContent = '✦ Prochain Arrivage';
-      title.innerHTML = 'Drop Techwear <em>Futur</em>';
-      desc.textContent = 'Une collection futuriste inspirée de la rue parisienne. En préparation.';
-      cta.style.display = 'none';
-      
-      renderTeasing({ date_lancement: '2026-12-15T00:00:00', description: '' });
-      return;
-    }
-
-    if (!colId) { location.href = 'mode.html'; return; }
-
-    try {
-      const { data: cols, error: colErr } = await SE.sb.from('collections').select('*').eq('id', colId).limit(1);
-      if (colErr || !cols || cols.length === 0) { location.href = 'mode.html'; return; }
-      const col = cols[0];
-
-      document.title = `${esc(col.nom)} — SenExport Boutique`;
-
-      const { data: liens, error: lienErr } = await SE.sb.from('collection_articles').select('article_ref').eq('collection_id', col.id);
-      let collectionArticles = [];
-      if (!lienErr && liens && liens.length > 0) {
-        const refs = liens.map(l => l.article_ref);
-        const { data: arts, error: artErr } = await SE.sb.from('articles').select('*').in('reference', refs);
-        if (!artErr && arts) collectionArticles = arts;
-      }
-
-      document.getElementById('col-hero-bg').style.backgroundImage = `url('${esc(col.image_url || 'https://placehold.co/1600x900/08090E/D4AF37?text=SenExport')}')`;
-      document.getElementById('col-badge').textContent = col.statut === 'en_cours' ? '● Disponible Maintenant' : 'Collection';
-      document.getElementById('col-title').innerHTML = esc(col.nom).replace(/(\d{4})/, '<em>$1</em>'); 
-      document.getElementById('col-desc').textContent = col.description || '';
-      
-      if (col.statut === 'passee') document.getElementById('col-hero').classList.add('past');
-
-      generateAmbient(col.theme_visuel);
-
-      if (col.statut === 'a_venir') {
-        document.getElementById('hero-cta').style.display = 'none';
-        renderTeasing(col);
-      } else {
-        let productsToShow = collectionArticles;
-        if (col.statut === 'passee') {
-          productsToShow = collectionArticles.filter(a => (a.quantite || 0) > 0);
-        }
-
-        let html = '';
-        html += renderTeaser(col);
-        html += renderProducts(productsToShow);
-        html += renderGuides(allArts); 
-        
-        html += `
-          <div class="final-cta">
-            <h3>Envie de voir <em>plus</em> ?</h3>
-            <a href="mode.html" class="final-btn">Retour à la Mode</a>
-          </div>
-        `;
-
-        dynamicContent.innerHTML = html;
-      }
-    } catch (e) {
-      console.error('[Collection] Erreur:', e);
-      dynamicContent.innerHTML = `<div class="empty-state"><h3>Erreur de chargement</h3><p>Veuillez réessayer plus tard.</p></div>`;
-    }
-  }
-
-  if (document.readyState === 'complete') init();
-  else window.addEventListener('load', init);
-})();
-</script>
+<script src="marche-ui.js"></script>
+<script src="animations.js"></script>
+<script src="collections.js"></script>
+<script>MUI.init();</script>
 </body>
 </html>
