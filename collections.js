@@ -1,148 +1,86 @@
 /* ═══════════════════════════════════════════════════════════════
-   SEN·MARCHÉ — collections.js
-   Affiche les collections (en cours, à venir, passées) dans #se-collections.
-   Les styles sont dans marche-ui.css (classes .dcol-*).
-   <div id="se-collections" data-header="off"></div> masque le titre du module.
+   SEN·MARCHÉ — collection-themes.js
+   Une collection existe pour une RAISON. Chaque raison (thème) a :
+   un nom, une icône, une ambiance, et la liste des sections de sa page.
+
+   Comment choisir le thème d'une collection ?
+   → remplis la colonne  theme_visuel  avec : froid, chaleur, promo
+   → sinon on le devine à partir du nom ("Promo…", "Soldes…", "Hiver…", "Été…")
+   → sinon : thème neutre "defaut".
+
+   Pour AJOUTER un thème : copie un bloc dans THEMES, change la clé,
+   le nom, l'icône et les sections. Le style se règle dans marche-ui.css (.t-<clé>).
+
+   Usage : MTheme.of(collection) → { key, label, icon, effect, tagline, titles, sections, year }
+          MTheme.discount(article) → { ref, pct }
    ═══════════════════════════════════════════════════════════════ */
-(function () {
+window.MTheme = (function () {
   'use strict';
+  const svg = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 
-  const WA_NUMBER = '221778038874';
-  const SUPA = 'https://axgpohmhzmdgozndlntj.supabase.co/storage/v1/object/public/photos/';
+  const SECTIONS_STYLE = ['manifeste', 'piece', 'grille', 'guides', 'engagement', 'suite'];
 
-  const esc = s => (s === null || s === undefined) ? '' : String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const pad2 = n => String(n).padStart(2, '0');
-  const fprix = n => Math.round(n || 0).toLocaleString('fr-FR').replace(/\u202f/g, ' ') + ' FCFA';
-  const imgUrl = url => !url ? '' : (url.startsWith('http') ? url : SUPA + url);
-  const bg = url => { const u = imgUrl(url); return u ? ` style="background-image:url('${esc(u)}')"` : ''; };
-
-  function countdownParts(target) {
-    const diff = new Date(target) - new Date();
-    if (diff <= 0) return null;
-    return { j: Math.floor(diff / 86400000), h: Math.floor((diff % 86400000) / 3600000), m: Math.floor((diff % 3600000) / 60000), s: Math.floor((diff % 60000) / 1000) };
-  }
-
-  async function loadCollections() {
-    try {
-      if (!window.SE || !SE.sb) return [];
-      const { data: collections, error } = await SE.sb.from('collections').select('*').neq('statut', 'epuisee').order('statut', { ascending: true }).order('date_lancement', { ascending: true });
-      if (error) throw error;
-      if (!collections || !collections.length) return [];
-
-      return await Promise.all(collections.map(async col => {
-        try {
-          const { data: liens } = await SE.sb.from('collection_articles').select('article_ref').eq('collection_id', col.id).limit(4);
-          if (!liens || !liens.length) return { ...col, articles: [] };
-          const { data: articles, error: artErr } = await SE.sb.from('articles').select('reference, nom, prix_vente_fcfa, photo_url, quantite').in('reference', liens.map(l => l.article_ref)).limit(4);
-          if (artErr) throw artErr;
-          return { ...col, articles: articles || [] };
-        } catch { return { ...col, articles: [] }; }
-      }));
-    } catch (e) {
-      console.warn('[Collections] Erreur chargement:', e.message);
-      return [];
+  const THEMES = {
+    froid: {
+      label: 'Vêtements chauds',
+      icon: svg('<path d="M12 2v20M4.2 7l15.6 10M19.8 7 4.2 17"/><path d="M9.5 3.8 12 6.3l2.5-2.5M9.5 20.2 12 17.7l2.5 2.5"/>'),
+      effect: 'snow',
+      tagline: 'Les pièces pour affronter le froid.',
+      titles: { grille: 'Les pièces <i>chaudes</i>', guides: 'Comment les <i>porter</i>' },
+      sections: SECTIONS_STYLE
+    },
+    chaleur: {
+      label: 'Tenues légères',
+      icon: svg('<circle cx="12" cy="12" r="4.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>'),
+      effect: 'sun',
+      tagline: 'Les pièces légères pour la chaleur.',
+      titles: { grille: 'Les pièces <i>légères</i>', guides: 'Comment les <i>porter</i>' },
+      sections: SECTIONS_STYLE
+    },
+    promo: {
+      label: 'Promotions',
+      icon: svg('<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.2"/>'),
+      effect: '',
+      tagline: 'Des prix réduits sur une sélection.',
+      titles: { grille: 'Toutes les <i>promos</i>', remises: 'Les <i>remises</i>', top: 'Les plus grosses <i>remises</i>' },
+      sections: ['remises', 'top', 'grille', 'engagement', 'suite']
+    },
+    defaut: {
+      label: 'Collection',
+      icon: '',
+      effect: '',
+      tagline: '',
+      titles: { grille: 'À <i>explorer</i>', guides: 'Comment les <i>porter</i>' },
+      sections: SECTIONS_STYLE
     }
+  };
+
+  /* mots-clés pour deviner le thème à partir du nom / de theme_visuel */
+  const GUESS = [
+    ['promo', /promo|solde|remise|r[ée]duc|bon plan|offre/],
+    ['froid', /froid|hiver|winter|snow|neige|chaud/],
+    ['chaleur', /chaleur|summer|sun|soleil|l[ée]ger|(^|[^a-z])(ete|été)([^a-z]|$)/]
+  ];
+
+  function of(col) {
+    col = col || {};
+    const t = String(col.theme_visuel || '').trim().toLowerCase();
+    const n = String(col.nom || '').toLowerCase();
+    let key = THEMES[t] ? t : '';
+    if (!key) for (const [k, re] of GUESS) { if (re.test(t) || re.test(n)) { key = k; break; } }
+    if (!key) key = 'defaut';
+    const m = String(col.nom || '').match(/\d{4}/);
+    const year = m ? m[0] : '';
+    return Object.assign({ key, year }, THEMES[key]);
   }
 
-  function renderAVenir(col) {
-    const cd = col.date_lancement ? countdownParts(col.date_lancement) : null;
-    const pieces = (col.articles || []).slice(0, 2).map(a => `<div${bg(a.photo_url)}></div>`).join('') || '<div></div><div></div>';
-    const cdHtml = cd ? `<div class="dcol-cd" data-cdwrap="${esc(col.id)}">
-        <div><b data-cd="j">${pad2(cd.j)}</b><small>Jours</small></div><div><b data-cd="h">${pad2(cd.h)}</b><small>Heures</small></div>
-        <div><b data-cd="m">${pad2(cd.m)}</b><small>Min</small></div><div><b data-cd="s">${pad2(cd.s)}</b><small>Sec</small></div></div>` : '';
-    const wa = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(`Bonjour, je veux être notifié en avant-première pour la collection "${col.nom}" de SenMarché.`)}`;
-    return `<article class="dcol dcol-soon rv">
-      <div class="dcol-teaser">${pieces}</div>
-      <div>
-        <span class="dcol-tag">✦ Bientôt</span>
-        <h3 class="dcol-name">${esc(col.nom)}</h3>
-        ${col.description ? `<p class="dcol-desc">${esc(col.description)}</p>` : ''}
-        ${cdHtml}
-        <a href="${wa}" class="btn-s btn-wa" target="_blank" rel="noopener">Être notifié en avant-première</a>
-      </div></article>`;
+  /* promotion : on utilise prix_min_fcfa comme prix de référence barré,
+     exactement comme le fait déjà le catalogue (app.js). */
+  function discount(a) {
+    const prix = a.prix_vente_fcfa || 0;
+    const ref = a.prix_min_fcfa && a.prix_min_fcfa > prix ? a.prix_min_fcfa : 0;
+    return { ref, pct: ref ? Math.round((1 - prix / ref) * 100) : 0 };
   }
 
-  function renderEnCours(col) {
-    const arts = (col.articles || []).slice(0, 3).map(a => {
-      const q = a.quantite || 0;
-      const stock = q > 0 && q <= 3 ? `<span class="dcol-art-stock low">${q} restant${q > 1 ? 's' : ''}</span>` : (q > 3 ? '<span class="dcol-art-stock ok">En stock</span>' : '');
-      return `<a href="produit.html?ref=${esc(a.reference)}" class="dcol-art"><div class="dcol-art-img"${bg(a.photo_url)}></div>
-        <div><div class="dcol-art-name">${esc(a.nom)}</div><div class="dcol-art-prix">${fprix(a.prix_vente_fcfa)}</div>${stock}</div></a>`;
-    }).join('');
-    return `<article class="dcol dcol-live rv">
-      <div class="dcol-head"><div><span class="dcol-tag dcol-tag--live">● Disponible maintenant</span>
-        <h3 class="dcol-name">${esc(col.nom)}</h3>${col.description ? `<p class="dcol-desc">${esc(col.description)}</p>` : ''}</div>
-        <a href="collection.html?id=${esc(col.id)}" class="btn-s">Voir la collection →</a></div>
-      ${arts ? `<div class="dcol-arts">${arts}</div>` : ''}
-      <p class="dcol-note">Stock limité · Paiement à la récupération</p></article>`;
-  }
-
-  function renderPassee(col) {
-    const n = (col.articles || []).reduce((s, a) => s + (a.quantite || 0), 0);
-    if (n === 0) return '';
-    return `<article class="dcol dcol-past rv"><div class="dcol-past-row"><div>
-      <span class="dcol-tag dcol-tag--past">Collection précédente</span>
-      <h4 class="dcol-past-name">${esc(col.nom)}</h4>
-      <p class="dcol-past-stock">${n} pièce${n > 1 ? 's' : ''} encore disponible${n > 1 ? 's' : ''}</p></div>
-      <a href="collection.html?id=${esc(col.id)}" class="btn-s btn-dark">Voir les pièces →</a></div></article>`;
-  }
-
-  function renderFallback() {
-    return `<div class="dcol-list"><article class="dcol dcol-live"><div class="dcol-head"><div>
-      <span class="dcol-tag dcol-tag--live">● Nouveaux arrivages</span>
-      <h3 class="dcol-name">Découvrez le catalogue</h3>
-      <p class="dcol-desc">Des articles sélectionnés avec soin, en stock limité.</p></div>
-      <a href="catalogue.html" class="btn-s">Voir le catalogue →</a></div>
-      <p class="dcol-note">Stock limité · Paiement à la récupération</p></article></div>`;
-  }
-
-  function renderSection(collections, opts = {}) {
-    const avenir = collections.filter(c => c.statut === 'a_venir');
-    const enCours = collections.filter(c => c.statut === 'en_cours');
-    const passees = collections.filter(c => c.statut === 'passee');
-    if (!avenir.length && !enCours.length && !passees.length) return renderFallback();
-
-    const list = [...enCours.map(renderEnCours), ...avenir.map(renderAVenir), ...passees.map(renderPassee).filter(Boolean)].join('');
-    const header = opts.header === false ? '' : `<div class="sh"><span class="sh-n">✦</span><h2>Collections &amp; <i>drops</i></h2></div>`;
-    return `${header}<div class="dcol-list">${list}</div>`;
-  }
-
-  function startCountdowns(container, collections) {
-    const avenir = collections.filter(c => c.statut === 'a_venir' && c.date_lancement);
-    if (!avenir.length) return;
-    setInterval(() => {
-      avenir.forEach(col => {
-        const cd = countdownParts(col.date_lancement); if (!cd) return;
-        const wrap = container.querySelector(`[data-cdwrap="${col.id}"]`); if (!wrap) return;
-        ['j', 'h', 'm', 's'].forEach(k => { const el = wrap.querySelector(`[data-cd="${k}"]`); if (el) el.textContent = pad2(cd[k]); });
-      });
-    }, 1000);
-  }
-
-  function observe(container) {
-    document.body.classList.add('rv-ready');
-    if (!('IntersectionObserver' in window)) { container.querySelectorAll('.rv').forEach(el => el.classList.add('in')); return; }
-    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
-    container.querySelectorAll('.rv').forEach(el => io.observe(el));
-  }
-
-  async function mount(containerId = 'se-collections') {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    const opts = { header: container.dataset.header !== 'off' };
-    container.innerHTML = '<div class="skel" style="height:280px;border-radius:22px"></div>';
-    try {
-      const collections = await loadCollections();
-      container.innerHTML = renderSection(collections, opts);
-      startCountdowns(container, collections);
-      observe(container);
-    } catch (e) {
-      console.warn('[SE Collections] Erreur:', e);
-      container.innerHTML = renderFallback();
-    }
-  }
-
-  window.SE_Collections = { mount, loadCollections, renderSection };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => mount());
-  else mount();
+  return { of, discount, THEMES };
 })();
