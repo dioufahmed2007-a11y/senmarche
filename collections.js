@@ -14,8 +14,6 @@
   const pad2 = n => String(n).padStart(2, '0');
   const fprix = n => Math.round(n || 0).toLocaleString('fr-FR').replace(/\u202f/g, ' ') + ' FCFA';
   const imgUrl = url => !url ? '' : (url.startsWith('http') ? url : SUPA + url);
-  const season = col => window.MTheme ? MTheme.of(col) : { key: 'defaut', label: 'Collection', icon: '' };
-  const pill = S => S.key !== 'defaut' ? `<span class="season-pill">${S.icon}${esc(S.label)}</span>` : '';
   const bg = url => { const u = imgUrl(url); return u ? ` style="background-image:url('${esc(u)}')"` : ''; };
 
   function countdownParts(target) {
@@ -47,17 +45,16 @@
   }
 
   function renderAVenir(col) {
-    const S = season(col);
     const cd = col.date_lancement ? countdownParts(col.date_lancement) : null;
     const pieces = (col.articles || []).slice(0, 2).map(a => `<div${bg(a.photo_url)}></div>`).join('') || '<div></div><div></div>';
     const cdHtml = cd ? `<div class="dcol-cd" data-cdwrap="${esc(col.id)}">
         <div><b data-cd="j">${pad2(cd.j)}</b><small>Jours</small></div><div><b data-cd="h">${pad2(cd.h)}</b><small>Heures</small></div>
         <div><b data-cd="m">${pad2(cd.m)}</b><small>Min</small></div><div><b data-cd="s">${pad2(cd.s)}</b><small>Sec</small></div></div>` : '';
     const wa = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(`Bonjour, je veux être notifié en avant-première pour la collection "${col.nom}" de SenMarché.`)}`;
-    return `<article class="dcol dcol-soon rv ${S.key !== 'defaut' ? 't-' + S.key : ''}">
+    return `<article class="dcol dcol-soon rv">
       <div class="dcol-teaser">${pieces}</div>
       <div>
-        <div class="dcol-tags">${pill(S)}<span class="dcol-tag">✦ Bientôt</span></div>
+        <span class="dcol-tag">✦ Bientôt</span>
         <h3 class="dcol-name">${esc(col.nom)}</h3>
         ${col.description ? `<p class="dcol-desc">${esc(col.description)}</p>` : ''}
         ${cdHtml}
@@ -66,15 +63,14 @@
   }
 
   function renderEnCours(col) {
-    const S = season(col);
     const arts = (col.articles || []).slice(0, 3).map(a => {
       const q = a.quantite || 0;
       const stock = q > 0 && q <= 3 ? `<span class="dcol-art-stock low">${q} restant${q > 1 ? 's' : ''}</span>` : (q > 3 ? '<span class="dcol-art-stock ok">En stock</span>' : '');
       return `<a href="produit.html?ref=${esc(a.reference)}" class="dcol-art"><div class="dcol-art-img"${bg(a.photo_url)}></div>
         <div><div class="dcol-art-name">${esc(a.nom)}</div><div class="dcol-art-prix">${fprix(a.prix_vente_fcfa)}</div>${stock}</div></a>`;
     }).join('');
-    return `<article class="dcol dcol-live rv ${S.key !== 'defaut' ? 't-' + S.key : ''}">
-      <div class="dcol-head"><div><div class="dcol-tags">${pill(S)}<span class="dcol-tag dcol-tag--live">● Disponible maintenant</span></div>
+    return `<article class="dcol dcol-live rv">
+      <div class="dcol-head"><div><span class="dcol-tag dcol-tag--live">● Disponible maintenant</span>
         <h3 class="dcol-name">${esc(col.nom)}</h3>${col.description ? `<p class="dcol-desc">${esc(col.description)}</p>` : ''}</div>
         <a href="collection.html?id=${esc(col.id)}" class="btn-s">Voir la collection →</a></div>
       ${arts ? `<div class="dcol-arts">${arts}</div>` : ''}
@@ -82,11 +78,10 @@
   }
 
   function renderPassee(col) {
-    const S = season(col);
     const n = (col.articles || []).reduce((s, a) => s + (a.quantite || 0), 0);
     if (n === 0) return '';
-    return `<article class="dcol dcol-past rv ${S.key !== 'defaut' ? 't-' + S.key : ''}"><div class="dcol-past-row"><div>
-      <div class="dcol-tags">${pill(S)}<span class="dcol-tag dcol-tag--past">Collection précédente</span></div>
+    return `<article class="dcol dcol-past rv"><div class="dcol-past-row"><div>
+      <span class="dcol-tag dcol-tag--past">Collection précédente</span>
       <h4 class="dcol-past-name">${esc(col.nom)}</h4>
       <p class="dcol-past-stock">${n} pièce${n > 1 ? 's' : ''} encore disponible${n > 1 ? 's' : ''}</p></div>
       <a href="collection.html?id=${esc(col.id)}" class="btn-s btn-dark">Voir les pièces →</a></div></article>`;
@@ -121,13 +116,6 @@
     }, 1000);
   }
 
-  function observe(container) {
-    document.body.classList.add('rv-ready');
-    if (!('IntersectionObserver' in window)) { container.querySelectorAll('.rv').forEach(el => el.classList.add('in')); return; }
-    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
-    container.querySelectorAll('.rv').forEach(el => io.observe(el));
-  }
-
   async function mount(containerId = 'se-collections') {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -138,7 +126,6 @@
       container.innerHTML = renderSection(collections, opts);
       const al = document.getElementById('archives-link'); if (al) al.hidden = !collections.some(c => c.statut === 'passee');
       startCountdowns(container, collections);
-      observe(container);
     } catch (e) {
       console.warn('[SE Collections] Erreur:', e);
       container.innerHTML = renderFallback();
