@@ -33,7 +33,6 @@ body.se-mode img,body.se-mode svg{max-width:100%}
 .hero-s-bg{position:absolute;inset:0;z-index:-3;background:var(--hero-img,none) center/cover no-repeat;filter:grayscale(1) contrast(1.1) brightness(.9)}
 .hero-s-tint{position:absolute;inset:0;z-index:-2;background:var(--m-g-vert);mix-blend-mode:multiply;opacity:.82}
 .hero-s-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,color-mix(in srgb,var(--m-nuit) 80%,transparent) 2%,transparent 62%)}
-.hero-s::after{content:'';position:absolute;inset:0;z-index:-1;background-image:var(--wax-w);pointer-events:none}
 .hero-s-top{position:absolute;top:clamp(1.2rem,3vw,2rem);left:var(--gut);right:var(--gut);display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
 .hero-s-top .mono{color:var(--m-safran-2)}
 .sticker{display:inline-block;transform:rotate(6deg);background:var(--m-safran);color:var(--m-on-safran);border-radius:14px;box-shadow:0 12px 24px -10px color-mix(in srgb,var(--m-nuit) 60%,transparent);padding:.55rem .9rem;font:800 1.1rem/.95 var(--m-display);font-variation-settings:"wdth" 75;text-transform:uppercase;text-align:center}
@@ -127,6 +126,10 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
 .chrono-val{display:block;font:800 clamp(1.7rem,3.4vw,2.4rem)/1 var(--m-display);color:var(--m-safran-2)}
 .chrono-lbl{display:block;font:600 .68rem/1 var(--m-body);color:color-mix(in srgb,var(--m-on-nuit) 75%,transparent);margin-top:.35rem}
 @media(max-width:860px){.drops{grid-template-columns:1fr}.drop.current{grid-row:auto;min-height:340px}}
+
+.drops.one{grid-template-columns:1fr}
+.drops.one .drop.current,.drops.two .drop.current{grid-row:auto;min-height:380px}
+.drops.one .drop.past,.drops.two .drop.past{min-height:200px}
 
 /* ═════════ FILTRES ═════════ */
 .filters-bar{display:flex;gap:.5rem;padding:.2rem 0 1.1rem;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -269,28 +272,10 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
   </div>
 </div></section>
 
-<!-- 02 DROPS -->
-<section class="sec"><div class="container">
-  <div class="sh"><span class="sh-n">02</span><h2>Les <i>arrivages</i></h2><span class="mono">Drops &amp; archives</span></div>
-  <div class="drops">
-    <a href="collection.html?id=00000000-0000-0000-0000-000000000001" class="drop current">
-      <div class="drop-bg" style="background-image:url('https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=1200&auto=format&fit=crop')"></div>
-      <div class="drop-body"><span class="drop-tag">● Disponible maintenant</span><h3 class="drop-title disp">Drop hiver <em>2026</em></h3><span class="drop-go">Voir le drop →</span></div>
-    </a>
-    <a href="collection.html?id=00000000-0000-0000-0000-000000000002" class="drop upcoming">
-      <div class="drop-bg" style="background-image:url('https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1200&auto=format&fit=crop')"></div>
-      <div class="drop-body"><span class="drop-tag">✦ Prochain arrivage</span><h3 class="drop-title disp">Drop techwear <em>futur</em></h3>
-        <div class="chrono" id="chrono">
-          <div class="chrono-unit"><span class="chrono-val" id="cd-j">00</span><span class="chrono-lbl">Jours</span></div>
-          <div class="chrono-unit"><span class="chrono-val" id="cd-h">00</span><span class="chrono-lbl">Heures</span></div>
-          <div class="chrono-unit"><span class="chrono-val" id="cd-m">00</span><span class="chrono-lbl">Min</span></div>
-          <div class="chrono-unit"><span class="chrono-val" id="cd-s">00</span><span class="chrono-lbl">Sec</span></div>
-        </div></div>
-    </a>
-    <a href="archives.html" class="drop past">
-      <div class="drop-body"><span class="drop-tag">Archives</span><h3 class="drop-title disp">Voir les <em>archives</em></h3><span class="drop-go">Tout revoir →</span></div>
-    </a>
-  </div>
+<!-- 02 COLLECTIONS (affichée seulement s'il y en a) -->
+<section class="sec" id="drops-sec" hidden><div class="container">
+  <div class="sh"><span class="sh-n">02</span><h2>Les <i>collections</i></h2><span class="mono">En cours &amp; à venir</span></div>
+  <div class="drops" id="drops"></div>
 </div></section>
 
 <!-- 03 CATALOGUE -->
@@ -381,17 +366,20 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
   }
   const NOIMG = "var p=this.parentNode;this.remove();p.classList.add('noimg')";
 
-  /* 1. COMPTE À REBOURS */
-  const DROP_DATE = new Date('2026-12-15T00:00:00').getTime();
+  /* 1. COMPTE À REBOURS (seulement s'il y a un prochain arrivage avec une date) */
+  let DROP_DATE = null;
   function tickChrono(){
-    const diff = DROP_DATE - Date.now();
-    const v = diff > 0 ? diff : 0;
-    document.getElementById('cd-j').textContent = String(Math.floor(v / 86400000)).padStart(2,'0');
-    document.getElementById('cd-h').textContent = String(Math.floor((v % 86400000) / 3600000)).padStart(2,'0');
-    document.getElementById('cd-m').textContent = String(Math.floor((v % 3600000) / 60000)).padStart(2,'0');
-    document.getElementById('cd-s').textContent = String(Math.floor((v % 60000) / 1000)).padStart(2,'0');
+    if (!DROP_DATE) return;
+    const v = Math.max(0, DROP_DATE - Date.now());
+    const set = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = String(n).padStart(2,'0'); };
+    set('cd-j', Math.floor(v / 86400000)); set('cd-h', Math.floor((v % 86400000) / 3600000));
+    set('cd-m', Math.floor((v % 3600000) / 60000)); set('cd-s', Math.floor((v % 60000) / 1000));
   }
-  tickChrono(); setInterval(tickChrono, 1000);
+  setInterval(tickChrono, 1000);
+
+  /* numérotation 01, 02, 03… des sections visibles */
+  function renumber(){ let i = 0; document.querySelectorAll('.sec:not([hidden]) .sh-n').forEach(el => { el.textContent = String(++i).padStart(2,'0'); }); }
+  renumber();
 
   /* 2. PANIER COULISSANT */
   const drawer = document.getElementById('cart-drawer'), overlay = document.getElementById('drawer-overlay');
@@ -556,11 +544,43 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
   document.getElementById('product-grid').addEventListener('click', handleGridClick);
   document.getElementById('featured-grid').addEventListener('click', handleGridClick);
 
+  /* 7. COLLECTIONS : on n'affiche que ce qui existe vraiment dans Supabase */
+  const CHRONO = `<div class="chrono" id="chrono"><div class="chrono-unit"><span class="chrono-val" id="cd-j">00</span><span class="chrono-lbl">Jours</span></div><div class="chrono-unit"><span class="chrono-val" id="cd-h">00</span><span class="chrono-lbl">Heures</span></div><div class="chrono-unit"><span class="chrono-val" id="cd-m">00</span><span class="chrono-lbl">Min</span></div><div class="chrono-unit"><span class="chrono-val" id="cd-s">00</span><span class="chrono-lbl">Sec</span></div></div>`;
+  function dropCard(kind, col, tag){
+    const bgStyle = col.image_url ? ` style="background-image:url('${esc(imgUrl(col.image_url, 1200))}')"` : '';
+    return `<a href="collection.html?id=${esc(col.id)}" class="drop ${kind}"><div class="drop-bg"${bgStyle}></div>
+      <div class="drop-body"><span class="drop-tag">${tag}</span>
+      <h3 class="drop-title disp">${esc(col.nom).replace(/(\d{4})/, '<em>$1</em>')}</h3>
+      ${kind === 'upcoming' ? (col.date_lancement ? CHRONO : '') : '<span class="drop-go">Voir la collection →</span>'}</div></a>`;
+  }
+  async function loadDrops(){
+    try{
+      if (!SE.sb) return;
+      const { data } = await SE.sb.from('collections').select('*').neq('statut', 'epuisee').order('date_lancement', { ascending: true });
+      if (!data || !data.length) return;
+      const live = data.filter(c => c.statut === 'en_cours').pop();
+      const soon = data.find(c => c.statut === 'a_venir');
+      const hasPast = data.some(c => c.statut === 'passee');
+      const cards = [];
+      if (live) cards.push(dropCard('current', live, '● Disponible maintenant'));
+      if (soon) cards.push(dropCard('upcoming', soon, '✦ Prochain arrivage'));
+      if (hasPast) cards.push(`<a href="archives.html" class="drop past"><div class="drop-body"><span class="drop-tag">Archives</span><h3 class="drop-title disp">Voir les <em>archives</em></h3><span class="drop-go">Tout revoir →</span></div></a>`);
+      if (!cards.length) return;
+      const grid = document.getElementById('drops');
+      grid.className = 'drops' + (cards.length === 1 ? ' one' : cards.length === 2 ? ' two' : '');
+      grid.innerHTML = cards.join('');
+      document.getElementById('drops-sec').hidden = false;
+      if (soon && soon.date_lancement){ DROP_DATE = new Date(soon.date_lancement).getTime(); tickChrono(); }
+    }catch(e){ console.warn('[Collections]', e); }
+    finally{ renumber(); }
+  }
+
   async function loadArticles(){
     try{
       const raw = await SE.Articles.load();
       allArticles = raw.sort((a, b) => (b.quantite || 0) - (a.quantite || 0));
       renderGrid(allArticles.slice(0, 4), 'featured-grid');
+      loadDrops();
       applyFilters();
     }catch(e){
       console.error('[SenMarché] Erreur chargement mode', e);
