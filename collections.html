@@ -41,7 +41,7 @@
 <main>
   <section class="chap"><div class="m-wrap">
     <div id="se-collections" data-header="off"></div>
-    <div style="text-align:center;margin-top:2rem"><a href="archives.html" class="btn-s btn-dark">Voir les archives →</a></div>
+    <div id="archives-link" hidden style="text-align:center;margin-top:2rem"><a href="archives.html" class="btn-s btn-dark">Voir les archives →</a></div>
   </div></section>
 </main>
 <div class="after"></div>
@@ -66,8 +66,7 @@
 <script src="images.js"></script>
 <script src="app.js"></script>
 <script src="marche-ui.js"></script>
-<script src="animations.js"></script>
 <script src="collections.js"></script>
-<script>MUI.init();</script>
+<script>if (window.MUI) MUI.init(); else console.error("[SenMarché] marche-ui.js est introuvable.");</script>
 </body>
 </html>
