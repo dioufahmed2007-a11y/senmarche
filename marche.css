@@ -17,6 +17,8 @@
   --m-indigo:#1F2C6B; --m-indigo-2:#5568F0;
   --m-nuit:#0F1018;
   --m-wa:#25D366;
+  --m-ice:#D9ECFF; --m-ice-2:#7FB2F5; --m-sun:#FF8A1F;
+  --m-tint-ice:color-mix(in srgb,var(--m-ice-2) 14%,var(--bg));
   --m-on-vert:#FBF3E0; --m-on-safran:#1A1207; --m-on-bissap:#FFFFFF; --m-on-indigo:#FFFFFF; --m-on-nuit:#FFFFFF;
   --m-acc-vert:#0E4D3A; --m-acc-bissap:#A3193F; --m-acc-indigo:#1F2C6B; --m-acc-safran:#8A5A00;
   --m-card:#FFFBF1; --m-on-card:#1A1207; --m-on-card-soft:#4A4032;
@@ -40,6 +42,7 @@
   --m-bissap:#7E1230; --m-bissap-2:#B72E58;
   --m-indigo:#171F52; --m-indigo-2:#3C4FC0;
   --m-nuit:#07080D;
+  --m-ice:#BBD7FA; --m-ice-2:#4F86D6; --m-sun:#E8741A;
   --m-acc-vert:#5CCB9F; --m-acc-bissap:#FF86A5; --m-acc-indigo:#9AAAFF; --m-acc-safran:#F2BD45;
   --m-card:#1D1E2C; --m-on-card:#F3EFE6; --m-on-card-soft:#C7C1B3;
   --m-tint-vert:color-mix(in srgb,var(--m-vert) 34%,var(--bg));
@@ -49,6 +52,7 @@
   --m-hard:var(--m-safran);
 }
 html{overflow-x:hidden;-webkit-text-size-adjust:100%}
+@supports (overflow:clip){html{overflow-x:clip}}
 [hidden]{display:none!important}
 
 /* base.css force un fond quasi noir au scroll : on le fait suivre le thème */
