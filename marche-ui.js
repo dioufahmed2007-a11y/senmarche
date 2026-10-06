@@ -87,14 +87,8 @@ window.MUI = (function () {
     });
   }
 
-  /* ── Apparition au scroll ── */
-  let io;
-  function reveal() {
-    if (!('IntersectionObserver' in window)) return;
-    document.body.classList.add('rv-ready');
-    io = io || new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
-    document.querySelectorAll('.rv:not(.in)').forEach(el => io.observe(el));
-  }
+  /* apparition : gérée en CSS (.rv), rien à faire ici */
+  function reveal() {}
 
   /* ── Compte à rebours : remplit [data-cd="j|h|m|s"] dans root ── */
   function countdown(date, root) {
