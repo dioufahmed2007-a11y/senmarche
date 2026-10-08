@@ -201,6 +201,75 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
   .cart-handle{display:none}
 }
 
+/* ═════════ SWITCH NEUF / FEUG JAY ═════════ */
+.univ-switch{position:sticky;top:56px;z-index:60;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.univ-row{display:flex;align-items:center;gap:.6rem;padding:.7rem 0}
+.univ-tab{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;padding:.6rem 1.2rem;border-radius:999px;border:2px solid var(--ink);background:transparent;color:var(--ink);font:800 .95rem/1 var(--m-body);cursor:pointer;transition:.15s}
+.univ-tab small{font:700 .72rem/1 var(--m-body);opacity:.8}
+.univ-tab[data-univ="neuf"].active{background:var(--m-safran);border-color:var(--m-safran);color:var(--m-on-safran)}
+.univ-tab[data-univ="fj"].active{background:var(--m-bissap);border-color:var(--m-bissap);color:var(--m-on-bissap)}
+.univ-hint{margin-left:auto;font:600 .82rem/1 var(--m-body);color:var(--stone)}
+@media(min-width:900px){.univ-hint{display:none}}
+.univ-panel{animation:uIn .35s ease both}
+@keyframes uIn{from{opacity:0;transform:translateX(var(--ux,14px))}to{opacity:1;transform:none}}
+body[data-univ="neuf"] .univ-panel{--ux:-14px}
+@media(prefers-reduced-motion:reduce){.univ-panel{animation:none}}
+.sec{scroll-margin-top:120px}
+
+/* ═════════ FEUG JAY (friperie) ═════════ */
+.fj-hero{position:relative;overflow:hidden;background:var(--m-g-bissap);color:var(--m-on-bissap);padding-bottom:clamp(2.2rem,5vw,3.6rem)}
+.fj-awning{height:34px;background:repeating-linear-gradient(90deg,var(--m-bissap) 0 42px,var(--m-on-vert) 42px 84px)}
+.fj-scallop{height:22px;background:radial-gradient(circle at 21px 0,var(--m-bissap) 21px,transparent 22px) 0 0/84px 22px repeat-x,radial-gradient(circle at 63px 0,var(--m-on-vert) 21px,transparent 22px) 0 0/84px 22px repeat-x}
+.fj-inner{position:relative;padding-top:clamp(1.4rem,4vw,2.6rem)}
+.fj-kick{display:inline-block;transform:rotate(-3deg);background:var(--m-safran);color:var(--m-on-safran);padding:.45rem .85rem;border-radius:8px;font:800 .88rem/1 var(--m-body)}
+.fj-title{font-size:clamp(5rem,21vw,15rem);margin:1rem 0 .5rem;color:var(--m-on-bissap)}
+.fj-title .out{--oc:var(--m-on-bissap)}
+.fj-mean{font:italic 500 clamp(1.3rem,3vw,2rem)/1.3 var(--m-serif);color:var(--m-safran-2);margin:0 0 .8rem}
+.fj-lead{max-width:50ch;font-size:clamp(1.05rem,1.4vw,1.2rem);line-height:1.75;opacity:.94;margin:0 0 1.6rem}
+.fj-ctas{display:flex;gap:.8rem;flex-wrap:wrap}
+.btn-s.fj-alt{background:transparent;color:var(--m-on-bissap);border-color:var(--m-on-bissap)}
+.fj-hangers{display:flex;gap:clamp(1rem,4vw,3rem);margin-top:2rem;opacity:.28;overflow:hidden}
+.fj-hangers svg{width:44px;height:44px;flex-shrink:0;transform-origin:50% 0}
+.fj-hangers svg:nth-child(odd){transform:rotate(-6deg)}.fj-hangers svg:nth-child(even){transform:rotate(5deg)}
+body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
+.fj-grid .p-prix{color:var(--m-acc-bissap)}
+
+/* gros / business */
+.gros-lead{font-size:clamp(1.05rem,1.5vw,1.2rem);line-height:1.85;color:var(--stone);max-width:64ch;margin:0 0 1.6rem}
+.gros-opts{display:grid;grid-template-columns:1fr;gap:1rem;margin-bottom:1.6rem}
+@media(min-width:860px){.gros-opts{grid-template-columns:repeat(3,1fr)}}
+.gros-opt{border-radius:24px;padding:1.6rem;display:flex;flex-direction:column;gap:.7rem;background:var(--gbg)}
+.gros-opt:nth-child(1){--gbg:var(--m-tint-safran)}.gros-opt:nth-child(2){--gbg:var(--m-tint-vert)}.gros-opt:nth-child(3){--gbg:var(--m-tint-bissap)}
+.gico{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--m-bissap);color:var(--m-on-bissap)}
+.gico svg{width:26px;height:26px}
+.gros-opt h3{font:800 clamp(1.5rem,2.4vw,1.9rem)/1.05 var(--m-display);letter-spacing:-.02em;color:var(--ink);margin:.2rem 0 0}
+.gros-opt p{font-size:1rem;line-height:1.7;color:var(--ink);opacity:.82;margin:0}
+.gros-opt .btn-s{margin-top:auto;align-self:flex-start}
+.gros-lots{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-bottom:1.6rem}
+.lot{border:1px solid var(--border);border-radius:20px;overflow:hidden;background:var(--card);display:flex;flex-direction:column}
+.lot-img{aspect-ratio:16/10;background:var(--m-g-bissap) center/cover no-repeat}
+.lot-body{padding:1rem 1.1rem 1.2rem;display:flex;flex-direction:column;gap:.4rem;flex:1}
+.lot-body h4{font:800 1.25rem/1.15 var(--m-display);color:var(--ink);margin:0}
+.lot-body p{font-size:.95rem;line-height:1.6;color:var(--stone);margin:0}
+.lot-prix{font:800 1.6rem/1 var(--m-display);color:var(--m-acc-bissap)}
+.lot-min{font:600 .85rem/1 var(--m-body);color:var(--stone)}
+.lot .btn-s{margin-top:auto;align-self:flex-start}
+.gros-grid{display:grid;grid-template-columns:1fr;gap:1.2rem}
+@media(min-width:900px){.gros-grid{grid-template-columns:1.3fr 1fr;align-items:start}}
+.gros-form{border:1px solid var(--border);border-radius:24px;padding:clamp(1.4rem,3.5vw,2.2rem);background:var(--card);display:grid;gap:1rem}
+.gf-row{display:grid;gap:1rem}
+@media(min-width:640px){.gf-row.two{grid-template-columns:1fr 1fr}}
+.gf label{display:block;font:700 .9rem/1 var(--m-body);margin-bottom:.45rem;color:var(--ink)}
+.gf input,.gf select,.gf textarea{width:100%;padding:.9rem 1rem;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--ink);font:500 1rem/1.4 var(--m-body);outline:none}
+.gf input:focus,.gf select:focus,.gf textarea:focus{border-color:var(--m-bissap);box-shadow:0 0 0 3px color-mix(in srgb,var(--m-bissap) 22%,transparent)}
+.gf textarea{min-height:120px;resize:vertical}
+.gros-msg{font:600 .95rem/1.5 var(--m-body);padding:.9rem 1rem;border-radius:12px;color:var(--ink)}
+.gros-msg.ok{background:var(--m-tint-vert)}.gros-msg.err{background:var(--m-tint-bissap)}
+.gros-wa{border-radius:24px;padding:clamp(1.4rem,3.5vw,2.2rem);background:var(--m-g-vert);color:var(--m-on-vert)}
+.gros-wa h3{font:800 clamp(1.6rem,2.6vw,2rem)/1.05 var(--m-display);letter-spacing:-.02em;margin:0 0 .6rem}
+.gros-wa p{font-size:1rem;line-height:1.7;opacity:.92;margin:0 0 1.2rem}
+.btn-s.wa{background:var(--m-wa);color:var(--m-on-nuit)}
+
 /* ═════════ TÉLÉPHONE ═════════ */
 @media(max-width:640px){
   .hero-s{min-height:78svh}
@@ -217,6 +286,9 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
   .drop{min-height:200px}
   .drop.current{min-height:320px}
   .mkt-img{min-height:190px}
+  .univ-tab{padding:.55rem 1rem}
+  .fj-title{font-size:clamp(4.4rem,26vw,8rem)}
+  .fj-ctas .btn-s{width:100%}
 }
 </style>
 </head>
@@ -244,6 +316,16 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
     <a href="compte.html" class="nav-icon" aria-label="Compte"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
   </div>
 </nav>
+
+<!-- SWITCH NEUF / FEUG JAY -->
+<div class="univ-switch" id="univ-switch"><div class="container"><div class="univ-row" role="tablist" aria-label="Neuf ou seconde main">
+  <button class="univ-tab active" data-univ="neuf" role="tab" aria-selected="true">Neuf</button>
+  <button class="univ-tab" data-univ="fj" role="tab" aria-selected="false">Feug Jay <small>seconde main</small></button>
+  <span class="univ-hint">← Glisse pour changer →</span>
+</div></div></div>
+
+<div id="univ-area">
+<div class="univ-panel" id="panel-neuf">
 
 <!-- HERO -->
 <header class="hero-s" id="hero" style="--hero-img:url('https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2000&auto=format&fit=crop')">
@@ -285,10 +367,6 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
     <button class="filter-pill active" data-genre="all">Tout</button>
     <button class="filter-pill" data-genre="homme">Homme</button>
     <button class="filter-pill" data-genre="femme">Femme</button>
-    <div class="filter-sep"></div>
-    <button class="filter-pill active" data-etat="all">Tous</button>
-    <button class="filter-pill" data-etat="neuf">Neuf</button>
-    <button class="filter-pill" data-etat="bon">Bon état</button>
     <select class="sort-select" id="sort-select"><option value="default">Trier par</option><option value="prix_asc">Prix ↑</option><option value="prix_desc">Prix ↓</option></select>
   </div>
   <div class="prod-grid" id="product-grid">
@@ -323,6 +401,69 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
   <div class="faq-item"><button class="faq-q"><span>Combien de temps pour recevoir ?</span><span class="ic">+</span></button><div class="faq-a"><p>Entre 48h et quelques jours selon l'arrivage. Vous êtes informé à chaque étape sur WhatsApp.</p></div></div>
   <div class="faq-item"><button class="faq-q"><span>Et si l'article ne me convient pas ?</span><span class="ic">+</span></button><div class="faq-a"><p>Vous inspectez l'article au moment du retrait, avant de payer. Si quelque chose ne va pas, vous n'êtes pas engagé.</p></div></div>
 </div></div></section>
+
+</div><!-- /panel-neuf -->
+
+<!-- ═════════ FEUG JAY ═════════ -->
+<div class="univ-panel" id="panel-fj" hidden>
+  <header class="fj-hero">
+    <div class="fj-awning" aria-hidden="true"></div><div class="fj-scallop" aria-hidden="true"></div>
+    <div class="container fj-inner">
+      <span class="fj-kick">Seconde main</span>
+      <h1 class="fj-title disp">Feug <span class="out">Jay</span></h1>
+      <p class="fj-mean">En wolof, <i>feug jay</i> : secouer l'habit, et le vendre.</p>
+      <p class="fj-lead">Des habits de seconde main à petits prix. Pour te faire plaisir, ou pour faire ton business.</p>
+      <div class="fj-ctas"><a href="#fj-trouvailles" class="btn-s">Voir les trouvailles →</a><a href="#fj-gros" class="btn-s fj-alt">Acheter en gros</a></div>
+      <div class="fj-hangers" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg></div>
+    </div>
+  </header>
+
+  <section class="sec" id="fj-trouvailles"><div class="container">
+    <div class="sh"><span class="sh-n">01</span><h2>Les <i>trouvailles</i></h2><span class="mono">Seconde main</span></div>
+    <div class="filters-bar">
+      <button class="filter-pill active" data-fjgenre="all">Tout</button>
+      <button class="filter-pill" data-fjgenre="homme">Homme</button>
+      <button class="filter-pill" data-fjgenre="femme">Femme</button>
+      <select class="sort-select" id="fj-sort"><option value="default">Trier par</option><option value="prix_asc">Prix ↑</option><option value="prix_desc">Prix ↓</option></select>
+    </div>
+    <div class="prod-grid fj-grid" id="fj-grid"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+  </div></section>
+
+  <section class="sec" id="fj-gros" style="padding-bottom:clamp(3rem,7vw,5rem)"><div class="container">
+    <div class="sh"><span class="sh-n">02</span><h2>Pour ton <i>business</i></h2><span class="mono">Gros &amp; revendeurs</span></div>
+    <p class="gros-lead">Tu veux vendre de la friperie ? Achète des lots au kilo, demande un devis sur mesure, ou associe-toi avec nous comme revendeur. Dis-nous ce que tu cherches : type d'habits, quantités, budget. On te répond directement.</p>
+
+    <div class="gros-opts">
+      <div class="gros-opt"><span class="gico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l3 6-9 12L3 9z"/><path d="M3 9h18"/></svg></span><h3>Au kilo</h3><p>Des lots d'habits de seconde main vendus au poids. Tu choisis le type de lot, on te donne le prix au kilo et le poids minimum.</p><button class="btn-s" data-gros="Acheter au kilo">Demander le tarif</button></div>
+      <div class="gros-opt"><span class="gico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></span><h3>Devis personnalisé</h3><p>Tu as un besoin précis : quantité, type de vêtements, budget ? Décris-le et on te prépare une offre sur mesure.</p><button class="btn-s" data-gros="Un devis personnalisé">Demander un devis</button></div>
+      <div class="gros-opt"><span class="gico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><h3>Devenir partenaire</h3><p>Tu veux revendre régulièrement ? Associons-nous : tu nous écris, et on voit ensemble comment travailler.</p><button class="btn-s" data-gros="Devenir partenaire">Me proposer</button></div>
+    </div>
+
+    <div id="gros-lots-wrap" hidden>
+      <div class="sh" style="margin-top:2rem"><span class="sh-n" style="visibility:hidden">·</span><h2>Les lots <i>disponibles</i></h2><span class="mono">Au kilo</span></div>
+      <div class="gros-lots" id="gros-lots"></div>
+    </div>
+
+    <div class="gros-grid" style="margin-top:1.6rem">
+      <form class="gros-form gf" id="gros-form" novalidate>
+        <div><label for="gros-choix">Je veux</label>
+          <select id="gros-choix"><option>Acheter au kilo</option><option>Un devis personnalisé</option><option>Devenir partenaire</option></select></div>
+        <div class="gf-row two"><div><label for="gros-nom">Ton nom</label><input id="gros-nom" autocomplete="name" placeholder="Prénom et nom"></div>
+          <div><label for="gros-tel">Ton numéro WhatsApp</label><input id="gros-tel" type="tel" autocomplete="tel" placeholder="77 000 00 00"></div></div>
+        <div><label for="gros-msg">Ton besoin</label><textarea id="gros-msg" placeholder="Type d'habits, quantités, ce que tu veux en faire…"></textarea></div>
+        <div><label for="gros-budget">Ton budget (facultatif)</label><input id="gros-budget" inputmode="numeric" placeholder="Ex. 100 000 FCFA"></div>
+        <div id="gros-feedback" class="gros-msg" hidden></div>
+        <button type="submit" class="btn-s" id="gros-submit">Envoyer ma demande</button>
+      </form>
+      <aside class="gros-wa">
+        <h3>Tu préfères écrire ?</h3>
+        <p>Envoie-nous directement un message sur WhatsApp. Dis-nous ce que tu cherches, on te répond.</p>
+        <a class="btn-s wa" id="gros-wa" href="https://wa.me/221778038874" target="_blank" rel="noopener">Écrire sur WhatsApp</a>
+      </aside>
+    </div>
+  </div></section>
+</div><!-- /panel-fj -->
+</div><!-- /univ-area -->
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -378,7 +519,7 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
   setInterval(tickChrono, 1000);
 
   /* numérotation 01, 02, 03… des sections visibles */
-  function renumber(){ let i = 0; document.querySelectorAll('.sec:not([hidden]) .sh-n').forEach(el => { el.textContent = String(++i).padStart(2,'0'); }); }
+  function renumber(){ document.querySelectorAll('.univ-panel').forEach(p => { let i = 0; p.querySelectorAll('.sec:not([hidden]) .sh-n').forEach(el => { if (el.style.visibility !== 'hidden') el.textContent = String(++i).padStart(2,'0'); }); }); }
   renumber();
 
   /* 2. PANIER COULISSANT */
@@ -461,7 +602,7 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
 
   /* 5. FILTRES & GRILLES */
   let allArticles = [];
-  document.querySelectorAll('.filter-pill').forEach(btn => {
+  document.querySelectorAll('.filter-pill[data-genre]').forEach(btn => {
     btn.addEventListener('click', () => {
       const type = btn.dataset.genre ? 'genre' : 'etat';
       document.querySelectorAll(`.filter-pill[data-${type}]`).forEach(b => b.classList.remove('active'));
@@ -473,21 +614,19 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
   function applyFilters(){
     let r = [...allArticles];
     const g = document.querySelector('.filter-pill[data-genre].active').dataset.genre;
-    const e = document.querySelector('.filter-pill[data-etat].active').dataset.etat;
     const sort = document.getElementById('sort-select').value;
     if (g !== 'all') r = r.filter(a => (a.genre || '').toLowerCase().includes(g));
-    if (e !== 'all') r = r.filter(a => (a.etat || '').toLowerCase().includes(e === 'bon' ? 'bon' : 'neuf'));
     if (sort === 'prix_asc') r.sort((a, b) => (a.prix_vente_fcfa || 0) - (b.prix_vente_fcfa || 0));
     else if (sort === 'prix_desc') r.sort((a, b) => (b.prix_vente_fcfa || 0) - (a.prix_vente_fcfa || 0));
     renderGrid(r, 'product-grid');
   }
 
-  function renderGrid(articles, gridId = 'product-grid'){
+  function renderGrid(articles, gridId = 'product-grid', second = false){
     const grid = document.getElementById(gridId); if (!grid) return;
-    if (articles.length === 0 && gridId === 'product-grid'){
-      grid.innerHTML = `<div style="grid-column:1/-1;padding:3.5rem 1rem;text-align:center;border:2px dashed var(--ink)">
-        <p class="disp" style="font-size:2rem;color:var(--ink);margin-bottom:1rem">Aucune pièce disponible</p>
-        <a href="demande-speciale.html" class="btn-s">Faire une demande spéciale →</a></div>`;
+    if (articles.length === 0 && (gridId === 'product-grid' || gridId === 'fj-grid')){
+      grid.innerHTML = second
+        ? `<div style="grid-column:1/-1;padding:3.5rem 1rem;text-align:center;border:2px dashed var(--ink)"><p class="disp" style="font-size:2rem;color:var(--ink);margin-bottom:1rem">Aucune trouvaille pour le moment</p><a href="#fj-gros" class="btn-s">Voir l'offre en gros →</a></div>`
+        : `<div style="grid-column:1/-1;padding:3.5rem 1rem;text-align:center;border:2px dashed var(--ink)"><p class="disp" style="font-size:2rem;color:var(--ink);margin-bottom:1rem">Aucune pièce disponible</p><a href="demande-speciale.html" class="btn-s">Faire une demande spéciale →</a></div>`;
       return;
     }
     grid.innerHTML = articles.map(a => {
@@ -496,7 +635,8 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
       const isNew = (a.etat || '').toLowerCase().includes('neuf');
       const photo = imgUrl(a.photo_url, 600);
       let badges = '';
-      if (isNew) badges += `<span class="p-badge neuf">★ Neuf</span>`;
+      if (second) badges += `<span class="p-badge fj">${esc(window.SE && SE.etatLabel ? SE.etatLabel(SE.normEtat(a.etat)) : 'Seconde main')}</span>`;
+      else if (isNew) badges += `<span class="p-badge neuf">★ Neuf</span>`;
       if (lowStock) badges += `<span class="p-badge stock">⚡ Stock limité</span>`;
       const overlayOut = isOut ? `<div class="p-out-overlay"><span class="p-out-label">Sold out</span></div>` : '';
       const button = isOut ? `<button class="p-action view" data-ref="${esc(a.reference)}">Voir l'article</button>` : `<button class="p-action add" data-cart-add="${esc(a.reference)}">Ajouter au panier</button>`;
@@ -575,13 +715,110 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
     finally{ renumber(); }
   }
 
+  /* 8. FEUG JAY : switch Neuf / Feug Jay (boutons + glisser) */
+  const panels = { neuf: document.getElementById('panel-neuf'), fj: document.getElementById('panel-fj') };
+  document.body.dataset.univ = 'neuf';
+  function setUniv(k, push){
+    if (!panels[k] || (document.body.dataset.univ === k && !panels[k].hidden)) return;
+    Object.entries(panels).forEach(([key, el]) => { el.hidden = key !== k; });
+    document.querySelectorAll('.univ-tab').forEach(t => { const on = t.dataset.univ === k; t.classList.toggle('active', on); t.setAttribute('aria-selected', on); });
+    document.body.dataset.univ = k;
+    if (push !== false) history.replaceState(null, '', k === 'fj' ? '#feug-jay' : location.pathname + location.search);
+    renumber();
+    const top = panels[k].getBoundingClientRect().top + window.scrollY - 112;
+    if (window.scrollY > top) window.scrollTo({ top: Math.max(0, top) });
+  }
+  document.querySelectorAll('.univ-tab').forEach(t => t.addEventListener('click', () => setUniv(t.dataset.univ)));
+  (function(){
+    const area = document.getElementById('univ-area'); let sx = null, sy = null;
+    area.addEventListener('touchstart', e => {
+      if (e.target.closest('.filters-bar,input,select,textarea,.chrono,.gros-lots')) { sx = null; return; }
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+    }, { passive: true });
+    area.addEventListener('touchend', e => {
+      if (sx === null) return;
+      const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = null;
+      if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.6) setUniv(dx < 0 ? 'fj' : 'neuf');
+    }, { passive: true });
+  })();
+  if (location.hash === '#feug-jay') setUniv('fj', false);
+  window.addEventListener('hashchange', () => { if (location.hash === '#feug-jay') setUniv('fj', false); else if (!location.hash) setUniv('neuf', false); });
+
+  /* articles de seconde main = tout ce qui n'est pas "Neuf" */
+  let secondArts = [];
+  const isNewArt = a => { const e = (a.etat || '').toLowerCase(); return !e || e.includes('neuf'); };
+  document.querySelectorAll('[data-fjgenre]').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-fjgenre]').forEach(b => b.classList.remove('active')); btn.classList.add('active'); applyFJ();
+  }));
+  document.getElementById('fj-sort').addEventListener('change', applyFJ);
+  function applyFJ(){
+    let r = [...secondArts];
+    const g = document.querySelector('[data-fjgenre].active').dataset.fjgenre, sort = document.getElementById('fj-sort').value;
+    if (g !== 'all') r = r.filter(a => (a.genre || '').toLowerCase().includes(g));
+    if (sort === 'prix_asc') r.sort((a, b) => (a.prix_vente_fcfa || 0) - (b.prix_vente_fcfa || 0));
+    else if (sort === 'prix_desc') r.sort((a, b) => (b.prix_vente_fcfa || 0) - (a.prix_vente_fcfa || 0));
+    renderGrid(r, 'fj-grid', true);
+  }
+  document.getElementById('fj-grid').addEventListener('click', handleGridClick);
+
+  /* gros : formulaire + WhatsApp + lots au kilo (table gros_offres) */
+  const choix = document.getElementById('gros-choix'), waBtn = document.getElementById('gros-wa');
+  function updateWa(extra){
+    const txt = `Bonjour SenMarché, je suis intéressé par Feug Jay en gros : ${choix.value.toLowerCase()}.${extra ? ' ' + extra : ''}`;
+    waBtn.href = 'https://wa.me/221778038874?text=' + encodeURIComponent(txt);
+  }
+  choix.addEventListener('change', () => updateWa()); updateWa();
+  document.querySelectorAll('.gros-opt [data-gros]').forEach(b => b.addEventListener('click', () => {
+    choix.value = b.dataset.gros; updateWa();
+    document.getElementById('gros-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }));
+  const fb = document.getElementById('gros-feedback');
+  function say(txt, ok){ fb.hidden = false; fb.className = 'gros-msg ' + (ok ? 'ok' : 'err'); fb.textContent = txt; }
+  document.getElementById('gros-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const nom = document.getElementById('gros-nom').value.trim(), tel = document.getElementById('gros-tel').value.trim();
+    const msg = document.getElementById('gros-msg').value.trim(), budget = document.getElementById('gros-budget').value;
+    if (!nom || !tel){ say('Ajoute ton nom et ton numéro WhatsApp pour qu\'on puisse te répondre.', false); return; }
+    const btn = document.getElementById('gros-submit'); btn.disabled = true; btn.textContent = 'Envoi…';
+    try{
+      await SE.Demandes.create({ nom, tel, description: `[FEUG JAY — ${choix.value}]\n${msg || '(pas de détail)'}`, categorie: 'Feug Jay (gros)', budget: parseInt(String(budget).replace(/\D/g, ''), 10) || null });
+      say('Merci, c\'est bien reçu. On te contacte sur WhatsApp.', true);
+      e.target.reset(); updateWa();
+    }catch(err){
+      console.error(err);
+      say('Ta demande n\'est pas partie. Écris-nous directement sur WhatsApp avec le bouton à côté.', false);
+    }
+    btn.disabled = false; btn.textContent = 'Envoyer ma demande';
+  });
+  async function loadGros(){
+    try{
+      if (!SE.sb) return;
+      const { data } = await SE.sb.from('gros_offres').select('*').eq('actif', true).order('ordre', { ascending: true });
+      if (!data || !data.length) return;
+      document.getElementById('gros-lots').innerHTML = data.map(l => `<article class="lot">
+        <div class="lot-img"${l.image_url ? ` style="background-image:url('${esc(imgUrl(l.image_url, 700))}')"` : ''}></div>
+        <div class="lot-body"><h4>${esc(l.titre)}</h4>${l.description ? `<p>${esc(l.description)}</p>` : ''}
+          ${l.prix_kg_fcfa ? `<span class="lot-prix">${fprix(l.prix_kg_fcfa)} / kg</span>` : ''}${l.min_kg ? `<span class="lot-min">Dès ${esc(l.min_kg)} kg</span>` : ''}
+          <button class="btn-s" data-lot="${esc(l.titre)}">Demander ce lot</button></div></article>`).join('');
+      document.querySelectorAll('#gros-lots [data-lot]').forEach(b => b.addEventListener('click', () => {
+        choix.value = 'Acheter au kilo'; updateWa('Lot : ' + b.dataset.lot + '.');
+        document.getElementById('gros-msg').value = 'Je suis intéressé par le lot : ' + b.dataset.lot + '.';
+        document.getElementById('gros-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }));
+      document.getElementById('gros-lots-wrap').hidden = false;
+    }catch(e){ /* table pas encore créée : on affiche seulement les 3 offres */ }
+  }
+
   async function loadArticles(){
     try{
       const raw = await SE.Articles.load();
-      allArticles = raw.sort((a, b) => (b.quantite || 0) - (a.quantite || 0));
+      const sorted = raw.sort((a, b) => (b.quantite || 0) - (a.quantite || 0));
+      allArticles = sorted.filter(isNewArt);          /* panneau Neuf */
+      secondArts = sorted.filter(a => !isNewArt(a));  /* panneau Feug Jay */
       renderGrid(allArticles.slice(0, 4), 'featured-grid');
-      loadDrops();
-      applyFilters();
+      loadDrops(); loadGros();
+      applyFilters(); applyFJ();
+      const tab = document.querySelector('.univ-tab[data-univ="fj"] small'); if (tab && secondArts.length) tab.textContent = secondArts.length + ' pièce' + (secondArts.length > 1 ? 's' : '');
     }catch(e){
       console.error('[SenMarché] Erreur chargement mode', e);
       document.getElementById('product-grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--stone)">Erreur de chargement.</div>';
