@@ -22,6 +22,23 @@ window.MUI = (function () {
   /* <img> avec repli sur le fond de marque si la photo ne se charge pas */
   const photo = (u, w, alt, extra = '') => u ? `<img src="${esc(imgUrl(u, w))}" alt="${esc(alt)}" loading="lazy" ${extra} onerror="${NOIMG}">` : '';
 
+
+  /* ── Illustrations (icônes de ligne, grandes) ── */
+  const ICONS = {
+    shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>',
+    wallet: '<rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20M6 6V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/><circle cx="17" cy="14.5" r="1.3"/>',
+    eye: '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',
+    snow: '<path d="M12 2v20M4.2 7l15.6 10M19.8 7 4.2 17"/><path d="M9.5 3.8 12 6.3l2.5-2.5M9.5 20.2 12 17.7l2.5 2.5"/>',
+    sun: '<circle cx="12" cy="12" r="4.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>',
+    tag: '<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.2"/>',
+    hanger: '<path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/>',
+    shirt: '<path d="M8 3 3 6l2 4 2-1v12h10V9l2 1 2-4-5-3a4 4 0 0 1-8 0z"/>',
+    heart: '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>'
+  };
+  const art = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ICONS.tag}</svg>`;
+  /* « Entrée » dans ton logiciel = nouveau paragraphe sur le site */
+  const paras = t => String(t || '').split(/\n+/).map(x => x.trim()).filter(Boolean).map(x => `<p>${esc(x)}</p>`).join('');
+
   /* ── Panier coulissant ── */
   const cart = {
     open() { document.getElementById('cart-drawer').classList.add('open'); document.getElementById('drawer-overlay').classList.add('open'); document.body.style.overflow = 'hidden'; },
@@ -111,5 +128,5 @@ window.MUI = (function () {
     reveal();
   }
 
-  return { esc, fprix, imgUrl, photo, cart, badge, reveal, countdown, init, NOIMG };
+  return { esc, fprix, imgUrl, photo, art, paras, cart, badge, reveal, countdown, init, NOIMG };
 })();
