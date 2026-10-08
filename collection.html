@@ -78,6 +78,11 @@
   const wa = txt => `https://wa.me/${WA}?text=${encodeURIComponent(txt)}`;
   const head = (num, title, meta) => `<div class="sh rv"><span class="sh-n">${num}</span><h2>${title}</h2>${meta ? `<span class="sh-meta">${esc(meta)}</span>` : ''}</div>`;
   const list = v => { if (typeof v === 'string') { try { v = JSON.parse(v); } catch (e) { v = null; } } return Array.isArray(v) ? v : []; };
+  const ROLE = { haut: 'Le haut', bas: 'Le bas', chaussures: 'Les chaussures', accessoire: "L'accessoire" };
+  const ROLE_ORDER = ['haut', 'bas', 'chaussures'];
+  const row = (titre, texte, icon, image) => `<article class="zrow rv">
+      <div class="zart ${image ? 'has-img' : ''}">${image ? photo(image, 900, titre) : ''}<span class="zico">${MUI.art(icon)}</span><span class="zc c1"></span><span class="zc c2"></span></div>
+      <div class="ztext"><h3>${esc(titre)}</h3>${MUI.paras(texte)}</div></article>`;
   /* prix barré : comme dans le catalogue, prix_min_fcfa sert de prix de référence */
   const disc = a => { const p = a.prix_vente_fcfa || 0, r = a.prix_min_fcfa && a.prix_min_fcfa > p ? a.prix_min_fcfa : 0; return { ref: r, pct: r ? Math.round((1 - p / r) * 100) : 0 }; };
 
@@ -170,29 +175,44 @@
         parts.push(`<section class="chap"><div class="m-wrap">${head(num(), 'Toute la <i>collection</i>', arts.length + ' pièce' + (arts.length > 1 ? 's' : ''))}
           <div class="pgrid rv">${arts.map(card).join('')}</div></div></section>`);
 
-        /* 3. comment porter (si tu l'as rempli dans la colonne guides) */
-        const guides = list(col.guides).map(g => ({ g, items: (g.refs || []).map(r => arts.find(a => a.reference === r) || allArts.find(a => a.reference === r)).filter(Boolean) })).filter(x => x.items.length);
-        if (guides.length) parts.push(`<section class="chap"><div class="m-wrap">${head(num(), 'Comment les <i>porter</i>')}
-          ${guides.map(({ g, items }) => {
-            const total = items.reduce((t, a) => t + (a.prix_vente_fcfa || 0), 0), two = items.length > 1;
-            return `<div class="look rv" style="margin-bottom:1rem"><div class="look-collage" style="grid-template-columns:${two ? '1.5fr 1fr' : '1fr'}">${items.slice(0, 2).map(a => `<div class="${a.photo_url ? '' : 'noimg'}">${photo(a.photo_url, 600, a.nom)}</div>`).join('')}</div>
-            <div class="look-content"><h3 class="look-title">${esc(g.titre || 'Le total look')}</h3>${g.texte ? `<p class="piece-desc" style="margin-bottom:1.2rem">${esc(g.texte)}</p>` : ''}
-            <div class="look-items">${items.map(a => `<a href="produit.html?ref=${esc(a.reference)}" class="look-item"><span>${esc(a.nom)}</span><strong>${fprix(a.prix_vente_fcfa)}</strong></a>`).join('')}</div>
-            <div class="look-total"><span>Total</span><b>${fprix(total)}</b></div><button class="btn-s btn-buy-look" data-refs="${items.map(a => a.reference).join(',')}">Acheter l'ensemble</button></div></div>`;
+        /* 3. comment porter : les looks de ton logiciel (tables looks + look_articles), sinon la colonne guides */
+        let looks = [];
+        try {
+          const { data: lk } = await SE.sb.from('looks').select('*').eq('collection_id', col.id).eq('actif', true).order('ordre', { ascending: true });
+          if (lk && lk.length) {
+            const { data: la } = await SE.sb.from('look_articles').select('*').in('look_id', lk.map(l => l.id)).order('ordre', { ascending: true });
+            looks = lk.map(l => ({ titre: l.titre, texte: l.texte, items: (la || []).filter(x => x.look_id === l.id).map(x => ({ role: x.role, a: arts.find(p => p.reference === x.article_ref) || allArts.find(p => p.reference === x.article_ref) })).filter(x => x.a) }));
+          }
+        } catch (e) { /* tables pas encore créées : on continue */ }
+        if (!looks.length) looks = list(col.guides).map(g => ({ titre: g.titre, texte: g.texte, items: (g.refs || []).map((r, i) => ({ role: ROLE_ORDER[i] || 'accessoire', a: arts.find(p => p.reference === r) || allArts.find(p => p.reference === r) })).filter(x => x.a) }));
+        looks = looks.filter(l => l.items.length);
+        if (looks.length) parts.push(`<section class="chap"><div class="m-wrap">${head(num(), 'Comment les <i>porter</i>')}
+          ${looks.map(l => {
+            const total = l.items.reduce((t, x) => t + (x.a.prix_vente_fcfa || 0), 0);
+            return `<div class="lk rv"><div class="lk-head"><h3>${esc(l.titre || 'Le look complet')}</h3>${MUI.paras(l.texte)}</div>
+              <div class="lk-items" style="--n:${l.items.length}">${l.items.map(x => `<a class="lk-item" href="produit.html?ref=${esc(x.a.reference)}">
+                <div class="lk-img ${x.a.photo_url ? '' : 'noimg'}">${photo(x.a.photo_url, 700, x.a.nom)}${ROLE[x.role] ? `<span class="lk-role">${ROLE[x.role]}</span>` : ''}</div>
+                <div class="lk-info"><b>${esc(x.a.nom)}</b><span>${fprix(x.a.prix_vente_fcfa)}</span></div></a>`).join('')}</div>
+              <div class="lk-foot"><div><small>Le look complet</small><strong>${fprix(total)}</strong></div><button class="btn-s btn-buy-look" data-refs="${l.items.map(x => x.a.reference).join(',')}">Acheter le look</button></div></div>`;
           }).join('')}</div></section>`);
 
-        /* 4. pourquoi cette collection (arguments : colonne raisons et/ou story_text) */
-        const raisons = list(col.raisons).filter(r => r && (r.titre || r.texte));
+        /* 4. pourquoi cette collection : table collection_raisons, sinon colonne raisons */
+        let raisons = [];
+        try { const { data: rr } = await SE.sb.from('collection_raisons').select('*').eq('collection_id', col.id).order('ordre', { ascending: true }); if (rr && rr.length) raisons = rr; } catch (e) {}
+        if (!raisons.length) raisons = list(col.raisons);
+        raisons = raisons.filter(r => r && (r.titre || r.texte));
+        const DEF = ['hanger', 'tag', 'heart', 'shirt'];
         if (raisons.length || col.story_text) parts.push(`<section class="chap"><div class="m-wrap">${head(num(), 'Pourquoi cette <i>collection</i>')}
           ${col.story_text ? `<p class="why-quote rv">${col.story_text}</p>` : ''}
-          ${raisons.length ? `<div class="raisons rv">${raisons.slice(0, 3).map(r => `<div class="raison"><h3>${esc(r.titre || '')}</h3><p>${esc(r.texte || '')}</p></div>`).join('')}</div>` : ''}</div></section>`);
+          <div class="zig">${raisons.slice(0, 4).map((r, i) => row(r.titre || '', r.texte, r.icone || DEF[i % 4], r.image_url || r.image)).join('')}</div></div></section>`);
       }
 
       /* 5. engagement (toujours) */
       parts.push(`<section class="chap"><div class="m-wrap">${head(num(), 'Notre <i>engagement</i>')}
-        <div class="eng rv">
-          <div class="eng-card"><span class="eyebrow">Vérifié avant l'envoi</span><p>Chaque pièce est contrôlée avant l'envoi. Ce que vous voyez ici est <em>exactement</em> ce que vous recevrez.</p></div>
-          <div class="eng-card"><span class="eyebrow">Paiement à la récupération</span><p>Vous ne payez rien à la commande. Wave, Orange Money ou espèces, uniquement au moment du retrait.</p></div>
+        <div class="zig">
+          ${row("Vérifié avant l'envoi", "Chaque pièce est contrôlée avant l'envoi. Ce que vous voyez sur la photo est ce que vous recevez : pas de retouche trompeuse, pas de mauvaise surprise à l'ouverture.\nVous suivez ensuite l'avancement de votre commande sur WhatsApp, de la préparation jusqu'au retrait.", 'shield')}
+          ${row("Vous payez à la récupération", "Vous ne payez rien à la commande. Le règlement se fait uniquement au moment du retrait, en espèces, Wave ou Orange Money.\nAucun virement à l'avance, aucun risque : vous avez la pièce entre les mains avant de sortir votre argent.", 'wallet')}
+          ${row("Vous inspectez avant de payer", "Au retrait, vous regardez l'article de près avant de payer.\nSi quelque chose ne va pas, vous n'êtes pas engagé.", 'eye')}
         </div></div></section>`);
 
       /* 6. suite */
