@@ -201,20 +201,31 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
   .cart-handle{display:none}
 }
 
-/* ═════════ SWITCH NEUF / FEUG JAY ═════════ */
-.univ-switch{position:sticky;top:56px;z-index:60;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
-.univ-row{display:flex;align-items:center;gap:.6rem;padding:.7rem 0}
-.univ-tab{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;padding:.6rem 1.2rem;border-radius:999px;border:2px solid var(--ink);background:transparent;color:var(--ink);font:800 .95rem/1 var(--m-body);cursor:pointer;transition:.15s}
-.univ-tab small{font:700 .72rem/1 var(--m-body);opacity:.8}
-.univ-tab[data-univ="neuf"].active{background:var(--m-safran);border-color:var(--m-safran);color:var(--m-on-safran)}
-.univ-tab[data-univ="fj"].active{background:var(--m-bissap);border-color:var(--m-bissap);color:var(--m-on-bissap)}
-.univ-hint{margin-left:auto;font:600 .82rem/1 var(--m-body);color:var(--stone)}
-@media(min-width:900px){.univ-hint{display:none}}
+/* ═════════ SÉLECTEUR MODE / FEUG JAY (curseur qui glisse) ═════════ */
+.univ-switch{position:sticky;top:56px;z-index:60;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:.55rem 0 .5rem}
+.usw{position:relative;display:grid;grid-template-columns:1fr 1fr;max-width:560px;margin:0 auto;padding:5px;border-radius:999px;background:var(--bg2);border:1px solid var(--border)}
+.usw-thumb{position:absolute;top:5px;bottom:5px;left:5px;width:calc(50% - 5px);border-radius:999px;background:var(--m-g-safran);box-shadow:0 12px 24px -12px color-mix(in srgb,var(--m-safran) 80%,transparent);transition:transform .45s cubic-bezier(.65,0,.25,1),background .35s,box-shadow .35s}
+body[data-univ="fj"] .usw-thumb{transform:translateX(100%);background:var(--m-g-bissap);box-shadow:0 12px 24px -12px color-mix(in srgb,var(--m-bissap) 80%,transparent)}
+.usw-btn{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:.65rem;min-height:54px;padding:.4rem .9rem;border:0;background:transparent;color:var(--ink);cursor:pointer;border-radius:999px;transition:color .3s}
+.usw-btn[data-univ="neuf"].active{color:var(--m-on-safran)}
+.usw-btn[data-univ="fj"].active{color:var(--m-on-bissap)}
+.usw-ico svg{width:24px;height:24px;display:block}
+.usw-txt{display:flex;flex-direction:column;align-items:flex-start;text-align:left;line-height:1.1}
+.usw-txt b{font:800 1.05rem/1.1 var(--m-display);letter-spacing:-.01em}
+.usw-txt small{font:600 .74rem/1.1 var(--m-body);opacity:.85;margin-top:.2rem}
+.usw-cnt{margin-left:.1rem;background:color-mix(in srgb,currentColor 18%,transparent);border-radius:999px;padding:.22rem .5rem;font:800 .7rem/1 var(--m-body);font-style:normal}
+.usw-cnt:empty{display:none}
+.usw-hint{display:none;text-align:center;font:600 .78rem/1 var(--m-body);color:var(--stone);margin:.45rem 0 0}
+.usw-hint span{display:inline-block;animation:nudge 1.6s ease-in-out infinite}
+.usw-hint span:first-child{animation-direction:reverse}
+@keyframes nudge{50%{transform:translateX(4px)}}
+@media(max-width:640px){.usw-hint{display:block}.usw-txt small{display:none}.usw-btn{min-height:46px;gap:.5rem}}
+@media(prefers-reduced-motion:reduce){.usw-hint span{animation:none}.usw-thumb{transition:none}}
 .univ-panel{animation:uIn .35s ease both}
 @keyframes uIn{from{opacity:0;transform:translateX(var(--ux,14px))}to{opacity:1;transform:none}}
 body[data-univ="neuf"] .univ-panel{--ux:-14px}
 @media(prefers-reduced-motion:reduce){.univ-panel{animation:none}}
-.sec{scroll-margin-top:120px}
+.sec{scroll-margin-top:140px}
 
 /* ═════════ FEUG JAY (friperie) ═════════ */
 .fj-hero{position:relative;overflow:hidden;background:var(--m-g-bissap);color:var(--m-on-bissap);padding-bottom:clamp(2.2rem,5vw,3.6rem)}
@@ -270,6 +281,64 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
 .gros-wa p{font-size:1rem;line-height:1.7;opacity:.92;margin:0 0 1.2rem}
 .btn-s.wa{background:var(--m-wa);color:var(--m-on-nuit)}
 
+/* ═════════ FEUG JAY : blocs développés ═════════ */
+.fj-chips{display:flex;gap:.5rem;flex-wrap:wrap;margin:0 0 1.4rem}
+.fj-chips span{border:1px solid color-mix(in srgb,var(--m-on-bissap) 50%,transparent);border-radius:999px;padding:.5rem .85rem;font:700 .88rem/1 var(--m-body)}
+.fj-band{background:var(--m-g-vert);color:var(--m-on-vert);padding:clamp(1.8rem,4vw,2.8rem) 0}
+.fj-band-in{display:grid;gap:1.4rem;align-items:center}
+@media(min-width:860px){.fj-band-in{grid-template-columns:1.4fr 1fr}}
+.fj-band-k{display:inline-block;transform:rotate(-2deg);background:var(--m-safran);color:var(--m-on-safran);padding:.4rem .75rem;border-radius:8px;font:800 .8rem/1 var(--m-body);margin-bottom:.9rem}
+.fj-band h2{font:800 clamp(1.9rem,3.8vw,3rem)/1.04 var(--m-display);letter-spacing:-.03em;margin:0 0 .7rem;color:var(--m-on-vert)}
+.fj-band h2 i,.fj-cta h2 i{font-family:var(--m-serif);font-style:italic;font-weight:500;letter-spacing:-.02em;color:var(--m-safran-2)}
+.fj-band p{line-height:1.75;opacity:.92;margin:0;max-width:54ch}
+.fj-band-side{display:flex;flex-direction:column;gap:1rem;align-items:flex-start}
+.fj-band-side ul{list-style:none;display:flex;gap:.5rem;flex-wrap:wrap;padding:0;margin:0}
+.fj-band-side li{border:1px solid color-mix(in srgb,var(--m-on-vert) 45%,transparent);border-radius:999px;padding:.5rem .85rem;font:700 .88rem/1 var(--m-body)}
+
+.zig{display:grid;gap:clamp(1rem,2.5vw,1.6rem)}
+.zrow{display:grid;grid-template-columns:1fr;border-radius:28px;overflow:hidden;background:var(--zbg);--zg:var(--m-g-bissap);--zbg:var(--m-tint-bissap)}
+.zrow:nth-child(3n+2){--zg:var(--m-g-safran);--zbg:var(--m-tint-safran)}
+.zrow:nth-child(3n+3){--zg:var(--m-g-vert);--zbg:var(--m-tint-vert)}
+.zart{position:relative;min-height:220px;display:grid;place-items:center;background:var(--zg);overflow:hidden;color:var(--m-on-bissap)}
+.zrow:nth-child(3n+2) .zart{color:var(--m-on-safran)}
+.zrow:nth-child(3n+3) .zart{color:var(--m-on-vert)}
+.zico{position:relative;z-index:2;width:clamp(110px,16vw,170px);aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:color-mix(in srgb,currentColor 14%,transparent);border:2px solid color-mix(in srgb,currentColor 35%,transparent)}
+.zico svg{width:52%;height:52%}
+.zc{position:absolute;border-radius:50%;border:2px solid color-mix(in srgb,currentColor 22%,transparent);pointer-events:none}
+.zc.c1{width:70%;aspect-ratio:1;right:-25%;top:-30%}.zc.c2{width:42%;aspect-ratio:1;left:-12%;bottom:-18%}
+.ztext{padding:clamp(1.8rem,4.5vw,3.2rem);display:flex;flex-direction:column;justify-content:center}
+.ztext h3{font:800 clamp(1.8rem,3.4vw,2.7rem)/1.05 var(--m-display);font-variation-settings:"wdth" 92;letter-spacing:-.03em;color:var(--ink);margin:0 0 1rem}
+.ztext p{font-size:clamp(1.05rem,1.5vw,1.2rem);line-height:1.85;color:var(--ink);opacity:.82;margin:0 0 1rem;max-width:58ch}
+.ztext p:last-child{margin-bottom:0}
+@media(min-width:860px){.zrow{grid-template-columns:.8fr 1.2fr;min-height:320px}.zrow:nth-child(even) .zart{order:2}}
+
+.fj-lead2{font-size:clamp(1.05rem,1.5vw,1.2rem);line-height:1.8;color:var(--stone);max-width:64ch;margin:0 0 1.4rem}
+.fj-sub{font:800 clamp(1.4rem,2.6vw,2rem)/1.1 var(--m-display);letter-spacing:-.02em;color:var(--ink);margin:1.6rem 0 1rem}
+.fj-sub i{font-family:var(--m-serif);font-style:italic;font-weight:500;color:var(--m-acc-bissap)}
+.fj-top{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.6rem,2vw,1.2rem);margin-bottom:.6rem}
+.fj-tagcard{position:relative;display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:transform .2s}
+.fj-tagcard:nth-child(1){transform:rotate(-1.4deg)}.fj-tagcard:nth-child(3){transform:rotate(1.4deg)}
+.fj-tagcard:hover{transform:translateY(-4px) rotate(0)}
+.fj-tagcard::before{content:'';position:absolute;top:10px;left:50%;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--ink);transform:translateX(-50%);z-index:3}
+.fj-timg{position:relative;aspect-ratio:4/5;background:var(--m-g-bissap);overflow:hidden}
+.fj-timg img{width:100%;height:100%;object-fit:cover}
+.fj-timg.noimg::after{content:'Sen·Marché';position:absolute;inset:0;display:grid;place-items:center;font:800 1.2rem/1 var(--m-display);color:color-mix(in srgb,var(--m-on-bissap) 70%,transparent)}
+.fj-tagprice{position:absolute;right:.6rem;bottom:3.6rem;z-index:2;background:var(--m-safran);color:var(--m-on-safran);border-radius:10px;padding:.5rem .7rem;font:800 clamp(.95rem,2vw,1.4rem)/1 var(--m-display);transform:rotate(-4deg);box-shadow:0 10px 20px -10px var(--m-nuit)}
+.fj-tagname{display:block;padding:.7rem .8rem .9rem;font:700 .9rem/1.3 var(--m-body);color:var(--ink)}
+.fj-steps{display:grid;grid-template-columns:1fr;gap:1rem;margin-top:1.8rem}
+@media(min-width:760px){.fj-steps{grid-template-columns:repeat(3,1fr)}}
+.fj-step{border-radius:22px;padding:1.4rem;background:var(--bg2);border:1px solid var(--border)}
+.fj-step .n{display:block;font:italic 500 3rem/.8 var(--m-serif);color:transparent;-webkit-text-stroke:2px var(--m-acc-bissap);margin-bottom:.7rem}
+.fj-step h4{font:800 1.25rem/1.15 var(--m-display);margin:0 0 .4rem;color:var(--ink)}
+.fj-step p{font-size:.98rem;line-height:1.65;color:var(--stone);margin:0}
+.gros-intro{max-width:70ch}
+.gros-chips{display:flex;gap:.5rem;flex-wrap:wrap;margin:0 0 1.6rem}
+.gros-chips span{background:var(--m-tint-bissap);border-radius:999px;padding:.55rem .9rem;font:700 .9rem/1 var(--m-body);color:var(--ink)}
+.fj-cta{border-radius:28px;padding:clamp(1.8rem,5vw,3.4rem);text-align:center;background:var(--m-g-bissap);color:var(--m-on-bissap)}
+.fj-cta h2{font:800 clamp(1.9rem,4vw,3rem)/1.05 var(--m-display);letter-spacing:-.03em;margin:0 0 .7rem;color:var(--m-on-bissap)}
+.fj-cta p{opacity:.92;margin:0 0 1.4rem}
+@media(max-width:640px){.fj-tagname{font-size:.72rem;padding:.5rem .55rem .7rem}.fj-tagprice{bottom:2.8rem;padding:.35rem .5rem}}
+
 /* ═════════ TÉLÉPHONE ═════════ */
 @media(max-width:640px){
   .hero-s{min-height:78svh}
@@ -286,7 +355,7 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
   .drop{min-height:200px}
   .drop.current{min-height:320px}
   .mkt-img{min-height:190px}
-  .univ-tab{padding:.55rem 1rem}
+  .usw-btn{padding:.55rem 1rem}
   .fj-title{font-size:clamp(4.4rem,26vw,8rem)}
   .fj-ctas .btn-s{width:100%}
 }
@@ -317,12 +386,15 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
   </div>
 </nav>
 
-<!-- SWITCH NEUF / FEUG JAY -->
-<div class="univ-switch" id="univ-switch"><div class="container"><div class="univ-row" role="tablist" aria-label="Neuf ou seconde main">
-  <button class="univ-tab active" data-univ="neuf" role="tab" aria-selected="true">Neuf</button>
-  <button class="univ-tab" data-univ="fj" role="tab" aria-selected="false">Feug Jay <small>seconde main</small></button>
-  <span class="univ-hint">← Glisse pour changer →</span>
-</div></div></div>
+<!-- SÉLECTEUR MODE / FEUG JAY -->
+<div class="univ-switch" id="univ-switch"><div class="container">
+  <div class="usw" role="tablist" aria-label="Choisir l'univers">
+    <span class="usw-thumb" aria-hidden="true"></span>
+    <button class="usw-btn active" data-univ="neuf" role="tab" aria-selected="true"><span class="usw-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 3 6l2 4 2-1v12h10V9l2 1 2-4-5-3a4 4 0 0 1-8 0z"/></svg></span><span class="usw-txt"><b>Mode</b><small>Pièces sélectionnées</small></span></button>
+    <button class="usw-btn" data-univ="fj" role="tab" aria-selected="false"><span class="usw-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg></span><span class="usw-txt"><b>Feug Jay</b><small>Friperie à petits prix</small></span><em class="usw-cnt"></em></button>
+  </div>
+  <p class="usw-hint" aria-hidden="true"><span>←</span> glisse <span>→</span></p>
+</div></div>
 
 <div id="univ-area">
 <div class="univ-panel" id="panel-neuf">
@@ -413,13 +485,33 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
       <h1 class="fj-title disp">Feug <span class="out">Jay</span></h1>
       <p class="fj-mean">En wolof, <i>feug jay</i> : secouer l'habit, et le vendre.</p>
       <p class="fj-lead">Des habits de seconde main à petits prix. Pour te faire plaisir, ou pour faire ton business.</p>
+      <div class="fj-chips"><span>Au détail</span><span>En gros, au kilo</span><span>Devis sur mesure</span></div>
       <div class="fj-ctas"><a href="#fj-trouvailles" class="btn-s">Voir les trouvailles →</a><a href="#fj-gros" class="btn-s fj-alt">Acheter en gros</a></div>
-      <div class="fj-hangers" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg></div>
+      <div class="fj-hangers" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg></div>
     </div>
   </header>
 
+  <section class="fj-band"><div class="container fj-band-in">
+    <div><span class="fj-band-k">Pour les pros</span>
+      <h2>Tu veux en faire ton <i>business</i> ?</h2>
+      <p>Achète des lots d'habits au kilo, demande un devis sur mesure ou deviens partenaire. On te répond directement.</p></div>
+    <div class="fj-band-side"><ul><li>Au kilo</li><li>Devis sur mesure</li><li>Partenaire</li></ul><a class="btn-s" href="#fj-gros">Voir l'offre en gros →</a></div>
+  </div></section>
+
+  <section class="sec" id="fj-pourquoi"><div class="container">
+    <div class="sh"><span class="sh-n">01</span><h2>L'esprit <i>Feug Jay</i></h2><span class="mono">Pourquoi la friperie</span></div>
+    <div class="zig">
+      <article class="zrow"><div class="zart"><span class="zico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12 2.5 18.2A1 1 0 0 0 3 20h18a1 1 0 0 0 .5-1.8z"/></svg></span><span class="zc c1"></span><span class="zc c2"></span></div><div class="ztext"><h3>On secoue l'habit, on le vend</h3><p>En wolof, feug jay veut dire secouer l'habit pour le vendre. C'est l'image du marché : on déplie, on montre, on trouve la pièce qu'on cherchait au milieu de la pile.</p><p>Sur SenMarché, on a gardé cet esprit. Chaque habit de seconde main est présenté un par un, avec son prix et son état, pour que tu saches exactement ce que tu achètes.</p></div></article>
+      <article class="zrow"><div class="zart"><span class="zico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg></span><span class="zc c1"></span><span class="zc c2"></span></div><div class="ztext"><h3>Un bon habit n'a pas besoin d'être neuf</h3><p>Une belle veste, un jean qui tombe bien ou un t-shirt tout simple peuvent avoir une deuxième vie. En seconde main, tu trouves des pièces à petit prix et tu composes ton style sans te ruiner.</p><p>L'état de chaque pièce est indiqué : tu vois tout de suite si elle est en bon état ou si elle porte les marques du temps.</p></div></article>
+      <article class="zrow"><div class="zart"><span class="zico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 3 6l2 4 2-1v12h10V9l2 1 2-4-5-3a4 4 0 0 1-8 0z"/></svg></span><span class="zc c1"></span><span class="zc c2"></span></div><div class="ztext"><h3>Pour toi, ou pour ton business</h3><p>Tu peux acheter à la pièce, comme sur le reste du site : tu choisis, tu commandes sans payer, et tu règles au retrait.</p><p>Et si tu veux revendre, on propose aussi des lots au kilo, des devis sur mesure et des partenariats. Écris-nous, on trouvera la formule qui te convient.</p></div></article>
+    </div>
+  </div></section>
+
   <section class="sec" id="fj-trouvailles"><div class="container">
-    <div class="sh"><span class="sh-n">01</span><h2>Les <i>trouvailles</i></h2><span class="mono">Seconde main</span></div>
+    <div class="sh"><span class="sh-n">02</span><h2>Les <i>trouvailles</i></h2><span class="mono" id="fj-count-note">Au détail</span></div>
+    <p class="fj-lead2">Des habits à la pièce, avec le prix et l'état affichés sur chaque article. Tu choisis, tu commandes sans payer, et tu règles au retrait.</p>
+    <div id="fj-top-wrap" hidden><h3 class="fj-sub">Les plus petits <i>prix</i></h3><div class="fj-top" id="fj-top"></div></div>
+    <h3 class="fj-sub">Toutes les <i>pièces</i></h3>
     <div class="filters-bar">
       <button class="filter-pill active" data-fjgenre="all">Tout</button>
       <button class="filter-pill" data-fjgenre="homme">Homme</button>
@@ -427,21 +519,36 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
       <select class="sort-select" id="fj-sort"><option value="default">Trier par</option><option value="prix_asc">Prix ↑</option><option value="prix_desc">Prix ↓</option></select>
     </div>
     <div class="prod-grid fj-grid" id="fj-grid"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    <div class="fj-steps">
+      <div class="fj-step"><b class="n">1</b><h4>Tu choisis</h4><p>Parcours les trouvailles et ajoute tes pièces au panier.</p></div>
+      <div class="fj-step"><b class="n">2</b><h4>Tu commandes sans payer</h4><p>Aucun paiement à l'avance, aucun risque.</p></div>
+      <div class="fj-step"><b class="n">3</b><h4>Tu récupères et tu paies</h4><p>Tu regardes tes habits de près au retrait, puis tu règles en espèces, Wave ou Orange Money.</p></div>
+    </div>
   </div></section>
 
-  <section class="sec" id="fj-gros" style="padding-bottom:clamp(3rem,7vw,5rem)"><div class="container">
-    <div class="sh"><span class="sh-n">02</span><h2>Pour ton <i>business</i></h2><span class="mono">Gros &amp; revendeurs</span></div>
-    <p class="gros-lead">Tu veux vendre de la friperie ? Achète des lots au kilo, demande un devis sur mesure, ou associe-toi avec nous comme revendeur. Dis-nous ce que tu cherches : type d'habits, quantités, budget. On te répond directement.</p>
+  <section class="sec" id="fj-gros"><div class="container">
+    <div class="sh"><span class="sh-n">03</span><h2>Pour ton <i>business</i></h2><span class="mono">Gros &amp; revendeurs</span></div>
+    <div class="gros-intro">
+      <p class="gros-lead">Tu tiens un stand au marché, une boutique, ou tu vends en ligne ? Avec Feug Jay, tu peux remplir ton stock sans courir partout : on te propose des lots d'habits de seconde main vendus au kilo.</p>
+      <p class="gros-lead">Pas de grille toute faite : dis-nous ce que tu cherches (type d'habits, quantités, budget) et on te répond avec une offre adaptée. Tu peux aussi devenir partenaire et revendre avec nous sur la durée.</p>
+      <div class="gros-chips"><span>Prix au kilo</span><span>Devis sur mesure</span><span>Échange direct sur WhatsApp</span></div>
+    </div>
 
     <div class="gros-opts">
-      <div class="gros-opt"><span class="gico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l3 6-9 12L3 9z"/><path d="M3 9h18"/></svg></span><h3>Au kilo</h3><p>Des lots d'habits de seconde main vendus au poids. Tu choisis le type de lot, on te donne le prix au kilo et le poids minimum.</p><button class="btn-s" data-gros="Acheter au kilo">Demander le tarif</button></div>
-      <div class="gros-opt"><span class="gico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></span><h3>Devis personnalisé</h3><p>Tu as un besoin précis : quantité, type de vêtements, budget ? Décris-le et on te prépare une offre sur mesure.</p><button class="btn-s" data-gros="Un devis personnalisé">Demander un devis</button></div>
-      <div class="gros-opt"><span class="gico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><h3>Devenir partenaire</h3><p>Tu veux revendre régulièrement ? Associons-nous : tu nous écris, et on voit ensemble comment travailler.</p><button class="btn-s" data-gros="Devenir partenaire">Me proposer</button></div>
+      <div class="gros-opt"><span class="gico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12l3 6-9 12L3 9z"/><path d="M3 9h18"/></svg></span><h3>Au kilo</h3><p>Des lots d'habits de seconde main vendus au poids. Tu choisis le type de lot, on te donne le prix au kilo et le poids minimum.</p><button class="btn-s" data-gros="Acheter au kilo">Demander le tarif</button></div>
+      <div class="gros-opt"><span class="gico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></span><h3>Devis personnalisé</h3><p>Tu as un besoin précis : quantité, type de vêtements, budget ? Décris-le et on te prépare une offre sur mesure.</p><button class="btn-s" data-gros="Un devis personnalisé">Demander un devis</button></div>
+      <div class="gros-opt"><span class="gico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><h3>Devenir partenaire</h3><p>Tu veux revendre régulièrement ? Associons-nous : tu nous écris, et on voit ensemble comment travailler.</p><button class="btn-s" data-gros="Devenir partenaire">Me proposer</button></div>
     </div>
 
     <div id="gros-lots-wrap" hidden>
-      <div class="sh" style="margin-top:2rem"><span class="sh-n" style="visibility:hidden">·</span><h2>Les lots <i>disponibles</i></h2><span class="mono">Au kilo</span></div>
+      <h3 class="fj-sub">Les lots <i>disponibles</i></h3>
       <div class="gros-lots" id="gros-lots"></div>
+    </div>
+
+    <div class="fj-steps">
+      <div class="fj-step"><b class="n">1</b><h4>Tu nous écris</h4><p>Avec le formulaire ci-dessous, ou directement sur WhatsApp.</p></div>
+      <div class="fj-step"><b class="n">2</b><h4>On te répond</h4><p>Avec une offre adaptée à ton besoin : lot au kilo, devis ou partenariat.</p></div>
+      <div class="fj-step"><b class="n">3</b><h4>On s'organise</h4><p>On se met d'accord ensemble sur la suite.</p></div>
     </div>
 
     <div class="gros-grid" style="margin-top:1.6rem">
@@ -462,6 +569,20 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
       </aside>
     </div>
   </div></section>
+
+  <section class="sec" id="fj-faq"><div class="container"><div class="faq-wrap">
+    <div class="sh" style="grid-template-columns:auto 1fr"><span class="sh-n">04</span><h2>Questions <i>fréquentes</i></h2></div>
+    <div class="faq-item"><button class="faq-q"><span>Dans quel état sont les habits ?</span><span class="ic">+</span></button><div class="faq-a"><p>L'état est indiqué sur chaque article (bon état, usagé…). Tu vois tout de suite ce que tu achètes, et tu inspectes ta pièce au retrait avant de payer.</p></div></div>
+    <div class="faq-item"><button class="faq-q"><span>Je peux acheter un seul habit ?</span><span class="ic">+</span></button><div class="faq-a"><p>Oui. Au détail, tu achètes à la pièce, comme sur le reste du site : tu commandes sans payer et tu règles au retrait.</p></div></div>
+    <div class="faq-item"><button class="faq-q"><span>Comment acheter en gros ?</span><span class="ic">+</span></button><div class="faq-a"><p>Trois façons : au kilo, sur devis personnalisé, ou en devenant partenaire. Remplis le formulaire ou écris-nous sur WhatsApp, on te répond avec une offre adaptée.</p></div></div>
+    <div class="faq-item"><button class="faq-q"><span>Comment se passe le paiement ?</span><span class="ic">+</span></button><div class="faq-a"><p>Au détail, tu ne paies rien à la commande : le règlement se fait au retrait, en espèces, Wave ou Orange Money. Pour le gros, on se met d'accord ensemble.</p></div></div>
+  </div></div></section>
+
+  <section class="sec" style="padding-bottom:clamp(3rem,7vw,5rem)"><div class="container"><div class="fj-cta">
+    <h2>Une question, une idée de <i>partenariat</i> ?</h2>
+    <p>Écris-nous directement, on te répond.</p>
+    <a class="btn-s wa" href="https://wa.me/221778038874?text=Bonjour%20SenMarch%C3%A9%2C%20j%27ai%20une%20question%20sur%20Feug%20Jay." target="_blank" rel="noopener">Écrire sur WhatsApp</a>
+  </div></div></section>
 </div><!-- /panel-fj -->
 </div><!-- /univ-area -->
 
@@ -721,14 +842,14 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
   function setUniv(k, push){
     if (!panels[k] || (document.body.dataset.univ === k && !panels[k].hidden)) return;
     Object.entries(panels).forEach(([key, el]) => { el.hidden = key !== k; });
-    document.querySelectorAll('.univ-tab').forEach(t => { const on = t.dataset.univ === k; t.classList.toggle('active', on); t.setAttribute('aria-selected', on); });
+    document.querySelectorAll('.usw-btn').forEach(t => { const on = t.dataset.univ === k; t.classList.toggle('active', on); t.setAttribute('aria-selected', on); });
     document.body.dataset.univ = k;
     if (push !== false) history.replaceState(null, '', k === 'fj' ? '#feug-jay' : location.pathname + location.search);
     renumber();
-    const top = panels[k].getBoundingClientRect().top + window.scrollY - 112;
+    const top = panels[k].getBoundingClientRect().top + window.scrollY - 132;
     if (window.scrollY > top) window.scrollTo({ top: Math.max(0, top) });
   }
-  document.querySelectorAll('.univ-tab').forEach(t => t.addEventListener('click', () => setUniv(t.dataset.univ)));
+  document.querySelectorAll('.usw-btn').forEach(t => t.addEventListener('click', () => setUniv(t.dataset.univ)));
   (function(){
     const area = document.getElementById('univ-area'); let sx = null, sy = null;
     area.addEventListener('touchstart', e => {
@@ -751,13 +872,40 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
     document.querySelectorAll('[data-fjgenre]').forEach(b => b.classList.remove('active')); btn.classList.add('active'); applyFJ();
   }));
   document.getElementById('fj-sort').addEventListener('change', applyFJ);
+  let fjMax = Infinity;
   function applyFJ(){
     let r = [...secondArts];
     const g = document.querySelector('[data-fjgenre].active').dataset.fjgenre, sort = document.getElementById('fj-sort').value;
     if (g !== 'all') r = r.filter(a => (a.genre || '').toLowerCase().includes(g));
+    if (fjMax !== Infinity) r = r.filter(a => (a.prix_vente_fcfa || 0) <= fjMax);
     if (sort === 'prix_asc') r.sort((a, b) => (a.prix_vente_fcfa || 0) - (b.prix_vente_fcfa || 0));
     else if (sort === 'prix_desc') r.sort((a, b) => (b.prix_vente_fcfa || 0) - (a.prix_vente_fcfa || 0));
     renderGrid(r, 'fj-grid', true);
+  }
+  /* mise en avant du détail : les 3 plus petits prix + filtres de budget calculés sur tes vrais prix */
+  function initFJExtras(){
+    const note = document.getElementById('fj-count-note');
+    if (note) note.textContent = secondArts.length ? secondArts.length + ' pièce' + (secondArts.length > 1 ? 's' : '') + ' au détail' : 'Au détail';
+    const cnt = document.querySelector('.usw-cnt'); if (cnt) cnt.textContent = secondArts.length || '';
+    const top = secondArts.filter(a => (a.quantite || 0) > 0).sort((a, b) => (a.prix_vente_fcfa || 0) - (b.prix_vente_fcfa || 0)).slice(0, 3);
+    if (top.length === 3){
+      document.getElementById('fj-top').innerHTML = top.map(a => `<a class="fj-tagcard" href="produit.html?ref=${esc(a.reference)}"><div class="fj-timg ${a.photo_url ? '' : 'noimg'}">${a.photo_url ? `<img src="${esc(imgUrl(a.photo_url, 500))}" alt="${esc(a.nom)}" loading="lazy" onerror="${NOIMG}">` : ''}</div><span class="fj-tagprice">${fprix(a.prix_vente_fcfa || 0)}</span><span class="fj-tagname">${esc(a.nom)}</span></a>`).join('');
+      document.getElementById('fj-top-wrap').hidden = false;
+    }
+    const prices = secondArts.map(a => a.prix_vente_fcfa || 0).sort((x, y) => x - y);
+    if (prices.length >= 6){
+      const r5 = v => Math.max(500, Math.round(v / 500) * 500);
+      const t1 = r5(prices[Math.floor(prices.length / 3)]), t2 = r5(prices[Math.floor(prices.length * 2 / 3)]);
+      if (t1 < t2){
+        const bar = document.querySelector('#panel-fj .filters-bar'), sort = document.getElementById('fj-sort');
+        const sep = document.createElement('div'); sep.className = 'filter-sep'; bar.insertBefore(sep, sort);
+        [[Infinity, 'Tous les prix'], [t1, `Jusqu'à ${t1.toLocaleString('fr-FR')} F`], [t2, `Jusqu'à ${t2.toLocaleString('fr-FR')} F`]].forEach(([v, l], i) => {
+          const b = document.createElement('button'); b.className = 'filter-pill' + (i === 0 ? ' active' : ''); b.textContent = l; b.dataset.fjmax = 'x';
+          b.addEventListener('click', () => { bar.querySelectorAll('[data-fjmax]').forEach(x => x.classList.remove('active')); b.classList.add('active'); fjMax = v; applyFJ(); });
+          bar.insertBefore(b, sort);
+        });
+      }
+    }
   }
   document.getElementById('fj-grid').addEventListener('click', handleGridClick);
 
@@ -817,8 +965,7 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
       secondArts = sorted.filter(a => !isNewArt(a));  /* panneau Feug Jay */
       renderGrid(allArticles.slice(0, 4), 'featured-grid');
       loadDrops(); loadGros();
-      applyFilters(); applyFJ();
-      const tab = document.querySelector('.univ-tab[data-univ="fj"] small'); if (tab && secondArts.length) tab.textContent = secondArts.length + ' pièce' + (secondArts.length > 1 ? 's' : '');
+      applyFilters(); initFJExtras(); applyFJ();
     }catch(e){
       console.error('[SenMarché] Erreur chargement mode', e);
       document.getElementById('product-grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--stone)">Erreur de chargement.</div>';
