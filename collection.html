@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="marche-ui.css">
 <script src="theme.js"></script>
 </head>
-<body class="se-page">
+<body class="se-page col-page">
 <nav class="nav" id="nav">
   <a href="index.html" class="nav-logo">Sen<span style="color:var(--m-acc-bissap)">·</span>Marché</a>
   <ul class="nav-links"><li><a href="mode.html">Mode</a></li><li><a href="maison.html">Maison</a></li><li><a href="fille.html">Fille</a></li><li><a href="sport.html">Sport</a></li><li><a href="catalogue.html">Catalogue</a></li><li><a href="collections.html" class="active">Collections</a></li></ul>
@@ -35,8 +35,9 @@
   <div class="snow" id="snow" aria-hidden="true"></div>
   <div class="chero-body">
     <span class="chero-badge" id="col-badge">Chargement…</span>
-    <h1 class="chero-title disp" id="col-title">Collection</h1>
+    <h1 class="chero-title" id="col-title">Collection</h1>
     <p class="chero-desc" id="col-desc"></p>
+    <div class="chero-meta" id="col-meta"></div>
   </div>
 </header>
 
@@ -75,34 +76,37 @@
   const colId = new URLSearchParams(location.search).get('id');
   const root = document.getElementById('dynamic-content');
 
+  const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
+  const head = (n, title, meta) => `<div class="sh rv"><span class="sh-n">${ROMAN[n] || n}</span><h2>${title}</h2>${meta ? `<span class="sh-meta">${esc(meta)}</span>` : ''}</div>`;
   const wa = txt => `https://wa.me/${WA}?text=${encodeURIComponent(txt)}`;
-  const head = (num, title, meta) => `<div class="sh rv"><span class="sh-n">${num}</span><h2>${title}</h2>${meta ? `<span class="sh-meta">${esc(meta)}</span>` : ''}</div>`;
+  const pad = n => String(n).padStart(2, '0');
   const list = v => { if (typeof v === 'string') { try { v = JSON.parse(v); } catch (e) { v = null; } } return Array.isArray(v) ? v : []; };
+  const disc = a => { const p = a.prix_vente_fcfa || 0, r = a.prix_min_fcfa && a.prix_min_fcfa > p ? a.prix_min_fcfa : 0; return { ref: r, pct: r ? Math.round((1 - p / r) * 100) : 0 }; };
+  /* flou du teaser : plus la sortie approche, moins c'est flou */
+  const blurPx = date => { if (!date) return 14; const h = (new Date(date) - Date.now()) / 36e5; if (h <= 0) return 0; return Math.round(Math.max(3, Math.min(18, 3 + 15 * Math.min(1, h / 168)))); };
   const ROLE = { haut: 'Le haut', bas: 'Le bas', chaussures: 'Les chaussures', accessoire: "L'accessoire" };
   const ROLE_ORDER = ['haut', 'bas', 'chaussures'];
   const row = (titre, texte, icon, image) => `<article class="zrow rv">
       <div class="zart ${image ? 'has-img' : ''}">${image ? photo(image, 900, titre) : ''}<span class="zico">${MUI.art(icon)}</span><span class="zc c1"></span><span class="zc c2"></span></div>
       <div class="ztext"><h3>${esc(titre)}</h3>${MUI.paras(texte)}</div></article>`;
-  /* prix barré : comme dans le catalogue, prix_min_fcfa sert de prix de référence */
-  const disc = a => { const p = a.prix_vente_fcfa || 0, r = a.prix_min_fcfa && a.prix_min_fcfa > p ? a.prix_min_fcfa : 0; return { ref: r, pct: r ? Math.round((1 - p / r) * 100) : 0 }; };
 
-  function card(a) {
+  function card(a, i) {
     const out = (a.quantite || 0) <= 0, q = a.quantite || 0, d = disc(a);
     const tag = out ? '<span class="pc-tag out">Épuisé</span>' : (d.pct ? `<span class="pc-tag">−${d.pct}%</span>` : (q <= 3 ? '<span class="pc-tag">Derniers</span>' : ''));
     return `<article class="pc ${out ? 'is-out' : ''}">
       <a href="produit.html?ref=${esc(a.reference)}" class="pc-img ${a.photo_url ? '' : 'noimg'}" aria-label="${esc(a.nom)}">${photo(a.photo_url, 500, a.nom)}${tag}</a>
-      <div class="pc-body"><a href="produit.html?ref=${esc(a.reference)}" class="pc-name">${esc(a.nom)}</a>
+      <div class="pc-body"><small class="pc-n">Passage ${pad(i + 1)}</small><a href="produit.html?ref=${esc(a.reference)}" class="pc-name">${esc(a.nom)}</a>
         <span class="pc-prix">${d.pct ? `<s>${fprix(d.ref)}</s>` : ''}${fprix(a.prix_vente_fcfa)}</span>
         ${out ? '<button class="pc-add is-off">Épuisé</button>' : `<button class="pc-add" data-cart-add="${esc(a.reference)}">Ajouter au panier</button>`}</div></article>`;
   }
 
-  function hero(col) {
+  function setHero(col) {
     document.title = `${col.nom} — SenMarché`;
     document.getElementById('col-title').innerHTML = esc(col.nom).replace(/(\d{4})/, '<em>$1</em>');
     document.getElementById('col-desc').textContent = col.description || '';
     if (col.image_url) {
       const src = imgUrl(col.image_url, 1600), t = new Image();
-      t.onload = () => { const bg = document.getElementById('chero-bg'); bg.style.backgroundImage = `url('${src}')`; bg.classList.add('on'); };
+      t.onload = () => { const bg = document.getElementById('chero-bg'); bg.style.backgroundImage = `url('${src}')`; bg.classList.add('on'); if (col.statut === 'a_venir') bg.classList.add('soft'); };
       t.src = src;
     }
     if (col.theme_visuel === 'snow') {
@@ -114,6 +118,38 @@
       }
     }
   }
+  const meta = chips => { document.getElementById('col-meta').innerHTML = chips.filter(Boolean).map(c => `<span>${esc(c)}</span>`).join(''); };
+
+  /* ───────── collection à venir : avant-goût flouté + « me prévenir » ───────── */
+  function renderTeaser(col, arts) {
+    const bl = blurPx(col.date_lancement), shown = arts.slice(0, 8);
+    const tiles = (shown.length ? shown : [1, 2, 3, 4]).map((a, i) => `<div class="tz-tile" style="--bl:${bl}px">${a.photo_url ? photo(a.photo_url, 500, 'Pièce mystère') : `<span class="tz-ph">${MUI.art('hanger')}</span>`}<span class="tz-q">?</span><span class="tz-lbl">Passage ${pad(i + 1)}</span></div>`).join('');
+    const cd = col.date_lancement ? `<div class="chrono" id="chrono">${['j|Jours', 'h|Heures', 'm|Min', 's|Sec'].map(x => { const [k, l] = x.split('|'); return `<div class="chrono-unit"><span class="chrono-val" data-cd="${k}">00</span><span class="chrono-lbl">${l}</span></div>`; }).join('')}</div>` : '';
+    root.innerHTML = `
+      <section class="chap"><div class="m-wrap"><div class="tease rv"><span class="eyebrow">Avant-première</span><h2 class="t-big">Le rideau se <i>lève bientôt</i></h2>
+        <p class="tease-text">${esc(col.description || 'Une nouvelle collection arrive. Voici un avant-goût, volontairement flou.')}</p>${cd}</div></div></section>
+      <section class="chap"><div class="m-wrap">${head(1, 'Un avant-<i>goût</i>', arts.length ? arts.length + ' pièce' + (arts.length > 1 ? 's' : '') + ' à découvrir' : '')}
+        <div class="tz-grid rv">${tiles}</div><p class="tz-note">Plus la date approche, moins c'est flou.</p></div></section>
+      <section class="chap"><div class="m-wrap"><div class="tz-alert rv"><h2>Sois le premier <i style="color:var(--m-acc-bissap)">prévenu</i></h2>
+        <p>Laisse ton numéro WhatsApp : on te prévient dès que la collection est en ligne, avant tout le monde.</p>
+        <form class="tz-form" id="tz-form" novalidate><input id="tz-nom" autocomplete="given-name" placeholder="Ton prénom"><input id="tz-tel" type="tel" autocomplete="tel" placeholder="Ton numéro WhatsApp"><button type="submit" class="btn-s" id="tz-btn">Me prévenir</button></form>
+        <div class="tz-msg" id="tz-msg" hidden></div></div></div></section>`;
+    MUI.countdown(col.date_lancement, document.getElementById('chrono'));
+    const msg = document.getElementById('tz-msg');
+    const say = (t, link) => { msg.hidden = false; msg.innerHTML = esc(t) + (link ? ` <a href="${link}" target="_blank" rel="noopener" style="text-decoration:underline">Écrire sur WhatsApp</a>` : ''); };
+    document.getElementById('tz-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const nom = document.getElementById('tz-nom').value.trim(), tel = document.getElementById('tz-tel').value.trim();
+      if (!tel) { say('Ajoute ton numéro WhatsApp pour qu\'on puisse te prévenir.'); return; }
+      const btn = document.getElementById('tz-btn'); btn.disabled = true;
+      let ok = false;
+      try { const { error } = await SE.sb.from('collection_alertes').insert([{ collection_id: col.id, nom, tel }]); ok = !error; } catch (err) {}
+      if (ok) { say('C\'est noté ! On te prévient dès que la collection sort.'); e.target.reset(); }
+      else say('On n\'a pas pu t\'enregistrer. Écris-nous sur WhatsApp, on te prévient quand même.', wa(`Je veux être prévenu de la sortie de « ${col.nom} » sur SenMarché.`));
+      btn.disabled = false;
+    });
+    MUI.reveal();
+  }
 
   async function init() {
     MUI.init();
@@ -124,108 +160,128 @@
       const { data: cols } = await SE.sb.from('collections').select('*').eq('id', colId).limit(1);
       if (!cols || !cols.length) { location.href = 'collections.html'; return; }
       const col = cols[0];
-      hero(col);
+      setHero(col);
 
-      /* collection pas encore sortie */
-      if (col.statut === 'a_venir') {
-        document.getElementById('col-badge').textContent = '✦ Prochain arrivage';
-        root.innerHTML = `<section class="chap"><div class="m-wrap"><div class="tease rv">
-          <span class="eyebrow">Prochain arrivage</span><h2 class="t-big">Arrivage <i>bientôt</i></h2>
-          <p class="tease-text">${esc(col.description || 'Préparez-vous, cette collection arrive très bientôt.')}</p>
-          ${col.date_lancement ? `<div class="chrono" id="chrono">${['j|Jours', 'h|Heures', 'm|Min', 's|Sec'].map(x => { const [k, l] = x.split('|'); return `<div class="chrono-unit"><span class="chrono-val" data-cd="${k}">00</span><span class="chrono-lbl">${l}</span></div>`; }).join('')}</div>` : ''}
-          <a class="btn-s btn-wa" href="${wa(`Je veux être informé de la sortie de « ${col.nom} » sur SenMarché.`)}" target="_blank" rel="noopener">Être averti en avant-première</a></div></div></section>`;
-        MUI.countdown(col.date_lancement, document.getElementById('chrono'));
-        return;
-      }
-      document.getElementById('col-badge').textContent = col.statut === 'en_cours' ? '● Disponible maintenant' : 'Collection précédente';
-
-      /* les pièces de la collection */
       const { data: liens } = await SE.sb.from('collection_articles').select('article_ref').eq('collection_id', col.id);
       let arts = [];
       if (liens && liens.length) {
         const { data } = await SE.sb.from('articles').select('*').in('reference', liens.map(l => l.article_ref));
         if (data) arts = data;
       }
+
+      if (col.statut === 'a_venir') { document.getElementById('col-badge').textContent = '✦ Prochain arrivage'; meta(['Avant-première', arts.length ? arts.length + ' pièces' : '']); renderTeaser(col, arts); return; }
+      if (col.statut === 'epuisee') {
+        document.getElementById('col-badge').textContent = 'Collection terminée';
+        root.innerHTML = `<section class="chap"><div class="m-wrap"><div class="next rv"><span class="eyebrow">Collection terminée</span><h2>Cette collection est <i>terminée</i></h2><p>Toutes les pièces ont trouvé preneur.</p><a href="collections.html" class="btn-s">Voir les collections</a></div></div></section>`;
+        return;
+      }
+      document.getElementById('col-badge').textContent = col.statut === 'en_cours' ? '● Disponible maintenant' : 'Collection précédente';
       if (col.statut === 'passee') arts = arts.filter(a => (a.quantite || 0) > 0);
 
-      const parts = [];
-      const num = () => String(parts.length + 1).padStart(2, '0');
-
+      const parts = []; let n = 0;
       if (!arts.length) {
         parts.push(`<section class="chap"><div class="m-wrap"><div class="empty-note"><h3 class="t-big">Cette collection <i>se prépare</i></h3><p>Les pièces arrivent bientôt.</p><a href="catalogue.html" class="btn-s">Voir le catalogue</a></div></div></section>`);
       } else {
-        /* 1. produit phare / pièce maîtresse */
-        const chosen = col.hero_piece_ref ? arts.find(a => a.reference === col.hero_piece_ref) : null;
-        const feat = chosen || arts.slice().sort((x, y) => (y.quantite || 0) - (x.quantite || 0))[0];
-        const out = (feat.quantite || 0) <= 0, d = disc(feat), q = feat.quantite || 0;
-        parts.push(`<section class="chap chap--tight"><div class="m-wrap">${head(num(), chosen ? 'La pièce <i>maîtresse</i>' : 'Le produit <i>phare</i>')}
-          <div class="piece rv">
-            <div class="piece-img ${out ? 'is-out' : ''} ${feat.photo_url ? '' : 'noimg'}">${photo(feat.photo_url, 900, feat.nom)}</div>
-            <div>
-              <span class="piece-badge">${chosen ? 'Pièce maîtresse' : 'À ne pas manquer'}</span>
-              <div class="piece-label">Réf. ${esc(feat.reference)}</div>
-              <h3 class="piece-name">${esc(feat.nom)}</h3>
-              <p class="piece-desc">${esc(feat.description || 'Une pièce centrale de cette collection.')}</p>
-              <div class="piece-foot">
-                <div><span class="piece-prix">${fprix(feat.prix_vente_fcfa)}</span>${d.pct ? `<span class="piece-rare">${fprix(d.ref)} · −${d.pct}%</span>` : (out ? '<span class="piece-rare">Épuisé</span>' : (q <= 3 ? `<span class="piece-rare">Il n'en reste que ${q}</span>` : ''))}</div>
-                ${out ? '<span class="btn-s is-off">Indisponible</span>' : `<a href="produit.html?ref=${esc(feat.reference)}" class="btn-s">Découvrir la pièce</a>`}
-              </div></div></div></div></section>`);
-
-        /* 2. toute la galerie */
-        parts.push(`<section class="chap"><div class="m-wrap">${head(num(), 'Toute la <i>collection</i>', arts.length + ' pièce' + (arts.length > 1 ? 's' : ''))}
-          <div class="pgrid rv">${arts.map(card).join('')}</div></div></section>`);
-
-        /* 3. comment porter : les looks de ton logiciel (tables looks + look_articles), sinon la colonne guides */
+        /* ── looks (tables looks + look_articles, sinon colonne guides) ── */
         let looks = [];
         try {
           const { data: lk } = await SE.sb.from('looks').select('*').eq('collection_id', col.id).eq('actif', true).order('ordre', { ascending: true });
           if (lk && lk.length) {
             const { data: la } = await SE.sb.from('look_articles').select('*').in('look_id', lk.map(l => l.id)).order('ordre', { ascending: true });
-            looks = lk.map(l => ({ titre: l.titre, texte: l.texte, items: (la || []).filter(x => x.look_id === l.id).map(x => ({ role: x.role, a: arts.find(p => p.reference === x.article_ref) || allArts.find(p => p.reference === x.article_ref) })).filter(x => x.a) }));
+            looks = lk.map(l => ({ titre: l.titre, texte: l.texte, image: l.image_url, items: (la || []).filter(x => x.look_id === l.id).map(x => ({ role: x.role, a: arts.find(p => p.reference === x.article_ref) || allArts.find(p => p.reference === x.article_ref) })).filter(x => x.a) }));
           }
-        } catch (e) { /* tables pas encore créées : on continue */ }
-        if (!looks.length) looks = list(col.guides).map(g => ({ titre: g.titre, texte: g.texte, items: (g.refs || []).map((r, i) => ({ role: ROLE_ORDER[i] || 'accessoire', a: arts.find(p => p.reference === r) || allArts.find(p => p.reference === r) })).filter(x => x.a) }));
+        } catch (e) {}
+        if (!looks.length) looks = list(col.guides).map(g => ({ titre: g.titre, texte: g.texte, image: g.image, items: (g.refs || []).map((r, i) => ({ role: ROLE_ORDER[i] || 'accessoire', a: arts.find(p => p.reference === r) || allArts.find(p => p.reference === r) })).filter(x => x.a) }));
         looks = looks.filter(l => l.items.length);
-        if (looks.length) parts.push(`<section class="chap"><div class="m-wrap">${head(num(), 'Comment les <i>porter</i>')}
-          ${looks.map(l => {
-            const total = l.items.reduce((t, x) => t + (x.a.prix_vente_fcfa || 0), 0);
-            return `<div class="lk rv"><div class="lk-head"><h3>${esc(l.titre || 'Le look complet')}</h3>${MUI.paras(l.texte)}</div>
-              <div class="lk-items" style="--n:${l.items.length}">${l.items.map(x => `<a class="lk-item" href="produit.html?ref=${esc(x.a.reference)}">
-                <div class="lk-img ${x.a.photo_url ? '' : 'noimg'}">${photo(x.a.photo_url, 700, x.a.nom)}${ROLE[x.role] ? `<span class="lk-role">${ROLE[x.role]}</span>` : ''}</div>
-                <div class="lk-info"><b>${esc(x.a.nom)}</b><span>${fprix(x.a.prix_vente_fcfa)}</span></div></a>`).join('')}</div>
-              <div class="lk-foot"><div><small>Le look complet</small><strong>${fprix(total)}</strong></div><button class="btn-s btn-buy-look" data-refs="${l.items.map(x => x.a.reference).join(',')}">Acheter le look</button></div></div>`;
-          }).join('')}</div></section>`);
-
-        /* 4. pourquoi cette collection : table collection_raisons, sinon colonne raisons */
         let raisons = [];
         try { const { data: rr } = await SE.sb.from('collection_raisons').select('*').eq('collection_id', col.id).order('ordre', { ascending: true }); if (rr && rr.length) raisons = rr; } catch (e) {}
         if (!raisons.length) raisons = list(col.raisons);
         raisons = raisons.filter(r => r && (r.titre || r.texte));
-        const DEF = ['hanger', 'tag', 'heart', 'shirt'];
-        if (raisons.length || col.story_text) parts.push(`<section class="chap"><div class="m-wrap">${head(num(), 'Pourquoi cette <i>collection</i>')}
-          ${col.story_text ? `<p class="why-quote rv">${col.story_text}</p>` : ''}
-          <div class="zig">${raisons.slice(0, 4).map((r, i) => row(r.titre || '', r.texte, r.icone || DEF[i % 4], r.image_url || r.image)).join('')}</div></div></section>`);
+
+        meta([arts.length + ' pièce' + (arts.length > 1 ? 's' : ''), looks.length ? looks.length + ' tenue' + (looks.length > 1 ? 's' : '') : '', col.statut === 'en_cours' ? 'Disponible maintenant' : 'Collection précédente']);
+
+        /* I. EN VITRINE */
+        const chosen = col.hero_piece_ref ? arts.find(a => a.reference === col.hero_piece_ref) : null;
+        const feat = chosen || arts.slice().sort((x, y) => (y.quantite || 0) - (x.quantite || 0))[0];
+        const out = (feat.quantite || 0) <= 0, d = disc(feat);
+        n++;
+        parts.push(`<section class="chap chap--tight"><div class="m-wrap">${head(n, 'En <i>vitrine</i>')}
+          <div class="stage rv"><div class="vit">
+            <div class="vit-win"><div class="vit-frame ${feat.photo_url ? '' : 'noimg'}">${photo(feat.photo_url, 900, feat.nom)}</div><span class="vit-floor"></span><span class="vit-sticker">${chosen ? 'Pièce<br>maîtresse' : 'À ne pas<br>manquer'}</span></div>
+            <div class="vit-info"><span class="eyebrow">Réf. ${esc(feat.reference)}</span><h3 class="vit-name">${esc(feat.nom)}</h3>
+              <div class="vit-desc">${MUI.paras(feat.description || 'Une pièce centrale de cette collection.')}</div>
+              <div class="vit-price"><b>${fprix(feat.prix_vente_fcfa)}</b>${d.pct ? `<s>${fprix(d.ref)}</s><em>−${d.pct}%</em>` : ''}</div>
+              <div class="vit-actions">${out ? '<span class="btn-s is-off">Indisponible</span>' : `<button class="btn-s" data-cart-add="${esc(feat.reference)}">Ajouter au panier</button>`}<a href="produit.html?ref=${esc(feat.reference)}" class="btn-s btn-lite">Voir la pièce</a></div>
+            </div></div></div></div></section>`);
+
+        /* II. LE DÉFILÉ */
+        n++;
+        const names = arts.slice(0, 12).map(a => `<span>${esc(a.nom)}</span>`).join('');
+        parts.push(`<section class="chap"><div class="m-wrap">${head(n, 'Le <i>défilé</i>', arts.length + ' pièce' + (arts.length > 1 ? 's' : ''))}
+          <div class="pgrid rv">${arts.map(card).join('')}</div>
+          <div class="names-tape" aria-hidden="true"><div class="names-track">${names}${names}</div></div></div></section>`);
+
+        /* III. LES TENUES : un combo qu'on compose */
+        if (looks.length) {
+          n++;
+          parts.push(`<section class="chap"><div class="m-wrap">${head(n, 'Les <i>tenues</i>', 'Décoche ce que tu ne veux pas')}
+            ${looks.map((l, li) => `<div class="cb rv" data-look="${li}">
+              <div class="cb-visual">${l.image ? photo(l.image, 900, l.titre) : `<div class="cb-board">${l.items.slice(0, 3).map(x => `<div class="cb-tile" data-ref="${esc(x.a.reference)}">${photo(x.a.photo_url, 500, x.a.nom)}</div>`).join('')}</div>`}</div>
+              <div><div class="cb-head"><h3>${esc(l.titre || 'La tenue complète')}</h3>${MUI.paras(l.texte)}</div>
+                <div class="cb-list">${l.items.map(x => { const na = (x.a.quantite || 0) <= 0; return `<label class="cb-row ${na ? 'na off' : ''}"><input type="checkbox" ${na ? 'disabled' : 'checked'} data-ref="${esc(x.a.reference)}" data-prix="${x.a.prix_vente_fcfa || 0}"><span class="cb-check">✓</span>
+                  <span class="cb-thumb">${photo(x.a.photo_url, 200, x.a.nom)}</span><span class="cb-txt"><small>${ROLE[x.role] || 'Pièce'}${na ? ' · Épuisé' : ''}</small><b>${esc(x.a.nom)}</b></span><span class="cb-p">${fprix(x.a.prix_vente_fcfa)}</span></label>`; }).join('')}</div>
+                <div class="cb-foot"><div><small class="cb-n">Ta sélection</small><strong class="cb-total">0 FCFA</strong></div><button class="btn-s cb-add">Ajouter la sélection au panier</button></div></div></div>`).join('')}</div></section>`);
+        }
+
+        /* IV. POURQUOI CETTE COLLECTION */
+        if (raisons.length || col.story_text) {
+          n++;
+          const photos = arts.filter(a => a.photo_url);
+          parts.push(`<section class="chap"><div class="m-wrap">${head(n, 'Pourquoi cette <i>collection</i>')}
+            ${col.story_text ? `<div class="mf rv">${col.image_url ? `<div class="mf-bg" style="background-image:url('${esc(imgUrl(col.image_url, 1200))}')"></div>` : ''}<p class="mf-text">${col.story_text}</p>
+              <div class="mf-chips"><span>${arts.length} pièce${arts.length > 1 ? 's' : ''}</span>${looks.length ? `<span>${looks.length} tenue${looks.length > 1 ? 's' : ''} à composer</span>` : ''}<span>Vérifié avant l'envoi</span></div></div>` : ''}
+            <div class="zig">${raisons.slice(0, 4).map((r, i) => row(r.titre || '', r.texte, r.icone || ['hanger', 'tag', 'heart', 'shirt'][i % 4], r.image_url || r.image || (photos.length ? photos[i % photos.length].photo_url : null))).join('')}</div></div></section>`);
+        }
       }
 
-      /* 5. engagement (toujours) */
-      parts.push(`<section class="chap"><div class="m-wrap">${head(num(), 'Notre <i>engagement</i>')}
+      /* V. ENGAGEMENT */
+      n++;
+      const ph = arts.filter(a => a.photo_url);
+      parts.push(`<section class="chap"><div class="m-wrap">${head(n, 'Notre <i>engagement</i>')}
         <div class="zig">
-          ${row("Vérifié avant l'envoi", "Chaque pièce est contrôlée avant l'envoi. Ce que vous voyez sur la photo est ce que vous recevez : pas de retouche trompeuse, pas de mauvaise surprise à l'ouverture.\nVous suivez ensuite l'avancement de votre commande sur WhatsApp, de la préparation jusqu'au retrait.", 'shield')}
+          ${row("Vérifié avant l'envoi", "Chaque pièce est contrôlée avant l'envoi. Ce que vous voyez sur la photo est ce que vous recevez : pas de retouche trompeuse, pas de mauvaise surprise à l'ouverture.\nVous suivez ensuite l'avancement de votre commande sur WhatsApp, de la préparation jusqu'au retrait.", 'shield', ph[1 % (ph.length || 1)] && ph[1 % ph.length].photo_url)}
           ${row("Vous payez à la récupération", "Vous ne payez rien à la commande. Le règlement se fait uniquement au moment du retrait, en espèces, Wave ou Orange Money.\nAucun virement à l'avance, aucun risque : vous avez la pièce entre les mains avant de sortir votre argent.", 'wallet')}
-          ${row("Vous inspectez avant de payer", "Au retrait, vous regardez l'article de près avant de payer.\nSi quelque chose ne va pas, vous n'êtes pas engagé.", 'eye')}
+          ${row("Vous inspectez avant de payer", "Au retrait, vous regardez l'article de près avant de payer.\nSi quelque chose ne va pas, vous n'êtes pas engagé.", 'eye', ph[2 % (ph.length || 1)] && ph[2 % ph.length].photo_url)}
         </div></div></section>`);
 
-      /* 6. suite */
+      /* suite */
       const { data: nxt } = await SE.sb.from('collections').select('*').eq('statut', 'a_venir').neq('id', col.id).limit(1);
       const next = nxt && nxt.length ? nxt[0] : null;
       parts.push(`<section class="chap"><div class="m-wrap"><div class="next rv">${next
-        ? `<span class="eyebrow">La prochaine collection</span><h2>${esc(next.nom)}</h2><p>${esc(next.description || '')}</p><a href="collection.html?id=${esc(next.id)}" class="btn-s">Voir la collection</a>`
+        ? `<span class="eyebrow">La prochaine collection</span><h2>${esc(next.nom)}</h2><p>${esc(next.description || '')}</p><a href="collection.html?id=${esc(next.id)}" class="btn-s">Voir l'avant-goût</a>`
         : `<span class="eyebrow">Et après ?</span><h2>D'autres pièces <i>arrivent</i></h2><a href="catalogue.html" class="btn-s">Voir le catalogue</a>`}</div></div></section>`);
 
       root.innerHTML = parts.join('');
-      document.querySelectorAll('.btn-buy-look').forEach(b => b.addEventListener('click', () => {
-        b.dataset.refs.split(',').forEach(r => SE.Cart.add(r, 1)); MUI.badge(); MUI.cart.update(); setTimeout(MUI.cart.open, 350);
-      }));
+
+      /* combo : cocher / décocher, total, ajout au panier */
+      document.querySelectorAll('.cb').forEach(cb => {
+        const boxes = [...cb.querySelectorAll('input[type=checkbox]')], total = cb.querySelector('.cb-total'), add = cb.querySelector('.cb-add'), count = cb.querySelector('.cb-n');
+        const refresh = () => {
+          let sum = 0, k = 0;
+          boxes.forEach(b => {
+            const on = b.checked; b.closest('.cb-row').classList.toggle('off', !on);
+            const tile = cb.querySelector(`.cb-tile[data-ref="${CSS.escape(b.dataset.ref)}"]`); if (tile) tile.classList.toggle('off', !on);
+            if (on) { sum += +b.dataset.prix; k++; }
+          });
+          total.textContent = fprix(sum); count.textContent = k ? `Ta sélection · ${k} pièce${k > 1 ? 's' : ''}` : 'Rien de sélectionné';
+          add.disabled = !k; add.style.opacity = k ? '' : '.45';
+        };
+        boxes.forEach(b => b.addEventListener('change', refresh)); refresh();
+        add.addEventListener('click', () => {
+          const refs = boxes.filter(b => b.checked).map(b => b.dataset.ref); if (!refs.length) return;
+          refs.forEach(r => SE.Cart.add(r, 1)); MUI.badge(); MUI.cart.update(); setTimeout(MUI.cart.open, 350);
+        });
+      });
     } catch (e) {
       console.error('[Collection] Erreur:', e);
       root.innerHTML = `<section class="chap"><div class="m-wrap"><div class="empty-note"><h3>Erreur de chargement</h3><p>Veuillez réessayer plus tard.</p></div></div></section>`;
