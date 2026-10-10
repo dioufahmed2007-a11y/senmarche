@@ -40,8 +40,13 @@
 
 <main>
   <section class="chap"><div class="m-wrap">
-    <div id="se-collections" data-header="off"></div>
-    <div id="archives-link" hidden style="text-align:center;margin-top:2rem"><a href="archives.html" class="btn-s btn-dark">Voir les archives →</a></div>
+    <div id="se-collections" data-header="off" data-passees="off"></div>
+    <div id="archives-link" hidden style="text-align:center;margin-top:2rem"><a href="#archives" class="btn-s btn-dark">Voir les archives →</a></div>
+  </div></section>
+  <section class="chap sepia" id="archives" hidden><div class="m-wrap">
+    <div class="sh"><span class="sh-n">✦</span><h2>Les <i>archives</i></h2><span class="sh-meta" id="arch-meta"></span></div>
+    <p class="piece-desc" style="margin-bottom:1.4rem">Les pièces des collections précédentes encore disponibles, en dernières quantités.</p>
+    <div id="archives-body"></div>
   </div></section>
 </main>
 <div class="after"></div>
@@ -67,6 +72,41 @@
 <script src="app.js"></script>
 <script src="marche-ui.js"></script>
 <script src="collections.js"></script>
-<script>if (window.MUI) MUI.init(); else console.error("[SenMarché] marche-ui.js est introuvable.");</script>
+<script>
+(() => {
+  if (!window.MUI) { console.error('[SenMarché] marche-ui.js est introuvable.'); return; }
+  MUI.init();
+  const { esc, fprix, photo } = MUI;
+  const disc = a => { const p = a.prix_vente_fcfa || 0, r = a.prix_min_fcfa && a.prix_min_fcfa > p ? a.prix_min_fcfa : 0; return { ref: r, pct: r ? Math.round((1 - p / r) * 100) : 0 }; };
+  const card = a => { const d = disc(a), q = a.quantite || 0;
+    return `<article class="pc"><a href="produit.html?ref=${esc(a.reference)}" class="pc-img ${a.photo_url ? '' : 'noimg'}" aria-label="${esc(a.nom)}">${photo(a.photo_url, 500, a.nom)}${d.pct ? `<span class="pc-tag">−${d.pct}%</span>` : (q <= 3 ? '<span class="pc-tag">Derniers</span>' : '')}</a>
+      <div class="pc-body"><a href="produit.html?ref=${esc(a.reference)}" class="pc-name">${esc(a.nom)}</a>
+      <span class="pc-prix">${d.pct ? `<s>${fprix(d.ref)}</s>` : ''}${fprix(a.prix_vente_fcfa)}</span>
+      <button class="pc-add" data-cart-add="${esc(a.reference)}">Ajouter au panier</button></div></article>`; };
+  async function run() {
+    const link = document.getElementById('archives-link');
+    try {
+      await SE.Articles.load();
+      const { data: cols } = await SE.sb.from('collections').select('*').eq('statut', 'passee').order('date_lancement', { ascending: false });
+      const results = await Promise.all((cols || []).map(async col => {
+        const { data: liens } = await SE.sb.from('collection_articles').select('article_ref').eq('collection_id', col.id);
+        if (!liens || !liens.length) return { col, arts: [] };
+        const { data } = await SE.sb.from('articles').select('*').in('reference', liens.map(l => l.article_ref));
+        return { col, arts: (data || []).filter(a => (a.quantite || 0) > 0) };
+      }));
+      const seen = new Set();
+      const groups = results.map(g => ({ col: g.col, arts: g.arts.filter(a => !seen.has(a.reference) && seen.add(a.reference)) })).filter(g => g.arts.length);
+      if (link) link.hidden = !groups.length;
+      if (!groups.length) return;
+      const total = groups.reduce((n, g) => n + g.arts.length, 0);
+      document.getElementById('arch-meta').textContent = total + ' pièce' + (total > 1 ? 's' : '') + ' restante' + (total > 1 ? 's' : '');
+      document.getElementById('archives-body').innerHTML = groups.map(g => `<div class="grp-head"><h3>${esc(g.col.nom)}</h3><span>${g.arts.length} pièce${g.arts.length > 1 ? 's' : ''}</span></div><div class="pgrid">${g.arts.map(card).join('')}</div>`).join('');
+      document.getElementById('archives').hidden = false;
+      if (location.hash === '#archives') setTimeout(() => document.getElementById('archives').scrollIntoView(), 50);
+    } catch (e) { console.warn('[Archives]', e); }
+  }
+  if (document.readyState === 'complete') run(); else window.addEventListener('load', run);
+})();
+</script>
 </body>
 </html>
