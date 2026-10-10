@@ -97,9 +97,10 @@
     const avenir = collections.filter(c => c.statut === 'a_venir');
     const enCours = collections.filter(c => c.statut === 'en_cours');
     const passees = collections.filter(c => c.statut === 'passee');
-    if (!avenir.length && !enCours.length && !passees.length) return renderFallback();
+    const showPast = opts.passees !== false;
+    if (!avenir.length && !enCours.length && (!passees.length || !showPast)) return renderFallback();
 
-    const list = [...enCours.map(renderEnCours), ...avenir.map(renderAVenir), ...passees.map(renderPassee).filter(Boolean)].join('');
+    const list = [...enCours.map(renderEnCours), ...avenir.map(renderAVenir), ...(showPast ? passees.map(renderPassee).filter(Boolean) : [])].join('');
     const header = opts.header === false ? '' : `<div class="sh"><span class="sh-n">✦</span><h2>Collections &amp; <i>drops</i></h2></div>`;
     return `${header}<div class="dcol-list">${list}</div>`;
   }
@@ -119,7 +120,7 @@
   async function mount(containerId = 'se-collections') {
     const container = document.getElementById(containerId);
     if (!container) return;
-    const opts = { header: container.dataset.header !== 'off' };
+    const opts = { header: container.dataset.header !== 'off', passees: container.dataset.passees !== 'off' };
     container.innerHTML = '<div class="skel" style="height:280px;border-radius:22px"></div>';
     try {
       const collections = await loadCollections();
