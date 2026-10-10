@@ -120,20 +120,25 @@
   }
   const meta = chips => { document.getElementById('col-meta').innerHTML = chips.filter(Boolean).map(c => `<span>${esc(c)}</span>`).join(''); };
 
-  /* ───────── collection à venir : avant-goût flouté + « me prévenir » ───────── */
+  /* ───────── collection à venir : tout en haut, visible tout de suite ───────── */
   function renderTeaser(col, arts) {
-    const bl = blurPx(col.date_lancement), shown = arts.slice(0, 8);
-    const tiles = (shown.length ? shown : [1, 2, 3, 4]).map((a, i) => `<div class="tz-tile" style="--bl:${bl}px">${a.photo_url ? photo(a.photo_url, 500, 'Pièce mystère') : `<span class="tz-ph">${MUI.art('hanger')}</span>`}<span class="tz-q">?</span><span class="tz-lbl">Passage ${pad(i + 1)}</span></div>`).join('');
+    const feat = (col.hero_piece_ref && arts.find(a => a.reference === col.hero_piece_ref)) || arts.find(a => a.photo_url) || arts[0];
+    const h = col.date_lancement ? (new Date(col.date_lancement) - Date.now()) / 36e5 : 168;
+    const bl = h <= 0 ? 0 : Math.round(5 + 6 * Math.min(1, h / 168));       /* flou léger : on voit, mais pas trop */
+    const others = arts.filter(a => a !== feat).slice(0, 7), blT = Math.min(18, bl + 5);
+    const frame = feat && feat.photo_url ? photo(feat.photo_url, 900, 'Pièce mystère') : `<span class="tz-ph">${MUI.art('hanger')}</span>`;
     const cd = col.date_lancement ? `<div class="chrono" id="chrono">${['j|Jours', 'h|Heures', 'm|Min', 's|Sec'].map(x => { const [k, l] = x.split('|'); return `<div class="chrono-unit"><span class="chrono-val" data-cd="${k}">00</span><span class="chrono-lbl">${l}</span></div>`; }).join('')}</div>` : '';
     root.innerHTML = `
-      <section class="chap"><div class="m-wrap"><div class="tease rv"><span class="eyebrow">Avant-première</span><h2 class="t-big">Le rideau se <i>lève bientôt</i></h2>
-        <p class="tease-text">${esc(col.description || 'Une nouvelle collection arrive. Voici un avant-goût, volontairement flou.')}</p>${cd}</div></div></section>
-      <section class="chap"><div class="m-wrap">${head(1, 'Un avant-<i>goût</i>', arts.length ? arts.length + ' pièce' + (arts.length > 1 ? 's' : '') + ' à découvrir' : '')}
-        <div class="tz-grid rv">${tiles}</div><p class="tz-note">Plus la date approche, moins c'est flou.</p></div></section>
-      <section class="chap"><div class="m-wrap"><div class="tz-alert rv"><h2>Sois le premier <i style="color:var(--m-acc-bissap)">prévenu</i></h2>
-        <p>Laisse ton numéro WhatsApp : on te prévient dès que la collection est en ligne, avant tout le monde.</p>
-        <form class="tz-form" id="tz-form" novalidate><input id="tz-nom" autocomplete="given-name" placeholder="Ton prénom"><input id="tz-tel" type="tel" autocomplete="tel" placeholder="Ton numéro WhatsApp"><button type="submit" class="btn-s" id="tz-btn">Me prévenir</button></form>
-        <div class="tz-msg" id="tz-msg" hidden></div></div></div></section>`;
+      <section class="chap chap--tight"><div class="m-wrap"><div class="stage rv"><div class="vit">
+        <div class="vit-win"><div class="vit-frame tz-frame" style="--bl:${bl}px">${frame}<span class="tz-q">?</span></div><span class="vit-floor"></span><span class="vit-sticker">Bientôt</span></div>
+        <div class="vit-info"><span class="eyebrow">Avant-première</span><h2 class="vit-name">Le rideau se lève bientôt</h2>
+          <div class="vit-desc"><p>${esc(col.description || 'Une nouvelle collection arrive.')}</p><p>Voici une première pièce, volontairement un peu floue. Plus la date approche, plus elle se dévoile.</p></div>
+          ${cd}
+          <form class="tzs-form" id="tz-form" novalidate><input id="tz-nom" autocomplete="given-name" placeholder="Ton prénom"><input id="tz-tel" type="tel" autocomplete="tel" placeholder="Ton numéro WhatsApp"><button type="submit" class="btn-s" id="tz-btn">Me prévenir</button></form>
+          <div class="tz-msg" id="tz-msg" hidden></div>
+        </div></div></div></div></section>
+      ${others.length ? `<section class="chap"><div class="m-wrap">${head(1, 'Un avant-<i>goût</i>', arts.length + ' pièce' + (arts.length > 1 ? 's' : '') + ' à découvrir')}
+        <div class="tz-grid rv">${others.map((a, i) => `<div class="tz-tile" style="--bl:${blT}px">${a.photo_url ? photo(a.photo_url, 500, 'Pièce mystère') : `<span class="tz-ph">${MUI.art('hanger')}</span>`}<span class="tz-q">?</span><span class="tz-lbl">Passage ${pad(i + 2)}</span></div>`).join('')}</div></div></section>` : ''}`;
     MUI.countdown(col.date_lancement, document.getElementById('chrono'));
     const msg = document.getElementById('tz-msg');
     const say = (t, link) => { msg.hidden = false; msg.innerHTML = esc(t) + (link ? ` <a href="${link}" target="_blank" rel="noopener" style="text-decoration:underline">Écrire sur WhatsApp</a>` : ''); };
@@ -169,7 +174,7 @@
         if (data) arts = data;
       }
 
-      if (col.statut === 'a_venir') { document.getElementById('col-badge').textContent = '✦ Prochain arrivage'; meta(['Avant-première', arts.length ? arts.length + ' pièces' : '']); renderTeaser(col, arts); return; }
+      if (col.statut === 'a_venir') { document.getElementById('chero').classList.add('chero--compact'); document.getElementById('col-badge').textContent = '✦ Prochain arrivage'; meta(['Avant-première', arts.length ? arts.length + ' pièces' : '']); renderTeaser(col, arts); return; }
       if (col.statut === 'epuisee') {
         document.getElementById('col-badge').textContent = 'Collection terminée';
         root.innerHTML = `<section class="chap"><div class="m-wrap"><div class="next rv"><span class="eyebrow">Collection terminée</span><h2>Cette collection est <i>terminée</i></h2><p>Toutes les pièces ont trouvé preneur.</p><a href="collections.html" class="btn-s">Voir les collections</a></div></div></section>`;
@@ -193,6 +198,7 @@
         } catch (e) {}
         if (!looks.length) looks = list(col.guides).map(g => ({ titre: g.titre, texte: g.texte, image: g.image, items: (g.refs || []).map((r, i) => ({ role: ROLE_ORDER[i] || 'accessoire', a: arts.find(p => p.reference === r) || allArts.find(p => p.reference === r) })).filter(x => x.a) }));
         looks = looks.filter(l => l.items.length);
+        looks.forEach(l => { l.items = l.items.slice(0, 3); });   /* un ensemble de 2 à 3 pièces */
         let raisons = [];
         try { const { data: rr } = await SE.sb.from('collection_raisons').select('*').eq('collection_id', col.id).order('ordre', { ascending: true }); if (rr && rr.length) raisons = rr; } catch (e) {}
         if (!raisons.length) raisons = list(col.raisons);
@@ -224,7 +230,7 @@
         /* III. LES TENUES : un combo qu'on compose */
         if (looks.length) {
           n++;
-          parts.push(`<section class="chap"><div class="m-wrap">${head(n, 'Les <i>tenues</i>', 'Décoche ce que tu ne veux pas')}
+          parts.push(`<section class="chap"><div class="m-wrap">${head(n, 'Comment <i>porter</i>', 'Décoche ce que tu ne veux pas')}
             ${looks.map((l, li) => `<div class="cb rv" data-look="${li}">
               <div class="cb-visual">${l.image ? photo(l.image, 900, l.titre) : `<div class="cb-board">${l.items.slice(0, 3).map(x => `<div class="cb-tile" data-ref="${esc(x.a.reference)}">${photo(x.a.photo_url, 500, x.a.nom)}</div>`).join('')}</div>`}</div>
               <div><div class="cb-head"><h3>${esc(l.titre || 'La tenue complète')}</h3>${MUI.paras(l.texte)}</div>
@@ -240,19 +246,9 @@
           parts.push(`<section class="chap"><div class="m-wrap">${head(n, 'Pourquoi cette <i>collection</i>')}
             ${col.story_text ? `<div class="mf rv">${col.image_url ? `<div class="mf-bg" style="background-image:url('${esc(imgUrl(col.image_url, 1200))}')"></div>` : ''}<p class="mf-text">${col.story_text}</p>
               <div class="mf-chips"><span>${arts.length} pièce${arts.length > 1 ? 's' : ''}</span>${looks.length ? `<span>${looks.length} tenue${looks.length > 1 ? 's' : ''} à composer</span>` : ''}<span>Vérifié avant l'envoi</span></div></div>` : ''}
-            <div class="zig">${raisons.slice(0, 4).map((r, i) => row(r.titre || '', r.texte, r.icone || ['hanger', 'tag', 'heart', 'shirt'][i % 4], r.image_url || r.image || (photos.length ? photos[i % photos.length].photo_url : null))).join('')}</div></div></section>`);
+            <div class="zig zig--xl">${raisons.slice(0, 2).map((r, i) => row(r.titre || '', r.texte, r.icone || ['hanger', 'tag', 'heart', 'shirt'][i % 4], r.image_url || r.image || (photos.length ? photos[i % photos.length].photo_url : null))).join('')}</div></div></section>`);
         }
       }
-
-      /* V. ENGAGEMENT */
-      n++;
-      const ph = arts.filter(a => a.photo_url);
-      parts.push(`<section class="chap"><div class="m-wrap">${head(n, 'Notre <i>engagement</i>')}
-        <div class="zig">
-          ${row("Vérifié avant l'envoi", "Chaque pièce est contrôlée avant l'envoi. Ce que vous voyez sur la photo est ce que vous recevez : pas de retouche trompeuse, pas de mauvaise surprise à l'ouverture.\nVous suivez ensuite l'avancement de votre commande sur WhatsApp, de la préparation jusqu'au retrait.", 'shield', ph[1 % (ph.length || 1)] && ph[1 % ph.length].photo_url)}
-          ${row("Vous payez à la récupération", "Vous ne payez rien à la commande. Le règlement se fait uniquement au moment du retrait, en espèces, Wave ou Orange Money.\nAucun virement à l'avance, aucun risque : vous avez la pièce entre les mains avant de sortir votre argent.", 'wallet')}
-          ${row("Vous inspectez avant de payer", "Au retrait, vous regardez l'article de près avant de payer.\nSi quelque chose ne va pas, vous n'êtes pas engagé.", 'eye', ph[2 % (ph.length || 1)] && ph[2 % ph.length].photo_url)}
-        </div></div></section>`);
 
       /* suite */
       const { data: nxt } = await SE.sb.from('collections').select('*').eq('statut', 'a_venir').neq('id', col.id).limit(1);
