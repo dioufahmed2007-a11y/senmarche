@@ -353,3 +353,17 @@ body.col-page .sh-n{font-family:var(--m-serif);font-style:italic;font-weight:500
 .tz-form input{padding:.95rem 1rem;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--ink);font:500 1rem/1.3 var(--m-body);outline:none;width:100%}
 .tz-form input:focus{border-color:var(--m-safran);box-shadow:0 0 0 3px color-mix(in srgb,var(--m-safran) 25%,transparent)}
 .tz-msg{max-width:520px;margin:1rem auto 0;padding:.9rem 1rem;border-radius:12px;font:600 .95rem/1.5 var(--m-body);color:var(--ink);background:var(--bg)}
+
+/* ═════════ AJUSTEMENTS COLLECTION ═════════ */
+.zig--xl .ztext h3{font-size:clamp(2.1rem,4.2vw,3.4rem)}
+.zig--xl .ztext p{font-size:clamp(1.15rem,1.8vw,1.4rem);line-height:1.9}
+@media(min-width:860px){.zig--xl .zrow{min-height:420px}}
+body.col-page .chero.chero--compact{min-height:min(40svh,340px)}
+.tz-frame img{filter:blur(var(--bl,8px)) saturate(1.1);transform:scale(1.14)}
+.tzs-form{display:grid;gap:.7rem;margin-top:1.2rem}
+@media(min-width:640px){.tzs-form{grid-template-columns:1fr 1.2fr auto}}
+.tzs-form input{padding:.95rem 1rem;border:1px solid color-mix(in srgb,var(--m-on-nuit) 35%,transparent);border-radius:12px;background:color-mix(in srgb,var(--m-on-nuit) 8%,transparent);color:var(--m-on-nuit);font:500 1rem/1.3 var(--m-body);outline:none;width:100%}
+.tzs-form input::placeholder{color:color-mix(in srgb,var(--m-on-nuit) 60%,transparent)}
+.tzs-form input:focus{border-color:var(--m-safran-2)}
+.stage .chrono{margin:1.2rem 0 0;max-width:420px}
+.stage .tz-msg{background:color-mix(in srgb,var(--m-on-nuit) 12%,transparent);color:var(--m-on-nuit);margin-left:0}
