@@ -114,6 +114,14 @@
     });
   }
 
+  /* bouton « retour » : une page restaurée depuis l'historique ne doit jamais rester blanche */
+  window.addEventListener('pageshow', e => {
+    if (!e.persisted) return;
+    document.documentElement.style.visibility = '';
+    if (document.body) document.body.style.opacity = '';
+    apply(get());
+  });
+
   apply(get());
   window.SE_Theme = { apply, get, themes: THEMES, renderWidget };
   document.addEventListener('DOMContentLoaded', () => {
