@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
    SEN·MARCHÉ — marche-ui.css
-   Composants partagés des pages collection / archives / collections.
+   Composants partagés des pages collection / collections.
    À charger après marche.css. Aucune couleur en dur : tout vient des tokens.
    ═══════════════════════════════════════════════════════════════ */
 body.se-page{padding-top:56px;font-family:var(--m-body);overflow-x:clip;max-width:100%;-webkit-tap-highlight-color:transparent}
@@ -181,7 +181,7 @@ body.se-page img,body.se-page svg{max-width:100%}
 @keyframes rvIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.rv{animation:none}}
 
-/* ═════════ CARTES PRODUIT (collection, archives) ═════════ */
+/* ═════════ CARTES PRODUIT (collection) ═════════ */
 .pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 @media(min-width:768px){.pgrid{grid-template-columns:repeat(4,1fr);gap:16px}}
 .pc{position:relative;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:transform .2s,box-shadow .2s}
@@ -367,14 +367,3 @@ body.col-page .chero.chero--compact{min-height:min(40svh,340px)}
 .tzs-form input:focus{border-color:var(--m-safran-2)}
 .stage .chrono{margin:1.2rem 0 0;max-width:420px}
 .stage .tz-msg{background:color-mix(in srgb,var(--m-on-nuit) 12%,transparent);color:var(--m-on-nuit);margin-left:0}
-
-/* ═════════ ARCHIVES : les anciennes collections ═════════ */
-.arch-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-@media(min-width:768px){.arch-grid{grid-template-columns:repeat(3,1fr);gap:16px}}
-.arch-card{position:relative;display:flex;align-items:flex-end;aspect-ratio:4/3;border-radius:22px;overflow:hidden;color:var(--m-on-nuit);text-decoration:none;background:var(--m-g-indigo);isolation:isolate}
-.arch-card .bg{position:absolute;inset:0;z-index:-2;background-size:cover;background-position:center;filter:sepia(.35) saturate(.85);transition:transform .6s}
-.arch-card:hover .bg{transform:scale(1.05)}
-.arch-card::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,color-mix(in srgb,var(--m-nuit) 90%,transparent),transparent 65%)}
-.arch-card .tx{padding:1rem 1.1rem}
-.arch-card small{display:block;font:700 .8rem/1 var(--m-body);color:var(--m-safran-2);margin-bottom:.35rem}
-.arch-card h3{font:800 clamp(1.1rem,2vw,1.5rem)/1.1 var(--m-display);letter-spacing:-.02em;margin:0;color:var(--m-on-nuit)}
