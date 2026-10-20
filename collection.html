@@ -165,6 +165,8 @@
       const { data: cols } = await SE.sb.from('collections').select('*').eq('id', colId).limit(1);
       if (!cols || !cols.length) { location.href = 'collections.html'; return; }
       const col = cols[0];
+      /* seules les collections en cours et à venir existent sur le site */
+      if (col.statut !== 'en_cours' && col.statut !== 'a_venir') { location.href = 'collections.html'; return; }
       setHero(col);
 
       const { data: liens } = await SE.sb.from('collection_articles').select('article_ref').eq('collection_id', col.id);
@@ -175,13 +177,7 @@
       }
 
       if (col.statut === 'a_venir') { document.getElementById('chero').classList.add('chero--compact'); document.getElementById('col-badge').textContent = '✦ Prochain arrivage'; meta(['Avant-première', arts.length ? arts.length + ' pièces' : '']); renderTeaser(col, arts); return; }
-      if (col.statut === 'epuisee') {
-        document.getElementById('col-badge').textContent = 'Collection terminée';
-        root.innerHTML = `<section class="chap"><div class="m-wrap"><div class="next rv"><span class="eyebrow">Collection terminée</span><h2>Cette collection est <i>terminée</i></h2><p>Toutes les pièces ont trouvé preneur.</p><a href="collections.html" class="btn-s">Voir les collections</a></div></div></section>`;
-        return;
-      }
-      document.getElementById('col-badge').textContent = col.statut === 'en_cours' ? '● Disponible maintenant' : 'Collection précédente';
-      if (col.statut === 'passee') arts = arts.filter(a => (a.quantite || 0) > 0);
+      document.getElementById('col-badge').textContent = '● Disponible maintenant';
 
       const parts = []; let n = 0;
       if (!arts.length) {
@@ -204,7 +200,7 @@
         if (!raisons.length) raisons = list(col.raisons);
         raisons = raisons.filter(r => r && (r.titre || r.texte));
 
-        meta([arts.length + ' pièce' + (arts.length > 1 ? 's' : ''), looks.length ? looks.length + ' tenue' + (looks.length > 1 ? 's' : '') : '', col.statut === 'en_cours' ? 'Disponible maintenant' : 'Collection précédente']);
+        meta([arts.length + ' pièce' + (arts.length > 1 ? 's' : ''), looks.length ? looks.length + ' tenue' + (looks.length > 1 ? 's' : '') : '', 'Disponible maintenant']);
 
         /* I. EN VITRINE */
         const chosen = col.hero_piece_ref ? arts.find(a => a.reference === col.hero_piece_ref) : null;
