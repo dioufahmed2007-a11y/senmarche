@@ -25,7 +25,7 @@
   async function loadCollections() {
     try {
       if (!window.SE || !SE.sb) return [];
-      const { data: collections, error } = await SE.sb.from('collections').select('*').neq('statut', 'epuisee').order('statut', { ascending: true }).order('date_lancement', { ascending: true });
+      const { data: collections, error } = await SE.sb.from('collections').select('*').in('statut', ['en_cours', 'a_venir']).order('statut', { ascending: true }).order('date_lancement', { ascending: true });
       if (error) throw error;
       if (!collections || !collections.length) return [];
 
@@ -77,11 +77,6 @@
       <p class="dcol-note">Stock limité · Paiement à la récupération</p></article>`;
   }
 
-  function renderArchive(col) {
-    const y = (String(col.nom || '').match(/\d{4}/) || [String(col.date_lancement || '').slice(0, 4)])[0];
-    return `<a href="collection.html?id=${esc(col.id)}" class="arch-card"><div class="bg"${bg(col.image_url)}></div><div class="tx"><small>${y ? esc(y) + ' · ' : ''}Voir la collection →</small><h3>${esc(col.nom)}</h3></div></a>`;
-  }
-
   function renderFallback() {
     return `<div class="empty-note"><h3 class="t-big">Pas de collection <i>pour le moment</i></h3>
       <p>Les prochaines arrivent bientôt. En attendant, tout est dans le catalogue.</p>
@@ -91,14 +86,9 @@
   function renderSection(collections, opts = {}) {
     const avenir = collections.filter(c => c.statut === 'a_venir');
     const enCours = collections.filter(c => c.statut === 'en_cours');
-    const passees = collections.filter(c => c.statut === 'passee');
-    if (!avenir.length && !enCours.length && !passees.length) return renderFallback();
-
-    const list = [...enCours.map(renderEnCours), ...avenir.map(renderAVenir)].join('');
+    if (!avenir.length && !enCours.length) return renderFallback();
     const header = opts.header === false ? '' : `<div class="sh"><span class="sh-n">✦</span><h2>Collections &amp; <i>drops</i></h2></div>`;
-    /* les archives n'existent que s'il y a d'anciennes collections */
-    const archives = passees.length ? `<div id="archives" style="scroll-margin-top:90px"><div class="sh" style="margin-top:${list ? '2.6rem' : '0'}"><span class="sh-n">✦</span><h2>Les <i>archives</i></h2><span class="sh-meta">${passees.length} collection${passees.length > 1 ? 's' : ''}</span></div><div class="arch-grid">${passees.map(renderArchive).join('')}</div></div>` : '';
-    return `${header}${list ? `<div class="dcol-list">${list}</div>` : ''}${archives}`;
+    return `${header}<div class="dcol-list">${[...enCours.map(renderEnCours), ...avenir.map(renderAVenir)].join('')}</div>`;
   }
 
   function startCountdowns(container, collections) {
@@ -121,8 +111,6 @@
     try {
       const collections = await loadCollections();
       container.innerHTML = renderSection(collections, opts);
-      const al = document.getElementById('archives-link'); if (al) al.hidden = !collections.some(c => c.statut === 'passee');
-      if (location.hash === '#archives') setTimeout(() => { const el = document.getElementById('archives'); if (el) el.scrollIntoView(); }, 60);
       startCountdowns(container, collections);
     } catch (e) {
       console.warn('[SE Collections] Erreur:', e);
