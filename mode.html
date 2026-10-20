@@ -99,7 +99,8 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
 @keyframes bump{50%{transform:scale(1.4)}}
 
 /* ═════════ DROPS ═════════ */
-.drops{display:grid;grid-template-columns:1.35fr 1fr;grid-template-rows:auto auto;gap:14px}
+.drops{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.drops .drop{min-height:360px}
 .drop{position:relative;overflow:hidden;display:flex;align-items:flex-end;text-decoration:none;color:var(--m-on-nuit);border-radius:22px;background:var(--m-nuit);min-height:230px;isolation:isolate;transition:transform .2s,box-shadow .2s}
 .drop:hover{transform:translateY(-4px);box-shadow:0 22px 40px -22px color-mix(in srgb,var(--m-nuit) 60%,transparent)}
 .drop-bg{position:absolute;inset:0;z-index:-2;background-size:cover;background-position:center;transition:transform .7s}
@@ -111,25 +112,14 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
 .drop-title{font-size:clamp(2rem,4.4vw,3.4rem);margin:0 0 .5rem;color:var(--m-on-nuit)}
 .drop-title em{font-style:normal;color:transparent;-webkit-text-stroke:2px var(--m-on-nuit)}
 .drop-go{font:700 .88rem/1 var(--m-body);color:var(--m-safran-2)}
-.drop.current{grid-row:1/3;min-height:460px}
 .drop.upcoming::before{background:var(--m-g-indigo)}
 .drop.upcoming .drop-bg{opacity:.3;filter:grayscale(1)}
-.drop.past{background:var(--m-safran);color:var(--m-on-safran);min-height:170px}
-.drop.past::before{background:var(--m-g-safran)}
-.drop.past::after{display:none}
-.drop.past .drop-title{color:var(--m-on-safran)}
-.drop.past .drop-title em{-webkit-text-stroke-color:var(--m-on-safran)}
-.drop.past .drop-tag{background:var(--m-nuit);color:var(--m-on-nuit)}
-.drop.past .drop-go{color:var(--m-on-safran)}
 .chrono{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-top:1rem}
 .chrono-unit{border:1px solid color-mix(in srgb,var(--m-safran-2) 60%,transparent);border-radius:14px;padding:.6rem .3rem;text-align:center;background:color-mix(in srgb,var(--m-nuit) 45%,transparent)}
 .chrono-val{display:block;font:800 clamp(1.7rem,3.4vw,2.4rem)/1 var(--m-display);color:var(--m-safran-2)}
 .chrono-lbl{display:block;font:600 .68rem/1 var(--m-body);color:color-mix(in srgb,var(--m-on-nuit) 75%,transparent);margin-top:.35rem}
-@media(max-width:860px){.drops{grid-template-columns:1fr}.drop.current{grid-row:auto;min-height:340px}}
+@media(max-width:860px){.drops{grid-template-columns:1fr}}
 
-.drops.one{grid-template-columns:1fr}
-.drops.one .drop.current,.drops.two .drop.current{grid-row:auto;min-height:380px}
-.drops.one .drop.past,.drops.two .drop.past{min-height:200px}
 
 /* ═════════ FILTRES ═════════ */
 .filters-bar{display:flex;gap:.5rem;padding:.2rem 0 1.1rem;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -362,8 +352,7 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
   body.se-mode .p-body{padding:.7rem .7rem .8rem}
   body.se-mode .p-name{font-size:.8rem}
   body.se-mode .p-prix{font-size:1.2rem}
-  .drop{min-height:200px}
-  .drop.current{min-height:320px}
+  .drops .drop{min-height:300px}
   .mkt-img{min-height:190px}
   .usw-btn{padding:.55rem 1rem}
   .fj-title{font-size:clamp(4.4rem,26vw,8rem)}
@@ -438,7 +427,7 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
 
 <!-- 02 COLLECTIONS (affichée seulement s'il y en a) -->
 <section class="sec" id="drops-sec" hidden><div class="container">
-  <div class="sh"><span class="sh-n">02</span><h2>Les <i>collections</i></h2><span class="mono">En cours &amp; à venir</span></div>
+  <div class="sh"><span class="sh-n">02</span><h2>Les <i>collections</i></h2><span class="mono">En ce moment</span></div>
   <div class="drops" id="drops"></div>
 </div></section>
 
@@ -602,13 +591,14 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
   const NOIMG = "var p=this.parentNode;this.remove();p.classList.add('noimg')";
 
   /* 1. COMPTE À REBOURS (seulement s'il y a un prochain arrivage avec une date) */
-  let DROP_DATE = null;
+  /* compte à rebours : chaque collection à venir a le sien */
   function tickChrono(){
-    if (!DROP_DATE) return;
-    const v = Math.max(0, DROP_DATE - Date.now());
-    const set = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = String(n).padStart(2,'0'); };
-    set('cd-j', Math.floor(v / 86400000)); set('cd-h', Math.floor((v % 86400000) / 3600000));
-    set('cd-m', Math.floor((v % 3600000) / 60000)); set('cd-s', Math.floor((v % 60000) / 1000));
+    document.querySelectorAll('.chrono[data-date]').forEach(el => {
+      const v = Math.max(0, new Date(el.dataset.date) - Date.now());
+      const set = (k, n) => { const x = el.querySelector('[data-k="' + k + '"]'); if (x) x.textContent = String(n).padStart(2, '0'); };
+      set('j', Math.floor(v / 86400000)); set('h', Math.floor((v % 86400000) / 3600000));
+      set('m', Math.floor((v % 3600000) / 60000)); set('s', Math.floor((v % 60000) / 1000));
+    });
   }
   setInterval(tickChrono, 1000);
 
@@ -779,32 +769,27 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
   document.getElementById('featured-grid').addEventListener('click', handleGridClick);
 
   /* 7. COLLECTIONS : on n'affiche que ce qui existe vraiment dans Supabase */
-  const CHRONO = `<div class="chrono" id="chrono"><div class="chrono-unit"><span class="chrono-val" id="cd-j">00</span><span class="chrono-lbl">Jours</span></div><div class="chrono-unit"><span class="chrono-val" id="cd-h">00</span><span class="chrono-lbl">Heures</span></div><div class="chrono-unit"><span class="chrono-val" id="cd-m">00</span><span class="chrono-lbl">Min</span></div><div class="chrono-unit"><span class="chrono-val" id="cd-s">00</span><span class="chrono-lbl">Sec</span></div></div>`;
-  function dropCard(kind, col, tag){
+  const chronoHTML = d => `<div class="chrono" data-date="${esc(d)}">` + [['j', 'Jours'], ['h', 'Heures'], ['m', 'Min'], ['s', 'Sec']].map(([k, l]) => `<div class="chrono-unit"><span class="chrono-val" data-k="${k}">00</span><span class="chrono-lbl">${l}</span></div>`).join('') + `</div>`;
+  function dropCard(col){
+    const soon = col.statut === 'a_venir';
     const bgStyle = col.image_url ? ` style="background-image:url('${esc(imgUrl(col.image_url, 1200))}')"` : '';
-    return `<a href="collection.html?id=${esc(col.id)}" class="drop ${kind}"><div class="drop-bg"${bgStyle}></div>
-      <div class="drop-body"><span class="drop-tag">${tag}</span>
+    return `<a href="collection.html?id=${esc(col.id)}" class="drop ${soon ? 'upcoming' : 'current'}"><div class="drop-bg"${bgStyle}></div>
+      <div class="drop-body"><span class="drop-tag">${soon ? '✦ Prochain arrivage' : '● Disponible maintenant'}</span>
       <h3 class="drop-title disp">${esc(col.nom).replace(/(\d{4})/, '<em>$1</em>')}</h3>
-      ${kind === 'upcoming' ? (col.date_lancement ? CHRONO : '') : '<span class="drop-go">Voir la collection →</span>'}</div></a>`;
+      ${soon ? (col.date_lancement ? chronoHTML(col.date_lancement) : '<span class="drop-go">Voir l\'avant-goût →</span>') : '<span class="drop-go">Voir la collection →</span>'}</div></a>`;
   }
+  /* on n'affiche que les collections en cours et à venir (jusqu'à 3) : une collection finie se retire, elle n'est pas archivée */
   async function loadDrops(){
     try{
       if (!SE.sb) return;
-      const { data } = await SE.sb.from('collections').select('*').neq('statut', 'epuisee').order('date_lancement', { ascending: true });
-      if (!data || !data.length) return;
-      const live = data.filter(c => c.statut === 'en_cours').pop();
-      const soon = data.find(c => c.statut === 'a_venir');
-      const hasPast = data.some(c => c.statut === 'passee');
-      const cards = [];
-      if (live) cards.push(dropCard('current', live, '● Disponible maintenant'));
-      if (soon) cards.push(dropCard('upcoming', soon, '✦ Prochain arrivage'));
-      if (hasPast) cards.push(`<a href="collections.html#archives" class="drop past"><div class="drop-body"><span class="drop-tag">Archives</span><h3 class="drop-title disp">Voir les <em>archives</em></h3><span class="drop-go">Tout revoir →</span></div></a>`);
-      if (!cards.length) return;
+      const { data } = await SE.sb.from('collections').select('*').in('statut', ['en_cours', 'a_venir']).order('date_lancement', { ascending: true });
+      const cols = (data || []).sort((a, b) => (a.statut === b.statut ? 0 : a.statut === 'en_cours' ? -1 : 1)).slice(0, 3);
+      if (!cols.length) return;
       const grid = document.getElementById('drops');
-      grid.className = 'drops' + (cards.length === 1 ? ' one' : cards.length === 2 ? ' two' : '');
-      grid.innerHTML = cards.join('');
+      grid.className = 'drops';
+      grid.innerHTML = cols.map(dropCard).join('');
       document.getElementById('drops-sec').hidden = false;
-      if (soon && soon.date_lancement){ DROP_DATE = new Date(soon.date_lancement).getTime(); tickChrono(); }
+      tickChrono();
     }catch(e){ console.warn('[Collections]', e); }
     finally{ renumber(); }
   }
