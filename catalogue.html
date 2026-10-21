@@ -65,6 +65,17 @@ button{cursor:pointer;font-family:inherit}
 .empty p{color:var(--stone);margin-bottom:1rem}
 .more{display:flex;justify-content:center;margin-top:2rem}
 .more .b{min-width:220px}
+/* Fluidité */
+.sel{-webkit-appearance:none;appearance:none;padding-right:2.4rem;background-image:linear-gradient(45deg,transparent 50%,var(--stone) 50%),linear-gradient(135deg,var(--stone) 50%,transparent 50%);background-position:calc(100% - 20px) 52%,calc(100% - 14px) 52%;background-size:6px 6px;background-repeat:no-repeat}
+.pr input{-moz-appearance:textfield;appearance:textfield;min-width:0}
+.pr input::-webkit-outer-spin-button,.pr input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.pr input:focus,.sbar input:focus,.sel:focus-visible{outline:2px solid var(--or);outline-offset:1px}
+.p-grid{min-height:320px}
+.fo,.chip,.b,#f-open{transition:background .15s,border-color .15s,transform .1s}
+.b:active,#f-open:active{transform:scale(.97)}
+@media(max-width:919px){.fil.open{animation:sheet .26s cubic-bezier(.2,.8,.2,1)}}
+@keyframes sheet{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){.fil.open{animation:none}}
 .wa{position:fixed;right:16px;bottom:20px;z-index:300}
 </style>
 </head>
@@ -142,7 +153,8 @@ const esc = s => s == null ? '' : String(s).replace(/[&<>"']/g, c => ({'&':'&amp
 const P = new URLSearchParams(location.search);
 const UNI = { mode: 'Mode', feugjay: 'Feug Jay', maison: 'Maison' };
 const S = { cats: P.get('cat') ? [+P.get('cat')] : [], unis: [], etats: [], min: null, max: null, stock: true, sort: 'recent', q: P.get('q') || '', shown: 12 };
-let ARTS = [], CATS = [], catName = {};
+let ARTS = [], CATS = [], catName = {}, HC = {}, lastKey = null, lastShown = 0;
+const card = a => HC[a.reference] || (HC[a.reference] = SE.productCard(a));
 
 const univers = id => { const n = (catName[id] || '').toLowerCase(); return /feug/.test(n) ? 'feugjay' : /maison/.test(n) ? 'maison' : /mode|fille|sport|v[eê]tement|homme|femme|enfant/.test(n) ? 'mode' : 'autre'; };
 const seconde = a => /feug/i.test(catName[a.categorie_id] || '') || (!!a.etat && !/neuf/i.test(a.etat));
@@ -174,9 +186,16 @@ function render() {
   if (!n) {
     $('grid').innerHTML = `<div class="empty"><h3>Aucun article trouvé</h3><p>${ARTS.length ? 'Essaie de retirer un filtre ou de chercher autrement.' : 'Le catalogue se remplit bientôt.'}</p>${ARTS.length ? '<button class="b p" style="flex:none;padding:0 1.5rem" id="e-clear">Effacer les filtres</button>' : '<a class="b p" style="display:inline-flex;align-items:center;flex:none;padding:0 1.5rem" href="demande-speciale.html">Faire une demande spéciale</a>'}</div>`;
     const ec = $('e-clear'); if (ec) ec.onclick = clearAll;
-    $('more').classList.add('hid'); chips(); return;
+    lastKey = null; $('more').classList.add('hid'); chips(); return;
   }
-  $('grid').innerHTML = l.slice(0, S.shown).map(SE.productCard).join('');
+  const key = l.map(a => a.reference).join('|'), g = $('grid');
+  if (key === lastKey && S.shown >= lastShown) {
+    if (S.shown > lastShown) g.insertAdjacentHTML('beforeend', l.slice(lastShown, S.shown).map(card).join(''));
+  } else {
+    g.innerHTML = l.slice(0, S.shown).map(card).join('');
+    if (lastKey !== null && !matchMedia('(prefers-reduced-motion:reduce)').matches) g.animate([{ opacity: .35 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' });
+  }
+  lastKey = key; lastShown = Math.min(S.shown, l.length);
   $('more').classList.toggle('hid', n <= S.shown);
   chips();
 }
@@ -233,8 +252,9 @@ async function boot() {
 // Écouteurs
 document.querySelectorAll('[data-e]').forEach(x => x.onchange = () => { S.etats = toggle(S.etats, x.dataset.e, x.checked); S.shown = 12; render(); });
 $('stock').onchange = e => { S.stock = e.target.checked; S.shown = 12; render(); };
-$('p-min').oninput = e => { S.min = e.target.value ? +e.target.value : null; S.shown = 12; render(); };
-$('p-max').oninput = e => { S.max = e.target.value ? +e.target.value : null; S.shown = 12; render(); };
+let tp; const dr = () => { clearTimeout(tp); tp = setTimeout(() => { S.shown = 12; render(); }, 350); };
+$('p-min').oninput = e => { S.min = e.target.value ? +e.target.value : null; dr(); };
+$('p-max').oninput = e => { S.max = e.target.value ? +e.target.value : null; dr(); };
 $('sort').onchange = e => { S.sort = e.target.value; render(); };
 $('more-b').onclick = () => { S.shown += 12; render(); };
 $('f-clear').onclick = clearAll;
