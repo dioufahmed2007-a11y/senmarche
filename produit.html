@@ -159,7 +159,7 @@ form.f{display:grid;gap:.8rem;max-width:520px;margin-top:1rem}
   <a href="index.html" class="nav-logo">Sen<em>Marché</em></a>
   <ul class="nav-links">
     <li><a href="mode.html">Mode</a></li>
-    <li><a href="feugjay.html">Feug Jay</a></li>
+    
     <li><a href="maison.html">Maison</a></li>
     <li><a href="collections.html">Collections</a></li>
   </ul>
@@ -200,7 +200,7 @@ form.f{display:grid;gap:.8rem;max-width:520px;margin-top:1rem}
 <footer class="footer">
   <div class="footer-grid">
     <div class="footer-brand"><div>Sen<em style="color:inherit;opacity:.75;font-style:italic">Marché</em></div><p>Mode, seconde main et maison. Paiement à la récupération.</p></div>
-    <nav class="footer-col"><h4>Univers</h4><ul><li><a href="mode.html">Mode</a></li><li><a href="feugjay.html">Feug Jay</a></li><li><a href="maison.html">Maison</a></li></ul></nav>
+    <nav class="footer-col"><h4>Univers</h4><ul><li><a href="mode.html">Mode</a></li><li><a href="maison.html">Maison</a></li></ul></nav>
     <nav class="footer-col"><h4>Compte</h4><ul><li><a href="compte.html">Mon compte</a></li><li><a href="panier.html">Panier</a></li></ul></nav>
     <nav class="footer-col"><h4>Contact</h4><ul><li><a href="https://wa.me/221778038874" target="_blank" rel="noopener">WhatsApp</a></li></ul></nav>
   </div>
@@ -251,7 +251,7 @@ async function load() {
     if (error || !a) { P.innerHTML = '<p style="padding:4rem 0">Produit introuvable. <a href="mode.html" style="color:var(--or)">Retour à la boutique</a></p>'; return; }
 
     const cat = a.categorie?.nom || 'Catalogue', cl = cat.toLowerCase();
-    const link = cl.includes('feug') ? 'feugjay.html' : cl.includes('maison') ? 'maison.html' : cl.includes('mode') || cl.includes('fille') || cl.includes('sport') ? 'mode.html' : 'catalogue.html';
+    const link = cl.includes('maison') ? 'maison.html' : cl.includes('mode') || cl.includes('fille') || cl.includes('sport') ? 'mode.html' : 'catalogue.html';
     $('c-cat').innerHTML = `<a href="${link}">${esc(cat)}</a>`;
     $('c-name').textContent = a.nom;
     document.title = a.nom + ' — SenMarché';
