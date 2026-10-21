@@ -111,6 +111,27 @@ form.f{display:grid;gap:.8rem;max-width:520px;margin-top:1rem}
 .mbox table{width:100%;border-collapse:collapse;margin-top:1rem}
 .mbox td,.mbox th{border:1px solid var(--border);padding:.6rem;text-align:center;font-size:.9rem}
 .mbox th{background:var(--card);color:var(--or)}
+/* Recadrage */
+.prod{align-items:start}
+.qty{align-self:flex-start}
+.sec h2{text-align:center}
+.look{grid-template-columns:repeat(auto-fit,minmax(150px,190px));justify-content:center}
+.li{text-align:center;align-items:center}
+.li label{justify-content:center;text-align:left}
+.li select{width:100%}
+.lookbar{flex-direction:column;justify-content:center;text-align:center}
+.grid4{max-width:960px;margin:0 auto}
+.pc{text-align:center}
+.acc-wrap{max-width:760px}
+.acc{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:.75rem;overflow:hidden}
+.acc summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:1.1rem 1.4rem;font-family:var(--ff-d);font-size:1.35rem;font-weight:500}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:'+';font-size:1.6rem;color:var(--or);line-height:1}
+.acc[open] summary::after{content:'−'}
+.acc summary span{font-family:var(--ff-b);font-size:.9rem;color:var(--stone);font-weight:400;margin-right:auto;margin-left:.6rem}
+.acc-in{padding:0 1.4rem 1.4rem}
+.acc .rv,.acc .qa{background:var(--bg2)}
+@media(min-width:900px){.lookbar{flex-direction:row;justify-content:space-between;text-align:left}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -142,16 +163,15 @@ form.f{display:grid;gap:.8rem;max-width:520px;margin-top:1rem}
 
 <section class="sec hid" id="sim-sec"><div class="pw"><h2>Dans le même univers</h2><div class="grid4" id="sim"></div></div></section>
 
-<section class="sec alt"><div class="pw">
-  <h2>Avis clients</h2>
-  <div id="reviews"></div>
-  <div id="rev-action"></div>
-</div></section>
-
-<section class="sec"><div class="pw">
-  <h2>Questions</h2>
-  <div id="qas"></div>
-  <div id="qa-action"></div>
+<section class="sec alt"><div class="pw acc-wrap">
+  <details class="acc" id="acc-rv">
+    <summary>Avis clients <span id="rv-count"></span></summary>
+    <div class="acc-in"><div id="reviews"></div><div id="rev-action"></div></div>
+  </details>
+  <details class="acc" id="acc-qa">
+    <summary>Questions <span id="qa-count"></span></summary>
+    <div class="acc-in"><div id="qas"></div><div id="qa-action"></div></div>
+  </details>
 </div></section>
 </main>
 
@@ -184,6 +204,7 @@ const list = v => !v ? [] : Array.isArray(v) ? v : String(v).split(',').map(s =>
 const sameDay = k => { const t = localStorage.getItem(k); return t && Date.now() - +t < 864e5; };
 // Séparateur taille : on garde "_" (compatible panier.html) mais on coupe au DERNIER "_"
 const mkRef = (ref, size) => size ? ref + '_' + size : ref;
+document.addEventListener('error',e=>{const t=e.target;if(t.tagName==='IMG'&&!t.dataset.f){t.dataset.f=1;t.src='https://placehold.co/400x500?text=SenMarch%C3%A9';}},true);
 let toastT;
 function toast(html) { const t = $('toast'); t.innerHTML = html; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 3500); }
 function badge() { try { const n = SE.Cart.count(); const b = $('cart-count'); b.textContent = n; b.classList.toggle('show', n > 0); } catch (e) {} }
@@ -243,7 +264,7 @@ async function load() {
       ${etat ? `<div class="etat">${esc(etat)}</div>` : ''}
       <h1 class="titre">${esc(a.nom)}</h1>
       <div class="note">${reviews.length ? `<span class="st">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5 - Math.round(avg))}</span>${avg.toFixed(1)} (${reviews.length} avis)` : 'Pas encore d’avis'}</div>
-      <div class="prix">${SE.fprix(a.prix_vente_fcfa || 0)} FCFA</div>
+      <div class="prix">${SE.fprix(a.prix_vente_fcfa || 0)}</div>
       <div class="stock ${out ? 'out' : ''}">${out ? 'Rupture de stock' : 'Disponible, paiement à la récupération'}</div>
       <p class="desc">${esc(a.description || 'Pas de description pour le moment. Écris-nous sur WhatsApp pour plus de détails.')}</p>
       ${out ? '<button class="btn2" disabled>Indisponible</button>' : `
@@ -280,11 +301,13 @@ async function load() {
       $('add').onclick = () => { if (ok()) { addIt(); added(); } };
       const buyNow = () => { if (ok()) { addIt(); location.href = 'panier.html'; } };
       $('buy').onclick = buyNow;
-      $('s-prix').textContent = SE.fprix(a.prix_vente_fcfa || 0) + ' FCFA';
+      $('s-prix').textContent = SE.fprix(a.prix_vente_fcfa || 0);
       $('s-btn').onclick = buyNow;
       new IntersectionObserver(es => { $('sticky').classList.toggle('on', !es[0].isIntersecting && innerWidth < 768); }).observe($('buy'));
     }
 
+    $('rv-count').textContent = reviews.length ? '(' + reviews.length + ')' : '';
+    $('qa-count').textContent = (qa.data || []).length ? '(' + qa.data.length + ')' : '';
     // Avis
     $('reviews').innerHTML = reviews.length ? reviews.map(r => `<div class="rv"><div class="h"><b>${esc(r.nom_client || 'Client')}${r.ville ? ' · ' + esc(r.ville) : ''}</b><span class="st">${'★'.repeat(r.note)}${'☆'.repeat(5 - r.note)}</span></div>${r.commentaire ? `<p>${esc(r.commentaire)}</p>` : ''}<div class="when">${new Date(r.date_creation).toLocaleDateString('fr-FR')}</div></div>`).join('') : '<p style="color:var(--stone)">Sois le premier à donner ton avis.</p>';
     if (sameDay('se_review_' + ref)) $('rev-action').innerHTML = '<p style="color:var(--stone)">Merci, tu as déjà donné ton avis aujourd’hui.</p>';
@@ -338,9 +361,9 @@ function buildLook(items) {
   $('look-sec').classList.remove('hid');
   $('look').innerHTML = items.map((x, i) => {
     const sz = list(x.tailles).length ? list(x.tailles) : list(x.pointures);
-    return `<div class="li" data-r="${esc(x.reference)}" data-p="${x.prix_vente_fcfa || 0}"><a href="produit.html?ref=${encodeURIComponent(x.reference)}"><img src="${esc(img(x.photo_url, 400))}" alt="${esc(x.nom)}" loading="lazy"></a><label><input type="checkbox" class="lk" checked>${esc(x.nom)}</label><b>${SE.fprix(x.prix_vente_fcfa || 0)} FCFA</b>${sz.length ? `<select class="ls" aria-label="Taille"><option value="">Taille…</option>${sz.map(s => `<option>${esc(s)}</option>`).join('')}</select>` : ''}</div>`;
+    return `<div class="li" data-r="${esc(x.reference)}" data-p="${x.prix_vente_fcfa || 0}"><a href="produit.html?ref=${encodeURIComponent(x.reference)}"><img src="${esc(img(x.photo_url, 400))}" alt="${esc(x.nom)}" loading="lazy"></a><label><input type="checkbox" class="lk" checked>${esc(x.nom)}</label><b>${SE.fprix(x.prix_vente_fcfa || 0)}</b>${sz.length ? `<select class="ls" aria-label="Taille"><option value="">Taille…</option>${sz.map(s => `<option>${esc(s)}</option>`).join('')}</select>` : ''}</div>`;
   }).join('');
-  const calc = () => { let t = 0, n = 0; document.querySelectorAll('.li').forEach(li => { if (li.querySelector('.lk').checked) { t += +li.dataset.p; n++; } }); $('look-n').textContent = n + ' article' + (n > 1 ? 's' : '') + ' :'; $('look-t').textContent = SE.fprix(t) + ' FCFA'; $('look-btn').disabled = !n; };
+  const calc = () => { let t = 0, n = 0; document.querySelectorAll('.li').forEach(li => { if (li.querySelector('.lk').checked) { t += +li.dataset.p; n++; } }); $('look-n').textContent = n + ' article' + (n > 1 ? 's' : '') + ' :'; $('look-t').textContent = SE.fprix(t); $('look-btn').disabled = !n; };
   document.querySelectorAll('.lk').forEach(c => c.onchange = calc); calc();
   $('look-btn').onclick = () => {
     const rows = [...document.querySelectorAll('.li')].filter(li => li.querySelector('.lk').checked);
@@ -354,7 +377,7 @@ function buildLook(items) {
 function buildSim(items) {
   if (!items.length) return;
   $('sim-sec').classList.remove('hid');
-  $('sim').innerHTML = items.map(x => `<a class="pc" href="produit.html?ref=${encodeURIComponent(x.reference)}"><img src="${esc(img(x.photo_url, 400))}" alt="${esc(x.nom)}" loading="lazy"><div>${esc(x.nom)}<b>${SE.fprix(x.prix_vente_fcfa || 0)} FCFA</b></div></a>`).join('');
+  $('sim').innerHTML = items.map(x => `<a class="pc" href="produit.html?ref=${encodeURIComponent(x.reference)}"><img src="${esc(img(x.photo_url, 400))}" alt="${esc(x.nom)}" loading="lazy"><div>${esc(x.nom)}<b>${SE.fprix(x.prix_vente_fcfa || 0)}</b></div></a>`).join('');
 }
 
 document.readyState === 'complete' ? load() : addEventListener('load', load);
