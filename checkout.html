@@ -1,57 +1,88 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<script>document.documentElement.style.visibility="hidden";setTimeout(function(){document.documentElement.style.visibility="";},4000);</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Valider ma commande — SenExport</title>
-<meta property="og:image" content="https://senexport.netlify.app/og.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://senexport.netlify.app/og.jpg">
-  <meta name="theme-color" content="#C4531A">
+<title>Valider ma commande — SenMarché</title>
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="styles-dark.css">
 <style>
-.co-layout{display:grid;grid-template-columns:1.3fr .8fr;gap:28px;padding:28px 0 56px}
-@media(max-width:920px){.co-layout{grid-template-columns:1fr;gap:20px}}
-.co-card{background:var(--card);border:1px solid rgba(212,175,55,.15);border-radius:var(--r16);padding:24px;margin-bottom:14px}
-.co-card h2{font-family:var(--ff-d);font-weight:500;font-size:1.2rem;margin-bottom:6px;letter-spacing:-.015em}
-.co-card .section-desc{font-size:.86rem;color:var(--stone);margin-bottom:18px}
-.step-num{display:inline-flex;width:24px;height:24px;border-radius:9999px;background:var(--or);color:#fff;font-size:.78rem;font-weight:700;align-items:center;justify-content:center;margin-right:8px;font-family:var(--ff-m)}
-.summary{position:sticky;top:85px;background:rgba(255,255,255,.04);border:1px solid rgba(212,175,55,.15);border-radius:var(--r16);padding:22px;align-self:flex-start}
-@media(max-width:920px){.summary{position:static}}
-.summary h3{font-family:var(--ff-d);font-weight:500;font-size:1.1rem;margin-bottom:14px}
-.summary .item{display:flex;gap:10px;font-size:.82rem;padding:8px 0;border-bottom:1px dashed rgba(212,175,55,.1)}
-.summary .item:last-of-type{border-bottom:none}
-.summary .item .name{flex:1;color:var(--ink)}
-.summary .item .qte{color:var(--stone);font-family:var(--ff-m);min-width:30px}
-.summary .item .prix{font-family:var(--ff-m);font-weight:600;color:var(--ink)}
-.sum-line{display:flex;justify-content:space-between;font-size:.88rem;margin:8px 0}
-.sum-line .lbl{color:var(--stone)}
-.sum-line .val{color:var(--ink);font-weight:500;font-family:var(--ff-m)}
-.sum-line.total{padding-top:12px;margin-top:12px;border-top:1px solid rgba(212,175,55,.1);font-size:1rem}
-.sum-line.total .lbl{color:var(--ink);font-weight:600;font-family:var(--ff-d)}
-.sum-line.total .val{color:var(--or);font-weight:700;font-size:1.35rem;font-family:var(--ff-d);letter-spacing:-.015em}
-.success-card{text-align:center;padding:48px 32px;background:var(--card);border:1px solid rgba(212,175,55,.15);border-radius:var(--r20);max-width:560px;margin:32px auto}
-.success-icon{width:68px;height:68px;border-radius:9999px;background:var(--green);color:#fff;display:grid;place-items:center;font-size:2rem;margin:0 auto 20px}
-.success-card h1{font-family:var(--ff-d);font-weight:500;font-size:1.7rem;margin-bottom:10px;letter-spacing:-.015em}
-.success-card p{color:var(--stone);line-height:1.55;margin-bottom:6px}
-.success-num{display:inline-block;padding:10px 18px;background:rgba(255,255,255,.04);border:1px dashed var(--sand);border-radius:var(--r8);margin:18px 0;font-family:var(--ff-m);font-size:.95rem;color:var(--ink);font-weight:600;letter-spacing:.05em}
-.success-actions{display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+body{background:var(--bg);color:var(--ink);font-family:var(--ff-b);padding-top:56px;overflow-x:hidden}
+button{cursor:pointer;font-family:inherit}
+.pw{max-width:1100px;margin:0 auto;padding:0 1rem}
+.head{padding:2rem 0 1rem}
+.head h1{font-family:var(--ff-d);font-size:clamp(2rem,6vw,3rem);font-weight:500;line-height:1.05}
+.head p{color:var(--stone);margin-top:.4rem}
+.lay{display:grid;gap:1.5rem;padding:.5rem 0 3.5rem}
+@media(min-width:920px){.lay{grid-template-columns:1.3fr .9fr;gap:2rem;align-items:start}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.3rem;margin-bottom:1rem}
+.card h2{font-family:var(--ff-d);font-size:1.3rem;font-weight:500;margin-bottom:.3rem}
+.card .d{color:var(--stone);font-size:.9rem;margin-bottom:1rem}
+.f{display:grid;gap:.4rem;margin-bottom:.9rem}
+.f label{font-size:.9rem;font-weight:500}
+.f input,.f textarea{width:100%;padding:.8rem .9rem;background:var(--bg);color:var(--ink);border:1px solid var(--border);border-radius:12px;font:inherit;font-size:1rem}
+.f input:focus,.f textarea:focus{outline:2px solid var(--or);outline-offset:1px}
+.f textarea{min-height:90px}
+.f small{color:var(--stone);font-size:.82rem}
+.f.bad input{border-color:var(--red)}
+.f .er{color:var(--red);font-size:.85rem;display:none}.f.bad .er{display:block}
+.two{display:grid;gap:0 1rem}@media(min-width:600px){.two{grid-template-columns:1fr 1fr}}
+.pick{display:grid;margin:0}
+.pick div{display:flex;gap:.7rem;padding:.65rem 0;font-size:.93rem}
+.pick div+div{border-top:1px solid var(--border)}
+.pick div::before{content:'✓';color:var(--green);font-weight:700}
+.sum{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.3rem}
+@media(min-width:920px){.sum{position:sticky;top:80px}}
+.sum h3{font-family:var(--ff-d);font-size:1.3rem;font-weight:500;margin-bottom:.8rem}
+.li{display:grid;grid-template-columns:1fr auto;gap:.2rem .8rem;padding:.6rem 0;border-bottom:1px dashed var(--border);font-size:.92rem}
+.li small{color:var(--stone);grid-column:1/-1}
+.li b{font-weight:600}
+.sl{display:flex;justify-content:space-between;margin-top:.7rem;color:var(--stone);font-size:.95rem}
+.sl.t{color:var(--ink);padding-top:.9rem;margin-top:.9rem;border-top:1px solid var(--border);font-weight:600;align-items:baseline}
+.sl.t b{font-family:var(--ff-d);font-size:1.6rem}
+.cag{margin-top:.9rem;padding:.9rem 1rem;border:1px solid var(--border);border-radius:12px;background:var(--bg2);font-size:.92rem}
+.cag label{display:flex;justify-content:space-between;align-items:center;gap:.8rem;cursor:pointer;margin-top:.4rem}
+.cag input{width:22px;height:22px;accent-color:var(--or)}
+.go{width:100%;min-height:54px;margin-top:1rem;border-radius:14px;border:1.5px solid var(--or);background:var(--or);color:var(--bg);font-size:1.02rem;font-weight:600}
+.go:disabled{opacity:.5;cursor:wait}
+.note{font-size:.82rem;color:var(--stone);margin-top:.7rem;text-align:center;line-height:1.5}
+.hid{display:none!important}
+.empty,.ok{text-align:center;padding:3rem 1rem;max-width:560px;margin:0 auto}
+.empty h2,.ok h2{font-family:var(--ff-d);font-size:1.9rem;font-weight:500;margin-bottom:.5rem}
+.empty p,.ok p{color:var(--stone);margin-bottom:1.2rem}
+.num{display:inline-block;padding:.7rem 1.2rem;border:1.5px dashed var(--or);border-radius:12px;font-weight:700;letter-spacing:.05em;margin:.5rem 0 1.4rem;font-size:1.05rem}
+.steps{text-align:left;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem 1.2rem;margin-bottom:1.4rem;display:grid;gap:.8rem}
+.steps div{display:flex;gap:.8rem;font-size:.95rem}
+.steps i{flex:0 0 26px;height:26px;border-radius:50%;background:var(--or);color:var(--bg);display:grid;place-items:center;font-style:normal;font-weight:700;font-size:.85rem}
+.links{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
+.links a{display:inline-flex;align-items:center;min-height:48px;padding:0 1.4rem;border-radius:12px;border:1.5px solid var(--or);color:var(--or);text-decoration:none;font-weight:600}
+.links a.p{background:var(--or);color:var(--bg)}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:400;background:var(--bg);border-top:1px solid var(--border);padding:.7rem 1rem calc(.7rem + env(safe-area-inset-bottom));display:none;align-items:center;gap:1rem}
+.bar.on{display:flex}.bar b{flex:1;font-family:var(--ff-d);font-size:1.3rem}
+.bar button{padding:0 1.5rem;min-height:48px;border-radius:12px;border:0;background:var(--or);color:var(--bg);font-weight:600}
+.bar button:disabled{opacity:.5}
+@media(min-width:920px){.bar{display:none!important}}
+body.has-bar{padding-bottom:80px}@media(min-width:920px){body.has-bar{padding-bottom:0}}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:1rem;z-index:900}
+.modal.on{display:flex}
+.mb{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:1.5rem;max-width:400px;width:100%;text-align:center}
+.mb p{margin-bottom:1.2rem;line-height:1.55}
+.mb div{display:flex;gap:.6rem}
+.mb button{flex:1;min-height:48px;border-radius:12px;border:1.5px solid var(--or);font-weight:600}
+.mb .y{background:var(--or);color:var(--bg)}.mb .n{background:transparent;color:var(--or)}
+.footer h4{color:inherit;opacity:.75}
 </style>
 </head>
 <body>
+
 <nav class="nav" id="nav">
-  <a href="index.html" class="nav-logo">Sen·Export <em>Boutique</em></a>
+  <a href="index.html" class="nav-logo">Sen<em>Marché</em></a>
   <ul class="nav-links">
     <li><a href="mode.html">Mode</a></li>
     <li><a href="maison.html">Maison</a></li>
@@ -59,463 +90,185 @@
     <li><a href="collections.html">Collections</a></li>
   </ul>
   <div class="nav-right">
-    <a href="favoris.html" class="nav-icon" aria-label="Favoris">
-      <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-    </a>
-    <a href="panier.html" class="nav-icon" aria-label="Panier">
-      <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      <span class="nav-badge" id="cart-badge"></span>
-    </a>
-    <a href="compte.html" class="nav-icon" aria-label="Mon compte">
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </a>
+    <a href="favoris.html" class="nav-icon" aria-label="Favoris"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></a>
+    <a href="panier.html" class="nav-icon" aria-label="Panier"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="nav-badge" id="cart-badge" data-cart-count></span></a>
+    <a href="compte.html" class="nav-icon" aria-label="Compte"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
   </div>
 </nav>
-<aside class="mobile-menu" id="mobile-menu">
-  <button class="close-btn">×</button>
-  <a href="catalogue.html">📦 Catalogue</a>
-  <a href="panier.html">🛒 Panier</a>
-  <a href="compte.html">◎ Compte</a>
-</aside>
 
-<div class="page-head">
-  <div class="w">
-    <div class="breadcrumb"><a href="index.html">Accueil</a><span class="sep">›</span><a href="panier.html">Panier</a><span class="sep">›</span><span>Validation</span></div>
-    <h1>Valider ma <em>commande</em></h1>
-    <p class="sub">Renseignez vos coordonnées, on vous contacte dans l'heure pour confirmer.</p>
-  </div>
-</div>
+<main><div class="pw">
+  <div class="head" id="head"><h1>Valider ma commande</h1><p>Remplis tes coordonnées, on te rappelle dans l’heure pour confirmer.</p></div>
 
-<main>
-<div id="empty-state" style="display:none" class="w">
-  <div class="empty" style="margin:60px auto;text-align:center;padding:60px 20px">
-    <div style="font-size:3rem;margin-bottom:14px">🛒</div>
-    <h3 style="font-family:var(--ff-d);font-weight:500;font-size:1.4rem;margin-bottom:8px">Votre panier est vide</h3>
-    <p style="color:var(--stone);margin-bottom:18px">Impossible de valider une commande sans articles.</p>
-    <a href="catalogue.html" class="btn btn-fire">Voir le catalogue</a>
-  </div>
-</div>
+  <div class="empty hid" id="empty"><h2>Ton panier est vide</h2><p>Il faut au moins un article pour valider une commande.</p><div class="links"><a class="p" href="catalogue.html">Voir le catalogue</a></div></div>
 
-<div id="success-state" style="display:none" class="w">
-  <div class="success-card">
-    <div class="success-icon">✓</div>
-    <h1>🎉 Commande validée !</h1>
-    <p style="font-size:1.1rem;color:var(--ink);margin-bottom:8px"><strong>Merci pour votre confiance.</strong></p>
-    <p>Numéro de commande :</p>
-    <div class="success-num" id="success-num"></div>
-    
-    <div style="background:rgba(212,175,55,.06);border-radius:14px;padding:18px;margin:20px 0;text-align:left">
-      <h3 style="font-family:var(--ff-d);font-size:1.05rem;font-weight:600;margin:0 0 12px;color:var(--ink)">📋 Voici ce qui se passe maintenant :</h3>
-      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px">
-        <div style="background:var(--or);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0">1</div>
-        <div><strong>Confirmation par WhatsApp</strong><br><span style="color:var(--stone);font-size:.9rem">Notre équipe vous appelle dans l'heure pour confirmer.</span></div>
-      </div>
-      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px">
-        <div style="background:var(--or);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0">2</div>
-        <div><strong>Préparation</strong><br><span style="color:var(--stone);font-size:.9rem">On prépare votre commande au dépôt.</span></div>
-      </div>
-      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px">
-        <div style="background:#2D6A4F;color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0">3</div>
-        <div><strong>Notification "Prête"</strong><br><span style="color:var(--stone);font-size:.9rem">Vous recevez un message WhatsApp + une notif dans votre compte.</span></div>
-      </div>
-      <div style="display:flex;align-items:flex-start;gap:12px">
-        <div style="background:#1a1a1a;color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0">4</div>
-        <div><strong>Retrait au dépôt à Thiès</strong><br><span style="color:var(--stone);font-size:.9rem">Vous payez à la récupération (espèces, Wave ou Orange Money).</span></div>
-      </div>
+  <div class="ok hid" id="ok">
+    <h2>Commande validée !</h2>
+    <p>Merci pour ta confiance. Voici ton numéro de commande :</p>
+    <div class="num" id="ok-num"></div>
+    <div class="steps">
+      <div><i>1</i><span><b>Confirmation par WhatsApp</b><br>Notre équipe te contacte dans l’heure.</span></div>
+      <div><i>2</i><span><b>Préparation</b><br>On prépare ta commande.</span></div>
+      <div><i>3</i><span><b>Notification « Prête »</b><br>Tu reçois un message WhatsApp et une notification dans ton compte.</span></div>
+      <div><i>4</i><span><b>Retrait et paiement</b><br>Tu paies à la récupération : espèces, Wave ou Orange Money.</span></div>
     </div>
-    
-    <p style="color:var(--stone);font-size:.92rem;margin-bottom:18px">💬 Vous pouvez suivre l'avancement à tout moment dans votre espace compte.</p>
-    
-    <div class="success-actions">
-      <a href="compte.html#commandes" class="btn btn-fire btn-lg">📦 Voir ma commande</a>
-      <a href="catalogue.html" class="btn btn-ghost">Continuer mes achats</a>
-    </div>
+    <div class="links"><a class="p" href="compte.html#commandes">Voir ma commande</a><a href="catalogue.html">Continuer mes achats</a></div>
   </div>
-</div>
 
-<div id="co-wrap" style="display:none">
-<div class="w co-layout">
-  <div class="co-form">
-
-    <div class="co-card">
-      <h2><span class="step-num">1</span>Vos coordonnées</h2>
-      <p class="section-desc">Pour qu'on puisse vous rappeler.</p>
-      <div class="field">
-        <label>Prénom et nom <span class="req">*</span></label>
-        <input class="input" id="f-nom" placeholder="Ex. Amadou Diop" required>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Numéro WhatsApp <span class="req">*</span></label>
-          <input class="input" id="f-tel" placeholder="+221 77 000 00 00" required inputmode="tel">
-          <span class="hint">Pour vous rappeler</span>
-        </div>
-        <div class="field">
-          <label>Email (optionnel)</label>
-          <input class="input" id="f-email" type="email" placeholder="exemple@gmail.com">
+  <div class="lay hid" id="wrap">
+    <div>
+      <div class="card"><h2>Tes coordonnées</h2><p class="d">Pour qu’on puisse te rappeler.</p>
+        <div class="f" id="g-nom"><label for="f-nom">Prénom et nom *</label><input id="f-nom" placeholder="Ex. Amadou Diop" autocomplete="name"><span class="er">Indique ton nom.</span></div>
+        <div class="two">
+          <div class="f" id="g-tel"><label for="f-tel">Numéro WhatsApp *</label><input id="f-tel" placeholder="+221 77 000 00 00" inputmode="tel" autocomplete="tel"><span class="er">Indique un numéro valide.</span></div>
+          <div class="f"><label for="f-email">Email (facultatif)</label><input id="f-email" type="email" placeholder="exemple@gmail.com" autocomplete="email"></div>
         </div>
       </div>
-    </div>
-
-    <div class="co-card">
-      <h2><span class="step-num">2</span>Retrait au dépôt</h2>
-      <div class="pickup-info" style="background:rgba(255,255,255,.04);border:1px solid rgba(212,175,55,.15);border-radius:var(--r12);padding:18px 20px;display:flex;gap:14px;align-items:flex-start">
-        <span style="font-size:1.6rem">🏢</span>
-        <div>
-          <strong style="display:block;font-size:1.05rem;margin-bottom:4px;color:var(--ink)">Retrait à notre dépôt à Thiès</strong>
-          <p style="font-size:.92rem;color:var(--stone);margin-bottom:6px">Du lundi au samedi, de 9h à 18h. Présentez votre numéro de commande à votre arrivée.</p>
-          <p style="font-size:.85rem;color:var(--stone);margin:0">📍 Adresse exacte communiquée par WhatsApp dès confirmation de votre commande.</p>
-        </div>
+      <div class="card"><h2>Retrait et paiement</h2>
+        <div class="pick"><div>Retrait en point de retrait, le lieu exact est confirmé par WhatsApp</div><div>Aucun paiement en ligne : tu paies à la récupération (espèces, Wave ou Orange Money)</div><div>Tu vérifies l’article avant de payer</div></div>
       </div>
-      <input type="hidden" id="mode-input" value="retrait" />
+      <div class="card"><h2>Message (facultatif)</h2><div class="f" style="margin:.6rem 0 0"><textarea id="f-msg" placeholder="Un créneau préféré, une précision…"></textarea></div></div>
     </div>
-
-    <div class="co-card">
-      <h2><span class="step-num">3</span>Message (optionnel)</h2>
-      <div class="field">
-        <textarea class="textarea" id="f-msg" placeholder="Un créneau préféré, une précision..."></textarea>
+    <aside class="sum">
+      <h3>Récapitulatif</h3>
+      <div id="s-items"></div>
+      <div class="sl"><span>Sous-total</span><span id="s-sub"></span></div>
+      <div class="cag hid" id="cag"><b>Ma cagnotte</b> <span id="cag-info"></span>
+        <label id="cag-row"><span>Utiliser toute ma cagnotte</span><input type="checkbox" id="cag-t"></label>
       </div>
-    </div>
-
-    <div class="alert info">
-      <span style="font-size:1.1rem">🔒</span>
-      <div><strong>Aucun paiement en ligne.</strong><br>Vous payez en espèces, Wave ou Orange Money au moment du retrait au dépôt.</div>
-    </div>
+      <div class="sl hid" id="s-cagl"><span>Cagnotte utilisée</span><span id="s-cag"></span></div>
+      <div class="sl t"><span>Total</span><b id="s-tot"></b></div>
+      <button class="go" id="go">Confirmer ma commande</button>
+      <p class="note"><b>Aucun paiement maintenant.</b><br>Nous te rappelons dans l’heure.</p>
+    </aside>
   </div>
+</div></main>
 
-  <aside class="summary">
-    <h3>Récapitulatif</h3>
-    <div id="sum-items"></div>
-    <div class="sum-line"><span class="lbl">Sous-total</span><span class="val" id="sum-subtotal">0 FCFA</span></div>
-    
-    <!-- Section cagnotte (visible si client connecté) -->
-    <div id="fidelite-section" style="display:none;background:linear-gradient(135deg, #FFF8E7 0%, #FAEFCE 100%);border:1px solid #F0D87C;border-radius:14px;padding:14px 16px;margin:12px 0">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-        <strong style="font-size:.92rem;color:#8B6F1A">💰 Ma cagnotte</strong>
-        <span style="font-size:.82rem;color:#8B6F1A;font-weight:600" id="fidelite-pts-info">— F</span>
-      </div>
-
-      <label id="cagnotte-toggle-row" style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;cursor:pointer">
-        <span style="font-size:.85rem;color:#5C4A10">Utiliser toute ma cagnotte sur cette commande</span>
-        <input type="checkbox" id="cagnotte-toggle" style="width:22px;height:22px;accent-color:#D4A437;flex-shrink:0">
-      </label>
-
-      <div style="display:flex;align-items:center;justify-content:space-between;font-size:.85rem;margin-top:8px">
-        <span id="points-detail" style="color:#666">Remise appliquée</span>
-        <span id="points-discount" style="color:#2D6A4F;font-weight:700;font-size:1rem">-0 F</span>
-      </div>
-    </div>
-    
-    <div class="sum-line" id="sum-fidelite-row" style="display:none"><span class="lbl">Cagnotte utilisée</span><span class="val" id="sum-fidelite" style="color:#2D6A4F">-0 F</span></div>
-    <div class="sum-line total"><span class="lbl">Total</span><span class="val" id="sum-total">0 FCFA</span></div>
-    <button class="btn btn-fire btn-lg btn-block" id="submit-btn" style="margin-top:14px">Confirmer ma commande</button>
-    <p style="font-size:.76rem;color:var(--stone);margin-top:12px;text-align:center;line-height:1.5"><strong>Aucun paiement maintenant.</strong><br>Nous vous rappelons dans l'heure.</p>
-  </aside>
-</div>
-</div>
-</main>
+<div class="bar hid" id="bar"><b id="b-tot"></b><button id="b-go">Confirmer</button></div>
+<div class="modal" id="modal"><div class="mb"><p id="m-txt"></p><div><button class="n" id="m-no">Annuler</button><button class="y" id="m-yes">Continuer quand même</button></div></div></div>
 
 <footer class="footer">
   <div class="footer-grid">
-    <div class="footer-brand">
-      <div style="font-family:var(--ff-d);font-size:1.4rem;font-weight:500;margin-bottom:.9rem">Sen·Export <em style="color:var(--or);font-style:italic;font-weight:300">Boutique</em></div>
-      <p style="font-size:.84rem;color:var(--stone);line-height:1.65;max-width:240px;margin-bottom:1.25rem">Produits français importés. Dépôt à Thiès, Sénégal.</p>
-      <div class="pay-tags"><span class="pay-tag">Wave</span><span class="pay-tag">Orange Money</span><span class="pay-tag">Espèces</span></div>
-    </div>
+    <div class="footer-brand"><div>Sen<em style="color:inherit;opacity:.75;font-style:italic">Marché</em></div><p>Mode, seconde main et maison. Paiement à la récupération.</p></div>
     <nav class="footer-col"><h4>Univers</h4><ul><li><a href="mode.html">Mode</a></li><li><a href="maison.html">Maison</a></li><li><a href="catalogue.html">Catalogue</a></li><li><a href="collections.html">Collections</a></li></ul></nav>
     <nav class="footer-col"><h4>Compte</h4><ul><li><a href="compte.html">Mon compte</a></li><li><a href="panier.html">Panier</a></li><li><a href="favoris.html">Favoris</a></li></ul></nav>
-    <nav class="footer-col"><h4>Contact</h4><ul><li><a href="https://wa.me/221778038874" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="a-propos.html">À propos</a></li><li><a href="demande-speciale.html">Demande spéciale</a></li><li><a href="cgv.html">CGV</a></li></ul></nav>
+    <nav class="footer-col"><h4>Contact</h4><ul><li><a href="https://wa.me/221778038874" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="a-propos.html">À propos</a></li><li><a href="cgv.html">CGV</a></li></ul></nav>
   </div>
-  <div class="footer-bottom">
-    <p>© 2026 SenExport Boutique · Fait à Thiès</p>
-    <a href="cgv.html">Conditions générales</a>
-  </div>
+  <div class="footer-bottom"><p>© 2026 SenMarché</p><a href="cgv.html">Conditions générales</a></div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script src="images.js"></script>
 <script src="app.js"></script>
-<script src="animations.js" defer></script>
+<script src="theme.js"></script>
+<script src="animations.js"></script>
 <script>
-let CART_ITEMS = [];
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const esc = s => s == null ? '' : String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let ARTS = [], L = [], sub = 0, remise = 0, busy = false;
+
+// Retrouve l'article et la taille d'une référence du panier ("REF" ou "REF_M")
+function lines() {
+  return SE.Cart.all().map(i => {
+    let a = ARTS.find(x => x.reference === i.ref), size = null, base = i.ref;
+    if (!a && i.ref.includes('_')) { const k = i.ref.lastIndexOf('_'); base = i.ref.slice(0, k); size = i.ref.slice(k + 1); a = ARTS.find(x => x.reference === base); }
+    return a ? { ref: i.ref, qte: i.qte, size, base, a } : null;
+  }).filter(Boolean);
+}
+const solde = () => (SE.Auth.currentClient && SE.Auth.currentClient.cagnotte_solde) || 0;
+
+function totals() {
+  sub = L.reduce((s, l) => s + (l.a.prix_vente_fcfa || 0) * l.qte, 0);
+  const t = $('cag-t');
+  remise = t && t.checked ? Math.min(solde(), sub) : 0;
+  $('s-sub').textContent = SE.fprix(sub);
+  $('s-cagl').classList.toggle('hid', !remise);
+  $('s-cag').textContent = '−' + SE.fprix(remise);
+  $('s-tot').textContent = $('b-tot').textContent = SE.fprix(sub - remise);
+}
+
+async function initCagnotte() {
+  for (let n = 0; n < 8 && !SE.Auth.currentClient; n++) {
+    await new Promise(r => setTimeout(r, 250));
+    if (SE.Auth.currentUser && !SE.Auth.currentClient) { try { await SE.Auth._loadClient(); } catch (e) {} }
+  }
+  const c = SE.Auth.currentClient; if (!c) return;
+  if (c.nom_complet && !$('f-nom').value) $('f-nom').value = c.nom_complet;
+  if (c.telephone && !$('f-tel').value) $('f-tel').value = c.telephone;
+  if (c.email && !$('f-email').value) $('f-email').value = c.email;
+  $('cag').classList.remove('hid');
+  if (solde() > 0) {
+    $('cag-info').textContent = SE.fprix(solde()) + ' disponibles';
+    $('cag-t').onchange = totals;
+  } else {
+    $('cag-row').classList.add('hid');
+    $('cag-info').textContent = '· Tu gagnes ' + SE.fprix(Math.round(sub * 0.01)) + ' avec cette commande.';
+  }
+}
+
+function ask(txt) {
+  return new Promise(res => {
+    $('m-txt').innerHTML = txt; $('modal').classList.add('on');
+    const done = v => { $('modal').classList.remove('on'); res(v); };
+    $('m-yes').onclick = () => done(true); $('m-no').onclick = () => done(false);
+  });
+}
+
+async function submit() {
+  if (busy) return;
+  const nom = $('f-nom').value.trim(), tel = $('f-tel').value.trim(), email = $('f-email').value.trim(), msg = $('f-msg').value.trim();
+  const okNom = nom.length >= 2, okTel = tel.replace(/\D/g, '').length >= 9;
+  $('g-nom').classList.toggle('bad', !okNom); $('g-tel').classList.toggle('bad', !okTel);
+  if (!okNom || !okTel) { (okNom ? $('f-tel') : $('f-nom')).focus(); SE.toast('Complète tes coordonnées', false); return; }
+
+  busy = true; $('go').disabled = $('b-go').disabled = true; $('go').textContent = 'Envoi en cours…';
+  try {
+    // Vérification de stock (prévient mais ne bloque pas), tailles regroupées par article
+    if (SE.sb) {
+      try {
+        const need = {}; L.forEach(l => need[l.base] = (need[l.base] || 0) + l.qte);
+        const { data } = await SE.sb.from('articles').select('reference,nom,quantite,etat').in('reference', Object.keys(need));
+        const out = (data || []).filter(a => a.etat === 'Vendu' || (a.quantite || 0) < need[a.reference]).map(a => '• ' + esc(a.nom));
+        if (out.length && !(await ask('Article(s) en rupture :<br><br>' + out.join('<br>') + '<br><br>Notre équipe te contactera pour proposer une alternative.'))) throw 'cancel';
+      } catch (e) { if (e === 'cancel') throw e; console.warn('Stock check:', e); }
+    }
+    // "reference" = référence de base (pour décrémenter le stock), la taille est dans le nom
+    const items = L.map(l => {
+      const p = l.a.prix_vente_fcfa || 0;
+      return { reference: l.base, nom: l.a.nom + (l.size ? ' (Taille : ' + l.size + ')' : ''), taille: l.size, prix: p, qte: l.qte, sous_total: p * l.qte };
+    });
+    const total = Math.max(0, sub - remise);
+    const r = await SE.Commandes.create({ client: { nom, tel, email, adresse: '', ville: '', quartier: '' }, mode: 'retrait', items, sous_total: sub, remise_fidelite: remise, frais_livraison: 0, total_ttc: total, notes: msg });
+    if (SE.Track) SE.Track.orderComplete(r.numero, total);
+    if (remise > 0 && SE.Auth.currentClient && SE.sb) {
+      try { const { data, error } = await SE.sb.rpc('use_cagnotte', { p_montant: remise }); if (!error && data && data[0] && data[0].new_solde !== undefined) SE.Auth.currentClient.cagnotte_solde = data[0].new_solde; else if (error) console.error('use_cagnotte:', error); } catch (e) { console.warn(e); }
+    }
+    SE.Cart.clear();
+    $('wrap').classList.add('hid'); $('bar').classList.add('hid'); document.body.classList.remove('has-bar'); $('head').classList.add('hid');
+    $('ok-num').textContent = r.numero; $('ok').classList.remove('hid');
+    if (typeof confetti === 'function') confetti({ particleCount: 120, spread: 70, origin: { y: .7 }, disableForReducedMotion: true });
+    scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (e) {
+    if (e !== 'cancel') { console.error('[CHECKOUT]', e); SE.toast('Erreur : ' + ((e && e.message) || 'réessaie'), false); }
+    busy = false; $('go').disabled = $('b-go').disabled = false; $('go').textContent = 'Confirmer ma commande';
+  }
+}
 
 (async () => {
   await new Promise(r => setTimeout(r, 50));
-  await SE.Articles.load();
-  const items = await SE.Cart.items();
-  CART_ITEMS = items;
-  
-  if (items.length === 0){
-    document.getElementById('empty-state').style.display = 'block';
-    return;
-  }
-  
-  document.getElementById('co-wrap').style.display = 'block';
-  
-  // Track : début du checkout
-  if (SE.Track) {
-    const total = await SE.Cart.total();
-    SE.Track.checkoutStart(total);
-  }
-  
-  /* Pre-fill si connecté */
-  if (SE.Auth.currentClient){
-    const c = SE.Auth.currentClient;
-    if (c.nom_complet) document.getElementById('f-nom').value = c.nom_complet;
-    if (c.telephone) document.getElementById('f-tel').value = c.telephone;
-    if (c.email) document.getElementById('f-email').value = c.email;
-  } else if (SE.Auth.currentUser?.email){
-    document.getElementById('f-email').value = SE.Auth.currentUser.email;
-  }
-  
-  /* Récap items */
-  document.getElementById('sum-items').innerHTML = items.map(i => `
-    <div class="item">
-      <span class="name">${i.article.nom}</span>
-      <span class="qte">×${i.qte}</span>
-      <span class="prix">${SE.fprix((i.article.prix_vente_fcfa||0) * i.qte)}</span>
-    </div>
-  `).join('');
-  
-  initFideliteSection();
-  updateTotal();
+  ARTS = await SE.Articles.load();
+  L = lines();
+  if (!L.length) { $('empty').classList.remove('hid'); return; }
+  $('wrap').classList.remove('hid'); $('bar').classList.remove('hid'); $('bar').classList.add('on'); document.body.classList.add('has-bar');
+  $('s-items').innerHTML = L.map(l => `<div class="li"><span>${esc(l.a.nom)}</span><b>${SE.fprix((l.a.prix_vente_fcfa || 0) * l.qte)}</b><small>${l.size ? 'Taille ' + esc(l.size) + ' · ' : ''}Quantité ${l.qte}</small></div>`).join('');
+  totals();
+  if (SE.Track) SE.Track.checkoutStart(sub);
+  $('go').onclick = $('b-go').onclick = submit;
+  initCagnotte().then(totals);
 })();
-
-function updateTotal(){
-  const subtotal = CART_ITEMS.reduce((s,i) => s + (i.article.prix_vente_fcfa||0) * i.qte, 0);
-  document.getElementById('sum-subtotal').textContent = SE.fprix(subtotal);
-  
-  // Calculer remise cagnotte selon le toggle (tout ou rien)
-  let remiseFid = 0;
-  const toggle = document.getElementById('cagnotte-toggle');
-  if (toggle && toggle.checked && SE.Auth.currentClient){
-    const solde = SE.Auth.currentClient.cagnotte_solde || 0;
-    remiseFid = Math.min(solde, subtotal);
-    document.getElementById('points-discount').textContent = '-' + SE.fnum(remiseFid) + ' F';
-  } else if (toggle) {
-    document.getElementById('points-discount').textContent = '-0 F';
-  }
-  
-  // Affichage ligne cagnotte
-  const fidRow = document.getElementById('sum-fidelite-row');
-  if (remiseFid > 0){
-    fidRow.style.display = 'flex';
-    document.getElementById('sum-fidelite').textContent = '-' + SE.fnum(remiseFid) + ' F';
-  } else {
-    fidRow.style.display = 'none';
-  }
-  
-  const total = subtotal - remiseFid;
-  document.getElementById('sum-total').textContent = SE.fprix(total);
-  
-  // Stocker pour le submit
-  window.REMISE_FIDELITE = remiseFid;
-}
-
-// Activer/désactiver section cagnotte selon connexion
-async function initFideliteSection(){
-  // Retry chargement client (max 2 sec)
-  let retries = 0;
-  while (!SE.Auth.currentClient && retries < 8){
-    await new Promise(r => setTimeout(r, 250));
-    retries++;
-    if (SE.Auth.currentUser && !SE.Auth.currentClient){
-      try { await SE.Auth._loadClient(); } catch {}
-    }
-  }
-  
-  if (!SE.Auth.currentClient) return;  // pas connecté
-  
-  const solde = SE.Auth.currentClient.cagnotte_solde || 0;
-  const fidSection = document.getElementById('fidelite-section');
-  
-  // Toujours afficher la section pour utilisateur connecté
-  fidSection.style.display = 'block';
-  
-  if (solde <= 0){
-    // Pas de cagnotte : message d'info, pas de toggle
-    const subtotal = CART_ITEMS.reduce((s,i)=>s+(i.article.prix_vente_fcfa||0)*i.qte,0);
-    fidSection.innerHTML = `
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:1.4rem">💰</span>
-        <div>
-          <strong style="font-size:.9rem;color:#8B6F1A;display:block;margin-bottom:2px">Cagnotte SenExport</strong>
-          <span style="font-size:.78rem;color:#8B6F1A">Vous gagnerez <strong>${SE.fnum(Math.round(subtotal * 0.01))} F</strong> de cagnotte avec cette commande !</span>
-        </div>
-      </div>
-    `;
-    return;
-  }
-  
-  document.getElementById('fidelite-pts-info').textContent = `${SE.fnum(solde)} F disponibles`;
-  
-  const toggle = document.getElementById('cagnotte-toggle');
-  toggle.checked = false;
-  toggle.addEventListener('change', updateTotal);
-}
-
-/* Modal de confirmation rupture stock — remplace confirm() natif */
-function seConfirm(msg){ return new Promise(resolve => {
-  const ov = document.createElement('div');
-  ov.style.cssText='position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;animation:seFadeIn .2s ease';
-  ov.innerHTML=`<div style="background:var(--card);border-radius:20px;padding:28px 24px;max-width:400px;width:100%;box-shadow:0 30px 60px rgba(0,0,0,.2);animation:sePopIn .3s cubic-bezier(0.34,1.56,0.64,1)">
-    <div style="font-size:2.5rem;text-align:center;margin-bottom:12px">⚠️</div>
-    <p style="color:#333;line-height:1.6;font-size:.92rem;margin-bottom:20px;text-align:center">${msg.replace(/\n/g,'<br>')}</p>
-    <div style="display:flex;gap:10px;justify-content:center">
-      <button id="sc-cancel" style="background:#f5f0e8;color:#555;padding:12px 22px;border-radius:12px;border:none;font-weight:600;cursor:pointer;font-size:.9rem">Annuler</button>
-      <button id="sc-ok" style="background:#C4531A;color:#fff;padding:12px 22px;border-radius:12px;border:none;font-weight:600;cursor:pointer;font-size:.9rem">Continuer quand même</button>
-    </div>
-  </div>`;
-  if(!document.getElementById('se-notif-anims')){const s=document.createElement('style');s.id='se-notif-anims';s.textContent='@keyframes seFadeIn{from{opacity:0}to{opacity:1}}@keyframes sePopIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}';document.head.appendChild(s);}
-  document.body.appendChild(ov);
-  ov.querySelector('#sc-ok').onclick=()=>{ov.remove();resolve(true)};
-  ov.querySelector('#sc-cancel').onclick=()=>{ov.remove();resolve(false)};
-}); }
-
-const submitBtn = document.getElementById('submit-btn');
-if (submitBtn) submitBtn.addEventListener('click', async e => {
-  e.preventDefault();
-  const btn = e.currentTarget;
-  
-  try {
-    const nom = document.getElementById('f-nom').value.trim();
-    const tel = document.getElementById('f-tel').value.trim();
-    const email = document.getElementById('f-email').value.trim();
-    const msg = document.getElementById('f-msg').value.trim();
-    
-
-    if (!nom){ SE.toast('Veuillez indiquer votre nom', false); document.getElementById('f-nom').focus(); return; }
-    if (!tel){ SE.toast('Veuillez indiquer votre numéro WhatsApp', false); document.getElementById('f-tel').focus(); return; }
-
-    btn.disabled = true;
-    btn.textContent = 'Envoi en cours...';
-    
-    /* Vérification stock NON-BLOQUANTE : on prévient mais on laisse passer */
-    if (SE.sb){
-      try {
-        const refs = CART_ITEMS.map(i => i.ref).filter(Boolean);
-        if (refs.length > 0){
-          const { data: stocks } = await SE.sb
-            .from('articles')
-            .select('reference,nom,quantite,etat')
-            .in('reference', refs);
-          
-          const ruptures = [];
-          if (stocks){
-            for (const ci of CART_ITEMS){
-              const art = stocks.find(a => a.reference === ci.ref);
-              if (art && (art.etat === 'Vendu' || (art.quantite || 0) < ci.qte)){
-                ruptures.push(art.nom || ci.article.nom);
-              }
-            }
-          }
-          
-          if (ruptures.length > 0){
-            const ok = await seConfirm("Article(s) en rupture :\n\n" + 
-                  ruptures.map(n => '• ' + n).join('\n') + 
-                  "\n\nNotre équipe vous contactera pour proposer une alternative.");
-            if (!ok){
-              btn.disabled = false;
-              btn.textContent = '✓ Valider ma commande';
-              return;
-            }
-          }
-        }
-      } catch(e){
-        console.warn('[CHECKOUT] Stock check failed, on continue:', e);
-      }
-    }
-
-    const subtotal = CART_ITEMS.reduce((s,i) => s + (i.article.prix_vente_fcfa||0) * i.qte, 0);
-    const remiseFid = window.REMISE_FIDELITE || 0;
-    const total = Math.max(0, subtotal - remiseFid);
-    const mode = 'retrait';
-    
-
-    const articles_json = CART_ITEMS.map(i => ({
-      reference: i.ref,
-      nom: i.article.nom,
-      prix: i.article.prix_vente_fcfa || 0,
-      qte: i.qte,
-      sous_total: (i.article.prix_vente_fcfa || 0) * i.qte,
-    }));
-    
-
-    const result = await SE.Commandes.create({
-      client: { nom, tel, email, adresse: '', ville: '', quartier: '' },
-      mode,
-      items: articles_json,
-      sous_total: subtotal,
-      remise_fidelite: remiseFid,
-      frais_livraison: 0,
-      total_ttc: total,
-      notes: msg,
-    });
-    
-    
-    // Track la commande validée
-    if (SE.Track) SE.Track.orderComplete(result.numero, total);
-    
-    // Si le client a utilisé sa cagnotte, la déduire via fonction RPC sécurisée
-    if (remiseFid > 0 && SE.Auth.currentClient && SE.sb){
-      try {
-        const { data, error } = await SE.sb.rpc('use_cagnotte', {
-          p_montant: remiseFid,
-        });
-        if (error){
-          console.error('[CHECKOUT] Erreur RPC use_cagnotte:', error);
-          console.error('⚠️ IMPORTANT : Lance MIGRATION_V32.sql dans Supabase si ce n\'est pas déjà fait !');
-        } else if (data && data[0]?.new_solde !== undefined && SE.Auth.currentClient){
-          SE.Auth.currentClient.cagnotte_solde = data[0].new_solde;
-        }
-      } catch(ptsErr){
-        console.warn('Erreur déduction cagnotte:', ptsErr);
-      }
-    }
-    
-    SE.Cart.clear();
-    document.getElementById('co-wrap').style.display = 'none';
-    document.getElementById('success-state').style.display = 'block';
-    
-    /* Typewriter sur le numéro de commande */
-    const numEl = document.getElementById('success-num');
-    const numTxt = result.numero;
-    numEl.textContent = '';
-    let i = 0;
-    const tw = setInterval(() => {
-      numEl.textContent += numTxt[i++];
-      if (i >= numTxt.length) clearInterval(tw);
-    }, 60);
-    
-    /* Son de commande validée */
-    if (window.SE_Sound) SE_Sound.play('order');
-
-    /* Confetti doré + son */
-    if (window.SE_Sound) SE_Sound.play('confetti');
-    if (typeof confetti === 'function'){
-      const fire = (particleRatio, opts) => confetti(Object.assign({}, {
-        origin:{y:0.7}, disableForReducedMotion:true
-      }, opts, { particleCount: Math.floor(220 * particleRatio) }));
-      fire(0.25,{spread:26,startVelocity:55,colors:['var(--or)','#F5E09A']});
-      fire(0.2,{spread:60,colors:['var(--or)','var(--ink)','#8B6F1A']});
-      fire(0.35,{spread:100,decay:0.91,scalar:0.8,colors:['var(--or)','var(--or2)']});
-      fire(0.1,{spread:120,startVelocity:25,decay:0.92,scalar:1.2,colors:['#F5E09A']});
-      fire(0.1,{spread:120,startVelocity:45,colors:['var(--or)']});
-    }
-    
-    window.scrollTo({top:0,behavior:'smooth'});
-    
-  } catch(err){
-    console.error('[CHECKOUT] ERREUR:', err);
-    SE.toast('Erreur : ' + (err.message || 'Réessayez'), false);
-    btn.disabled = false;
-    btn.textContent = '✓ Valider ma commande';
-  }
-});
-
+})();
 </script>
-<a href="https://wa.me/221778038874" class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
-<script src="theme.js"></script>
-<script src="animations.js"></script>
 </body>
 </html>
