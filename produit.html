@@ -132,6 +132,23 @@ form.f{display:grid;gap:.8rem;max-width:520px;margin-top:1rem}
 .acc-in{padding:0 1.4rem 1.4rem}
 .acc .rv,.acc .qa{background:var(--bg2)}
 @media(min-width:900px){.lookbar{flex-direction:row;justify-content:space-between;text-align:left}}
+/* Finition mobile / hiérarchie */
+.info{gap:1.1rem}
+.titre{font-size:clamp(1.9rem,6vw,2.8rem)}
+.pbar{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.prix{font-size:clamp(1.6rem,6vw,2.2rem)}
+.stock{display:inline-flex;align-items:center;gap:.45rem;font-size:.85rem;font-weight:600;padding:.35rem .8rem;border-radius:99px;background:var(--bg2)}
+.stock::before{content:'';width:8px;height:8px;border-radius:50%;background:currentColor}
+.desc{color:var(--ink);opacity:.8;font-size:1rem;line-height:1.7}
+.qrow{display:flex;align-items:center;justify-content:space-between;gap:1rem;font-weight:600}
+.qty{align-self:auto}
+.btn2{min-height:54px;border-radius:14px;font-size:1.02rem}
+.buy{margin-top:.25rem}
+.add{border-width:1.5px}
+.rass{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:.4rem 1.1rem;gap:0;margin-top:.5rem;color:var(--ink)}
+.rass div{display:flex;gap:.75rem;align-items:flex-start;padding:.8rem 0;font-size:.92rem;line-height:1.45}
+.rass div+div{border-top:1px solid var(--border)}
+.rass div::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -264,14 +281,13 @@ async function load() {
       ${etat ? `<div class="etat">${esc(etat)}</div>` : ''}
       <h1 class="titre">${esc(a.nom)}</h1>
       <div class="note">${reviews.length ? `<span class="st">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5 - Math.round(avg))}</span>${avg.toFixed(1)} (${reviews.length} avis)` : 'Pas encore d’avis'}</div>
-      <div class="prix">${SE.fprix(a.prix_vente_fcfa || 0)}</div>
-      <div class="stock ${out ? 'out' : ''}">${out ? 'Rupture de stock' : 'Disponible, paiement à la récupération'}</div>
+      <div class="pbar"><div class="prix">${SE.fprix(a.prix_vente_fcfa || 0)}</div><div class="stock ${out ? 'out' : ''}">${out ? 'Rupture de stock' : 'En stock'}</div></div>
       <p class="desc">${esc(a.description || 'Pas de description pour le moment. Écris-nous sur WhatsApp pour plus de détails.')}</p>
       ${out ? '<button class="btn2" disabled>Indisponible</button>' : `
       ${sizes.length ? `<div><div class="lab"><b>${chaus ? 'Pointure' : 'Taille'}</b>${vet ? `<a id="g-open">Guide des ${chaus ? 'pointures' : 'tailles'}</a>` : ''}</div>
         <div class="sizes" id="sizes">${sizes.map(s => `<button type="button" data-s="${esc(s)}">${esc(s)}</button>`).join('')}</div>
         <div class="err" id="s-err">Choisis une ${chaus ? 'pointure' : 'taille'} pour continuer.</div></div>` : ''}
-      <div class="qty"><button id="q-"  aria-label="Moins">−</button><span id="q-v">1</span><button id="q+" aria-label="Plus">+</button></div>
+      <div class="qrow"><span>Quantité</span><div class="qty"><button id="q-"  aria-label="Moins">−</button><span id="q-v">1</span><button id="q+" aria-label="Plus">+</button></div></div>
       <button class="btn2 buy" id="buy">Acheter maintenant</button>
       <button class="btn2 add" id="add">Ajouter au panier</button>
       <div class="rass"><div>Retrait en point de retrait, le lieu exact est confirmé par WhatsApp</div><div>Paiement à la récupération : Wave, Orange Money ou espèces</div><div>Tu vérifies l’article avant de payer</div></div>`}
