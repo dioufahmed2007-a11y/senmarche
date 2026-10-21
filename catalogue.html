@@ -63,7 +63,7 @@ button{cursor:pointer;font-family:inherit}
 .empty{grid-column:1/-1;text-align:center;padding:3rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:14px}
 .empty h3{font-family:var(--ff-d);font-size:1.4rem;font-weight:500;margin-bottom:.4rem}
 .empty p{color:var(--stone);margin-bottom:1rem}
-.more{display:flex;justify-content:center;margin-top:2rem}
+.more{height:1px;margin-top:1rem}
 .spin{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--or);border-radius:50%;animation:sp .8s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 /* Fluidité */
@@ -126,7 +126,7 @@ button{cursor:pointer;font-family:inherit}
       </div>
       <div class="chips" id="chips"></div>
       <div class="p-grid" id="grid"><div class="empty">Chargement du catalogue…</div></div>
-      <div class="more hid" id="more" aria-label="Chargement"><span class="spin"></span></div>
+      <div class="more hid" id="more" aria-hidden="true"></div>
     </section>
   </div>
 </div>
@@ -258,9 +258,9 @@ $('sort').onchange = e => { S.sort = e.target.value; render(); };
 function loadMore() {
   const m = $('more'); if (m.classList.contains('hid')) return;
   S.shown += 12; render();
-  requestAnimationFrame(() => { if (!m.classList.contains('hid') && m.getBoundingClientRect().top < innerHeight + 400) loadMore(); });
+  requestAnimationFrame(() => { if (!m.classList.contains('hid') && m.getBoundingClientRect().top < innerHeight + 900) loadMore(); });
 }
-new IntersectionObserver(es => { if (es[0].isIntersecting) loadMore(); }, { rootMargin: '400px' }).observe($('more'));
+new IntersectionObserver(es => { if (es[0].isIntersecting) loadMore(); }, { rootMargin: '900px' }).observe($('more'));
 $('f-clear').onclick = clearAll;
 $('f-open').onclick = () => { $('fil').classList.add('open'); document.body.style.overflow = 'hidden'; };
 const closeF = () => { $('fil').classList.remove('open'); document.body.style.overflow = ''; };
