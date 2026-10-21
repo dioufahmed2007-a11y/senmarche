@@ -64,7 +64,8 @@ button{cursor:pointer;font-family:inherit}
 .empty h3{font-family:var(--ff-d);font-size:1.4rem;font-weight:500;margin-bottom:.4rem}
 .empty p{color:var(--stone);margin-bottom:1rem}
 .more{display:flex;justify-content:center;margin-top:2rem}
-.more .b{min-width:220px}
+.spin{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--or);border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
 /* Fluidité */
 .sel{-webkit-appearance:none;appearance:none;padding-right:2.4rem;background-image:linear-gradient(45deg,transparent 50%,var(--stone) 50%),linear-gradient(135deg,var(--stone) 50%,transparent 50%);background-position:calc(100% - 20px) 52%,calc(100% - 14px) 52%;background-size:6px 6px;background-repeat:no-repeat}
 .pr input{-moz-appearance:textfield;appearance:textfield;min-width:0}
@@ -114,7 +115,6 @@ button{cursor:pointer;font-family:inherit}
           <label class="fo"><input type="checkbox" data-e="sh"> Seconde main</label>
         </div>
         <div class="fg"><h4>Prix (FCFA)</h4><div class="pr"><input type="number" id="p-min" placeholder="Min" min="0" inputmode="numeric"><span>à</span><input type="number" id="p-max" placeholder="Max" min="0" inputmode="numeric"></div></div>
-        <div class="fg"><label class="fo" style="padding:0"><input type="checkbox" id="stock" checked> En stock seulement</label></div>
       </div>
       <div class="fbot"><button class="b g" id="f-clear">Tout effacer</button><button class="b p" id="f-apply">Voir les résultats</button></div>
     </aside>
@@ -126,7 +126,7 @@ button{cursor:pointer;font-family:inherit}
       </div>
       <div class="chips" id="chips"></div>
       <div class="p-grid" id="grid"><div class="empty">Chargement du catalogue…</div></div>
-      <div class="more hid" id="more"><button class="b g" id="more-b">Voir plus d’articles</button></div>
+      <div class="more hid" id="more" aria-label="Chargement"><span class="spin"></span></div>
     </section>
   </div>
 </div>
@@ -209,7 +209,6 @@ function chips() {
   S.etats.forEach(e => c.push([e === 'sh' ? 'Seconde main' : 'Neuf', () => S.etats = S.etats.filter(x => x !== e)]));
   if (S.min !== null) c.push([`Min ${SE.fnum(S.min)}`, () => { S.min = null; $('p-min').value = ''; }]);
   if (S.max !== null) c.push([`Max ${SE.fnum(S.max)}`, () => { S.max = null; $('p-max').value = ''; }]);
-  if (!S.stock) c.push(['Avec les articles épuisés', () => S.stock = true]);
   $('chips').innerHTML = c.map((x, i) => `<span class="chip" data-i="${i}">${esc(x[0])} ×</span>`).join('');
   document.querySelectorAll('.chip').forEach(el => el.onclick = () => { c[+el.dataset.i][1](); sync(); S.shown = 12; render(); });
 }
@@ -218,7 +217,6 @@ function sync() {
   document.querySelectorAll('[data-c]').forEach(x => x.checked = S.cats.includes(+x.dataset.c));
   document.querySelectorAll('[data-u]').forEach(x => x.checked = S.unis.includes(x.dataset.u));
   document.querySelectorAll('[data-e]').forEach(x => x.checked = S.etats.includes(x.dataset.e));
-  $('stock').checked = S.stock;
 }
 
 function clearAll() {
@@ -253,12 +251,16 @@ async function boot() {
 
 // Écouteurs
 document.querySelectorAll('[data-e]').forEach(x => x.onchange = () => { S.etats = toggle(S.etats, x.dataset.e, x.checked); S.shown = 12; render(); });
-$('stock').onchange = e => { S.stock = e.target.checked; S.shown = 12; render(); };
 let tp; const dr = () => { clearTimeout(tp); tp = setTimeout(() => { S.shown = 12; render(); }, 350); };
 $('p-min').oninput = e => { S.min = e.target.value ? +e.target.value : null; dr(); };
 $('p-max').oninput = e => { S.max = e.target.value ? +e.target.value : null; dr(); };
 $('sort').onchange = e => { S.sort = e.target.value; render(); };
-$('more-b').onclick = () => { S.shown += 12; render(); };
+function loadMore() {
+  const m = $('more'); if (m.classList.contains('hid')) return;
+  S.shown += 12; render();
+  requestAnimationFrame(() => { if (!m.classList.contains('hid') && m.getBoundingClientRect().top < innerHeight + 400) loadMore(); });
+}
+new IntersectionObserver(es => { if (es[0].isIntersecting) loadMore(); }, { rootMargin: '400px' }).observe($('more'));
 $('f-clear').onclick = clearAll;
 $('f-open').onclick = () => { $('fil').classList.add('open'); document.body.style.overflow = 'hidden'; };
 const closeF = () => { $('fil').classList.remove('open'); document.body.style.overflow = ''; };
