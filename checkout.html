@@ -84,7 +84,22 @@ body.has-bar{padding-bottom:80px}@media(min-width:920px){body.has-bar{padding-bo
 .mode span,.pt span{font-size:.85rem;color:var(--stone)}.pt small{color:var(--stone)}
 .pts{display:grid;gap:.5rem}
 .map{position:relative;z-index:0;isolation:isolate;height:260px;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:.8rem 0}
-.leaflet-container{font-family:inherit}
+.leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-tile-container,.leaflet-layer,.leaflet-zoom-box{position:absolute;left:0;top:0}
+.leaflet-container{overflow:hidden;background:#ddd;font-family:inherit;touch-action:none}
+.leaflet-container .leaflet-tile,.leaflet-container .leaflet-marker-icon{max-width:none!important;max-height:none!important;user-select:none;-webkit-user-drag:none}
+.leaflet-pane{z-index:400}.leaflet-tile-pane{z-index:200}.leaflet-overlay-pane{z-index:400}.leaflet-shadow-pane{z-index:500}.leaflet-marker-pane{z-index:600}.leaflet-popup-pane{z-index:700}
+.leaflet-tile{visibility:hidden}.leaflet-tile-loaded{visibility:inherit}
+.leaflet-zoom-animated{transform-origin:0 0}
+.leaflet-zoom-anim .leaflet-zoom-animated{transition:transform .25s cubic-bezier(0,0,.25,1)}
+.leaflet-zoom-anim .leaflet-tile,.leaflet-pan-anim .leaflet-tile{transition:none}
+.leaflet-top,.leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}
+.leaflet-top{top:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}.leaflet-right{right:0}
+.leaflet-control{position:relative;z-index:800;pointer-events:auto;float:left;clear:both;margin:10px}
+.leaflet-right .leaflet-control{float:right}
+.leaflet-bar{box-shadow:0 1px 5px rgba(0,0,0,.45);border-radius:6px;overflow:hidden}
+.leaflet-bar a{display:block;width:34px;height:34px;line-height:34px;text-align:center;text-decoration:none;background:#fff;color:#000;border-bottom:1px solid #ccc;font:bold 18px/34px sans-serif}
+.leaflet-control-attribution{background:rgba(255,255,255,.8);color:#333;padding:0 5px;font-size:11px;margin:0}
+.leaflet-control-attribution a{color:#0078a8}
 .pin{width:22px;height:22px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--or);border:2px solid var(--bg);box-shadow:0 2px 6px rgba(0,0,0,.35)}
 .b2{min-height:48px;padding:0 1.2rem;border-radius:12px;border:1.5px solid var(--or);background:transparent;color:var(--or);font-weight:600;margin:.2rem 0 .4rem}
 .f.bad textarea{border-color:var(--red)}
@@ -141,7 +156,7 @@ body.has-bar{padding-bottom:80px}@media(min-width:920px){body.has-bar{padding-bo
           <div class="f" id="g-pt" style="margin-bottom:.5rem"><span class="er">Choisis un point de retrait.</span></div>
           <div class="pts" id="pts"></div>
           <div class="map" id="map-r"></div>
-          <p class="note">L’adresse exacte et l’heure de retrait sont confirmées par WhatsApp.</p>
+          <p class="note">L’adresse exacte et l’heure de retrait sont confirmées par WhatsApp. <a id="gm" class="hid" target="_blank" rel="noopener" style="color:var(--or)">Ouvrir dans Google Maps</a></p>
         </div>
         <div id="p-livr" class="hid">
           <div class="f" id="g-liv">
@@ -244,9 +259,17 @@ async function initCagnotte() {
 // ── Mode, points de retrait, cartes ──
 const DEFAULT_POINTS = [{ id: 'depot-thies', nom: 'Dépôt SenMarché', ville: 'Thiès', quartier: '', horaires: 'Lun-Sam, 9h-18h', lat: 14.791, lng: -16.926 }];
 let MODE = localStorage.getItem('se_mode') === 'livraison' ? 'livraison' : 'retrait', PTS = [], PT = null, MR = null, ML = null, MK = null, PIN = null;
-const hasMap = () => typeof L !== 'undefined';
-const pinIcon = () => L.divIcon({ className: '', html: '<div class="pin"></div>', iconSize: [22, 22], iconAnchor: [11, 22] });
-const tiles = m => L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(m);
+const hasMap = () => typeof window.L !== 'undefined';
+const pinIcon = () => window.L.divIcon({ className: '', html: '<div class="pin"></div>', iconSize: [22, 22], iconAnchor: [11, 22] });
+function mapFail(id) {
+  const el = $(id); if (el.dataset.f) return; el.dataset.f = 1; el.classList.add('hid');
+  el.insertAdjacentHTML('afterend', '<p class="note">La carte ne s’affiche pas sur cet appareil. ' + (id === 'map-l' ? 'Écris simplement ton adresse ci-dessus.' : 'Choisis ton point dans la liste ci-dessus.') + '</p>');
+}
+function tiles(m, id) {
+  const t = window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap', referrerPolicy: 'origin' }).addTo(m);
+  let ok = false; t.on('tileload', () => { ok = true; });
+  setTimeout(() => { if (!ok) mapFail(id); }, 7000);
+}
 
 function sumMode() {
   $('s-mode-l').textContent = MODE === 'retrait' ? 'Retrait' : 'Livraison';
@@ -257,6 +280,7 @@ function pick(x, fly) {
   document.querySelectorAll('.pt').forEach(b => b.classList.toggle('on', !!x && b.dataset.id === String(x.id)));
   if (fly && MR && x && x.lat) MR.flyTo([x.lat, x.lng], 15);
   $('g-pt').classList.remove('bad'); sumMode();
+  const g = $('gm'); if (x && x.lat) g.href = 'https://www.google.com/maps?q=' + x.lat + ',' + x.lng; g.classList.toggle('hid', !(x && x.lat));
 }
 async function loadPoints() {
   let p = [];
@@ -267,22 +291,22 @@ async function loadPoints() {
   $('pts').innerHTML = PTS.map(x => `<button type="button" class="pt" data-id="${esc(x.id)}"><b>${esc(x.nom)}</b><span>${esc([x.quartier, x.ville].filter(Boolean).join(', '))}</span><small>${esc(x.horaires || '')}</small></button>`).join('');
   document.querySelectorAll('.pt').forEach(b => b.onclick = () => pick(PTS.find(x => String(x.id) === b.dataset.id), true));
   if (hasMap()) {
-    MR = L.map('map-r', { scrollWheelZoom: false }); tiles(MR);
+    MR = window.L.map('map-r', { scrollWheelZoom: false }); tiles(MR, 'map-r');
     const gp = PTS.filter(x => x.lat && x.lng);
-    gp.forEach(x => L.marker([x.lat, x.lng], { icon: pinIcon() }).addTo(MR).on('click', () => pick(x, false)));
+    gp.forEach(x => window.L.marker([x.lat, x.lng], { icon: pinIcon() }).addTo(MR).on('click', () => pick(x, false)));
     if (gp.length > 1) MR.fitBounds(gp.map(x => [x.lat, x.lng]), { padding: [30, 30] }); else MR.setView(gp.length ? [gp[0].lat, gp[0].lng] : [14.791, -16.926], 14);
   } else $('map-r').classList.add('hid');
   pick(PT, false);
 }
 function setPin(ll) {
   PIN = ll;
-  if (MK) MK.setLatLng(ll); else MK = L.marker(ll, { icon: pinIcon(), draggable: true }).addTo(ML).on('dragend', e => { PIN = e.target.getLatLng(); });
+  if (MK) MK.setLatLng(ll); else MK = window.L.marker(ll, { icon: pinIcon(), draggable: true }).addTo(ML).on('dragend', e => { PIN = e.target.getLatLng(); });
   $('pin-note').textContent = 'Repère placé sur la carte. Tu peux le déplacer.';
 }
 function initLivr() {
   if (!hasMap()) { $('map-l').classList.add('hid'); return; }
   if (ML) { ML.invalidateSize(); return; }
-  ML = L.map('map-l', { scrollWheelZoom: false }).setView([14.791, -16.926], 13); tiles(ML);
+  ML = window.L.map('map-l', { scrollWheelZoom: false }).setView([14.791, -16.926], 13); tiles(ML, 'map-l');
   ML.on('click', e => setPin(e.latlng));
 }
 function locate() {
