@@ -145,6 +145,7 @@ body:not(.theme-clair) .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) br
 .leaflet-popup-close-button{position:absolute;top:0;right:0;padding:6px 10px 0 0;font:18px/24px sans-serif;color:var(--stone);text-decoration:none}
 .pp{display:grid;gap:.15rem;min-width:180px}.pp b{font-size:1rem}.pp span{color:var(--stone);font-size:.88rem}
 .pp em{font-style:normal;color:var(--green);font-weight:600;font-size:.85rem;margin-top:.35rem}.pp a{color:var(--or);font-weight:600;margin-top:.2rem}
+.okbox{background:var(--bg2);border-left:3px solid var(--green);border-radius:8px;padding:.8rem 1rem;font-size:.93rem;line-height:1.5;margin:.6rem 0}
 </style>
 </head>
 <body>
@@ -199,7 +200,7 @@ body:not(.theme-clair) .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) br
           <div class="pts" id="pts"></div>
           <p class="note" id="cap-r" style="margin:.9rem 0 0"></p>
           <p class="note" id="route-info" style="margin:.2rem 0 0"></p>
-          <div class="mapw" id="w-r"><div class="map" id="map-r"></div><button type="button" class="exp2" id="loc-r">Ma position</button><button type="button" class="exp" data-w="w-r">Agrandir</button><div class="fsbar"><span id="fs-r"></span><button type="button" class="fsok" data-w="w-r">Terminer</button></div></div>
+          <div class="mapw" id="w-r"><div class="map" id="map-r"></div><button type="button" class="exp2" id="loc-r">Ma position</button><button type="button" class="exp" data-w="w-r">Agrandir</button><div class="fsbar"><span id="fs-r"></span><button type="button" class="fsok" data-w="w-r">Valider ce dépôt</button></div></div>
           <p class="note">L’adresse exacte et l’heure de retrait sont confirmées par WhatsApp. <a id="gm" class="hid" target="_blank" rel="noopener" style="color:var(--or)">Ouvrir dans Google Maps</a></p>
         </div>
         <div id="p-livr" class="hid">
@@ -214,9 +215,10 @@ body:not(.theme-clair) .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) br
           </div>
           
           <p class="stp"><b>2</b> Ta position sur la carte</p>
-          <p class="note" id="pin-note" style="margin:0 0 .5rem">Touche « Ma position » ou touche la carte pour placer ton repère. Le livreur l’utilisera pour venir jusqu’à toi.</p>
-          <div class="mapw" id="w-l"><div class="map" id="map-l"></div><button type="button" class="exp2" id="loc">Ma position</button><button type="button" class="exp" data-w="w-l" aria-label="Agrandir la carte">Agrandir</button><div class="fsbar"><span id="fs-l"></span><button type="button" class="fsok" data-w="w-l">Terminer</button></div></div>
-          <div id="save-box" class="hid" style="margin:.4rem 0 .8rem"><label style="display:flex;gap:.6rem;align-items:center;font-size:.92rem;cursor:pointer"><input type="checkbox" id="save-chk" style="width:20px;height:20px;accent-color:var(--or)"> Enregistrer cette adresse pour la prochaine fois</label><div class="f hid" id="save-nom-w" style="margin:.6rem 0 0"><input id="save-nom" maxlength="30" placeholder="Nom (ex. Maison, Travail)"></div></div>
+          <p class="note" id="pin-note" style="margin:0 0 .5rem">Touche « Ma position » ou touche la carte pour placer ton repère. Le livreur l’utilisera pour venir jusqu’à toi. Ta position n’est utilisée que pour livrer ta commande (et gardée dans ton compte seulement si tu l’enregistres).</p>
+          <div class="mapw" id="w-l"><div class="map" id="map-l"></div><button type="button" class="exp2" id="loc">Ma position</button><button type="button" class="exp" data-w="w-l" aria-label="Agrandir la carte">Agrandir</button><div class="fsbar"><span id="fs-l"></span><button type="button" class="fsok" data-w="w-l">Valider ma position</button></div></div>
+          <div id="pin-ok" class="okbox hid"></div>
+          <div id="save-box" class="hid" style="margin:.6rem 0 .8rem"><div class="f" style="margin-bottom:.5rem"><label for="save-nom">Enregistrer cette adresse dans mon compte (facultatif)</label><input id="save-nom" maxlength="30" placeholder="Nom : Maison, Travail…"></div><button type="button" class="b2" id="save-now">Enregistrer cette adresse</button></div>
           <p class="note hid" id="login-hint">Connecte-toi pour enregistrer tes adresses. <a href="compte.html" style="color:var(--or)">Me connecter</a></p>
           
           <p class="stp"><b>3</b> Valide ta commande</p>
@@ -403,7 +405,7 @@ async function loadPoints() {
 function setPin(ll) {
   PIN = ll;
   if (MK) MK.setLatLng(ll); else MK = window.L.marker(ll, { icon: pinIcon(true), draggable: true }).addTo(ML).on('dragend', e => { PIN = e.target.getLatLng(); });
-  $('pin-note').textContent = 'Position enregistrée : le livreur la verra.'; fsText();
+  fsText(); saveDraft();
 }
 function initLivr() {
   if (!hasMap()) { $('map-l').parentElement.classList.add('hid'); return; }
@@ -413,12 +415,12 @@ function initLivr() {
 }
 function locate() {
   if (!navigator.geolocation) { SE.toast('Position indisponible, écris ton adresse', false); return; }
-  navigator.geolocation.getCurrentPosition(p => { initLivr(); if (ML) { const ll = { lat: p.coords.latitude, lng: p.coords.longitude }; ML.setView(ll, 16); setPin(ll); } },
+  navigator.geolocation.getCurrentPosition(p => { initLivr(); if (ML) { const ll = { lat: p.coords.latitude, lng: p.coords.longitude }; ML.setView(ll, 16); setPin(ll); confirmPin(); } },
     () => SE.toast('Impossible de te localiser, écris ton adresse ou touche la carte', false), { timeout: 8000 });
 }
 function fsText() {
   $('fs-r').textContent = PT ? 'Point choisi : ' + PT.nom : 'Touche un point pour le choisir';
-  $('fs-l').textContent = PIN ? 'Position enregistrée. Tu peux la déplacer.' : 'Touche la carte à l’endroit où tu te trouves';
+  $('fs-l').textContent = PIN ? 'Repère placé. Touche « Valider ma position ».' : 'Touche la carte à l’endroit où tu te trouves';
 }
 function setInteractive(m, on) {
   ['dragging', 'touchZoom', 'scrollWheelZoom', 'doubleClickZoom', 'boxZoom', 'keyboard'].forEach(k => { if (m[k]) on ? m[k].enable() : m[k].disable(); });
@@ -431,9 +433,10 @@ function toggleFull(wid) {
   const m = wid === 'w-r' ? MR : ML;
   if (m) setInteractive(m, on);
   if (m) setTimeout(() => m.invalidateSize(), 60);
-  fsText();
+  fsText(); saveDraft();
 }
-document.querySelectorAll('.exp,.fsok').forEach(b => b.onclick = () => toggleFull(b.dataset.w));
+document.querySelectorAll('.exp').forEach(b => b.onclick = () => toggleFull(b.dataset.w));
+document.querySelectorAll('.fsok').forEach(b => b.onclick = () => validateFull(b.dataset.w));
 document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.mapw.full').forEach(w => toggleFull(w.id)); });
 async function initSaved() {
   if (!SE.Auth.currentUser || !SE.sb) { $('login-hint').classList.remove('hid'); return; }
@@ -451,11 +454,52 @@ async function onSaved(e) {
     const a = SAV.find(x => String(x.id) === u); if (!a) return;
     $('l-ville').value = a.ville || ''; $('l-quartier').value = a.quartier || ''; $('l-adr').value = a.adresse || '';
     initLivr();
-    if (a.lat && ML) { const ll = { lat: a.lat, lng: a.lng }; ML.setView(ll, 16); setPin(ll); }
+    if (a.lat && ML) { const ll = { lat: a.lat, lng: a.lng }; ML.setView(ll, 16); setPin(ll); confirmPin(); }
   } else if (d) {
     try { await SE.sb.from('adresses_clients').delete().eq('id', d); } catch (_) {}
     SAV = SAV.filter(x => String(x.id) !== d); renderSaved();
   }
+}
+const DK = 'se_draft';
+function saveDraft() {
+  try { const f = document.querySelector('.mapw.full'); sessionStorage.setItem(DK, JSON.stringify({ nom: $('f-nom').value, tel: $('f-tel').value, email: $('f-email').value, msg: $('f-msg').value, ville: $('l-ville').value, quartier: $('l-quartier').value, adr: $('l-adr').value, pin: PIN ? { lat: PIN.lat, lng: PIN.lng } : null, full: f ? f.id : '' })); } catch (e) {}
+}
+function loadDraft() {
+  try {
+    const d = JSON.parse(sessionStorage.getItem(DK) || 'null'); if (!d) return null;
+    [['f-nom', d.nom], ['f-tel', d.tel], ['f-email', d.email], ['f-msg', d.msg], ['l-ville', d.ville], ['l-quartier', d.quartier], ['l-adr', d.adr]].forEach(([id, v]) => { if (v && !$(id).value) $(id).value = v; });
+    return d;
+  } catch (e) { return null; }
+}
+async function fillFromPin(ll) {
+  let txt = '';
+  try {
+    const j = await (await fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=18&accept-language=fr&lat=' + ll.lat + '&lon=' + ll.lng)).json();
+    const a = j.address || {}, v = a.city || a.town || a.village || a.municipality || a.county || '', q = a.suburb || a.neighbourhood || a.quarter || a.city_district || '', r = [a.road, a.house_number].filter(Boolean).join(' ');
+    const set = (id, val) => { const el = $(id); if (val && (!el.value.trim() || el.dataset.auto)) { el.value = val; el.dataset.auto = 1; } };
+    set('l-ville', v); set('l-quartier', q); set('l-adr', r); txt = [r, q, v].filter(Boolean).join(', ');
+  } catch (e) {}
+  return txt;
+}
+function confirmPin() {
+  const ok = $('pin-ok'); ok.classList.remove('hid'); ok.textContent = '✓ Position enregistrée. Je cherche ton adresse…'; SE.toast('Position enregistrée ✓');
+  fillFromPin(PIN).then(t => {
+    ok.innerHTML = '✓ <b>Position enregistrée.</b>' + (t ? ' Adresse trouvée : ' + esc(t) + '.' : '') + ' Vérifie ton adresse ci-dessus (corrige-la si besoin), puis clique sur <b>« Confirmer ma commande »</b>.';
+    ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); saveDraft();
+  });
+}
+function validateFull(wid) {
+  if (wid === 'w-l') { if (!PIN) { SE.toast('Touche la carte pour placer ton repère, ou « Ma position »', false); return; } toggleFull(wid); confirmPin(); }
+  else { if (!PT) { SE.toast('Touche un dépôt pour le choisir', false); return; } toggleFull(wid); SE.toast('Dépôt choisi : ' + PT.nom); $('pts').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+}
+async function saveNow() {
+  const nom = $('save-nom').value.trim() || 'Mon adresse', ville = $('l-ville').value.trim(), q = $('l-quartier').value.trim(), adr = $('l-adr').value.trim();
+  if (!ville || !(adr || q || PIN)) { SE.toast('Indique ton adresse ou ta position avant d’enregistrer', false); return; }
+  try {
+    const { data, error } = await SE.sb.from('adresses_clients').insert([{ client_id: SE.Auth.currentUser.id, nom, ville, quartier: q, adresse: adr, lat: PIN ? PIN.lat : null, lng: PIN ? PIN.lng : null }]).select();
+    if (error) throw error;
+    SAV = SAV.concat(data || []); renderSaved(); $('save-nom').value = ''; SE.toast('Adresse enregistrée ✓');
+  } catch (e) { console.error(e); SE.toast('Impossible d’enregistrer. Le fichier adresses_clients.sql est-il lancé dans Supabase ?', false); }
 }
 function setMode(m) {
   MODE = m; localStorage.setItem('se_mode', m);
@@ -513,9 +557,6 @@ async function submit() {
     const total = Math.max(0, sub - remise);
     const r = await SE.Commandes.create({ client: { nom, tel, email, adresse: dest.adresse, ville: dest.ville, quartier: dest.quartier }, mode: dest.mode, items, sous_total: sub, remise_fidelite: remise, frais_livraison: 0, total_ttc: total, notes: (msg ? msg + '\n' : '') + dest.note });
     if (SE.Track) SE.Track.orderComplete(r.numero, total);
-    if (dest.mode === 'livraison' && $('save-chk').checked && SE.Auth.currentUser && SE.sb) {
-      try { await SE.sb.from('adresses_clients').insert([{ client_id: SE.Auth.currentUser.id, nom: $('save-nom').value.trim() || 'Mon adresse', ville: dest.ville, quartier: dest.quartier, adresse: $('l-adr').value.trim(), lat: PIN ? PIN.lat : null, lng: PIN ? PIN.lng : null }]); } catch (e) { console.warn('Adresse non enregistrée:', e); }
-    }
     if (remise > 0 && SE.Auth.currentClient && SE.sb) {
       try { const { data, error } = await SE.sb.rpc('use_cagnotte', { p_montant: remise }); if (!error && data && data[0] && data[0].new_solde !== undefined) SE.Auth.currentClient.cagnotte_solde = data[0].new_solde; else if (error) console.error('use_cagnotte:', error); } catch (e) { console.warn(e); }
     }
@@ -542,9 +583,15 @@ async function submit() {
   if (SE.Track) SE.Track.checkoutStart(sub);
   $('go').onclick = $('b-go').onclick = submit;
   $('loc').onclick = locate; $('loc-r').onclick = locateR; $('chips-s').onclick = onSaved;
-  $('save-chk').onchange = () => $('save-nom-w').classList.toggle('hid', !$('save-chk').checked);
+  $('save-now').onclick = saveNow; document.addEventListener('se:auth-changed', initSaved);
+  ['l-ville', 'l-quartier', 'l-adr'].forEach(id => $(id).addEventListener('input', () => { delete $(id).dataset.auto; }));
+  document.addEventListener('input', saveDraft);
   document.querySelectorAll('.mode').forEach(b => b.onclick = () => setMode(b.dataset.m));
-  setMode(MODE); loadPoints().then(() => { try { navigator.permissions.query({ name: 'geolocation' }).then(r => { if (r.state === 'granted') locateR(); }); } catch (e) {} });
+  const draft = loadDraft();
+  setMode(MODE);
+  setTimeout(() => { if (draft && MODE === 'livraison') { if (draft.pin) { initLivr(); if (ML) setPin(draft.pin); } if (draft.full === 'w-l') toggleFull('w-l'); } }, 400);
+  loadPoints().then(() => {
+    if (draft && draft.full === 'w-r' && MODE === 'retrait') toggleFull('w-r'); try { navigator.permissions.query({ name: 'geolocation' }).then(r => { if (r.state === 'granted') locateR(); }); } catch (e) {} });
   initCagnotte().then(() => { totals(); initSaved(); });
 })();
 })();
