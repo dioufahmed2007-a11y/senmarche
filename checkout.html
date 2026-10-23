@@ -104,6 +104,33 @@ body.has-bar{padding-bottom:80px}@media(min-width:920px){body.has-bar{padding-bo
 .b2{min-height:48px;padding:0 1.2rem;border-radius:12px;border:1.5px solid var(--or);background:transparent;color:var(--or);font-weight:600;margin:.2rem 0 .4rem}
 .f.bad textarea{border-color:var(--red)}
 .card .note{text-align:left;margin:.4rem 0 0}
+
+.mapw{position:relative;margin:.6rem 0}.mapw .map{margin:0}
+.map{height:clamp(240px,36vh,360px);border-color:var(--border)}
+.mapw:not(.full) .map{cursor:pointer}
+body.theme-clair .leaflet-tile-pane{filter:saturate(.5) sepia(.22) contrast(.95) brightness(1.02)}
+body:not(.theme-clair) .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.85) contrast(.9) saturate(.55)}
+.leaflet-bar a{background:var(--card);color:var(--ink);border-bottom-color:var(--border)}
+.leaflet-control-attribution{background:var(--card);color:var(--stone);opacity:.85}
+.leaflet-control-attribution a{color:var(--stone)}
+.leaflet-tooltip-pane{z-index:650}
+.leaflet-tooltip{position:absolute;padding:4px 9px;background:var(--card);color:var(--ink);border:1px solid var(--border);border-radius:8px;font-size:.8rem;font-weight:600;white-space:nowrap;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.pin{background:var(--stone);width:20px;height:20px;border:2px solid var(--card)}
+.pin.sel{background:var(--or);transform:rotate(-45deg) scale(1.3)}
+.exp{position:absolute;top:10px;right:10px;z-index:2;min-height:40px;padding:0 .9rem;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--ink);font-weight:600;font-size:.88rem;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.exp2{position:absolute;left:10px;bottom:30px;z-index:2;min-height:40px;padding:0 .9rem;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--ink);font-weight:600;font-size:.88rem;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.mapw.full .exp2{bottom:calc(84px + env(safe-area-inset-bottom))}
+.fsbar{display:none}
+.mapw.full{position:fixed;inset:0;z-index:950;margin:0;background:var(--bg)}
+.mapw.full .map{height:100%;border:0;border-radius:0}
+.mapw.full .exp{top:max(10px,env(safe-area-inset-top));right:10px;background:var(--or);color:var(--bg);border-color:var(--or)}
+.mapw.full .fsbar{display:flex;position:absolute;left:0;right:0;bottom:0;z-index:3;align-items:center;gap:1rem;padding:.8rem 1rem calc(.8rem + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--border)}
+.fsbar span{flex:1;font-size:.95rem}
+.fsok{min-height:46px;padding:0 1.3rem;border-radius:12px;border:0;background:var(--or);color:var(--bg);font-weight:600}
+.chips{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.9rem}
+.chip{display:inline-flex;align-items:center;border:1.5px solid var(--border);border-radius:99px;background:var(--bg);color:var(--ink);font-size:.92rem;min-height:44px;overflow:hidden}
+.chip span{padding:0 .5rem 0 1rem;line-height:44px;cursor:pointer}.chip i{font-style:normal;color:var(--stone);padding:0 .9rem 0 .3rem;line-height:44px;cursor:pointer}
+.pt em{font-style:normal;color:var(--green);font-weight:600;font-size:.82rem}
 </style>
 </head>
 <body>
@@ -151,24 +178,28 @@ body.has-bar{padding-bottom:80px}@media(min-width:920px){body.has-bar{padding-bo
         </div>
       </div>
       <div class="card"><h2>Comment veux-tu recevoir ta commande ?</h2>
-        <div class="modes"><button type="button" class="mode on" data-m="retrait"><b>Retrait</b><span>Gratuit, en point de retrait</span></button><button type="button" class="mode" data-m="livraison"><b>Livraison</b><span>Chez toi, frais confirmés par WhatsApp</span></button></div>
+        <div class="modes"><button type="button" class="mode on" data-m="retrait"><b>Retrait</b><span>Gratuit, en point de retrait</span></button><button type="button" class="mode" data-m="livraison"><b>Livraison</b><span>Chez toi, prix annoncé par WhatsApp</span></button></div>
         <div id="p-retrait">
           <div class="f" id="g-pt" style="margin-bottom:.5rem"><span class="er">Choisis un point de retrait.</span></div>
           <div class="pts" id="pts"></div>
-          <div class="map" id="map-r"></div>
+          <p class="note" id="cap-r" style="margin:.9rem 0 0"></p>
+          <p class="note" id="route-info" style="margin:.2rem 0 0"></p>
+          <div class="mapw" id="w-r"><div class="map" id="map-r"></div><button type="button" class="exp2" id="loc-r">Ma position</button><button type="button" class="exp" data-w="w-r">Agrandir</button><div class="fsbar"><span id="fs-r"></span><button type="button" class="fsok" data-w="w-r">Terminer</button></div></div>
           <p class="note">L’adresse exacte et l’heure de retrait sont confirmées par WhatsApp. <a id="gm" class="hid" target="_blank" rel="noopener" style="color:var(--or)">Ouvrir dans Google Maps</a></p>
         </div>
         <div id="p-livr" class="hid">
+          <div id="saved" class="hid"><div class="chips" id="chips-s"></div></div>
           <div class="f" id="g-liv">
             <label for="l-ville">Ville *</label><input id="l-ville" list="villes" placeholder="Ex. Thiès" autocomplete="address-level2"><datalist id="villes"><option value="Thiès"><option value="Dakar"><option value="Mbour"></datalist>
             <label for="l-quartier">Quartier</label><input id="l-quartier" placeholder="Ex. Randoulène" autocomplete="address-level3">
             <label for="l-adr">Adresse ou repère</label><textarea id="l-adr" placeholder="Ex. Près de la pharmacie, maison bleue, 2e rue à gauche"></textarea>
             <span class="er">Indique ta ville et ton adresse, ou place un repère sur la carte.</span>
           </div>
-          <button type="button" class="b2" id="loc">Utiliser ma position</button>
-          <p class="note" id="pin-note">Tu peux aussi toucher la carte pour placer ton repère (facultatif).</p>
-          <div class="map" id="map-l"></div>
-          <p class="note">Les frais de livraison te sont annoncés par WhatsApp avant l’envoi.</p>
+          <p class="note" id="pin-note">Écris ton adresse, puis touche « Ma position » ou la carte : le livreur te trouvera facilement.</p>
+          <div id="save-box" class="hid" style="margin:.4rem 0 .8rem"><label style="display:flex;gap:.6rem;align-items:center;font-size:.92rem;cursor:pointer"><input type="checkbox" id="save-chk" style="width:20px;height:20px;accent-color:var(--or)"> Enregistrer cette adresse pour la prochaine fois</label><div class="f hid" id="save-nom-w" style="margin:.6rem 0 0"><input id="save-nom" maxlength="30" placeholder="Nom (ex. Maison, Travail)"></div></div>
+          <p class="note hid" id="login-hint">Connecte-toi pour enregistrer tes adresses. <a href="compte.html" style="color:var(--or)">Me connecter</a></p>
+          <div class="mapw" id="w-l"><div class="map" id="map-l"></div><button type="button" class="exp2" id="loc">Ma position</button><button type="button" class="exp" data-w="w-l">Agrandir</button><div class="fsbar"><span id="fs-l"></span><button type="button" class="fsok" data-w="w-l">Terminer</button></div></div>
+          <p class="note">Le prix de ta livraison te sera envoyé par WhatsApp avant 12 h.</p>
         </div>
         <div class="pick" style="margin-top:1rem"><div>Aucun paiement en ligne : tu paies à la récupération ou à la livraison (espèces, Wave ou Orange Money)</div><div>Tu vérifies l’article avant de payer</div></div>
       </div>
@@ -260,9 +291,9 @@ async function initCagnotte() {
 const DEFAULT_POINTS = [{ id: 'depot-thies', nom: 'Dépôt SenMarché', ville: 'Thiès', quartier: '', horaires: 'Lun-Sam, 9h-18h', lat: 14.791, lng: -16.926 }];
 let MODE = localStorage.getItem('se_mode') === 'livraison' ? 'livraison' : 'retrait', PTS = [], PT = null, MR = null, ML = null, MK = null, PIN = null;
 const hasMap = () => typeof window.L !== 'undefined';
-const pinIcon = () => window.L.divIcon({ className: '', html: '<div class="pin"></div>', iconSize: [22, 22], iconAnchor: [11, 22] });
+const pinIcon = sel => window.L.divIcon({ className: '', html: '<div class="pin' + (sel ? ' sel' : '') + '"></div>', iconSize: [22, 22], iconAnchor: [11, 22] });
 function mapFail(id) {
-  const el = $(id); if (el.dataset.f) return; el.dataset.f = 1; el.classList.add('hid');
+  const el = $(id).parentElement; if (el.dataset.f) return; el.dataset.f = 1; el.classList.add('hid');
   el.insertAdjacentHTML('afterend', '<p class="note">La carte ne s’affiche pas sur cet appareil. ' + (id === 'map-l' ? 'Écris simplement ton adresse ci-dessus.' : 'Choisis ton point dans la liste ci-dessus.') + '</p>');
 }
 function tiles(m, id) {
@@ -273,14 +304,52 @@ function tiles(m, id) {
 
 function sumMode() {
   $('s-mode-l').textContent = MODE === 'retrait' ? 'Retrait' : 'Livraison';
-  $('s-mode').textContent = MODE === 'retrait' ? (PT ? PT.nom : 'À choisir') : 'Frais confirmés par WhatsApp';
+  $('s-mode').textContent = MODE === 'retrait' ? (PT ? PT.nom : 'À choisir') : 'Prix annoncé par WhatsApp avant 12 h';
 }
+const gp0 = a => a.filter(x => x.lat && x.lng).length;
 function pick(x, fly) {
   PT = x; if (x) localStorage.setItem('se_point', x.id);
   document.querySelectorAll('.pt').forEach(b => b.classList.toggle('on', !!x && b.dataset.id === String(x.id)));
   if (fly && MR && x && x.lat) MR.flyTo([x.lat, x.lng], 15);
-  $('g-pt').classList.remove('bad'); sumMode();
+  PTS.forEach(y => { if (y._m) y._m.setIcon(pinIcon(y === x)); });
+  $('g-pt').classList.remove('bad'); sumMode(); fsText(); if (ME) drawRoute();
   const g = $('gm'); if (x && x.lat) g.href = 'https://www.google.com/maps?q=' + x.lat + ',' + x.lng; g.classList.toggle('hid', !(x && x.lat));
+}
+let ME = null, MEM = null, RT = null, SAV = [];
+const km = (a, b) => { const r = x => x * Math.PI / 180, h = Math.sin(r(b.lat - a.lat) / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(r(b.lng - a.lng) / 2) ** 2; return 12742 * Math.asin(Math.sqrt(h)); };
+const fk = d => d < 1 ? Math.round(d * 1000) + ' m' : d.toFixed(1).replace('.', ',') + ' km';
+function renderCards() {
+  const near = PTS.filter(x => x._d != null).sort((a, b) => a._d - b._d)[0];
+  $('pts').innerHTML = PTS.map(x => `<button type="button" class="pt${PT && x === PT ? ' on' : ''}" data-id="${esc(x.id)}"><b>${esc(x.nom)}${x === near && PTS.length > 1 ? ' <em>· le plus proche</em>' : ''}</b><span>${esc([x.quartier, x.ville].filter(Boolean).join(', '))}</span><small>${esc(x.horaires || '')}${x._d != null ? ' · à ' + fk(x._d) + ' de toi' : ''}</small></button>`).join('');
+  document.querySelectorAll('.pt').forEach(b => b.onclick = () => pick(PTS.find(x => String(x.id) === b.dataset.id), true));
+}
+async function drawRoute() {
+  const el = $('route-info'), cur = PT;
+  if (RT && MR) { MR.removeLayer(RT); RT = null; }
+  if (!ME || !PT || !PT.lat) { el.textContent = ''; return; }
+  const dir = 'https://www.google.com/maps/dir/?api=1&origin=' + ME.lat + ',' + ME.lng + '&destination=' + PT.lat + ',' + PT.lng;
+  el.innerHTML = 'À vol d’oiseau : <b>' + fk(km(ME, PT)) + '</b> · <a href="' + dir + '" target="_blank" rel="noopener" style="color:var(--or)">Itinéraire</a>';
+  try {
+    const j = await (await fetch('https://router.project-osrm.org/route/v1/driving/' + ME.lng + ',' + ME.lat + ';' + PT.lng + ',' + PT.lat + '?overview=full&geometries=geojson')).json();
+    const rt = j.routes && j.routes[0];
+    if (rt && cur === PT) {
+      if (MR) { RT = window.L.geoJSON(rt.geometry, { style: { color: '#2b7de9', weight: 5, opacity: .85 } }).addTo(MR); }
+      el.innerHTML = 'Trajet : <b>' + fk(rt.distance / 1000) + '</b> · environ <b>' + Math.max(1, Math.round(rt.duration / 60)) + ' min</b> en voiture · <a href="' + dir + '" target="_blank" rel="noopener" style="color:var(--or)">Itinéraire</a>';
+    }
+  } catch (e) {}
+}
+function locateR() {
+  if (!navigator.geolocation) { SE.toast('Position indisponible', false); return; }
+  navigator.geolocation.getCurrentPosition(p => {
+    ME = { lat: p.coords.latitude, lng: p.coords.longitude };
+    if (MR && hasMap()) { if (MEM) MEM.setLatLng(ME); else MEM = window.L.circleMarker(ME, { radius: 8, color: '#fff', weight: 3, fillColor: '#2b7de9', fillOpacity: 1 }).addTo(MR); }
+    PTS.forEach(x => { if (x.lat) x._d = km(ME, x); });
+    const near = PTS.filter(x => x._d != null).sort((a, b) => a._d - b._d)[0];
+    if (near && !PT) PT = near;
+    const gp = PTS.filter(x => x.lat && x.lng).map(x => [x.lat, x.lng]);
+    if (MR && hasMap() && gp.length) MR.fitBounds(gp.concat([[ME.lat, ME.lng]]), { padding: [40, 40] });
+    renderCards(); pick(PT, false);
+  }, () => SE.toast('Impossible de te localiser, vérifie l’autorisation de position', false), { timeout: 8000 });
 }
 async function loadPoints() {
   let p = [];
@@ -288,31 +357,73 @@ async function loadPoints() {
   PTS = p.length ? p : DEFAULT_POINTS;
   const saved = localStorage.getItem('se_point');
   PT = PTS.find(x => String(x.id) === saved) || (PTS.length === 1 ? PTS[0] : null);
-  $('pts').innerHTML = PTS.map(x => `<button type="button" class="pt" data-id="${esc(x.id)}"><b>${esc(x.nom)}</b><span>${esc([x.quartier, x.ville].filter(Boolean).join(', '))}</span><small>${esc(x.horaires || '')}</small></button>`).join('');
-  document.querySelectorAll('.pt').forEach(b => b.onclick = () => pick(PTS.find(x => String(x.id) === b.dataset.id), true));
+  renderCards();
   if (hasMap()) {
-    MR = window.L.map('map-r', { scrollWheelZoom: false }); tiles(MR, 'map-r');
+    MR = window.L.map('map-r', { scrollWheelZoom: false, dragging: false, touchZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, zoomControl: false });
+    MR.on('click', () => { if (!$('w-r').classList.contains('full')) toggleFull('w-r'); }); tiles(MR, 'map-r');
     const gp = PTS.filter(x => x.lat && x.lng);
-    gp.forEach(x => window.L.marker([x.lat, x.lng], { icon: pinIcon() }).addTo(MR).on('click', () => pick(x, false)));
+    gp.forEach(x => { x._m = window.L.marker([x.lat, x.lng], { icon: pinIcon(false) }).addTo(MR).bindTooltip(esc(x.nom), { permanent: true, direction: 'top', offset: [0, -18] }).on('click', () => pick(x, false)); });
     if (gp.length > 1) MR.fitBounds(gp.map(x => [x.lat, x.lng]), { padding: [30, 30] }); else MR.setView(gp.length ? [gp[0].lat, gp[0].lng] : [14.791, -16.926], 14);
-  } else $('map-r').classList.add('hid');
+  } else $('map-r').parentElement.classList.add('hid');
+  $('cap-r').textContent = gp0(PTS) > 1 ? 'Touche un dépôt pour le choisir. Touche la carte pour l’agrandir.' : 'Touche la carte pour l’agrandir.';
   pick(PT, false);
 }
 function setPin(ll) {
   PIN = ll;
-  if (MK) MK.setLatLng(ll); else MK = window.L.marker(ll, { icon: pinIcon(), draggable: true }).addTo(ML).on('dragend', e => { PIN = e.target.getLatLng(); });
-  $('pin-note').textContent = 'Repère placé sur la carte. Tu peux le déplacer.';
+  if (MK) MK.setLatLng(ll); else MK = window.L.marker(ll, { icon: pinIcon(true), draggable: true }).addTo(ML).on('dragend', e => { PIN = e.target.getLatLng(); });
+  $('pin-note').textContent = 'Position enregistrée : le livreur la verra.'; fsText();
 }
 function initLivr() {
-  if (!hasMap()) { $('map-l').classList.add('hid'); return; }
+  if (!hasMap()) { $('map-l').parentElement.classList.add('hid'); return; }
   if (ML) { ML.invalidateSize(); return; }
-  ML = window.L.map('map-l', { scrollWheelZoom: false }).setView([14.791, -16.926], 13); tiles(ML, 'map-l');
-  ML.on('click', e => setPin(e.latlng));
+  ML = window.L.map('map-l', { scrollWheelZoom: false, dragging: false, touchZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, zoomControl: false }).setView([14.791, -16.926], 13); tiles(ML, 'map-l');
+  ML.on('click', e => { if ($('w-l').classList.contains('full')) setPin(e.latlng); else toggleFull('w-l'); });
 }
 function locate() {
   if (!navigator.geolocation) { SE.toast('Position indisponible, écris ton adresse', false); return; }
   navigator.geolocation.getCurrentPosition(p => { initLivr(); if (ML) { const ll = { lat: p.coords.latitude, lng: p.coords.longitude }; ML.setView(ll, 16); setPin(ll); } },
     () => SE.toast('Impossible de te localiser, écris ton adresse ou touche la carte', false), { timeout: 8000 });
+}
+function fsText() {
+  $('fs-r').textContent = PT ? 'Point choisi : ' + PT.nom : 'Touche un point pour le choisir';
+  $('fs-l').textContent = PIN ? 'Position enregistrée. Tu peux la déplacer.' : 'Touche la carte à l’endroit où tu te trouves';
+}
+function setInteractive(m, on) {
+  ['dragging', 'touchZoom', 'doubleClickZoom', 'boxZoom', 'keyboard'].forEach(k => { if (m[k]) on ? m[k].enable() : m[k].disable(); });
+  if (on) { m._zc = m._zc || window.L.control.zoom({ position: 'topleft' }); m._zc.addTo(m); } else if (m._zc) m._zc.remove();
+}
+function toggleFull(wid) {
+  const w = $(wid), on = w.classList.toggle('full');
+  document.body.style.overflow = on ? 'hidden' : '';
+  w.querySelector('.exp').textContent = on ? 'Fermer' : 'Agrandir';
+  const m = wid === 'w-r' ? MR : ML;
+  if (m) setInteractive(m, on);
+  if (m) setTimeout(() => { m.invalidateSize(); if (on && wid === 'w-r' && PT && PT.lat) m.setView([PT.lat, PT.lng], Math.max(m.getZoom(), 15)); }, 60);
+  fsText();
+}
+document.querySelectorAll('.exp,.fsok').forEach(b => b.onclick = () => toggleFull(b.dataset.w));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.mapw.full').forEach(w => toggleFull(w.id)); });
+async function initSaved() {
+  if (!SE.Auth.currentUser || !SE.sb) { $('login-hint').classList.remove('hid'); return; }
+  $('save-box').classList.remove('hid');
+  try { const { data } = await SE.sb.from('adresses_clients').select('*').eq('client_id', SE.Auth.currentUser.id).order('id'); SAV = data || []; } catch (e) { SAV = []; }
+  renderSaved();
+}
+function renderSaved() {
+  $('saved').classList.toggle('hid', !SAV.length);
+  $('chips-s').innerHTML = SAV.map(a => `<span class="chip"><span data-use="${a.id}">${esc(a.nom)}</span><i data-del="${a.id}" aria-label="Supprimer">×</i></span>`).join('');
+}
+async function onSaved(e) {
+  const u = e.target.dataset.use, d = e.target.dataset.del;
+  if (u) {
+    const a = SAV.find(x => String(x.id) === u); if (!a) return;
+    $('l-ville').value = a.ville || ''; $('l-quartier').value = a.quartier || ''; $('l-adr').value = a.adresse || '';
+    initLivr();
+    if (a.lat && ML) { const ll = { lat: a.lat, lng: a.lng }; ML.setView(ll, 16); setPin(ll); }
+  } else if (d) {
+    try { await SE.sb.from('adresses_clients').delete().eq('id', d); } catch (_) {}
+    SAV = SAV.filter(x => String(x.id) !== d); renderSaved();
+  }
 }
 function setMode(m) {
   MODE = m; localStorage.setItem('se_mode', m);
@@ -330,7 +441,9 @@ function destination() {
   const ville = $('l-ville').value.trim(), quartier = $('l-quartier').value.trim(), adr = $('l-adr').value.trim();
   if (!ville || !(adr || quartier || PIN)) { $('g-liv').classList.add('bad'); $('g-liv').scrollIntoView({ behavior: 'smooth', block: 'center' }); SE.toast('Indique ta ville et ton adresse, ou place un repère sur la carte', false); return null; }
   const link = PIN ? ' | Carte : https://www.google.com/maps?q=' + PIN.lat.toFixed(6) + ',' + PIN.lng.toFixed(6) : '';
-  return { mode: 'livraison', adresse: [adr, quartier, ville].filter(Boolean).join(', ') + link, ville, quartier, note: 'LIVRAISON : frais à confirmer par WhatsApp' };
+  let nd = '';
+  if (PIN) { const g = PTS.filter(x => x.lat && x.lng).map(x => [km(PIN, x), x]).sort((a, b) => a[0] - b[0])[0]; if (g) nd = ' | Distance au dépôt le plus proche (' + g[1].nom + ') : ' + g[0].toFixed(1) + ' km à vol d’oiseau'; }
+  return { mode: 'livraison', adresse: [adr, quartier, ville].filter(Boolean).join(', ') + link, ville, quartier, note: 'LIVRAISON : prix à envoyer par WhatsApp avant 12 h' + nd };
 }
 
 function ask(txt) {
@@ -368,13 +481,16 @@ async function submit() {
     const total = Math.max(0, sub - remise);
     const r = await SE.Commandes.create({ client: { nom, tel, email, adresse: dest.adresse, ville: dest.ville, quartier: dest.quartier }, mode: dest.mode, items, sous_total: sub, remise_fidelite: remise, frais_livraison: 0, total_ttc: total, notes: (msg ? msg + '\n' : '') + dest.note });
     if (SE.Track) SE.Track.orderComplete(r.numero, total);
+    if (dest.mode === 'livraison' && $('save-chk').checked && SE.Auth.currentUser && SE.sb) {
+      try { await SE.sb.from('adresses_clients').insert([{ client_id: SE.Auth.currentUser.id, nom: $('save-nom').value.trim() || 'Mon adresse', ville: dest.ville, quartier: dest.quartier, adresse: $('l-adr').value.trim(), lat: PIN ? PIN.lat : null, lng: PIN ? PIN.lng : null }]); } catch (e) { console.warn('Adresse non enregistrée:', e); }
+    }
     if (remise > 0 && SE.Auth.currentClient && SE.sb) {
       try { const { data, error } = await SE.sb.rpc('use_cagnotte', { p_montant: remise }); if (!error && data && data[0] && data[0].new_solde !== undefined) SE.Auth.currentClient.cagnotte_solde = data[0].new_solde; else if (error) console.error('use_cagnotte:', error); } catch (e) { console.warn(e); }
     }
     SE.Cart.clear();
     $('wrap').classList.add('hid'); $('bar').classList.add('hid'); document.body.classList.remove('has-bar'); $('head').classList.add('hid');
     $('ok-num').textContent = r.numero;
-    $('ok-s4').innerHTML = dest.mode === 'livraison' ? '<b>Livraison</b><br>On te confirme les frais et l’heure par WhatsApp. Tu paies à la livraison.' : '<b>Retrait et paiement</b><br>Tu récupères ta commande au point choisi et tu paies sur place.'; $('ok').classList.remove('hid');
+    $('ok-s4').innerHTML = dest.mode === 'livraison' ? '<b>Livraison</b><br>On t’envoie le prix de la livraison par WhatsApp avant 12 h. Tu paies à la livraison.' : '<b>Retrait et paiement</b><br>Tu récupères ta commande au point choisi et tu paies sur place.'; $('ok').classList.remove('hid');
     if (typeof confetti === 'function') confetti({ particleCount: 120, spread: 70, origin: { y: .7 }, disableForReducedMotion: true });
     scrollTo({ top: 0, behavior: 'smooth' });
   } catch (e) {
@@ -393,10 +509,11 @@ async function submit() {
   totals();
   if (SE.Track) SE.Track.checkoutStart(sub);
   $('go').onclick = $('b-go').onclick = submit;
-  $('loc').onclick = locate;
+  $('loc').onclick = locate; $('loc-r').onclick = locateR; $('chips-s').onclick = onSaved;
+  $('save-chk').onchange = () => $('save-nom-w').classList.toggle('hid', !$('save-chk').checked);
   document.querySelectorAll('.mode').forEach(b => b.onclick = () => setMode(b.dataset.m));
-  setMode(MODE); loadPoints();
-  initCagnotte().then(totals);
+  setMode(MODE); loadPoints().then(() => { try { navigator.permissions.query({ name: 'geolocation' }).then(r => { if (r.state === 'granted') locateR(); }); } catch (e) {} });
+  initCagnotte().then(() => { totals(); initSaved(); });
 })();
 })();
 </script>
