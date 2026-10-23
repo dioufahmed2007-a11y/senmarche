@@ -108,7 +108,6 @@ body.has-bar{padding-bottom:80px}@media(min-width:920px){body.has-bar{padding-bo
 .mapw{position:relative;margin:.6rem 0}.mapw .map{margin:0}
 .map{height:clamp(240px,36vh,360px);border-color:var(--border)}
 .mapw:not(.full) .map{cursor:pointer}
-body.theme-clair .leaflet-tile-pane{filter:saturate(.5) sepia(.22) contrast(.95) brightness(1.02)}
 body:not(.theme-clair) .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.85) contrast(.9) saturate(.55)}
 .leaflet-bar a{background:var(--card);color:var(--ink);border-bottom-color:var(--border)}
 .leaflet-control-attribution{background:var(--card);color:var(--stone);opacity:.85}
@@ -131,6 +130,21 @@ body:not(.theme-clair) .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) br
 .chip{display:inline-flex;align-items:center;border:1.5px solid var(--border);border-radius:99px;background:var(--bg);color:var(--ink);font-size:.92rem;min-height:44px;overflow:hidden}
 .chip span{padding:0 .5rem 0 1rem;line-height:44px;cursor:pointer}.chip i{font-style:normal;color:var(--stone);padding:0 .9rem 0 .3rem;line-height:44px;cursor:pointer}
 .pt em{font-style:normal;color:var(--green);font-weight:600;font-size:.82rem}
+.stp{display:flex;align-items:center;gap:.6rem;font-weight:600;margin:1.1rem 0 .5rem}
+.stp b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--or);color:var(--bg);font-size:.85rem}
+.intro{color:var(--stone);margin:.4rem 0 0}
+.leaflet-pane>svg,.leaflet-pane>canvas{position:absolute;left:0;top:0}
+.leaflet-overlay-pane svg{max-width:none!important;max-height:none!important}
+.leaflet-zoom-anim .leaflet-zoom-hide{visibility:hidden}
+.leaflet-interactive{cursor:pointer}.leaflet-grab{cursor:grab}.leaflet-dragging .leaflet-grab{cursor:grabbing}
+.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}
+.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:12px;background:var(--card);color:var(--ink);box-shadow:0 3px 14px rgba(0,0,0,.3)}
+.leaflet-popup-content{margin:12px 16px;line-height:1.4}
+.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-left:-20px;overflow:hidden;pointer-events:none}
+.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;transform:rotate(45deg);background:var(--card);box-shadow:0 3px 14px rgba(0,0,0,.3)}
+.leaflet-popup-close-button{position:absolute;top:0;right:0;padding:6px 10px 0 0;font:18px/24px sans-serif;color:var(--stone);text-decoration:none}
+.pp{display:grid;gap:.15rem;min-width:180px}.pp b{font-size:1rem}.pp span{color:var(--stone);font-size:.88rem}
+.pp em{font-style:normal;color:var(--green);font-weight:600;font-size:.85rem;margin-top:.35rem}.pp a{color:var(--or);font-weight:600;margin-top:.2rem}
 </style>
 </head>
 <body>
@@ -180,6 +194,7 @@ body:not(.theme-clair) .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) br
       <div class="card"><h2>Comment veux-tu recevoir ta commande ?</h2>
         <div class="modes"><button type="button" class="mode on" data-m="retrait"><b>Retrait</b><span>Gratuit, en point de retrait</span></button><button type="button" class="mode" data-m="livraison"><b>Livraison</b><span>Chez toi, prix annoncé par WhatsApp</span></button></div>
         <div id="p-retrait">
+          <p class="stp"><b>1</b> Choisis ton dépôt</p>
           <div class="f" id="g-pt" style="margin-bottom:.5rem"><span class="er">Choisis un point de retrait.</span></div>
           <div class="pts" id="pts"></div>
           <p class="note" id="cap-r" style="margin:.9rem 0 0"></p>
@@ -188,6 +203,8 @@ body:not(.theme-clair) .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) br
           <p class="note">L’adresse exacte et l’heure de retrait sont confirmées par WhatsApp. <a id="gm" class="hid" target="_blank" rel="noopener" style="color:var(--or)">Ouvrir dans Google Maps</a></p>
         </div>
         <div id="p-livr" class="hid">
+          <p class="intro">Pour te livrer, on a besoin de ton adresse et de ta position. Ça prend 30 secondes.</p>
+          <p class="stp"><b>1</b> Ton adresse</p>
           <div id="saved" class="hid"><div class="chips" id="chips-s"></div></div>
           <div class="f" id="g-liv">
             <label for="l-ville">Ville *</label><input id="l-ville" list="villes" placeholder="Ex. Thiès" autocomplete="address-level2"><datalist id="villes"><option value="Thiès"><option value="Dakar"><option value="Mbour"></datalist>
@@ -195,11 +212,15 @@ body:not(.theme-clair) .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) br
             <label for="l-adr">Adresse ou repère</label><textarea id="l-adr" placeholder="Ex. Près de la pharmacie, maison bleue, 2e rue à gauche"></textarea>
             <span class="er">Indique ta ville et ton adresse, ou place un repère sur la carte.</span>
           </div>
-          <p class="note" id="pin-note">Écris ton adresse, puis touche « Ma position » ou la carte : le livreur te trouvera facilement.</p>
+          
+          <p class="stp"><b>2</b> Ta position sur la carte</p>
+          <p class="note" id="pin-note" style="margin:0 0 .5rem">Touche « Ma position » ou touche la carte pour placer ton repère. Le livreur l’utilisera pour venir jusqu’à toi.</p>
+          <div class="mapw" id="w-l"><div class="map" id="map-l"></div><button type="button" class="exp2" id="loc">Ma position</button><button type="button" class="exp" data-w="w-l" aria-label="Agrandir la carte">Agrandir</button><div class="fsbar"><span id="fs-l"></span><button type="button" class="fsok" data-w="w-l">Terminer</button></div></div>
           <div id="save-box" class="hid" style="margin:.4rem 0 .8rem"><label style="display:flex;gap:.6rem;align-items:center;font-size:.92rem;cursor:pointer"><input type="checkbox" id="save-chk" style="width:20px;height:20px;accent-color:var(--or)"> Enregistrer cette adresse pour la prochaine fois</label><div class="f hid" id="save-nom-w" style="margin:.6rem 0 0"><input id="save-nom" maxlength="30" placeholder="Nom (ex. Maison, Travail)"></div></div>
           <p class="note hid" id="login-hint">Connecte-toi pour enregistrer tes adresses. <a href="compte.html" style="color:var(--or)">Me connecter</a></p>
-          <div class="mapw" id="w-l"><div class="map" id="map-l"></div><button type="button" class="exp2" id="loc">Ma position</button><button type="button" class="exp" data-w="w-l">Agrandir</button><div class="fsbar"><span id="fs-l"></span><button type="button" class="fsok" data-w="w-l">Terminer</button></div></div>
-          <p class="note">Le prix de ta livraison te sera envoyé par WhatsApp avant 12 h.</p>
+          
+          <p class="stp"><b>3</b> Valide ta commande</p>
+          <p class="note" style="margin:0">Le prix de ta livraison te sera envoyé par WhatsApp avant 12 h. Tu paies à la livraison.</p>
         </div>
         <div class="pick" style="margin-top:1rem"><div>Aucun paiement en ligne : tu paies à la récupération ou à la livraison (espèces, Wave ou Orange Money)</div><div>Tu vérifies l’article avant de payer</div></div>
       </div>
@@ -290,6 +311,13 @@ async function initCagnotte() {
 // ── Mode, points de retrait, cartes ──
 const DEFAULT_POINTS = [{ id: 'depot-thies', nom: 'Dépôt SenMarché', ville: 'Thiès', quartier: '', horaires: 'Lun-Sam, 9h-18h', lat: 14.791, lng: -16.926 }];
 let MODE = localStorage.getItem('se_mode') === 'livraison' ? 'livraison' : 'retrait', PTS = [], PT = null, MR = null, ML = null, MK = null, PIN = null;
+const MAPOPT = { scrollWheelZoom: false, dragging: false, touchZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, zoomControl: false, zoomSnap: 0.5, wheelPxPerZoomLevel: 120, bounceAtZoomLimits: false, minZoom: 10 };
+const DEMO_POINTS = [
+  { id: 'd1', nom: 'Dépôt Centre-ville (exemple)', ville: 'Thiès', quartier: 'Centre', horaires: 'Lun-Sam, 9h-18h', lat: 14.791, lng: -16.926 },
+  { id: 'd2', nom: 'Dépôt Nord (exemple)', ville: 'Thiès', quartier: 'Thiès Nord', horaires: 'Lun-Sam, 10h-19h', lat: 14.805, lng: -16.9255 },
+  { id: 'd3', nom: 'Dépôt Est (exemple)', ville: 'Thiès', quartier: 'Cité', horaires: 'Mar-Sam, 9h-17h', lat: 14.787, lng: -16.902 },
+  { id: 'd4', nom: 'Dépôt Ouest (exemple)', ville: 'Thiès', quartier: 'Randoulène', horaires: 'Lun-Sam, 9h-18h', lat: 14.786, lng: -16.948 }
+];
 const hasMap = () => typeof window.L !== 'undefined';
 const pinIcon = sel => window.L.divIcon({ className: '', html: '<div class="pin' + (sel ? ' sel' : '') + '"></div>', iconSize: [22, 22], iconAnchor: [11, 22] });
 function mapFail(id) {
@@ -323,6 +351,10 @@ function renderCards() {
   $('pts').innerHTML = PTS.map(x => `<button type="button" class="pt${PT && x === PT ? ' on' : ''}" data-id="${esc(x.id)}"><b>${esc(x.nom)}${x === near && PTS.length > 1 ? ' <em>· le plus proche</em>' : ''}</b><span>${esc([x.quartier, x.ville].filter(Boolean).join(', '))}</span><small>${esc(x.horaires || '')}${x._d != null ? ' · à ' + fk(x._d) + ' de toi' : ''}</small></button>`).join('');
   document.querySelectorAll('.pt').forEach(b => b.onclick = () => pick(PTS.find(x => String(x.id) === b.dataset.id), true));
 }
+function popupHtml(x) {
+  const dir = 'https://www.google.com/maps/dir/?api=1' + (ME ? '&origin=' + ME.lat + ',' + ME.lng : '') + '&destination=' + x.lat + ',' + x.lng;
+  return '<div class="pp"><b>' + esc(x.nom) + '</b><span>' + esc([x.quartier, x.ville].filter(Boolean).join(', ')) + '</span>' + (x.horaires ? '<span>' + esc(x.horaires) + '</span>' : '') + (x._d != null ? '<span>À ' + fk(x._d) + ' de toi</span>' : '') + '<em>✓ Dépôt choisi pour ta commande</em><a href="' + dir + '" target="_blank" rel="noopener">Itinéraire</a></div>';
+}
 async function drawRoute() {
   const el = $('route-info'), cur = PT;
   if (RT && MR) { MR.removeLayer(RT); RT = null; }
@@ -354,15 +386,15 @@ function locateR() {
 async function loadPoints() {
   let p = [];
   try { if (SE.sb) { const { data } = await SE.sb.from('points_retrait').select('*').eq('actif', true).order('ordre'); p = data || []; } } catch (e) {}
-  PTS = p.length ? p : DEFAULT_POINTS;
+  PTS = new URLSearchParams(location.search).get('demo') ? DEMO_POINTS : (p.length ? p : DEFAULT_POINTS);
   const saved = localStorage.getItem('se_point');
   PT = PTS.find(x => String(x.id) === saved) || (PTS.length === 1 ? PTS[0] : null);
   renderCards();
   if (hasMap()) {
-    MR = window.L.map('map-r', { scrollWheelZoom: false, dragging: false, touchZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, zoomControl: false });
+    MR = window.L.map('map-r', MAPOPT);
     MR.on('click', () => { if (!$('w-r').classList.contains('full')) toggleFull('w-r'); }); tiles(MR, 'map-r');
     const gp = PTS.filter(x => x.lat && x.lng);
-    gp.forEach(x => { x._m = window.L.marker([x.lat, x.lng], { icon: pinIcon(false) }).addTo(MR).bindTooltip(esc(x.nom), { permanent: true, direction: 'top', offset: [0, -18] }).on('click', () => pick(x, false)); });
+    gp.forEach(x => { x._m = window.L.marker([x.lat, x.lng], { icon: pinIcon(false) }).addTo(MR).bindTooltip(esc(x.nom), { permanent: true, direction: 'bottom', offset: [0, 4] }).bindPopup(() => popupHtml(x), { offset: [0, -20], autoPanPadding: [30, 30] }).on('click', () => pick(x, false)); });
     if (gp.length > 1) MR.fitBounds(gp.map(x => [x.lat, x.lng]), { padding: [30, 30] }); else MR.setView(gp.length ? [gp[0].lat, gp[0].lng] : [14.791, -16.926], 14);
   } else $('map-r').parentElement.classList.add('hid');
   $('cap-r').textContent = gp0(PTS) > 1 ? 'Touche un dépôt pour le choisir. Touche la carte pour l’agrandir.' : 'Touche la carte pour l’agrandir.';
@@ -376,7 +408,7 @@ function setPin(ll) {
 function initLivr() {
   if (!hasMap()) { $('map-l').parentElement.classList.add('hid'); return; }
   if (ML) { ML.invalidateSize(); return; }
-  ML = window.L.map('map-l', { scrollWheelZoom: false, dragging: false, touchZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, zoomControl: false }).setView([14.791, -16.926], 13); tiles(ML, 'map-l');
+  ML = window.L.map('map-l', MAPOPT).setView([14.791, -16.926], 13); tiles(ML, 'map-l');
   ML.on('click', e => { if ($('w-l').classList.contains('full')) setPin(e.latlng); else toggleFull('w-l'); });
 }
 function locate() {
@@ -389,7 +421,7 @@ function fsText() {
   $('fs-l').textContent = PIN ? 'Position enregistrée. Tu peux la déplacer.' : 'Touche la carte à l’endroit où tu te trouves';
 }
 function setInteractive(m, on) {
-  ['dragging', 'touchZoom', 'doubleClickZoom', 'boxZoom', 'keyboard'].forEach(k => { if (m[k]) on ? m[k].enable() : m[k].disable(); });
+  ['dragging', 'touchZoom', 'scrollWheelZoom', 'doubleClickZoom', 'boxZoom', 'keyboard'].forEach(k => { if (m[k]) on ? m[k].enable() : m[k].disable(); });
   if (on) { m._zc = m._zc || window.L.control.zoom({ position: 'topleft' }); m._zc.addTo(m); } else if (m._zc) m._zc.remove();
 }
 function toggleFull(wid) {
@@ -398,7 +430,7 @@ function toggleFull(wid) {
   w.querySelector('.exp').textContent = on ? 'Fermer' : 'Agrandir';
   const m = wid === 'w-r' ? MR : ML;
   if (m) setInteractive(m, on);
-  if (m) setTimeout(() => { m.invalidateSize(); if (on && wid === 'w-r' && PT && PT.lat) m.setView([PT.lat, PT.lng], Math.max(m.getZoom(), 15)); }, 60);
+  if (m) setTimeout(() => m.invalidateSize(), 60);
   fsText();
 }
 document.querySelectorAll('.exp,.fsok').forEach(b => b.onclick = () => toggleFull(b.dataset.w));
