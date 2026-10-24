@@ -114,11 +114,12 @@ body:not(.theme-clair) .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) br
 .leaflet-control-attribution a{color:var(--stone)}
 .leaflet-tooltip-pane{z-index:650}
 .leaflet-tooltip{position:absolute;padding:4px 9px;background:var(--card);color:var(--ink);border:1px solid var(--border);border-radius:8px;font-size:.8rem;font-weight:600;white-space:nowrap;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.pinw{width:44px;height:44px;display:grid;place-items:center}
 .pin{background:var(--stone);width:20px;height:20px;border:2px solid var(--card)}
 .pin.sel{background:var(--or);transform:rotate(-45deg) scale(1.3)}
 .exp{position:absolute;top:10px;right:10px;z-index:2;min-height:40px;padding:0 .9rem;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--ink);font-weight:600;font-size:.88rem;box-shadow:0 2px 8px rgba(0,0,0,.18)}
 .exp2{position:absolute;left:10px;bottom:30px;z-index:2;min-height:40px;padding:0 .9rem;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--ink);font-weight:600;font-size:.88rem;box-shadow:0 2px 8px rgba(0,0,0,.18)}
-.mapw.full .exp2{bottom:calc(84px + env(safe-area-inset-bottom))}
+.mapw.full .exp2{top:max(10px,env(safe-area-inset-top));left:56px;bottom:auto}
 .fsbar{display:none}
 .mapw.full{position:fixed;inset:0;z-index:950;margin:0;background:var(--bg)}
 .mapw.full .map{height:100%;border:0;border-radius:0}
@@ -321,7 +322,7 @@ const DEMO_POINTS = [
   { id: 'd4', nom: 'Dépôt Ouest (exemple)', ville: 'Thiès', quartier: 'Randoulène', horaires: 'Lun-Sam, 9h-18h', lat: 14.786, lng: -16.948 }
 ];
 const hasMap = () => typeof window.L !== 'undefined';
-const pinIcon = sel => window.L.divIcon({ className: '', html: '<div class="pin' + (sel ? ' sel' : '') + '"></div>', iconSize: [22, 22], iconAnchor: [11, 22] });
+const pinIcon = sel => window.L.divIcon({ className: '', html: '<div class="pinw"><div class="pin' + (sel ? ' sel' : '') + '"></div></div>', iconSize: [44, 44], iconAnchor: [22, 36] });
 function mapFail(id) {
   const el = $(id).parentElement; if (el.dataset.f) return; el.dataset.f = 1; el.classList.add('hid');
   el.insertAdjacentHTML('afterend', '<p class="note">La carte ne s’affiche pas sur cet appareil. ' + (id === 'map-l' ? 'Écris simplement ton adresse ci-dessus.' : 'Choisis ton point dans la liste ci-dessus.') + '</p>');
@@ -353,6 +354,12 @@ function renderCards() {
   $('pts').innerHTML = PTS.map(x => `<button type="button" class="pt${PT && x === PT ? ' on' : ''}" data-id="${esc(x.id)}"><b>${esc(x.nom)}${x === near && PTS.length > 1 ? ' <em>· le plus proche</em>' : ''}</b><span>${esc([x.quartier, x.ville].filter(Boolean).join(', '))}</span><small>${esc(x.horaires || '')}${x._d != null ? ' · à ' + fk(x._d) + ' de toi' : ''}</small></button>`).join('');
   document.querySelectorAll('.pt').forEach(b => b.onclick = () => pick(PTS.find(x => String(x.id) === b.dataset.id), true));
 }
+function fitAll() {
+  if (!MR) return;
+  const pts = PTS.filter(x => x.lat && x.lng).map(x => [x.lat, x.lng]); if (ME) pts.push([ME.lat, ME.lng]);
+  if (pts.length > 1) MR.fitBounds(pts, { padding: [40, 40], maxZoom: 14, animate: false });
+  else MR.setView(pts[0] || [14.791, -16.926], 13, { animate: false });
+}
 function popupHtml(x) {
   const dir = 'https://www.google.com/maps/dir/?api=1' + (ME ? '&origin=' + ME.lat + ',' + ME.lng : '') + '&destination=' + x.lat + ',' + x.lng;
   return '<div class="pp"><b>' + esc(x.nom) + '</b><span>' + esc([x.quartier, x.ville].filter(Boolean).join(', ')) + '</span>' + (x.horaires ? '<span>' + esc(x.horaires) + '</span>' : '') + (x._d != null ? '<span>À ' + fk(x._d) + ' de toi</span>' : '') + '<em>✓ Dépôt choisi pour ta commande</em><a href="' + dir + '" target="_blank" rel="noopener">Itinéraire</a></div>';
@@ -380,8 +387,7 @@ function locateR() {
     PTS.forEach(x => { if (x.lat) x._d = km(ME, x); });
     const near = PTS.filter(x => x._d != null).sort((a, b) => a._d - b._d)[0];
     if (near && !PT) PT = near;
-    const gp = PTS.filter(x => x.lat && x.lng).map(x => [x.lat, x.lng]);
-    if (MR && hasMap() && gp.length) MR.fitBounds(gp.concat([[ME.lat, ME.lng]]), { padding: [40, 40] });
+    fitAll();
     renderCards(); pick(PT, false);
   }, () => SE.toast('Impossible de te localiser, vérifie l’autorisation de position', false), { timeout: 8000 });
 }
@@ -394,24 +400,29 @@ async function loadPoints() {
   renderCards();
   if (hasMap()) {
     MR = window.L.map('map-r', MAPOPT);
-    MR.on('click', () => { if (!$('w-r').classList.contains('full')) toggleFull('w-r'); }); tiles(MR, 'map-r');
+    MR.on('click', e => {
+      let best = null, bd = 1e9;
+      PTS.forEach(x => { if (x._m) { const q = MR.latLngToContainerPoint(x._m.getLatLng()), d = Math.hypot(q.x - e.containerPoint.x, q.y - e.containerPoint.y - 10); if (d < bd) { bd = d; best = x; } } });
+      if (best && bd < 48) { pick(best, false); best._m.openPopup(); }
+      else if (!$('w-r').classList.contains('full')) toggleFull('w-r');
+    }); tiles(MR, 'map-r');
     const gp = PTS.filter(x => x.lat && x.lng);
     gp.forEach(x => { x._m = window.L.marker([x.lat, x.lng], { icon: pinIcon(false) }).addTo(MR).bindTooltip(esc(x.nom), { permanent: true, direction: 'bottom', offset: [0, 4] }).bindPopup(() => popupHtml(x), { offset: [0, -20], autoPanPadding: [30, 30] }).on('click', () => pick(x, false)); });
-    if (gp.length > 1) MR.fitBounds(gp.map(x => [x.lat, x.lng]), { padding: [30, 30] }); else MR.setView(gp.length ? [gp[0].lat, gp[0].lng] : [14.791, -16.926], 14);
+    fitAll();
   } else $('map-r').parentElement.classList.add('hid');
   $('cap-r').textContent = gp0(PTS) > 1 ? 'Touche un dépôt pour le choisir. Touche la carte pour l’agrandir.' : 'Touche la carte pour l’agrandir.';
   pick(PT, false);
 }
 function setPin(ll) {
   PIN = ll;
-  if (MK) MK.setLatLng(ll); else MK = window.L.marker(ll, { icon: pinIcon(true), draggable: true }).addTo(ML).on('dragend', e => { PIN = e.target.getLatLng(); });
+  if (MK) MK.setLatLng(ll); else MK = window.L.marker(ll, { icon: pinIcon(true), draggable: true }).addTo(ML).on('dragend', e => { PIN = e.target.getLatLng(); confirmPin(); });
   fsText(); saveDraft();
 }
 function initLivr() {
   if (!hasMap()) { $('map-l').parentElement.classList.add('hid'); return; }
   if (ML) { ML.invalidateSize(); return; }
   ML = window.L.map('map-l', MAPOPT).setView([14.791, -16.926], 13); tiles(ML, 'map-l');
-  ML.on('click', e => { if ($('w-l').classList.contains('full')) setPin(e.latlng); else toggleFull('w-l'); });
+  ML.on('click', e => { if ($('w-l').classList.contains('full')) { setPin(e.latlng); confirmPin(); } else toggleFull('w-l'); });
 }
 function locate() {
   if (!navigator.geolocation) { SE.toast('Position indisponible, écris ton adresse', false); return; }
@@ -432,7 +443,7 @@ function toggleFull(wid) {
   w.querySelector('.exp').textContent = on ? 'Fermer' : 'Agrandir';
   const m = wid === 'w-r' ? MR : ML;
   if (m) setInteractive(m, on);
-  if (m) setTimeout(() => m.invalidateSize(), 60);
+  if (m) setTimeout(() => { m.invalidateSize(); if (wid === 'w-r') fitAll(); }, 60);
   fsText(); saveDraft();
 }
 document.querySelectorAll('.exp').forEach(b => b.onclick = () => toggleFull(b.dataset.w));
@@ -481,15 +492,20 @@ async function fillFromPin(ll) {
   } catch (e) {}
   return txt;
 }
+let fillT;
 function confirmPin() {
-  const ok = $('pin-ok'); ok.classList.remove('hid'); ok.textContent = '✓ Position enregistrée. Je cherche ton adresse…'; SE.toast('Position enregistrée ✓');
-  fillFromPin(PIN).then(t => {
+  const ok = $('pin-ok'), full = () => !!document.querySelector('.mapw.full');
+  ok.classList.remove('hid'); ok.textContent = '✓ Position enregistrée. Recherche de ton adresse…';
+  if (full()) $('fs-l').textContent = '✓ Position enregistrée…'; else SE.toast('Position enregistrée ✓');
+  clearTimeout(fillT);
+  fillT = setTimeout(() => fillFromPin(PIN).then(t => {
     ok.innerHTML = '✓ <b>Position enregistrée.</b>' + (t ? ' Adresse trouvée : ' + esc(t) + '.' : '') + ' Vérifie ton adresse ci-dessus (corrige-la si besoin), puis clique sur <b>« Confirmer ma commande »</b>.';
-    ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); saveDraft();
-  });
+    if (full()) $('fs-l').textContent = '✓ ' + (t || 'Repère placé') + ' · touche « Valider ma position »'; else ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    saveDraft();
+  }), 400);
 }
 function validateFull(wid) {
-  if (wid === 'w-l') { if (!PIN) { SE.toast('Touche la carte pour placer ton repère, ou « Ma position »', false); return; } toggleFull(wid); confirmPin(); }
+  if (wid === 'w-l') { if (!PIN) { SE.toast('Touche la carte pour placer ton repère, ou « Ma position »', false); return; } toggleFull(wid); SE.toast('Position validée ✓'); setTimeout(() => $('pin-ok').scrollIntoView({ behavior: 'smooth', block: 'center' }), 150); }
   else { if (!PT) { SE.toast('Touche un dépôt pour le choisir', false); return; } toggleFull(wid); SE.toast('Dépôt choisi : ' + PT.nom); $('pts').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
 }
 async function saveNow() {
@@ -505,7 +521,7 @@ function setMode(m) {
   MODE = m; localStorage.setItem('se_mode', m);
   document.querySelectorAll('.mode').forEach(b => b.classList.toggle('on', b.dataset.m === m));
   $('p-retrait').classList.toggle('hid', m !== 'retrait'); $('p-livr').classList.toggle('hid', m !== 'livraison');
-  setTimeout(() => { if (m === 'livraison') initLivr(); else if (MR) MR.invalidateSize(); }, 30);
+  setTimeout(() => { if (m === 'livraison') initLivr(); else if (MR) { MR.invalidateSize(); fitAll(); } }, 30);
   sumMode();
 }
 function destination() {
