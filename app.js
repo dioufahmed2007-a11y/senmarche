@@ -1,18 +1,18 @@
 /* ═══════════════════════════════════════════════════════════════
-   SENEXPORT — APP JS v8
-   Adapté au vrai schéma Supabase d'Ahmed :
+   SENMARCHÉ — APP JS v9
+   Basé sur le vrai schéma Supabase :
    - commandes(numero, client_nom, client_tel, articles_json, total_ttc...)
    - clients(id, nom_complet, telephone, email, points, tier...)
    - demandes_speciales(client_nom, client_tel, description, budget...)
    - articles(reference, nom, prix_vente_fcfa, photo_url...)
+   Nouveautés v9 : articles avec taille dans le panier ("REF_M"),
+   cartes produit avec choix de taille, textes SenMarché.
    ═══════════════════════════════════════════════════════════════ */
 
 window.SE = window.SE || {};
 
 /* ──────────────────────────────────────────────────────────────
    CONFIG SUPABASE
-   ──────────────────────────────────────────────────────────────
-   Ces clés viennent de ton .env existant.
 */
 SE.SUPABASE_URL  = 'https://axgpohmhzmdgozndlntj.supabase.co';
 SE.SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4Z3BvaG1oem1kZ296bmRsbnRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MTIzOTMsImV4cCI6MjA5MTQ4ODM5M30.gukLxSpuLUPWOivsC-LgbNYIsnTWOuo0_G2ubYur3os';
@@ -31,13 +31,16 @@ SE.initSupabase = () => {
 /* ──────────────────────────────────────────────────────────────
    FORMATTERS
 */
-SE.fprix  = n => Math.round(n).toLocaleString('fr-FR').replace(/\u202f/g,' ') + ' FCFA';
-SE.fnum   = n => Math.round(n).toLocaleString('fr-FR').replace(/\u202f/g,' ');
+SE.fprix  = n => Math.round(Number(n) || 0).toLocaleString('fr-FR').replace(/\u202f/g,' ') + ' FCFA';
+SE.fnum   = n => Math.round(Number(n) || 0).toLocaleString('fr-FR').replace(/\u202f/g,' ');
 SE.freduc = (neuf, prix) => neuf > 0 ? Math.round((1 - prix/neuf) * 100) : 0;
 SE.fdate  = iso => {
   try { return new Date(iso).toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'}); }
   catch { return iso; }
 };
+
+/* Protège un texte avant de l'afficher dans du HTML */
+SE.esc = s => s == null ? '' : String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
 
 /* Normalise l'état (ta DB utilise "Bon etat", "Reconditionne" sans accents) */
 SE.normEtat = etat => {
@@ -57,7 +60,7 @@ SE.etatClass = etat => ({
 
 /* Image URL : si commence par http → utilise tel quel. Sinon → bucket photos. */
 SE.imgUrl = (url, w=800) => {
-  if (!url) return 'https://placehold.co/800x800/f5efe4/c4531a?text=SenExport';
+  if (!url) return 'https://placehold.co/800x800/f5efe4/c4531a?text=SenMarch%C3%A9';
   if (url.startsWith('http')) return url;
   if (url.startsWith('photos/') || url.includes('/')) {
     return `${SE.SUPABASE_URL}/storage/v1/object/public/${url.startsWith('photos/') ? url : 'photos/' + url}`;
@@ -66,13 +69,21 @@ SE.imgUrl = (url, w=800) => {
   return `${SE.SUPABASE_URL}/storage/v1/object/public/photos/${url}`;
 };
 
+/* Un article demande-t-il une taille ? (même règle que la page produit) */
+SE.needsSize = a => {
+  if (!a) return false;
+  if (a.tailles || a.pointures) return true;
+  const n = ((a.categorie && a.categorie.nom) || '').toLowerCase();
+  return a.categorie_id === 1 || /mode|fille|sport|feug/.test(n);
+};
+
 /* ──────────────────────────────────────────────────────────────
    ARTICLES — chargés depuis Supabase
 */
 SE.Articles = {
   cache: null,
   _loading: null,
-  
+
   async load(force=false){
     if (this.cache && !force) return this.cache;
     if (this._loading) return this._loading;
@@ -87,7 +98,7 @@ SE.Articles = {
           .or('masque.is.null,masque.eq.false')
           .order('quantite', { ascending: false })   // articles en stock d'abord
           .order('updated_at', { ascending: false })
-          .limit(200);
+          .limit(1000);
         if (error){ console.error('Articles load:', error); this.cache = []; return []; }
         this.cache = data || [];
         return this.cache;
@@ -101,22 +112,22 @@ SE.Articles = {
     })();
     return this._loading;
   },
-  
+
   async get(ref){
     const list = await this.load();
     return list.find(a => a.reference === ref);
   },
-  
+
   async byCategorie(catId){
     const list = await this.load();
     return list.filter(a => a.categorie_id === catId);
   },
-  
+
   /* Recherche par nom/référence/description */
   async search(query){
     const list = await this.load();
     const q = query.toLowerCase();
-    return list.filter(a => 
+    return list.filter(a =>
       (a.nom||'').toLowerCase().includes(q) ||
       (a.reference||'').toLowerCase().includes(q) ||
       (a.description||'').toLowerCase().includes(q)
@@ -129,7 +140,7 @@ SE.Articles = {
 */
 SE.Categories = {
   cache: null,
-  
+
   async load(){
     if (this.cache) return this.cache;
     if (!SE.sb){ this.cache = []; return []; }
@@ -140,12 +151,12 @@ SE.Categories = {
       return this.cache;
     } catch(e){ console.error(e); this.cache = []; return []; }
   },
-  
+
   async get(id){
     const list = await this.load();
     return list.find(c => c.id === id);
   },
-  
+
   async bySlug(slug){
     /* Support URL "?cat=electronique" → matche par nom en slugifiant */
     const list = await this.load();
@@ -154,9 +165,12 @@ SE.Categories = {
 };
 
 /* ──────────────────────────────────────────────────────────────
-   PRODUCT CARD (adapté au schéma articles)
+   PRODUCT CARD
+   - vêtements : bouton "Choisir la taille" (renvoie à la page produit)
+   - autres articles : bouton "Ajouter"
 */
 SE.productCard = a => {
+  const E = SE.esc, ref = E(a.reference), nom = E(a.nom);
   const prix   = a.prix_vente_fcfa || 0;
   const prixRef= a.prix_min_fcfa && a.prix_min_fcfa > prix ? a.prix_min_fcfa : null;
   const reduc  = prixRef ? SE.freduc(prixRef, prix) : 0;
@@ -166,30 +180,34 @@ SE.productCard = a => {
   const etat   = SE.normEtat(a.etat);
   const isWish = SE.Wishlist.has(a.reference);
   const inCart = SE.Cart.has(a.reference);
-  const photo  = SE.imgUrl(a.photo_url, 600);
+  const photo  = E(SE.imgUrl(a.photo_url, 600));
+  const link   = 'produit.html?ref=' + encodeURIComponent(a.reference);
+  const linkBtn = 'display:flex;align-items:center;justify-content:center;text-decoration:none';
   const cartBtn = isOut
-    ? `<button class="p-action p-action--out" onclick="location.href='produit.html?ref=${a.reference}'">Voir l\'article</button>`
-    : `<button class="p-action ${inCart?'added':''}" data-cart-add="${a.reference}">${inCart ? '✓ Dans le panier' : '🛒 Ajouter'}</button>`;
+    ? `<a class="p-action p-action--out" href="${link}" style="${linkBtn}">Voir l’article</a>`
+    : SE.needsSize(a)
+      ? `<a class="p-action" href="${link}" style="${linkBtn}">Choisir la taille</a>`
+      : `<button class="p-action ${inCart?'added':''}" data-cart-add="${ref}">${inCart ? '✓ Dans le panier' : '🛒 Ajouter'}</button>`;
 
   return `
     <article class="p-card${isOut?' p-card--out':''}">
-      <a href="produit.html?ref=${a.reference}" class="p-image-wrap" aria-label="${a.nom}">
-        <img src="${photo}" alt="${a.nom}" loading="lazy"
-             onerror="this.onerror=null;this.src='https://placehold.co/600x600/1a1a1e/D4AF37?text=SenExport'">
-        ${isOut?'<div class=\"p-out-overlay\"><span class=\"p-out-label\">Rupture de stock</span></div>':''}
+      <a href="${link}" class="p-image-wrap" aria-label="${nom}">
+        <img src="${photo}" alt="${nom}" loading="lazy"
+             onerror="this.onerror=null;this.src='https://placehold.co/600x600?text=SenMarch%C3%A9'">
+        ${isOut?'<div class="p-out-overlay"><span class="p-out-label">Rupture de stock</span></div>':''}
         <div class="p-badges">
-          ${reduc>0?`<span class=\"p-badge discount\">-${reduc}%</span>`:''}
-          ${!isOut?`<span class=\"p-badge ${SE.etatClass(etat)}\">${SE.etatLabel(etat)}</span>`:''}
-          ${low?'<span class=\"p-badge low\">Derniers</span>':''}
+          ${reduc>0?`<span class="p-badge discount">-${reduc}%</span>`:''}
+          ${!isOut?`<span class="p-badge ${SE.etatClass(etat)}">${SE.etatLabel(etat)}</span>`:''}
+          ${low?'<span class="p-badge low">Derniers</span>':''}
         </div>
       </a>
-      <button class="p-wish ${isWish?'active':''}" data-ref="${a.reference}" title="Favoris">${isWish?'♥':'♡'}</button>
+      <button class="p-wish ${isWish?'active':''}" data-ref="${ref}" title="Favoris">${isWish?'♥':'♡'}</button>
       <div class="p-body">
-        <a href="produit.html?ref=${a.reference}" class="p-name-link">
-          <h3 class="p-name">${a.nom}</h3>
+        <a href="${link}" class="p-name-link">
+          <h3 class="p-name">${nom}</h3>
         </a>
         <div class="p-prices">
-          ${prixRef?`<span class=\"struck\">${SE.fprix(prixRef)}</span>`:''}
+          ${prixRef?`<span class="struck">${SE.fprix(prixRef)}</span>`:''}
           <span class="main${isOut?' p-price--out':''}">${SE.fprix(prix)}</span>
         </div>
         ${cartBtn}
@@ -197,6 +215,7 @@ SE.productCard = a => {
     </article>
   `;
 };
+
 /* ──────────────────────────────────────────────────────────────
    WISHLIST (localStorage, clés = references d'articles)
 */
@@ -217,11 +236,13 @@ SE.Wishlist = {
 /* ──────────────────────────────────────────────────────────────
    CART (localStorage)
    Structure : [{ ref, qte }]
+   "ref" = référence de l'article, ou "REF_TAILLE" quand une taille est choisie
 */
 SE.Cart = {
   KEY:'se_cart',
   all(){ try{return JSON.parse(localStorage.getItem(this.KEY)||'[]')}catch{return []} },
-  has(ref){ return this.all().some(i => i.ref === ref); },
+  /* vrai si l'article est dans le panier, quelle que soit la taille */
+  has(ref){ return this.all().some(i => i.ref === ref || i.ref.startsWith(ref + '_')); },
   add(ref, qte=1){
     const list = this.all();
     const existing = list.find(i => i.ref === ref);
@@ -242,25 +263,40 @@ SE.Cart = {
   },
   clear(){ localStorage.removeItem(this.KEY); this._notify(); },
   count(){ return this.all().reduce((s,i)=>s+i.qte, 0); },
-  
-  /* Retourne les items enrichis avec les données articles (nécessite Articles.load()) */
+
+  /* Retrouve l'article et la taille d'une référence du panier */
+  split(ref, articles){
+    let a = articles.find(x => x.reference === ref);
+    if (a) return { base: ref, size: null, article: a };
+    const k = ref.lastIndexOf('_');
+    if (k > 0){
+      const base = ref.slice(0, k);
+      a = articles.find(x => x.reference === base);
+      if (a) return { base, size: ref.slice(k + 1), article: a };
+    }
+    return null;
+  },
+
+  /* Retourne les items enrichis : { ref, qte, base, size, article } (nécessite Articles.load()) */
   async items(){
     const articles = await SE.Articles.load();
     return this.all().map(i => {
-      const a = articles.find(x => x.reference === i.ref);
-      return a ? { ...i, article: a } : null;
+      const r = this.split(i.ref, articles);
+      return r ? { ...i, base: r.base, size: r.size, article: r.article } : null;
     }).filter(Boolean);
   },
-  
+
   async total(){
     const items = await this.items();
-    return items.reduce((s,i) => s + (i.article.prix_vente_fcfa * i.qte), 0);
+    return items.reduce((s,i) => s + ((i.article.prix_vente_fcfa || 0) * i.qte), 0);
   },
-  
+
+  /* Met à jour toutes les pastilles de panier */
   _notify(){
-    document.querySelectorAll('[data-cart-count]').forEach(el => {
-      const n = this.count();
+    const n = this.count();
+    document.querySelectorAll('[data-cart-count],#cart-badge,#cart-count').forEach(el => {
       el.textContent = n;
+      el.classList.toggle('show', n > 0);
       el.style.display = n > 0 ? '' : 'none';
     });
   }
@@ -273,11 +309,11 @@ SE.Auth = {
   currentUser: null,
   currentClient: null,
   _inited: false,
-  
+
   /* Initialise l'état : charge la session en cours */
   async init(){
     if (!SE.sb) return null;
-    
+
     // Évite la double init
     if (this._inited){
       // Si déjà inited mais pas de currentUser, refait juste un getSession
@@ -293,7 +329,7 @@ SE.Auth = {
       return this.currentUser;
     }
     this._inited = true;
-    
+
     try {
       const { data: { session } } = await SE.sb.auth.getSession();
       if (session?.user){
@@ -301,7 +337,7 @@ SE.Auth = {
         await this._loadClient();
       }
     } catch(e){ console.warn('init session:', e); }
-    
+
     /* Écoute changements de session */
     SE.sb.auth.onAuthStateChange(async (event, session) => {
       if (session?.user){
@@ -315,7 +351,7 @@ SE.Auth = {
     });
     return this.currentUser;
   },
-  
+
   /* Charge l'enregistrement client lié au user */
   async _loadClient(){
     if (!this.currentUser) return null;
@@ -330,9 +366,9 @@ SE.Auth = {
     this.currentClient = data;
     return data;
   },
-  
+
   isLogged(){ return this.currentUser !== null; },
-  
+
   /* Inscription email + mot de passe */
   async signUpEmail({ email, password, nom_complet, telephone }){
     if (!SE.sb) throw new Error('Supabase non configuré');
@@ -349,7 +385,7 @@ SE.Auth = {
     }
     return data;
   },
-  
+
   /* Connexion email + mdp */
   async signInEmail({ email, password }){
     if (!SE.sb) throw new Error('Supabase non configuré');
@@ -359,7 +395,7 @@ SE.Auth = {
     await this._loadClient();
     return data;
   },
-  
+
   /* Inscription téléphone + mdp (sans OTP SMS, juste pour MVP) */
   async signUpPhone({ phone, password, nom_complet, email }){
     if (!SE.sb) throw new Error('Supabase non configuré');
@@ -375,7 +411,7 @@ SE.Auth = {
     }
     return data;
   },
-  
+
   /* Connexion téléphone + mdp */
   async signInPhone({ phone, password }){
     if (!SE.sb) throw new Error('Supabase non configuré');
@@ -386,7 +422,7 @@ SE.Auth = {
     await this._loadClient();
     return data;
   },
-  
+
   /* Connexion Google */
   async signInWithGoogle(){
     if (!SE.sb) throw new Error('Supabase non configuré');
@@ -397,7 +433,7 @@ SE.Auth = {
     if (error) throw error;
     return data;
   },
-  
+
   /* Crée l'enregistrement client après inscription (trigger auto-génère numero_carte) */
   async _createClientRecord(user_id, { nom_complet, prenom='', telephone='', email='', adresse='', ville='Thies' }){
     try {
@@ -409,7 +445,7 @@ SE.Auth = {
       if (error) console.error('_createClientRecord:', error);
     } catch(e){ console.error(e); }
   },
-  
+
   async signOut(){
     if (SE.sb) await SE.sb.auth.signOut();
     this.currentUser = null;
@@ -425,7 +461,7 @@ SE.Auth = {
 */
 SE.Commandes = {
   KEY_LOCAL:'se_commandes',
-  
+
   /* Génère un numéro de commande CMD-YYYYMMDD-NNNN */
   _genNum(){
     const d = new Date();
@@ -433,19 +469,19 @@ SE.Commandes = {
     const rand = String(Math.floor(Math.random()*9999)).padStart(4,'0');
     return `CMD-${datePart}-${rand}`;
   },
-  
+
   /* Crée une commande dans Supabase.
      params = {
        client: {nom, tel, email, adresse},
        mode: 'retrait'|'livraison',
-       items: [{ref, nom, prix, qte}],
+       items: [{reference, nom, prix, qte}],   // reference = référence de l'article (sans la taille)
        sous_total, frais_livraison, total_ttc,
        notes
      }
   */
   async create(params){
     const numero = this._genNum();
-    
+
     const record = {
       numero,
       client_id: SE.Auth.currentUser?.id || null,
@@ -462,7 +498,7 @@ SE.Commandes = {
       statut: 'nouvelle',
       notes: params.notes || '',
     };
-    
+
     /* Écriture Supabase */
     let saved = false;
     if (SE.sb){
@@ -470,8 +506,8 @@ SE.Commandes = {
         const { data, error } = await SE.sb.from('commandes').insert([record]).select();
         if (error) throw error;
         saved = true;
-        console.log('[SenExport] Commande créée:', numero);
-        
+        console.log('[SenMarché] Commande créée:', numero);
+
         /* IMPORTANT : décrémenter le stock via fonction RPC sécurisée.
            Évite que 2 clients commandent la même pièce unique. */
         for (const it of params.items){
@@ -482,27 +518,27 @@ SE.Commandes = {
                 p_qte: it.qte || 1,
               });
               if (error){
-                console.warn('[SenExport] Erreur RPC décrément stock:', error);
+                console.warn('[SenMarché] Erreur RPC décrément stock:', error);
               } else {
-                console.log('[SenExport] Stock décrémenté:', it.reference, data);
+                console.log('[SenMarché] Stock décrémenté:', it.reference, data);
               }
             } catch(stockErr){
-              console.warn('[SenExport] Erreur décrément stock:', stockErr);
+              console.warn('[SenMarché] Erreur décrément stock:', stockErr);
             }
           }
         }
-        
+
         // Invalide le cache articles pour que les autres clients voient le nouvel état
         SE.Articles.cache = null;
-        
+
       } catch(e){
-        console.error('[SenExport] Erreur création commande:', e);
+        console.error('[SenMarché] Erreur création commande:', e);
         throw e;  // Propage l'erreur pour que le UI affiche un message
       }
     } else {
       throw new Error('Supabase non configuré');
     }
-    
+
     /* Garde aussi en local pour affichage immédiat dans "Mes commandes" */
     if (saved){
       const localRec = { ...record, created_at: new Date().toISOString() };
@@ -510,15 +546,15 @@ SE.Commandes = {
       list.unshift(localRec);
       localStorage.setItem(this.KEY_LOCAL, JSON.stringify(list.slice(0,20)));
     }
-    
+
     return record;
   },
-  
+
   allLocal(){
     try{ return JSON.parse(localStorage.getItem(this.KEY_LOCAL)||'[]'); }
     catch{ return []; }
   },
-  
+
   /* Récupère les commandes du client connecté depuis Supabase */
   async mine(){
     if (!SE.sb || !SE.Auth.currentUser) return this.allLocal();
@@ -544,7 +580,7 @@ SE.Demandes = {
       client_id: SE.Auth.currentUser?.id || null,
       client_nom: demande.nom,
       client_tel: demande.tel,
-      description: demande.description + 
+      description: demande.description +
         (demande.categorie ? `\n\nCatégorie : ${demande.categorie}` : '') +
         (demande.url ? `\n\nLien : ${demande.url}` : '') +
         (demande.delai ? `\n\nDélai : ${demande.delai}` : ''),
@@ -632,6 +668,7 @@ SE.initCart = () => {
     e.preventDefault();
     const ref = btn.dataset.cartAdd;
     SE.Cart.add(ref);
+    if (SE.Track) SE.Track.addToCart(ref);
     btn.textContent = '✓ Dans le panier';
     btn.classList.add('added');
     SE.toast('Ajouté au panier');
@@ -656,7 +693,7 @@ SE.initReveal = () => {
 */
 SE.greeting = () => {
   const h = new Date().getHours();
-  if (h < 6)  return 'Bonne nuit — SenExport veille';
+  if (h < 6)  return 'Bonne nuit — SenMarché veille';
   if (h < 12) return 'Bonjour — bienvenue à Thiès';
   if (h < 17) return 'Bon après-midi';
   if (h < 21) return 'Bonsoir';
@@ -696,7 +733,7 @@ SE.toast = (msg, ok=true, ms=2800) => {
 */
 SE.OrderNotif = {
   STORAGE_KEY: 'se_last_order_statuses',
-  
+
   STATUT_MESSAGES: {
     'confirmee':      { emj:'📞', title:'Commande confirmée', msg:'Nous avons bien confirmé votre commande !' },
     'en_preparation': { emj:'📦', title:'Commande confirmée', msg:'Votre commande est en cours de traitement.' },
@@ -705,21 +742,21 @@ SE.OrderNotif = {
     'livree':         { emj:'✅', title:'Commande livrée', msg:'Merci pour votre confiance !' },
     'annulee':        { emj:'❌', title:'Commande annulée', msg:'Contactez-nous si vous avez des questions.' },
   },
-  
+
   // À appeler après que les commandes du client soient chargées
   async checkUpdates(commandes){
     if (!commandes || commandes.length === 0) return;
-    
+
     let stored = {};
     try { stored = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}'); } catch {}
-    
+
     const newStored = {};
     const updates = [];
-    
+
     for (const cmd of commandes){
       const id = String(cmd.id);
       newStored[id] = cmd.statut;
-      
+
       if (stored[id] && stored[id] !== cmd.statut){
         // Statut a changé — notification
         updates.push({
@@ -729,20 +766,20 @@ SE.OrderNotif = {
         });
       }
     }
-    
+
     // Sauvegarde
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(newStored));
-    
+
     // Affiche les notifs (max 2 pour pas spammer)
     for (const u of updates.slice(0, 2)){
       this.showBigNotif(u);
     }
   },
-  
+
   showBigNotif({numero, newStatut}){
     const info = this.STATUT_MESSAGES[newStatut];
     if (!info) return;
-    
+
     const overlay = document.createElement('div');
     overlay.style.cssText = `
       position:fixed;inset:0;z-index:9999;
@@ -751,26 +788,26 @@ SE.OrderNotif = {
       display:flex;align-items:center;justify-content:center;
       padding:20px;animation:seFadeIn .3s ease-out;
     `;
-    
+
     overlay.innerHTML = `
       <div style="
-        background:#fff;border-radius:24px;padding:32px 28px;max-width:420px;width:100%;
+        background:var(--card,#fff);border-radius:24px;padding:32px 28px;max-width:420px;width:100%;
         text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.3);
         animation:sePopIn .4s cubic-bezier(0.34, 1.56, 0.64, 1);
       ">
         <div style="font-size:4rem;margin-bottom:12px;animation:seBounce 1.5s ease-in-out infinite">${info.emj}</div>
-        <h3 style="font-family:var(--f-display, serif);font-size:1.5rem;font-weight:600;
-                   margin:0 0 8px;color:#1a1a1a">${info.title}</h3>
-        <p style="color:#666;font-size:.95rem;margin:0 0 6px">${info.msg}</p>
-        <p style="color:#999;font-size:.78rem;font-family:monospace;margin:0 0 22px">${numero}</p>
+        <h3 style="font-family:var(--ff-d, serif);font-size:1.5rem;font-weight:600;
+                   margin:0 0 8px;color:var(--ink,#1a1a1a)">${info.title}</h3>
+        <p style="color:var(--stone,#666);font-size:.95rem;margin:0 0 6px">${info.msg}</p>
+        <p style="color:var(--stone,#999);font-size:.78rem;font-family:monospace;margin:0 0 22px">${SE.esc(numero)}</p>
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-          <a href="commande.html?id=${this._getCmdId(numero)}" style="
-            background:#D4623A;color:#fff;padding:12px 22px;border-radius:12px;
+          <a href="commande.html?id=${encodeURIComponent(this._getCmdId(numero))}" style="
+            background:var(--or,#D4623A);color:var(--bg,#fff);padding:12px 22px;border-radius:12px;
             font-weight:600;text-decoration:none;display:inline-block;
             transition:.2s;font-size:.95rem;
           ">Voir le détail</a>
-          <button onclick="this.closest('[data-notif-overlay]')?.remove() || this.parentElement.parentElement.parentElement.remove()" style="
-            background:#f5f0e8;color:#444;padding:12px 22px;border-radius:12px;
+          <button data-notif-close style="
+            background:var(--bg2,#f5f0e8);color:var(--ink,#444);padding:12px 22px;border-radius:12px;
             font-weight:600;border:none;cursor:pointer;font-size:.95rem;
           ">OK</button>
         </div>
@@ -778,18 +815,18 @@ SE.OrderNotif = {
     `;
     overlay.setAttribute('data-notif-overlay', '1');
     overlay.addEventListener('click', e => {
-      if (e.target === overlay) overlay.remove();
+      if (e.target === overlay || e.target.closest('[data-notif-close]')) overlay.remove();
     });
-    
+
     // Animations CSS si pas déjà là
     if (!document.getElementById('se-notif-anims')){
       const style = document.createElement('style');
       style.id = 'se-notif-anims';
       style.textContent = `
         @keyframes seFadeIn { from{opacity:0} to{opacity:1} }
-        @keyframes sePopIn { 
-          from{opacity:0;transform:scale(.7) translateY(20px)} 
-          to{opacity:1;transform:scale(1) translateY(0)} 
+        @keyframes sePopIn {
+          from{opacity:0;transform:scale(.7) translateY(20px)}
+          to{opacity:1;transform:scale(1) translateY(0)}
         }
         @keyframes seBounce {
           0%, 100% { transform:translateY(0) }
@@ -798,10 +835,10 @@ SE.OrderNotif = {
       `;
       document.head.appendChild(style);
     }
-    
+
     document.body.appendChild(overlay);
   },
-  
+
   _getCmdId(numero){
     // Cherche dans les commandes en cache
     return ''; // sera rempli par la page compte
@@ -818,7 +855,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   SE.initWishlist();
   SE.initCart();
   SE.initReveal();
-  
+
   // Check les notifications de commandes en arrière-plan (toutes les pages)
   // Retry si l'auth est lente (OAuth Google peut prendre du temps)
   async function checkOrderNotifs(){
@@ -828,7 +865,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       tries++;
     }
     if (!SE.Auth.currentUser) return;
-    
+
     try {
       const cmds = await SE.Commandes.mine();
       if (cmds && cmds.length > 0){
@@ -928,7 +965,7 @@ SE.Onboarding = {
   _seenKey: 'se_onboarding_seen',
   _idx: 0,
   _cards: [
-    { icon:'🛍️', title:'Commandez',           text:'Parcourez le catalogue et passez commande en quelques clics. Aucun paiement en ligne — vous payez à la récupération.' },
+    { icon:'🛍️', title:'Commandez',           text:'Parcourez le catalogue, choisissez le retrait ou la livraison, et passez commande en quelques clics. Aucun paiement en ligne : vous payez à la récupération ou à la livraison.' },
     { icon:'🗺️', title:'Suivez sur la carte',  text:'Suivez votre commande en temps réel : Reçue → Confirmée → Prête → Récupérée, avec la carte et l\'itinéraire jusqu\'au point de retrait.' },
     { icon:'📦', title:'Récupérez',            text:'Une fois prête, choisissez votre point de retrait, présentez votre QR code et récupérez votre commande.' },
     { icon:'💰', title:'Profitez de la cagnotte', text:'1% de chaque achat est ajouté à votre cagnotte en FCFA, utilisable sur le site ou au dépôt. Bonus à chaque palier franchi !' },
