@@ -210,6 +210,7 @@ form.f{display:grid;gap:.8rem;max-width:520px;margin-top:1rem}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="images.js"></script>
 <script src="app.js"></script>
+<script src="app-patch.js"></script>
 <script src="theme.js"></script>
 <script src="animations.js"></script>
 <script>
@@ -250,6 +251,7 @@ async function load() {
     const { data: a, error } = await SE.sb.from('articles').select('*').eq('reference', ref).single();
     if (error || !a) { P.innerHTML = '<p style="padding:4rem 0">Produit introuvable. <a href="mode.html" style="color:var(--or)">Retour à la boutique</a></p>'; return; }
 
+    const cached = (SE.Articles.cache || []).find(x => x.reference === ref); if (cached && cached.categorie) a.categorie = cached.categorie;
     const cat = a.categorie?.nom || 'Catalogue', cl = cat.toLowerCase();
     const link = cl.includes('maison') ? 'maison.html' : cl.includes('mode') || cl.includes('fille') || cl.includes('sport') ? 'mode.html' : 'catalogue.html';
     $('c-cat').innerHTML = `<a href="${link}">${esc(cat)}</a>`;
