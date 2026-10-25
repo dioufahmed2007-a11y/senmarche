@@ -1,188 +1,232 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <script>document.documentElement.style.visibility="hidden";setTimeout(function(){document.documentElement.style.visibility="";},4000);</script>
-<meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Maison & Électroménager — Bientôt · SenExport Boutique</title>
-  <link rel="icon" type="image/png" href="logo.png" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --bg:var(--bg);--or:var(--or);--or2:#B8941E;
-      --or-pale:rgba(212,175,55,.12);--or-line:rgba(212,175,55,.25);
-      --ivoire:var(--ink);--muted:#5A5A6A;--border:#1A1B28;
-      --ff-d:'Cormorant Garamond',serif;--ff-b:'DM Sans',sans-serif;
-      --ease:cubic-bezier(0.16,1,0.3,1);
-    }
-    html,body{height:100%;font-family:var(--ff-b);background:var(--bg);color:var(--ink);overflow-x:hidden}
-    a{color:inherit;text-decoration:none}
-    #particles{position:fixed;inset:0;pointer-events:none;z-index:0}
-
-        .hero-bg{position:fixed;inset:0;z-index:0;background-size:cover;background-position:center 30%;opacity:0;transition:opacity 1.4s var(--ease)}
-    .hero-bg.loaded{opacity:1}
-    .hero-bg::after{content:'';position:absolute;inset:0;
-      background:
-        linear-gradient(180deg, rgba(255,245,248,.55) 0%, rgba(255,245,248,.78) 55%, rgba(255,245,248,.95) 100%),
-        radial-gradient(ellipse 80% 60% at 50% 38%, rgba(255,143,177,.15) 0%, rgba(255,245,248,.8) 75%);
-    }
-    .nav{position:fixed;top:0;left:0;right:0;z-index:50;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(1.5rem,5vw,4rem);background:rgba(8,9,14,.7);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
-    .nav-logo{font-family:var(--ff-d);font-size:1.25rem;font-weight:600;color:var(--or);letter-spacing:.04em}
-    .nav-logo span{color:var(--ink);font-weight:300}
-    .nav-back{display:flex;align-items:center;gap:.5rem;font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .2s}
-    .nav-back:hover{color:var(--or)}
-    .nav-back svg{transition:transform .2s}
-    .nav-back:hover svg{transform:translateX(-3px)}
-
-    .main{position:relative;z-index:1;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px clamp(1.5rem,6vw,6rem) 3rem;text-align:center}
-    .main::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(700px,90vw);height:min(700px,90vw);background:radial-gradient(ellipse at center,rgba(212,175,55,.07) 0%,transparent 70%);pointer-events:none}
-
-    .hero-icon{font-size:clamp(3.5rem,8vw,5.5rem);line-height:1;margin-bottom:1.75rem;display:block;animation:icon-float 5s ease-in-out infinite;filter:drop-shadow(0 0 28px rgba(212,175,55,.3))}
-    @keyframes icon-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-
-    .eyebrow{font-size:.65rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--or);margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:.75rem;opacity:0;animation:fade-up .7s var(--ease) .1s forwards}
-    .eyebrow::before,.eyebrow::after{content:'';display:block;width:28px;height:1px;background:var(--or);opacity:.5}
-
-    .hero-title{font-family:var(--ff-d);font-size:clamp(2.2rem,6vw,56px);font-weight:300;line-height:1.05;letter-spacing:-.01em;color:var(--ink);margin-bottom:.75rem;opacity:0;animation:fade-up .7s var(--ease) .22s forwards}
-    .hero-sub{font-family:var(--ff-d);font-size:clamp(1.2rem,2.5vw,1.6rem);font-style:italic;font-weight:300;color:var(--or);letter-spacing:.02em;margin-bottom:1.5rem;opacity:0;animation:fade-up .7s var(--ease) .34s forwards}
-    .hero-desc{font-size:clamp(.85rem,1.6vw,.95rem);font-weight:300;color:var(--muted);line-height:1.8;max-width:480px;margin-bottom:2.75rem;opacity:0;animation:fade-up .7s var(--ease) .46s forwards}
-
-    .countdown-wrap{margin-bottom:3rem;opacity:0;animation:fade-up .7s var(--ease) .58s forwards}
-    .countdown-label{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
-    .countdown{display:flex;align-items:flex-start;justify-content:center}
-    .cd-unit{display:flex;flex-direction:column;align-items:center;padding:0 clamp(.75rem,2vw,1.5rem)}
-    .cd-val{font-family:var(--ff-d);font-size:clamp(2.4rem,6vw,4rem);font-weight:300;line-height:1;color:var(--or);letter-spacing:-.02em;min-width:2ch;text-align:center;position:relative}
-    .cd-val::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--or-line)}
-    .cd-lab{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.6rem}
-    .cd-sep{font-family:var(--ff-d);font-size:clamp(2rem,5vw,3.2rem);color:var(--or);opacity:.3;line-height:1;align-self:flex-start;animation:sep-blink 1.4s step-end infinite}
-    @keyframes sep-blink{0%,100%{opacity:.3}50%{opacity:.05}}
-
-    .btn-group{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;opacity:0;animation:fade-up .7s var(--ease) .7s forwards}
-    .btn{display:inline-flex;align-items:center;gap:.55rem;padding:.75rem 1.75rem;border-radius:2px;font-family:var(--ff-b);font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .22s var(--ease);white-space:nowrap;border:none}
-    .btn-or{background:var(--or);color:var(--bg)}
-    .btn-or:hover{background:#e0be3d;transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,175,55,.25)}
-    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
-    .btn-ghost:hover{border-color:var(--or-line);color:var(--ink);transform:translateY(-2px)}
-    .wa-dot{width:7px;height:7px;border-radius:50%;background:#25D366;flex-shrink:0}
-
-    .footer-note{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);font-size:.65rem;letter-spacing:.12em;color:var(--muted);opacity:.5;white-space:nowrap;z-index:10}
-
-    @keyframes fade-up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fille — SenMarché</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="styles-dark.css">
+<style>
+/* ── Palette rose (clair) ── */
+body[data-univers="fille"]{
+  --bg:#fff6f9;--bg2:#ffeaf1;--card:#ffffff;--card2:#fff0f5;--paper:#fff6f9;
+  --ink:#4a2433;--stone:#8f5f73;--muted:#8f5f73;--mist:#b98aa0;--border:#f6cfdc;--whisper:#f6cfdc;--sand:#f6cfdc;
+  --or:#d63f6e;--or2:#b92f5a;--prix:#d63f6e;--green:#2f8f66;--red:#d64550;
+  --btn-ink:#ffffff;--blob1:rgba(255,170,200,.55);--blob2:rgba(255,205,222,.75);
+  background:var(--bg);color:var(--ink);font-family:var(--ff-b);padding-top:56px;overflow-x:hidden;
+}
+/* ── Palette rose (sombre) ── */
+body[data-univers="fille"]:not(.theme-clair){
+  --bg:#1c1118;--bg2:#26171f;--card:#2b1b24;--card2:#331f2a;--paper:#1c1118;
+  --ink:#ffe8f0;--stone:#d3a3b6;--muted:#d3a3b6;--mist:#a97c91;--border:#4a2c3a;--whisper:#4a2c3a;--sand:#4a2c3a;
+  --or:#ff7fa6;--or2:#ff9db9;--prix:#ff9db9;--btn-ink:#2b1019;--blob1:rgba(255,127,166,.16);--blob2:rgba(255,157,185,.1);
+}
+button{cursor:pointer;font-family:inherit}
+.pw{max-width:1200px;margin:0 auto;padding:0 1rem}
+em{font-style:italic}
+
+/* ── Hero ── */
+.hero{position:relative;overflow:hidden;text-align:center;padding:3.5rem 1rem 3rem;
+  background:radial-gradient(circle at 12% 18%,var(--blob1),transparent 45%),radial-gradient(circle at 88% 8%,var(--blob2),transparent 42%),linear-gradient(180deg,var(--bg2),var(--bg))}
+.hero .eyebrow{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;border-radius:99px;background:var(--card);border:1px solid var(--border);color:var(--or);font-size:.82rem;font-weight:600;letter-spacing:.04em}
+.hero h1{font-family:var(--ff-d);font-size:clamp(2.6rem,9vw,5rem);font-weight:500;line-height:1;margin:1.1rem 0 .8rem;color:var(--ink)}
+.hero h1 em{color:var(--or);font-weight:400}
+.hero p.lead{max-width:34rem;margin:0 auto 1.6rem;color:var(--stone);font-size:1.05rem;line-height:1.7}
+.cta{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
+.btn-p,.btn-g{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 1.7rem;border-radius:99px;font-weight:600;font-size:.98rem;text-decoration:none;transition:transform .15s,box-shadow .15s}
+.btn-p{background:var(--or);color:var(--btn-ink);border:1.5px solid var(--or);box-shadow:0 8px 22px -8px var(--or)}
+.btn-g{background:transparent;color:var(--or);border:1.5px solid var(--or)}
+.btn-p:hover,.btn-g:hover{transform:translateY(-2px)}
+.sp{position:absolute;color:var(--or);opacity:.5;font-size:var(--s,1.2rem);left:var(--x);top:var(--y);animation:tw 3.6s ease-in-out infinite;animation-delay:var(--d,0s);pointer-events:none}
+@keyframes tw{0%,100%{opacity:.15;transform:scale(.8) rotate(0)}50%{opacity:.7;transform:scale(1.15) rotate(15deg)}}
+.heart{display:block;margin:1.8rem auto 0;width:34px;height:34px;color:var(--or);opacity:.8}
+
+/* ── Rassurance ── */
+.cool{display:grid;gap:.6rem;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin:-1.4rem auto 0;position:relative;z-index:2}
+.cool div{display:flex;align-items:center;gap:.6rem;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:.8rem 1rem;font-size:.9rem;box-shadow:0 10px 24px -16px var(--or)}
+.cool b{color:var(--or);font-size:1.1rem}
+
+/* ── Outils ── */
+.tools{display:grid;gap:.8rem;margin:2.2rem 0 1rem}
+.sbar{position:relative}
+.sbar input{width:100%;padding:.95rem 1.2rem .95rem 2.8rem;border-radius:99px;border:1.5px solid var(--border);background:var(--card);color:var(--ink);font:inherit;font-size:1rem}
+.sbar input:focus{outline:2px solid var(--or);outline-offset:1px}
+.sbar::before{content:'✦';position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:var(--or)}
+.row{display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.chips{display:flex;gap:.5rem;overflow-x:auto;padding:.2rem 0 .4rem;scrollbar-width:none;flex:1;min-width:0}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;min-height:42px;padding:0 1.1rem;border-radius:99px;border:1.5px solid var(--border);background:var(--card);color:var(--ink);font-size:.92rem;font-weight:500;transition:background .15s,border-color .15s}
+.chip.on{background:var(--or);border-color:var(--or);color:var(--btn-ink)}
+.sel{min-height:42px;padding:0 2.2rem 0 1rem;border-radius:99px;border:1.5px solid var(--border);background:var(--card);color:var(--ink);font:inherit;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--or) 50%),linear-gradient(135deg,var(--or) 50%,transparent 50%);background-position:calc(100% - 18px) 52%,calc(100% - 12px) 52%;background-size:6px 6px;background-repeat:no-repeat}
+.count{color:var(--stone);font-size:.92rem;margin:.2rem 0 1rem}
+.count b{color:var(--or)}
+
+/* ── Grille + cartes ── */
+.sec-t{font-family:var(--ff-d);font-size:clamp(1.6rem,4.5vw,2.3rem);font-weight:500;margin:1.5rem 0 .3rem;text-align:center}
+.sec-t em{color:var(--or)}
+.p-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;min-height:200px}
+@media(min-width:768px){.p-grid{grid-template-columns:repeat(4,1fr);gap:18px}}
+body[data-univers="fille"] .p-card{background:var(--card);border:1px solid var(--border);border-radius:22px;overflow:hidden;box-shadow:0 14px 30px -22px var(--or);transition:transform .2s,box-shadow .2s}
+body[data-univers="fille"] .p-card:hover{transform:translateY(-4px);box-shadow:0 18px 34px -20px var(--or)}
+body[data-univers="fille"] .p-name{color:var(--ink)}
+body[data-univers="fille"] .p-prices .main{color:var(--prix)}
+body[data-univers="fille"] .p-action{border-radius:99px}
+body[data-univers="fille"] .p-wish{color:var(--or)}
+.more{height:1px;margin-top:1rem}
+.empty{grid-column:1/-1;text-align:center;padding:3rem 1.2rem;background:var(--card);border:1px dashed var(--or);border-radius:22px}
+.empty h3{font-family:var(--ff-d);font-size:1.7rem;font-weight:500;margin-bottom:.4rem}
+.empty p{color:var(--stone);margin-bottom:1.2rem;line-height:1.6}
+.hid{display:none!important}
+.demande{margin:3rem 0 3.5rem;text-align:center;padding:2.2rem 1.2rem;border-radius:26px;background:linear-gradient(135deg,var(--bg2),var(--card2));border:1px solid var(--border)}
+.demande h2{font-family:var(--ff-d);font-size:clamp(1.6rem,4.5vw,2.2rem);font-weight:500;margin-bottom:.4rem}
+.demande p{color:var(--stone);margin-bottom:1.2rem}
+.footer h4{color:inherit;opacity:.75}
+@media(prefers-reduced-motion:reduce){.sp{animation:none;opacity:.4}*{transition:none!important}}
+</style>
 </head>
-<bodydata-univers="fille">
-  <div class="hero-bg" id="hero-bg"></div>
-  <canvas id="particles" aria-hidden="true"></canvas>
+<body data-univers="fille">
 
-  
-<nav class="nav">
-    <a href="index.html" class="nav-logo">SenExport <span>Boutique</span></a>
-    <a href="index.html" class="nav-back">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Accueil
-    </a>
-  </nav>
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav-logo">Sen<em>Marché</em></a>
+  <ul class="nav-links">
+    <li><a href="mode.html">Mode</a></li>
+    <li><a href="maison.html">Maison</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="collections.html">Collections</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="favoris.html" class="nav-icon" aria-label="Favoris"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></a>
+    <a href="panier.html" class="nav-icon" aria-label="Panier"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="nav-badge" id="cart-badge" data-cart-count></span></a>
+    <a href="compte.html" class="nav-icon" aria-label="Compte"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+  </div>
+</nav>
 
-  <main style="padding-top:56px" class="main">
-    <span class="eyebrow">SenExport Boutique · Maison</span>
-    <svg viewBox="0 0 48 48" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto 1.5rem" aria-hidden="true">
-  <path d="M6 22L24 6L42 22V42H30V30H18V42H6V22Z" stroke="var(--or)" stroke-width="2" stroke-linejoin="round" fill="none"/>
-  <path d="M24 6L24 6" stroke="var(--or)" stroke-width="2" stroke-linecap="round"/>
-</svg>
-    <h1 class="hero-title">Maison &amp; Électroménager</h1>
-    <p class="hero-sub">bientôt disponible.</p>
-    <p class="hero-desc">Notre showroom virtuel est en cours de construction. Vous pourrez bientôt explorer nos produits pièce par pièce.</p>
+<main>
+  <section class="hero">
+    <span class="sp" style="--x:8%;--y:22%;--s:1.4rem">✦</span><span class="sp" style="--x:20%;--y:70%;--s:.9rem;--d:.8s">✦</span>
+    <span class="sp" style="--x:86%;--y:30%;--s:1.2rem;--d:1.4s">✦</span><span class="sp" style="--x:75%;--y:75%;--s:1rem;--d:.4s">✦</span>
+    <span class="sp" style="--x:50%;--y:10%;--s:.8rem;--d:2s">✦</span><span class="sp" style="--x:94%;--y:58%;--s:.9rem;--d:1.1s">✦</span>
+    <span class="eyebrow">✿ Univers Fille</span>
+    <h1>Pour elle, <em>tout en rose</em></h1>
+    <p class="lead">Robes, accessoires et petites douceurs : une sélection tendre, soignée et pleine de charme, à retirer près de chez toi ou à recevoir chez toi.</p>
+    <div class="cta"><a class="btn-p" href="#selection">Voir la sélection</a><a class="btn-g" href="demande-speciale.html">Demander un article</a></div>
+    <svg class="heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.8 5 6.2 5c2 0 3.4 1.1 4.2 2.4h3.2C14.4 6.1 15.8 5 17.8 5c3.4 0 5.3 3.4 3.8 6.8C19.5 16.4 12 21 12 21z"/></svg>
+  </section>
 
-    <div class="countdown-wrap">
-      <p class="countdown-label">Lancement prévu dans</p>
-      <div class="countdown" role="timer" aria-live="polite">
-        <div class="cd-unit"><span class="cd-val" id="cd-j">00</span><span class="cd-lab">Jours</span></div>
-        <span class="cd-sep" aria-hidden="true">:</span>
-        <div class="cd-unit"><span class="cd-val" id="cd-h">00</span><span class="cd-lab">Heures</span></div>
-        <span class="cd-sep" aria-hidden="true">:</span>
-        <div class="cd-unit"><span class="cd-val" id="cd-m">00</span><span class="cd-lab">Minutes</span></div>
-        <span class="cd-sep" aria-hidden="true">:</span>
-        <div class="cd-unit"><span class="cd-val" id="cd-s">00</span><span class="cd-lab">Secondes</span></div>
+  <div class="pw">
+    <div class="cool"><div><b>✓</b> Retrait ou livraison</div><div><b>✓</b> Paiement à la récupération</div><div><b>✓</b> Tu vérifies avant de payer</div></div>
+
+    <h2 class="sec-t" id="selection">Notre <em>sélection</em></h2>
+
+    <div class="tools">
+      <div class="sbar"><input id="q" type="search" placeholder="Chercher une robe, un sac, un bijou…" autocomplete="off" aria-label="Chercher"></div>
+      <div class="row">
+        <div class="chips" id="chips"></div>
+        <select class="sel" id="sort" aria-label="Trier"><option value="recent">Nouveautés</option><option value="asc">Prix croissant</option><option value="desc">Prix décroissant</option></select>
       </div>
     </div>
+    <p class="count" id="count"></p>
 
-    <div class="btn-group">
-      <a href="index.html" class="btn btn-or">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        Retour à l'accueil
-      </a>
-      <a href="https://wa.me/221778038874" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
-        <span class="wa-dot"></span>
-        Nous contacter sur WhatsApp
-      </a>
-    </div>
-  </main>
+    <div class="p-grid" id="grid"><div class="empty">Chargement de la sélection…</div></div>
+    <div class="more hid" id="more" aria-hidden="true"></div>
 
-  <p class="footer-note">© 2026 SenExport Boutique</p>
+    <section class="demande">
+      <h2>Tu cherches <em style="color:var(--or)">autre chose</em> ?</h2>
+      <p>Dis-nous ce que tu rêves de trouver, on s’en occupe.</p>
+      <a class="btn-p" href="demande-speciale.html">Faire une demande spéciale</a>
+    </section>
+  </div>
+</main>
 
-  <script src="images.js"></script>
-  <script>
-  (() => {
-    const bg = document.getElementById('hero-bg');
-    const src = (window.SE_IMAGES || {}).heroMaison;
-    if (!src) return;
-    const im = new Image();
-    im.onload = () => {
-      bg.style.backgroundImage = `url('${src}')`;
-      bg.classList.add('loaded');
-    };
-    im.src = src;
-  })();
-  </script>
-  <script>
-  (() => {
-    const T=new Date('2026-08-15T00:00:00');
-    function pad(n){return String(n).padStart(2,'0')}
-    function tick(){
-      const diff=T-new Date();
-      if(diff<=0)return;
-      document.getElementById('cd-j').textContent=pad(Math.floor(diff/86400000));
-      document.getElementById('cd-h').textContent=pad(Math.floor((diff%86400000)/3600000));
-      document.getElementById('cd-m').textContent=pad(Math.floor((diff%3600000)/60000));
-      document.getElementById('cd-s').textContent=pad(Math.floor((diff%60000)/1000));
-    }
-    tick();setInterval(tick,1000);
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand"><div>Sen<em style="color:inherit;opacity:.75;font-style:italic">Marché</em></div><p>Mode, seconde main et maison. Paiement à la récupération.</p></div>
+    <nav class="footer-col"><h4>Univers</h4><ul><li><a href="mode.html">Mode</a></li><li><a href="maison.html">Maison</a></li><li><a href="catalogue.html">Catalogue</a></li><li><a href="collections.html">Collections</a></li></ul></nav>
+    <nav class="footer-col"><h4>Compte</h4><ul><li><a href="compte.html">Mon compte</a></li><li><a href="panier.html">Panier</a></li><li><a href="favoris.html">Favoris</a></li></ul></nav>
+    <nav class="footer-col"><h4>Contact</h4><ul><li><a href="https://wa.me/221778038874" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="a-propos.html">À propos</a></li><li><a href="cgv.html">CGV</a></li></ul></nav>
+  </div>
+  <div class="footer-bottom"><p>© 2026 SenMarché</p><a href="cgv.html">Conditions générales</a></div>
+</footer>
 
-    /* PARTICULES */
-    const canvas=document.getElementById('particles'),ctx=canvas.getContext('2d');
-    const PAL=[[212,175,55],[184,148,30],[240,205,85],[160,128,20]];
-    let W,H,pts;
-    function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
-    function newPt(bottom){
-      const c=PAL[Math.floor(Math.random()*PAL.length)];
-      return{x:Math.random()*W,y:bottom?H+Math.random()*100:Math.random()*H,r:Math.random()*1.6+.2,vx:(Math.random()-.5)*.3,vy:-(Math.random()*.4+.1),a:Math.random()*.5+.1,va:(Math.random()-.5)*.004,col:c,phi:Math.random()*Math.PI*2};
-    }
-    function init(){resize();const n=Math.min(Math.floor((W*H)/13000),100);pts=Array.from({length:n},()=>newPt(false))}
-    function frame(){
-      ctx.clearRect(0,0,W,H);
-      for(let i=0;i<pts.length;i++){
-        const p=pts[i];p.phi+=.016;
-        const a=Math.max(0,Math.min(1,p.a+Math.sin(p.phi)*.14));
-        ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.2832);
-        ctx.fillStyle=`rgba(${p.col[0]},${p.col[1]},${p.col[2]},${a})`;ctx.fill();
-        p.x+=p.vx;p.y+=p.vy;p.a+=p.va;
-        if(p.a>.65||p.a<.05)p.va*=-1;
-        if(p.y<-8||p.x<-8||p.x>W+8){pts[i]=newPt(true);pts[i].x=Math.random()*W}
-      }
-      requestAnimationFrame(frame);
-    }
-    window.addEventListener('resize',()=>{resize();pts.forEach(p=>{if(p.x>W)p.x=Math.random()*W;if(p.y>H)p.y=Math.random()*H})});
-    init();frame();
-  })();
-  </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="images.js"></script>
+<script src="app.js"></script>
 <script src="theme.js"></script>
 <script src="animations.js"></script>
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const S = { q: '', cat: null, sort: 'recent', shown: 12 };
+let ALL = [], FC = [], lastKey = null, lastShown = 0;
+const HC = {};
+const card = a => HC[a.reference] || (HC[a.reference] = SE.productCard(a));
+
+function list() {
+  let l = ALL.filter(a => {
+    if (S.cat !== null && a.categorie_id !== S.cat) return false;
+    if (S.q) { const q = S.q.toLowerCase(); if (!((a.nom || '') + ' ' + (a.description || '')).toLowerCase().includes(q)) return false; }
+    return true;
+  });
+  if (S.sort === 'asc') l.sort((a, b) => (a.prix_vente_fcfa || 0) - (b.prix_vente_fcfa || 0));
+  if (S.sort === 'desc') l.sort((a, b) => (b.prix_vente_fcfa || 0) - (a.prix_vente_fcfa || 0));
+  return l;
+}
+
+function render() {
+  const l = list(), n = l.length, g = $('grid');
+  $('count').innerHTML = ALL.length ? '<b>' + SE.fnum(n) + '</b> petite' + (n > 1 ? 's' : '') + ' merveille' + (n > 1 ? 's' : '') + ' pour toi' : '';
+  if (!n) {
+    lastKey = null; $('more').classList.add('hid');
+    g.innerHTML = ALL.length
+      ? '<div class="empty"><h3>Rien ne correspond…</h3><p>Essaie un autre mot ou une autre catégorie.</p><button class="btn-g" id="reset">Tout afficher</button></div>'
+      : '<div class="empty"><h3>De nouvelles pépites arrivent</h3><p>La sélection Fille se prépare. Dis-nous ce que tu cherches et on te la déniche.</p><a class="btn-p" href="demande-speciale.html">Faire une demande spéciale</a></div>';
+    const r = $('reset'); if (r) r.onclick = () => { S.q = ''; S.cat = null; $('q').value = ''; chips(); render(); };
+    return;
+  }
+  const key = l.map(a => a.reference).join('|');
+  if (key === lastKey && S.shown >= lastShown) {
+    if (S.shown > lastShown) g.insertAdjacentHTML('beforeend', l.slice(lastShown, S.shown).map(card).join(''));
+  } else {
+    g.innerHTML = l.slice(0, S.shown).map(card).join('');
+    if (lastKey !== null && !matchMedia('(prefers-reduced-motion:reduce)').matches) g.animate([{ opacity: .4 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' });
+  }
+  lastKey = key; lastShown = Math.min(S.shown, n);
+  $('more').classList.toggle('hid', n <= S.shown);
+}
+
+function chips() {
+  if (FC.length < 2) { $('chips').innerHTML = ''; return; }
+  $('chips').innerHTML = '<button class="chip' + (S.cat === null ? ' on' : '') + '" data-c="">Tout</button>' + FC.map(c => '<button class="chip' + (S.cat === c.id ? ' on' : '') + '" data-c="' + c.id + '">' + SE.esc(c.nom) + '</button>').join('');
+  document.querySelectorAll('.chip').forEach(b => b.onclick = () => { S.cat = b.dataset.c === '' ? null : +b.dataset.c; S.shown = 12; chips(); render(); });
+}
+
+function loadMore() {
+  const m = $('more'); if (m.classList.contains('hid')) return;
+  S.shown += 12; render();
+  requestAnimationFrame(() => { if (!m.classList.contains('hid') && m.getBoundingClientRect().top < innerHeight + 900) loadMore(); });
+}
+
+(async () => {
+  await new Promise(r => setTimeout(r, 50));
+  const [arts, cats] = await Promise.all([SE.Articles.load(), SE.Categories.load()]);
+  FC = cats.filter(c => /fille/i.test(c.nom));
+  const ids = FC.map(c => c.id);
+  ALL = arts.filter(a => ids.includes(a.categorie_id) && (a.quantite || 0) > 0 && a.etat !== 'Vendu');
+  chips(); render();
+  let t;
+  $('q').oninput = e => { clearTimeout(t); t = setTimeout(() => { S.q = e.target.value.trim(); S.shown = 12; render(); }, 250); };
+  $('sort').onchange = e => { S.sort = e.target.value; render(); };
+  new IntersectionObserver(es => { if (es[0].isIntersecting) loadMore(); }, { rootMargin: '900px' }).observe($('more'));
+  document.addEventListener('error', e => { const t = e.target; if (t.tagName === 'IMG' && !t.dataset.f) { t.dataset.f = 1; t.src = 'https://placehold.co/600x600?text=SenMarch%C3%A9'; } }, true);
+})();
+})();
+</script>
 </body>
 </html>
