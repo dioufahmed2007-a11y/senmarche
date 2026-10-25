@@ -147,6 +147,9 @@ body:not(.theme-clair) .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) br
 .pp{display:grid;gap:.15rem;min-width:180px}.pp b{font-size:1rem}.pp span{color:var(--stone);font-size:.88rem}
 .pp em{font-style:normal;color:var(--green);font-weight:600;font-size:.85rem;margin-top:.35rem}.pp a{color:var(--or);font-weight:600;margin-top:.2rem}
 .okbox{background:var(--bg2);border-left:3px solid var(--green);border-radius:8px;padding:.8rem 1rem;font-size:.93rem;line-height:1.5;margin:.6rem 0}
+.exp,.exp2{min-height:34px;padding:0 .7rem;font-size:.8rem;border-radius:9px}
+.mapw.full .exp,.mapw.full .exp2{min-height:40px;padding:0 .9rem;font-size:.88rem;border-radius:10px}
+.leaflet-tooltip{font-size:.78rem;padding:3px 8px}
 </style>
 </head>
 <body>
@@ -342,7 +345,7 @@ function pick(x, fly) {
   PT = x; if (x) localStorage.setItem('se_point', x.id);
   document.querySelectorAll('.pt').forEach(b => b.classList.toggle('on', !!x && b.dataset.id === String(x.id)));
   if (fly && MR && x && x.lat) MR.flyTo([x.lat, x.lng], 15);
-  PTS.forEach(y => { if (y._m) y._m.setIcon(pinIcon(y === x)); });
+  PTS.forEach(y => { if (y._m) { y._m.setIcon(pinIcon(y === x)); y._m.unbindTooltip().bindTooltip(esc(y.nom), { permanent: y === x, direction: 'bottom', offset: [0, 4] }); if (y === x) y._m.openTooltip(); } });
   $('g-pt').classList.remove('bad'); sumMode(); fsText(); if (ME) drawRoute();
   const g = $('gm'); if (x && x.lat) g.href = 'https://www.google.com/maps?q=' + x.lat + ',' + x.lng; g.classList.toggle('hid', !(x && x.lat));
 }
@@ -407,7 +410,7 @@ async function loadPoints() {
       else if (!$('w-r').classList.contains('full')) toggleFull('w-r');
     }); tiles(MR, 'map-r');
     const gp = PTS.filter(x => x.lat && x.lng);
-    gp.forEach(x => { x._m = window.L.marker([x.lat, x.lng], { icon: pinIcon(false) }).addTo(MR).bindTooltip(esc(x.nom), { permanent: true, direction: 'bottom', offset: [0, 4] }).bindPopup(() => popupHtml(x), { offset: [0, -20], autoPanPadding: [30, 30] }).on('click', () => pick(x, false)); });
+    gp.forEach(x => { x._m = window.L.marker([x.lat, x.lng], { icon: pinIcon(false) }).addTo(MR).bindTooltip(esc(x.nom), { direction: 'bottom', offset: [0, 4] }).bindPopup(() => popupHtml(x), { offset: [0, -20], autoPanPadding: [30, 30] }).on('click', () => pick(x, false)); });
     fitAll();
   } else $('map-r').parentElement.classList.add('hid');
   $('cap-r').textContent = gp0(PTS) > 1 ? 'Touche un dépôt pour le choisir. Touche la carte pour l’agrandir.' : 'Touche la carte pour l’agrandir.';
