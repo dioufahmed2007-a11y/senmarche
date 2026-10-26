@@ -260,7 +260,7 @@ async function load() {
     const qte = a.quantite || 0, out = qte <= 0, etat = a.etat || '';
     const neuf = /neuf/i.test(etat), seconde = cl.includes('feug') || (etat && !neuf);
     const chaus = /chaussure|basket|sneaker|sandale|pointure/i.test(cl + ' ' + a.nom) || !!a.pointures;
-    const vet = chaus || a.categorie_id === 1 || /mode|fille|sport|feug/.test(cl);
+    const vet = chaus || a.categorie_id === 1 || /mode|sport|feug|v[eê]tement|robe|jupe|pantalon|chemise|t-shirt/.test(cl);
     let sizes = list(a.tailles).length ? list(a.tailles) : list(a.pointures);
     if (!sizes.length && vet && !chaus) sizes = ['S', 'M', 'L', 'XL'];
     const photos = (Array.isArray(a.photos) && a.photos.length ? a.photos : [a.photo_url]).filter(Boolean).map(p => img(p, 900));
