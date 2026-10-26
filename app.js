@@ -74,7 +74,7 @@ SE.needsSize = a => {
   if (!a) return false;
   if (a.tailles || a.pointures) return true;
   const n = ((a.categorie && a.categorie.nom) || '').toLowerCase();
-  return a.categorie_id === 1 || /mode|fille|sport|feug/.test(n);
+  return a.categorie_id === 1 || /mode|sport|feug|v[eê]tement|robe|jupe|pantalon|chemise|t-shirt/.test(n);
 };
 
 /* ──────────────────────────────────────────────────────────────
