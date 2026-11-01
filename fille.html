@@ -8,128 +8,13 @@
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="styles-dark.css">
-<style>
-/* Boutique Fille : base crème du site + prune profond pour le contraste + framboise pour les actions + rose en touches douces */
-body[data-univers="fille"]{--or:#c2336b;--or2:#a52a59;--prix:#c2336b;--plum:#45172f;--plum2:#5c2442;--blush:#fde7ef;--blush2:#f9cfde;--gold:#b98b5e;--on-plum:#fff3f7;--btn-ink:#fff;--glow:rgba(194,51,107,.22)}
-body[data-univers="fille"]:not(.theme-clair){--or:#ff8fb3;--or2:#ffa9c4;--prix:#ff8fb3;--plum:#3a1530;--plum2:#4a1d3d;--blush:rgba(255,143,179,.11);--blush2:rgba(255,143,179,.22);--gold:#d9b38a;--btn-ink:#2b1019;--glow:rgba(255,143,179,.18)}
-body{background:var(--bg);color:var(--ink);font-family:var(--ff-b);padding-top:56px;overflow-x:hidden}
-button{cursor:pointer;font-family:inherit}
-main section{padding:0;margin:0}
-.pw{max-width:1200px;margin:0 auto;padding:0 1rem}
-.hid{display:none!important}
-em{font-style:italic}
-
-/* ── Hero prune : fort contraste, titre éditorial, vitrine en arches ── */
-.hero{background:radial-gradient(circle at 88% 18%,rgba(255,143,179,.3),transparent 42%),linear-gradient(135deg,var(--plum),var(--plum2));color:var(--on-plum);overflow:hidden}
-.hero-in{display:grid;gap:1.4rem;padding:2rem 1rem 1.8rem;align-items:center;max-width:1200px;margin:0 auto}
-@media(min-width:880px){.hero-in{grid-template-columns:1.1fr .9fr;padding:3.2rem 1rem 3rem;gap:2rem}}
-.kick{display:inline-flex;align-items:center;gap:.6rem;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:#ffc9db;font-weight:600}
-.kick::before{content:'';width:28px;height:1px;background:#ffc9db}
-.hero h1{font-family:var(--ff-d);font-size:clamp(2.5rem,8vw,4.6rem);font-weight:500;line-height:1;margin:.8rem 0 .7rem}
-.hero h1 em{color:#ffbdd3;font-weight:400}
-.hero p.lead{color:#f3d5e0;max-width:30rem;line-height:1.65;margin-bottom:1.2rem}
-.hs{position:relative;max-width:460px}
-.hs input{width:100%;padding:1rem 1.2rem 1rem 2.8rem;border-radius:14px;border:0;background:#fff8fa;color:#2d1b26;font:inherit;font-size:1rem}
-.hs input:focus{outline:2px solid #ffbdd3;outline-offset:2px}
-.hs::before{content:'✦';position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:#c2336b;z-index:1}
-.pills{display:flex;gap:.5rem 1rem;flex-wrap:wrap;margin-top:1rem;font-size:.86rem;color:#f3d5e0}
-.pills b{color:#ffbdd3}
-.hc{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-items:end;height:190px}
-@media(min-width:880px){.hc{height:400px;gap:14px}}
-.arch{display:block;border-radius:999px 999px 18px 18px;overflow:hidden;background:var(--plum2);border:2px solid rgba(255,255,255,.2);display:grid;place-items:center;font-size:2.2rem}
-.arch:nth-child(1){height:76%}.arch:nth-child(2){height:100%}.arch:nth-child(3){height:62%}
-.arch img{width:100%;height:100%;object-fit:cover}
-
-/* ── Titres de section ── */
-.sec{text-align:center;margin:2.8rem 0 1.2rem}
-.rule{display:flex;align-items:center;justify-content:center;gap:.8rem;color:var(--gold);font-size:.9rem;margin-bottom:.4rem}
-.rule::before,.rule::after{content:'';width:44px;height:1px;background:currentColor;opacity:.7}
-.sec h2{font-family:var(--ff-d);font-size:clamp(1.8rem,5vw,2.6rem);font-weight:500;line-height:1.05}
-.sec h2 em{color:var(--or)}
-.sec p{color:var(--stone);margin-top:.35rem}
-
-/* ── Rayons en arches ── */
-.rays{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 14px}
-@media(min-width:700px){.rays{grid-template-columns:repeat(4,1fr)}}
-.ray{border:0;background:none;color:var(--ink);text-align:center;padding:0}
-.ray .a{display:grid;place-items:center;aspect-ratio:3/4;border-radius:999px 999px 18px 18px;overflow:hidden;background:var(--blush);font-size:2.6rem;transition:transform .2s,box-shadow .2s;border:1px solid var(--blush2)}
-.ray:hover .a{transform:translateY(-4px);box-shadow:0 18px 30px -20px var(--glow)}
-.ray .a img{width:100%;height:100%;object-fit:cover}
-.ray b{display:block;font-family:var(--ff-d);font-size:1.3rem;font-weight:500;margin-top:.55rem}
-.ray small{color:var(--stone)}
-.ray.on .a{outline:3px solid var(--or);outline-offset:3px}
-.ray.on b{color:var(--or)}
-
-/* ── Barre collante ── */
-.tb{position:sticky;top:56px;z-index:30;background:var(--bg);border-bottom:1px solid var(--border);padding:.6rem 0;margin-top:2.2rem}
-.row{display:flex;gap:.6rem;align-items:center}
-.chips{display:flex;gap:.45rem;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:0 0 auto;min-height:38px;padding:0 1rem;border-radius:99px;border:1.5px solid var(--border);background:var(--card);color:var(--ink);font-size:.88rem;font-weight:500}
-.chip.on{background:var(--plum);border-color:var(--plum);color:var(--on-plum)}
-.chip.sep{margin-left:.3rem;border-style:dashed}
-.sel{flex:0 0 auto;min-height:38px;padding:0 1.9rem 0 .8rem;border-radius:12px;border:1.5px solid var(--border);background:var(--card);color:var(--ink);font:inherit;font-size:.88rem;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--or) 50%),linear-gradient(135deg,var(--or) 50%,transparent 50%);background-position:calc(100% - 15px) 52%,calc(100% - 10px) 52%;background-size:5px 5px;background-repeat:no-repeat}
-.count{color:var(--stone);font-size:.9rem;margin:.9rem 0 .7rem}
-.count b{color:var(--or)}
-
-/* ── Flux ── */
-.p-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;min-height:200px}
-@media(min-width:768px){.p-grid{grid-template-columns:repeat(4,1fr);gap:18px}}
-body[data-univers="fille"] .p-card{border-radius:16px;overflow:hidden;transition:transform .2s,box-shadow .2s}
-body[data-univers="fille"] .p-card:hover{transform:translateY(-3px);box-shadow:0 18px 30px -22px var(--glow)}
-body[data-univers="fille"] .p-wish{color:var(--or)}
-.ban{grid-column:1/-1;border-radius:20px;overflow:hidden;background:var(--blush);border:1px solid var(--blush2);padding:1.2rem 1rem}
-.ban h2,.ban h3{font-family:var(--ff-d);font-weight:500;line-height:1.1;font-size:1.6rem}
-.ban h2 em,.ban h3 em{color:var(--or)}
-.ban p{color:var(--stone);margin:.3rem 0 .8rem;font-size:.95rem;line-height:1.5}
-.ban.feat{display:grid;grid-template-columns:44% 1fr;gap:1rem;align-items:center;padding:0;background:var(--plum);color:var(--on-plum);border:0}
-.ban.feat a.im{display:block;height:100%;min-height:220px;background:var(--plum2)}
-.ban.feat img{width:100%;height:100%;object-fit:cover;display:block}
-.ban.feat .tx{padding:1rem 1rem 1rem 0}
-.ban.feat h3{color:var(--on-plum)}
-.ban.feat .tag{background:#ffd3e2;color:#45172f}
-.ban.feat .fp b{color:#ffc2d6}.ban.feat .fp s{color:#e5bccb}
-.ban.feat .btn-p{background:#ffd3e2;color:#45172f;border-color:#ffd3e2}
-.ban .tag{display:inline-block;background:var(--or);color:var(--btn-ink);border-radius:99px;padding:.18rem .75rem;font-size:.76rem;font-weight:700;margin-bottom:.45rem}
-.fp{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;margin:.3rem 0 .6rem}
-.fp b{font-family:var(--ff-d);font-size:1.8rem;color:var(--prix)}
-.fp s{color:var(--stone);font-size:.9rem}
-.low{color:var(--or);font-weight:600;font-size:.85rem;display:block;margin-bottom:.6rem}
-.ban.feat .low{color:#ffc2d6}
-.hrow{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,42vw);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:.2rem .1rem .6rem;scrollbar-width:thin}
-.hrow>*{scroll-snap-align:start}
-@media(min-width:768px){.hrow{grid-auto-columns:220px}}
-.ban.plain{background:var(--card);border-color:var(--border)}
-.trust{display:grid;gap:.7rem;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
-.trust div{display:flex;gap:.7rem;align-items:center;font-size:.92rem}
-.trust i{font-style:normal;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--blush);color:var(--or);font-size:1.1rem;flex:0 0 auto}
-.ban.cta{background:var(--plum);color:var(--on-plum);border:0;text-align:center;padding:1.8rem 1rem}
-.ban.cta h3{color:var(--on-plum)}.ban.cta h3 em{color:#ffbdd3}.ban.cta p{color:#f3d5e0}
-.rc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:.9rem 1rem;margin-top:.6rem}
-.rc .st{color:var(--or);letter-spacing:2px}
-.rc p{margin:.25rem 0;line-height:1.5;color:var(--ink)}.rc small{color:var(--stone)}.rc a{color:var(--or);font-weight:600}
-.btn-p,.btn-g{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 1.4rem;border-radius:14px;font-weight:600;text-decoration:none;font-size:.95rem}
-.btn-p{background:var(--or);color:var(--btn-ink);border:1.5px solid var(--or)}
-.btn-g{background:transparent;color:var(--or);border:1.5px solid var(--or)}
-.more{height:1px;margin-top:1rem}
-.empty{grid-column:1/-1;text-align:center;padding:2.4rem 1.2rem;background:var(--card);border:1px dashed var(--or);border-radius:18px}
-.empty h3{font-family:var(--ff-d);font-size:1.6rem;font-weight:500;margin-bottom:.4rem}
-.empty p{color:var(--stone);margin-bottom:1.1rem;line-height:1.6}
-.end{text-align:center;padding:2.2rem 1rem 3rem;color:var(--stone)}
-.end h3{font-family:var(--ff-d);font-size:1.6rem;font-weight:500;color:var(--ink);margin-bottom:.3rem}
-.end p{margin-bottom:1rem}
-.wa-float{position:fixed;right:16px;bottom:20px;z-index:300;width:54px;height:54px;border-radius:50%;background:#25D366;display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.25)}
-.wa-float svg{width:28px;height:28px;fill:#fff}
-.footer h4{color:inherit;opacity:.75}
-@media(prefers-reduced-motion:reduce){*{transition:none!important}}
-</style>
+<link rel="stylesheet" href="boutique.css">
 </head>
-<body data-univers="fille">
-
+<body data-b="fille">
 <nav class="nav" id="nav">
   <a href="index.html" class="nav-logo">Sen<em>Marché</em></a>
   <ul class="nav-links">
@@ -145,38 +30,70 @@ body[data-univers="fille"] .p-wish{color:var(--or)}
     <a href="compte.html" class="nav-icon" aria-label="Compte"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
   </div>
 </nav>
+<main class="hub"><div class="pw">
 
-<main>
-  <section class="hero">
-    <div class="hero-in">
-      <div>
-        <span class="kick">SenMarché · Fille</span>
-        <h1>La beauté, <em>version toi</em></h1>
-        <p class="lead">Gloss, maquillage, bijoux, sacs et petites folies. Tu choisis, on prépare : retrait près de chez toi ou livraison, et tu paies à la récupération.</p>
-        <div class="hs"><input id="q" type="search" placeholder="Un gloss ? Un sac ? Une robe ?" autocomplete="off" aria-label="Chercher dans l’univers Fille"></div>
-        <div class="pills"><span><b>✓</b> Retrait ou livraison</span><span><b>✓</b> Tu vérifies avant de payer</span><span id="stat"></span></div>
-      </div>
-      <div class="hc" id="collage" aria-hidden="true"></div>
-    </div>
-  </section>
+  <section id="pf"></section>
 
-  <div class="pw">
-    <section class="sec"><div class="rule">✦</div><h2>Nos <em>rayons</em></h2><p>Touche un rayon pour le découvrir.</p></section>
-    <div class="rays" id="rays"></div>
+  <section class="sec"><div class="pearls"></div><h2>Qu’est-ce qui te ferait <em>plaisir</em> ?</h2><p>Choisis ton rayon : on t’accompagne ensuite.</p></section>
+  <div class="hub-or" id="doors"></div>
+  <div class="routine-cta"><div><b>Un souci de peau, ou pas sûre de ton choix ?</b><span>Ma routine perso : 4 questions, une routine pensée pour ta peau.</span></div><a class="btn-p" href="soins.html#routine">Trouver ma routine</a></div>
+
+  <div id="packs-wrap" class="hid"><section class="sec"><div class="pearls"></div><h2>Coffrets &amp; <em>offres</em></h2><p>Compare : ensemble, c’est moins cher.</p></section><div class="packs" id="packs"></div></div>
+
+  <section class="sec"><div class="pearls"></div><h2>Nos <em>coups de cœur</em></h2><p>Un peu de tout, choisi pour toi.</p></section>
+  <div class="p-grid" id="grid"><div class="empty">Chargement…</div></div>
+
+  <div class="args">
+    <div><i>🏠</i><b>Retrait ou livraison</b><span>Tu choisis comment recevoir ta commande.</span></div>
+    <div><i>💸</i><b>Paiement à la récupération</b><span>Espèces, Wave ou Orange Money, au moment de la remise.</span></div>
+    <div><i>👀</i><b>Tu vérifies avant de payer</b><span>Tu regardes ton article avant de régler.</span></div>
+    <div><i>💬</i><b>Conseil sur WhatsApp</b><span>Une question, une teinte, une taille ? On te répond.</span></div>
   </div>
 
-  <div class="tb" id="tb"><div class="pw"><div class="row"><div class="chips" id="chips"></div><select class="sel" id="sort" aria-label="Trier"><option value="recent">Nouveautés</option><option value="asc">Prix ↑</option><option value="desc">Prix ↓</option></select></div></div></div>
+  <div class="ban cta" style="margin:2.6rem 0 1rem;border-radius:24px"><h3>Tu cherches <em>autre chose</em> ?</h3><p>Une pièce, une marque, une teinte précise ? Dis-nous ce que tu veux, on te la déniche.</p><a class="btn-p on-plum" href="demande-speciale.html">Faire une demande spéciale</a></div>
+  <p style="text-align:center;margin-bottom:3rem"><a class="btn-g" href="catalogue.html">Voir tout le catalogue SenMarché</a></p>
+</div></main>
+<script src="boutique.js"></script>
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id), E = s => SE.esc(s), U = Boutique.util;
+const price = U.price, isDeal = U.isDeal, pct = U.pct, link = U.link;
+const G = [
+  { k: 'ten', href: 'tenues.html', kick: 'Habits', t: 'Tenues', s: 'Abayas, voiles, robes, pantalons', re: /abaya|voile|[ée]l[ée]gance|tendance|robe/i },
+  { k: 'soi', href: 'soins.html', kick: 'Peau', t: 'Soins & routine', s: 'Crèmes, sérums, nettoyants', re: /soins?\b/i },
+  { k: 'cos', href: 'cosmetiques.html', kick: 'Beauté', t: 'Cosmétiques', s: 'Gloss, maquillage, parfums', re: /cosm[ée]tique|gloss|maquillage|l[eè]vres/i }
+];
+function phare(a) {
+  if (!a) return '<div class="pf"><div class="tx"><span class="tag" style="align-self:flex-start">✿ Bientôt</span><h2>Ta boutique se prépare</h2><p>De nouvelles pièces arrivent très vite. En attendant, dis-nous ce que tu cherches.</p><a class="btn-p on-plum" style="align-self:flex-start" href="demande-speciale.html">Faire une demande spéciale</a></div></div>';
+  const left = a.quantite || 0;
+  return '<div class="pf"><a class="im" href="' + link(a) + '"><img src="' + E(SE.imgUrl(a.photo_url, 800)) + '" alt="' + E(a.nom) + '"></a><div class="tx"><span class="tag" style="align-self:flex-start">✿ Produit phare</span><h2>' + E(a.nom) + '</h2><p>' + E(a.description || 'Un coup de cœur de la boutique.') + '</p><div class="fp"><b>' + SE.fprix(price(a)) + '</b>' + (isDeal(a) ? '<s>' + SE.fprix(a.prix_min_fcfa) + '</s>' : '') + '</div>' + (left > 0 && left <= 5 ? '<span class="low">Plus que ' + left + ' en stock</span>' : '') + '<a class="btn-p on-plum" style="align-self:flex-start" href="' + link(a) + '">Je le veux</a></div></div>';
+}
+(async () => {
+  await new Promise(r => setTimeout(r, 50));
+  const arts = await SE.Articles.load();
+  const group = {}; G.forEach(g => group[g.k] = []);
+  const all = [];
+  arts.forEach(a => {
+    if ((a.quantite || 0) <= 0 || a.etat === 'Vendu') return;
+    const n = (a.categorie && a.categorie.nom) || ''; if (!/fille/i.test(n)) return;
+    const g = G.find(x => x.re.test(n)); if (g) { group[g.k].push(a); all.push(a); }
+  });
+  const packs = all.filter(a => U.isPack(a, all)), notPack = all.filter(a => !U.isPack(a, all));
+  const star = (packs.concat(notPack)).slice().sort((a, b) => (isDeal(b) ? pct(b) : 0) - (isDeal(a) ? pct(a) : 0))[0];
+  $('pf').innerHTML = phare(star);
+  $('doors').innerHTML = G.map(g => { const l = group[g.k], f = l.find(a => a.photo_url); return '<a class="door" href="' + g.href + '">' + (f ? '<img loading="lazy" src="' + E(SE.imgUrl(f.photo_url, 600)) + '" alt="">' : '') + '<span class="k">' + g.kick + '</span><span class="t"><b>' + g.t + '</b><small>' + g.s + (l.length ? ' · ' + l.length + ' article' + (l.length > 1 ? 's' : '') : ' · bientôt') + '</small></span></a>'; }).join('');
+  if (packs.length) { $('packs-wrap').classList.remove('hid'); $('packs').innerHTML = packs.slice(0, 3).map(p => U.packHtml(p, all)).join(''); }
+  // coups de cœur : un peu de chaque rayon, en alternance
+  const lists = G.map(g => group[g.k].filter(a => !U.isPack(a, all)).slice(0, 4)), mix = [];
+  for (let i = 0; i < 4; i++) lists.forEach(l => { if (l[i]) mix.push(l[i]); });
+  $('grid').innerHTML = mix.length ? mix.slice(0, 8).map(SE.productCard).join('') : '<div class="empty"><h3>De nouvelles pépites arrivent</h3><p>La boutique se prépare.</p></div>';
+  document.addEventListener('error', e => { const x = e.target; if (x.tagName === 'IMG' && !x.dataset.f) { x.dataset.f = 1; x.src = 'https://placehold.co/600x750/f8e9ee/a84863?text=SenMarch%C3%A9'; } }, true);
+})();
+})();
+</script>
 
-  <div class="pw" id="shop">
-    <p class="count" id="count"></p>
-    <div class="p-grid" id="grid"><div class="empty">Chargement de la sélection…</div></div>
-    <div class="more hid" id="more" aria-hidden="true"></div>
-    <div class="end hid" id="end"><h3>Tu as tout vu <em style="color:var(--or)">✦</em></h3><p>Il manque quelque chose ? Dis-nous ce que tu cherches.</p><a class="btn-p" href="demande-speciale.html">Faire une demande spéciale</a></div>
-  </div>
-</main>
-
-<a href="https://wa.me/221778038874?text=Bonjour%20SenMarch%C3%A9%2C%20je%20regarde%20l%E2%80%99univers%20Fille%20%F0%9F%8C%B8" class="wa-float" target="_blank" rel="noopener" aria-label="Nous écrire sur WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
-
+<a href="https://wa.me/221778038874?text=Bonjour%20SenMarch%C3%A9%2C%20j%E2%80%99ai%20une%20question" class="wa-float" target="_blank" rel="noopener" aria-label="Nous écrire sur WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
 <footer class="footer">
   <div class="footer-grid">
     <div class="footer-brand"><div>Sen<em style="color:inherit;opacity:.75;font-style:italic">Marché</em></div><p>Mode, seconde main et maison. Paiement à la récupération.</p></div>
@@ -186,149 +103,8 @@ body[data-univers="fille"] .p-wish{color:var(--or)}
   </div>
   <div class="footer-bottom"><p>© 2026 SenMarché</p><a href="cgv.html">Conditions générales</a></div>
 </footer>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="images.js"></script>
 <script src="app.js"></script>
 <script src="theme.js"></script>
 <script src="animations.js"></script>
-<script>
-(() => {
-'use strict';
-const $ = id => document.getElementById(id), E = s => SE.esc(s);
-const RAYONS = [
-  { k: 'gloss', t: 'Gloss', e: '💋', re: /gloss|l[eè]vre|rouge|baume|lip/i },
-  { k: 'maquillage', t: 'Maquillage', e: '🎀', re: /maquill|palette|fard|mascara|teint|blush|poudre|eye-?liner/i },
-  { k: 'soins', t: 'Soins', e: '🌸', re: /soin|cr[eè]me|parfum|brume|gommage|beaut|vernis|ongle/i },
-  { k: 'bijoux', t: 'Bijoux', e: '💍', re: /bijou|collier|bracelet|bague|boucle|montre/i },
-  { k: 'sacs', t: 'Sacs', e: '👜', re: /\bsacs?\b|pochette|banane|cabas/i },
-  { k: 'cheveux', t: 'Cheveux', e: '🎀', re: /cheveu|chouchou|pince|bandeau|barrette/i },
-  { k: 'vetements', t: 'Vêtements', e: '👗', re: /robe|jupe|\btop\b|haut|pantalon|ensemble|chemise|t-shirt|v[eê]tement|pull/i }
-];
-const PAGE = 14;
-const S = { q: '', ray: null, sort: 'recent', max: null, shown: PAGE };
-let ALL = [], REV = [], lastKey = null, lastShown = 0;
-const HC = {}, card = a => HC[a.reference] || (HC[a.reference] = SE.productCard(a));
-const txt = a => (a.nom || '') + ' ' + ((a.categorie && a.categorie.nom) || '') + ' ' + (a.description || '');
-const rayonOf = a => { const t = txt(a); const r = RAYONS.find(x => x.re.test(t)); return r ? r.k : 'autres'; };
-const price = a => a.prix_vente_fcfa || 0;
-const isDeal = a => a.prix_min_fcfa && a.prix_min_fcfa > price(a);
-const pct = a => Math.round((1 - price(a) / a.prix_min_fcfa) * 100);
-const link = a => 'produit.html?ref=' + encodeURIComponent(a.reference);
-const filtering = () => !!(S.q || S.ray || S.max);
-
-function list() {
-  let l = ALL.filter(a => (!S.ray || a._r === S.ray) && (!S.max || price(a) <= S.max) && (!S.q || txt(a).toLowerCase().includes(S.q.toLowerCase())));
-  if (S.sort === 'asc') l.sort((a, b) => price(a) - price(b));
-  if (S.sort === 'desc') l.sort((a, b) => price(b) - price(a));
-  return l;
-}
-
-function units(l) {
-  const u = [], deals = ALL.filter(isDeal).sort((a, b) => pct(b) - pct(a));
-  const plain = filtering() || S.sort !== 'recent';
-  l.forEach((a, i) => {
-    u.push({ t: 'p', a });
-    if (plain) return;
-    if (i === 3) u.push({ t: 'feat', a: deals[0] || ALL[0] });
-    if (i === 7 && deals.length >= 2) u.push({ t: 'deals', l: deals });
-    if (i === 11) u.push({ t: 'trust' });
-    if (i === 15 && REV.length) u.push({ t: 'rv' });
-    if (i === 19) u.push({ t: 'ask' });
-  });
-  return u;
-}
-
-function unitHtml(u) {
-  if (u.t === 'p') return card(u.a);
-  if (u.t === 'feat') {
-    const a = u.a, left = a.quantite || 0;
-    return '<div class="ban feat"><a class="im" href="' + link(a) + '"><img loading="lazy" src="' + E(SE.imgUrl(a.photo_url, 700)) + '" alt="' + E(a.nom) + '"></a><div class="tx"><span class="tag">✦ Coup de cœur</span><h3>' + E(a.nom) + '</h3><div class="fp"><b>' + SE.fprix(price(a)) + '</b>' + (isDeal(a) ? '<s>' + SE.fprix(a.prix_min_fcfa) + '</s>' : '') + '</div>' + (left > 0 && left <= 5 ? '<span class="low">Plus que ' + left + ' en stock</span>' : '') + '<a class="btn-p" href="' + link(a) + '">Je le veux</a></div></div>';
-  }
-  if (u.t === 'deals') return '<div class="ban"><h2>Bons <em>plans</em></h2><p>Des petits prix qui font plaisir.</p><div class="hrow">' + u.l.slice(0, 8).map(card).join('') + '</div></div>';
-  if (u.t === 'trust') return '<div class="ban plain"><div class="trust"><div><i>🏠</i><span><b>Retrait ou livraison</b><br>Tu choisis.</span></div><div><i>💸</i><span><b>Paiement à la récupération</b><br>Espèces, Wave ou Orange Money.</span></div><div><i>👀</i><span><b>Tu vérifies avant de payer</b><br>Zéro mauvaise surprise.</span></div></div></div>';
-  if (u.t === 'rv') return '<div class="ban plain"><h3>Ce qu’<em>elles</em> en disent</h3>' + REV.map(x => { const a = ALL.find(y => y.reference === x.article_reference); return '<div class="rc"><span class="st">' + '★'.repeat(x.note) + '☆'.repeat(5 - x.note) + '</span><p>« ' + E(String(x.commentaire).slice(0, 150)) + ' »</p><small>' + E(x.nom_client || 'Cliente') + (a ? ' · <a href="' + link(a) + '">' + E(a.nom) + '</a>' : '') + '</small></div>'; }).join('') + '</div>';
-  if (u.t === 'ask') return '<div class="ban cta"><h3>Tu cherches <em>autre chose</em> ?</h3><p>Une teinte, une marque, un article précis ? On te le déniche.</p><a class="btn-p" href="demande-speciale.html" style="background:#ffd3e2;color:#45172f;border-color:#ffd3e2">Faire une demande spéciale</a></div>';
-  return '';
-}
-
-function render() {
-  const l = list(), n = l.length, g = $('grid');
-  $('count').innerHTML = ALL.length ? '<b>' + SE.fnum(n) + '</b> trouvaille' + (n > 1 ? 's' : '') + ' pour toi' : '';
-  if (!n) {
-    lastKey = null; $('more').classList.add('hid'); $('end').classList.add('hid');
-    g.innerHTML = ALL.length
-      ? '<div class="empty"><h3>Rien ne correspond…</h3><p>Essaie un autre mot, un autre rayon ou un autre budget.</p><button class="btn-g" id="reset">Tout afficher</button></div>'
-      : '<div class="empty"><h3>De nouvelles pépites arrivent</h3><p>La sélection se prépare. Dis-nous ce que tu cherches et on te la déniche.</p><a class="btn-p" href="demande-speciale.html">Faire une demande spéciale</a></div>';
-    const r = $('reset'); if (r) r.onclick = reset;
-    return;
-  }
-  const u = units(l), key = u.map(x => x.t + (x.a ? x.a.reference : '')).join('|');
-  if (key === lastKey && S.shown >= lastShown) {
-    if (S.shown > lastShown) g.insertAdjacentHTML('beforeend', u.slice(lastShown, S.shown).map(unitHtml).join(''));
-  } else {
-    g.innerHTML = u.slice(0, S.shown).map(unitHtml).join('');
-    if (lastKey !== null && !matchMedia('(prefers-reduced-motion:reduce)').matches) g.animate([{ opacity: .4 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' });
-  }
-  lastKey = key; lastShown = Math.min(S.shown, u.length);
-  const more = u.length > S.shown;
-  $('more').classList.toggle('hid', !more);
-  $('end').classList.toggle('hid', more);
-}
-
-function reset() { Object.assign(S, { q: '', ray: null, max: null, sort: 'recent', shown: PAGE }); $('q').value = ''; $('sort').value = 'recent'; ui(); render(); }
-function ui() {
-  document.querySelectorAll('.ray').forEach(s => s.classList.toggle('on', (s.dataset.k || null) === S.ray));
-  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.m ? +c.dataset.m === S.max : (c.dataset.k || null) === S.ray));
-}
-function toShop() { const r = $('tb').getBoundingClientRect(); if (r.top > 120 || r.top < 0) $('tb').scrollIntoView({ behavior: 'smooth' }); }
-function apply(scroll) { S.shown = PAGE; ui(); render(); if (scroll) toShop(); }
-function pickRayon(k, scroll) { S.ray = k || null; apply(scroll); }
-function pickMax(m) { S.max = S.max === m ? null : m; apply(false); }
-
-function build() {
-  ALL.forEach(a => a._r = rayonOf(a));
-  const min = ALL.length ? Math.min(...ALL.map(price)) : 0;
-  if (ALL.length) $('stat').innerHTML = '<b>✓</b> ' + ALL.length + ' articles · dès ' + SE.fprix(min);
-  const by = {}; ALL.forEach(a => (by[a._r] = by[a._r] || []).push(a));
-  // Vitrine du bandeau : 3 arches avec de vrais articles (les plus gros rabais d'abord)
-  const pics = ALL.slice().sort((a, b) => (isDeal(b) ? pct(b) : 0) - (isDeal(a) ? pct(a) : 0)).slice(0, 3);
-  $('collage').innerHTML = [0, 1, 2].map(i => { const a = pics[i]; return a ? '<span class="arch"><img loading="lazy" src="' + E(SE.imgUrl(a.photo_url, 500)) + '" alt=""></span>' : '<span class="arch">✦</span>'; }).join('');
-  const rs = RAYONS.filter(r => by[r.k]);
-  $('rays').innerHTML = rs.map(r => { const f = by[r.k].find(a => a.photo_url); return '<button class="ray" data-k="' + r.k + '"><span class="a">' + (f ? '<img loading="lazy" src="' + E(SE.imgUrl(f.photo_url, 400)) + '" alt="">' : r.e) + '</span><b>' + r.t + '</b><small>' + by[r.k].length + ' article' + (by[r.k].length > 1 ? 's' : '') + '</small></button>'; }).join('');
-  $('chips').innerHTML = '<button class="chip on">Tout</button>' + rs.map(r => '<button class="chip" data-k="' + r.k + '">' + r.t + '</button>').join('') + '<button class="chip sep" data-m="3000">Moins de 3 000</button><button class="chip" data-m="5000">Moins de 5 000</button><button class="chip" data-m="10000">Moins de 10 000</button>';
-  document.querySelectorAll('.ray').forEach(b => b.onclick = () => pickRayon(b.dataset.k !== S.ray ? b.dataset.k : null, true));
-  document.querySelectorAll('.chip').forEach(b => b.onclick = () => b.dataset.m ? pickMax(+b.dataset.m) : pickRayon(b.dataset.k && b.dataset.k !== S.ray ? b.dataset.k : null, false));
-}
-
-async function reviews() {
-  try {
-    if (!SE.sb || !ALL.length) return;
-    const { data } = await SE.sb.from('avis').select('*').in('article_reference', ALL.map(a => a.reference)).eq('statut', 'approuve').order('date_creation', { ascending: false }).limit(30);
-    REV = (data || []).filter(x => x.commentaire).slice(0, 2);
-    if (REV.length) { lastKey = null; render(); }
-  } catch (e) {}
-}
-
-function loadMore() {
-  const m = $('more'); if (m.classList.contains('hid')) return;
-  S.shown += PAGE; render();
-  requestAnimationFrame(() => { if (!m.classList.contains('hid') && m.getBoundingClientRect().top < innerHeight + 900) loadMore(); });
-}
-
-(async () => {
-  await new Promise(r => setTimeout(r, 50));
-  const [arts, cats] = await Promise.all([SE.Articles.load(), SE.Categories.load()]);
-  const ids = cats.filter(c => /fille/i.test(c.nom)).map(c => c.id);
-  ALL = arts.filter(a => ids.includes(a.categorie_id) && (a.quantite || 0) > 0 && a.etat !== 'Vendu');
-  build(); render(); reviews();
-  let t;
-  $('q').oninput = e => { const v = e.target.value; clearTimeout(t); t = setTimeout(() => { S.q = v.trim(); apply(!!S.q); }, 400); };
-  $('sort').onchange = e => { S.sort = e.target.value; apply(false); };
-  new IntersectionObserver(es => { if (es[0].isIntersecting) loadMore(); }, { rootMargin: '900px' }).observe($('more'));
-  document.addEventListener('error', e => { const x = e.target; if (x.tagName === 'IMG' && !x.dataset.f) { x.dataset.f = 1; x.src = 'https://placehold.co/600x750/ffd6e4/c2336b?text=SenMarch%C3%A9'; } }, true);
-})();
-})();
-</script>
-</body>
-</html>
