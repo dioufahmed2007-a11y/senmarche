@@ -27,7 +27,7 @@ function packHtml(p, all) {
 }
 B.util = { isPack, packHtml, isDeal, pct, price, link };
 
-B.init = function (cfg) {
+const initInner = function (cfg) {
   const PAGE = 14, parts = cfg.parts || null, PK = 'se_part_' + cfg.key;
   const S = { q: '', ray: null, sort: 'recent', max: null, shown: PAGE, part: null, mode: 'vitrine' };
   let ALL = [], lastKey = null, lastShown = 0;
@@ -43,7 +43,7 @@ B.init = function (cfg) {
     '<section class="bh"><div class="pw"><div class="bc"><a href="fille.html">Fille</a><i>/</i><span>' + cfg.title + '</span></div>' +
     '<h1>' + cfg.title + ' <em>' + cfg.em + '</em></h1><p class="lead">' + cfg.lead + '</p>' +
     (parts ? '<div class="parts" id="parts"></div>' : '') +
-    '<div class="hs"><input id="q" type="search" placeholder="' + E(cfg.placeholder || 'Chercher…') + '" autocomplete="off" aria-label="Chercher"></div></div></section>' +
+    '<div class="hs"><input id="q" type="search" placeholder="' + E(cfg.placeholder || 'Chercher…') + '" autocomplete="off" aria-label="Chercher"></div></div><div class="pearls pb"></div></section>' +
     (cfg.extraHtml || '') +
     '<div class="pw" id="view"></div>' +
     '<div id="listing" class="hid"><div class="tb" id="tb"><div class="pw"><div class="row"><button class="chip back" id="back">← Vitrine</button><div class="chips" id="chips"></div><select class="sel" id="sort" aria-label="Trier"><option value="recent">Nouveautés</option><option value="asc">Prix ↑</option><option value="desc">Prix ↓</option></select></div></div></div>' +
@@ -138,7 +138,7 @@ B.init = function (cfg) {
   function parts_ui() { if (!parts) return; $('parts').innerHTML = parts.map(p => '<button class="part' + (S.part === p.k ? ' on' : '') + '" data-p="' + p.k + '">' + p.t + '</button>').join(''); $('parts').querySelectorAll('.part').forEach(b => b.onclick = () => setPart(b.dataset.p)); }
   function loadMore() { const m = $('more'); if (m.classList.contains('hid') || S.mode !== 'liste') return; S.shown += PAGE; renderListe(); requestAnimationFrame(() => { if (!m.classList.contains('hid') && m.getBoundingClientRect().top < innerHeight + 900) loadMore(); }); }
 
-  (async () => {
+  (async () => { try {
     await new Promise(r => setTimeout(r, 50));
     const arts = await SE.Articles.load();
     const inCat = a => { const n = (a.categorie && a.categorie.nom) || ''; return parts ? parts.some(p => p.catRe.test(n)) : cfg.catRe.test(n); };
@@ -153,6 +153,7 @@ B.init = function (cfg) {
     new IntersectionObserver(es => { if (es[0].isIntersecting) loadMore(); }, { rootMargin: '900px' }).observe($('more'));
     document.addEventListener('error', e => { const x = e.target; if (x.tagName === 'IMG' && !x.dataset.f) { x.dataset.f = 1; x.src = 'https://placehold.co/600x750/f8e9ee/a84863?text=SenMarch%C3%A9'; } }, true);
     if (cfg.onReady) cfg.onReady(ALL, { toListe, S, show });
-  })();
+  } catch (e) { console.error(e); $('view').innerHTML = '<div class="empty" style="margin-top:2rem"><h3>Un souci de chargement</h3><p>' + String(e.message).replace(/</g, '&lt;') + '</p></div>'; } })();
 };
+B.init = cfg => { try { initInner(cfg); } catch (e) { console.error(e); const a = $('app'); if (a) a.innerHTML = '<div class="pw" style="padding:3rem 0"><h2>La page n’a pas pu s’afficher</h2><p>' + String(e.message).replace(/</g, '&lt;') + '</p></div>'; } };
 })();
