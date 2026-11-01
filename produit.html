@@ -252,7 +252,7 @@ async function load() {
 
     const cached = (SE.Articles.cache || []).find(x => x.reference === ref); if (cached && cached.categorie) a.categorie = cached.categorie;
     const cat = a.categorie?.nom || 'Catalogue', cl = cat.toLowerCase();
-    const link = cl.includes('fille') ? 'fille.html' : cl.includes('maison') ? 'maison.html' : cl.includes('sport') ? 'sport.html' : cl.includes('mode') ? 'mode.html' : 'catalogue.html';
+    const link = cl.includes('fille') ? (/soins?\b/.test(cl) ? 'soins.html' : /cosm|gloss|maquillage|l[eè]vres/.test(cl) ? 'cosmetiques.html' : /abaya|voile|tendance|robe|[ée]l[ée]gance/.test(cl) ? 'tenues.html' : 'fille.html') : cl.includes('maison') ? 'maison.html' : cl.includes('sport') ? 'sport.html' : cl.includes('mode') ? 'mode.html' : 'catalogue.html';
     $('c-cat').innerHTML = `<a href="${link}">${esc(cat)}</a>`;
     $('c-name').textContent = a.nom;
     document.title = a.nom + ' — SenMarché';
@@ -260,7 +260,7 @@ async function load() {
     const qte = a.quantite || 0, out = qte <= 0, etat = a.etat || '';
     const neuf = /neuf/i.test(etat), seconde = cl.includes('feug') || (etat && !neuf);
     const chaus = /chaussure|basket|sneaker|sandale|pointure/i.test(cl + ' ' + a.nom) || !!a.pointures;
-    const vet = chaus || a.categorie_id === 1 || /mode|sport|feug|v[eê]tement|robe|jupe|pantalon|chemise|t-shirt/.test(cl);
+    const vet = chaus || SE.needsSize(a);
     let sizes = list(a.tailles).length ? list(a.tailles) : list(a.pointures);
     if (!sizes.length && vet && !chaus) sizes = ['S', 'M', 'L', 'XL'];
     const photos = (Array.isArray(a.photos) && a.photos.length ? a.photos : [a.photo_url]).filter(Boolean).map(p => img(p, 900));
