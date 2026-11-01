@@ -74,7 +74,8 @@ SE.needsSize = a => {
   if (!a) return false;
   if (a.tailles || a.pointures) return true;
   const n = ((a.categorie && a.categorie.nom) || '').toLowerCase();
-  return a.categorie_id === 1 || /mode|sport|feug|v[eê]tement|robe|jupe|pantalon|chemise|t-shirt/.test(n);
+  if (/voile|hijab|foulard|khimar|bonnet|sous-voile|[ée]charpe|[ée]pingle|broche|ceinture/i.test(a.nom || '')) return false;
+  return a.categorie_id === 1 || /mode|sport|feug|v[eê]tement|robe|jupe|pantalon|chemise|t-shirt|[ée]l[ée]gance|tendance|abaya/.test(n);
 };
 
 /* ──────────────────────────────────────────────────────────────
