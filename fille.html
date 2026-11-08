@@ -13,6 +13,8 @@
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="styles-dark.css">
 <link rel="stylesheet" href="boutique.css">
+<link rel="stylesheet" href="fille-extra.css">
+<script>document.documentElement.classList.add('js')</script>
 </head>
 <body data-b="fille">
 <nav class="nav" id="nav">
@@ -36,35 +38,34 @@
     <div class="fh-in">
       <div>
         <span class="kick">Univers Fille</span>
-        <h1>Pour elle, <em>avec douceur</em></h1>
-        <p class="lead">Des tenues, des soins et des cosmétiques choisis avec soin. Tu choisis, on prépare : retrait près de chez toi ou livraison, et tu paies à la récupération.</p>
-        <div class="fh-cta"><a class="btn-p on-plum" href="#boutiques">Découvrir les boutiques</a><a class="btn-gl" href="soins.html#routine">Ma routine perso</a></div>
+        <h1>Habille-toi, soigne-toi, <em>fais-toi plaisir</em></h1>
+        <p class="lead">Abayas, voiles, cosmétiques et soins à petits prix. Tu choisis, on prépare : retrait près de chez toi ou livraison, et tu paies à la récupération.</p>
+        <div class="fh-cta"><a class="btn-p on-plum" href="#rayons">Voir les rayons</a><a class="btn-gl" href="soins.html#routine">Ma routine perso</a></div>
         <ul class="fh-trust"><li><b>✓</b> Retrait ou livraison</li><li><b>✓</b> Paiement à la récupération</li><li><b>✓</b> Tu vérifies avant de payer</li></ul>
       </div>
-      <div class="fh-art" id="hero-art"><img class="ph" src="fille-hero.jpg" alt="" onload="this.parentNode.classList.add('has-photo')" onerror="this.remove()"></div>
+      <div class="fh-art" id="hero-art"></div>
     </div>
   </section>
 
   <div class="pw">
-    <section class="sec" id="boutiques"><div class="fl" data-fl></div><h2>Nos <em>boutiques</em></h2><p>Chacune a sa logique : choisis la tienne, on t’accompagne ensuite.</p></section>
-    <div class="cats" id="cats"></div>
-    <div class="routine-cta"><div><b>Un souci de peau, ou pas sûre de ton choix ?</b><span>Ma routine perso : 4 questions, une routine pensée pour ta peau.</span></div><a class="btn-p" href="soins.html#routine">Trouver ma routine</a></div>
+    <section class="sec rv" id="rayons"><div class="fl" data-fl></div><h2>Nos <em>rayons</em></h2><p>Un rayon pour chaque envie : choisis le tien.</p></section>
+    <div class="cats four rv" id="cats"></div>
 
-    <div id="pf-wrap" class="hid"><section class="sec"><div class="fl" data-fl></div><h2>Notre <em>coup de cœur</em></h2></section><div id="pf"></div></div>
+    <div id="new-wrap" class="hid"><section class="sec rv"><div class="fl" data-fl></div><h2>Les <em>nouveautés</em></h2><p>Fais défiler : un peu de chaque rayon.</p></section><div class="rail rv" id="new"></div></div>
 
-    <div id="packs-wrap" class="hid"><section class="sec"><div class="fl" data-fl></div><h2>Coffrets &amp; <em>offres</em></h2><p>Compare : ensemble, c’est moins cher.</p></section><div class="packs" id="packs"></div></div>
+    <div id="cheap-wrap" class="hid"><div class="band rv"><div><b>Petits <em>prix</em></b><br><span id="cheap-sub"></span></div><a class="btn-g" href="catalogue.html">Tout le catalogue</a></div><div class="rail rv" id="cheap"></div></div>
 
-    <section class="sec"><div class="fl" data-fl></div><h2>Nos <em>favorites</em></h2><p>Un peu de chaque rayon, choisi pour toi.</p></section>
-    <div class="p-grid" id="grid"><div class="empty">Chargement…</div></div>
+    <section class="sec rv" id="coffrets"><div class="fl" data-fl></div><h2>Coffrets &amp; <em>offres</em></h2><p>Ensemble, c’est plus joli et plus avantageux. Compare, ou compose le tien.</p></section>
+    <div class="packs rv hid" id="packs"></div>
+    <div class="cof rv hid" id="cof"></div>
 
-    <div class="args">
-      <div><i>🏠</i><b>Retrait ou livraison</b><span>Tu choisis comment recevoir ta commande.</span></div>
-      <div><i>💸</i><b>Paiement à la récupération</b><span>Espèces, Wave ou Orange Money, au moment de la remise.</span></div>
-      <div><i>👀</i><b>Tu vérifies avant de payer</b><span>Tu regardes ton article avant de régler.</span></div>
-      <div><i>💬</i><b>Conseil sur WhatsApp</b><span>Une question, une teinte, une taille ? On te répond.</span></div>
-    </div>
+    <div class="routine-cta rv" style="margin-top:2.6rem"><div><b>Un souci de peau, ou pas sûre de ton choix ?</b><span>Ma routine perso : 4 questions, une routine pensée pour ta peau.</span></div><a class="btn-p" href="soins.html#routine">Trouver ma routine</a></div>
 
-    <div class="ban cta" style="margin:2.6rem 0 1rem;border-radius:24px"><h3>Tu cherches <em>autre chose</em> ?</h3><p>Une pièce, une marque, une teinte précise ? Dis-nous ce que tu veux, on te la déniche.</p><a class="btn-p on-plum" href="demande-speciale.html">Faire une demande spéciale</a></div>
+    <div id="pf-wrap" class="hid"><section class="sec rv"><div class="fl" data-fl></div><h2>Notre <em>coup de cœur</em></h2></section><div id="pf" class="rv"></div></div>
+
+    <div class="advice rv"><div><b>Une question, une teinte, une taille ?</b><span>On te répond sur WhatsApp et on t’aide à choisir.</span></div><a class="btn-g" target="_blank" rel="noopener" href="https://wa.me/221778038874?text=Bonjour%20SenMarch%C3%A9%2C%20j%E2%80%99ai%20une%20question%20sur%20l%E2%80%99univers%20Fille">Écrire sur WhatsApp</a></div>
+
+    <div class="ban cta rv" style="margin:1.4rem 0 1rem;border-radius:24px"><h3>Tu cherches <em>autre chose</em> ?</h3><p>Une pièce, une marque, une teinte précise ? Dis-nous ce que tu veux, on te la déniche.</p><a class="btn-p on-plum" href="demande-speciale.html">Faire une demande spéciale</a></div>
     <p style="text-align:center;margin-bottom:3rem"><a class="btn-g" href="catalogue.html">Voir tout le catalogue SenMarché</a></p>
   </div>
 </main>
@@ -92,20 +93,82 @@ if (typeof Boutique === 'undefined' || typeof FilleArt === 'undefined') { docume
 'use strict';
 const $ = id => document.getElementById(id), E = s => SE.esc(s), U = Boutique.util;
 const price = U.price, isDeal = U.isDeal, pct = U.pct, link = U.link;
-const real = a => a && a.photo_url && !/placehold\.co/.test(a.photo_url);
+const REDUCED = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const CHEAP_MAX = 5000, COF_MAX = 4, COF_MIN = 2, WA = '221778038874';
+
+/* ── ornements ── */
 document.querySelectorAll('[data-fl]').forEach(e => e.innerHTML = FilleArt.fleuron());
-$('hero-art').insertAdjacentHTML('afterbegin', FilleArt.hero());
+
+/* ── apparition au défilement ── */
+const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -6% 0px' }) : null;
+const reveal = (root) => (root || document).querySelectorAll('.rv:not(.in)').forEach(el => io ? io.observe(el) : el.classList.add('in'));
+
+/* ── hero : carrousel (illustration SVG en secours si les images manquent) ── */
+(function hero() {
+  const box = $('hero-art'), imgs = ['fille-hero.jpg', 'fille-hero-2.jpg', 'fille-hero-3.jpg'];
+  box.innerHTML = FilleArt.hero() + '<div class="slides" aria-hidden="true"></div><div class="dots" role="tablist" aria-label="Choisir une image"></div>';
+  const wrap = box.querySelector('.slides'), dots = box.querySelector('.dots');
+  let cur = 0, timer = null, loaded = [];
+  imgs.forEach(src => { const im = new Image(); im.className = 'sl'; im.alt = ''; im.decoding = 'async';
+    im.onload = () => { loaded.push(im); wrap.appendChild(im); if (loaded.length === 1) { box.classList.add('has-photo'); show(0); } drawDots(); };
+    im.src = src; });
+  function drawDots() { dots.innerHTML = loaded.length > 1 ? loaded.map((_, i) => '<button type="button" aria-label="Image ' + (i + 1) + '"' + (i === cur ? ' class="on"' : '') + '></button>').join('') : '';
+    dots.querySelectorAll('button').forEach((b, i) => b.onclick = () => { show(i); restart(); }); }
+  function show(i) { if (!loaded.length) return; cur = (i + loaded.length) % loaded.length; loaded.forEach((im, k) => im.classList.toggle('on', k === cur)); drawDots(); }
+  function restart() { clearInterval(timer); if (!REDUCED && loaded.length > 1) timer = setInterval(() => show(cur + 1), 5200); }
+  setTimeout(restart, 1500);
+  let x0 = null; box.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+  box.addEventListener('touchend', e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) { show(cur + (dx < 0 ? 1 : -1)); restart(); } x0 = null; });
+  box.addEventListener('mouseenter', () => clearInterval(timer)); box.addEventListener('mouseleave', restart);
+})();
+
+/* ── rayons ── */
 const G = [
-  { k: 'ten', href: 'tenues.html', kick: 'Habits', t: 'Tenues', s: 'Abayas, voiles, robes, pantalons : choisis ton style.', tags: ['Abayas', 'Voiles', 'Robes', 'Pantalons'], photo: 'cat-tenues.jpg', art: FilleArt.tenues, re: /abaya|voile|[ée]l[ée]gance|tendance|robe/i },
-  { k: 'soi', href: 'soins.html', kick: 'Peau', t: 'Soins & routine', s: 'Crèmes, sérums, nettoyants : par étape, par problème, ou en routine perso.', tags: ['Nettoyants', 'Sérums', 'Crèmes', 'Solaire'], photo: 'cat-soins.jpg', art: FilleArt.soins, re: /soins?\b/i },
-  { k: 'cos', href: 'cosmetiques.html', kick: 'Beauté', t: 'Cosmétiques', s: 'Gloss, teint, yeux, ongles et parfums : de petites folies à petits prix.', tags: ['Lèvres', 'Teint', 'Yeux', 'Parfums'], photo: 'cat-cosmetiques.jpg', art: FilleArt.cosmetiques, re: /cosm[ée]tique|gloss|maquillage|l[eè]vres/i }
+  { k: 'ten', href: 'tenues.html', kick: 'Habits', t: 'Tenues', s: 'Abayas, voiles, robes, pantalons.', tags: ['Abayas', 'Voiles', 'Robes', 'Pantalons'], photo: 'cat-tenues.jpg', art: FilleArt.tenues, re: /abaya|voile|[ée]l[ée]gance|tendance|robe/i },
+  { k: 'soi', href: 'soins.html', kick: 'Peau', t: 'Soins', s: 'Crèmes, sérums, nettoyants, ou une routine perso.', tags: ['Nettoyants', 'Sérums', 'Crèmes', 'Solaire'], photo: 'cat-soins.jpg', art: FilleArt.soins, re: /soins?\b/i },
+  { k: 'cos', href: 'cosmetiques.html', kick: 'Beauté', t: 'Cosmétiques', s: 'Gloss, teint, yeux, ongles, parfums.', tags: ['Lèvres', 'Teint', 'Yeux', 'Parfums'], photo: 'cat-cosmetiques.jpg', art: FilleArt.cosmetiques, re: /cosm[ée]tique|gloss|maquillage|l[eè]vres/i }
 ];
-const cardHtml = (g, n) => '<a class="cat" href="' + g.href + '"><div class="cat-art">' + g.art() + '<img class="ph" src="' + g.photo + '" alt="" onload="this.parentNode.classList.add(\'has-photo\')" onerror="this.remove()"></div><div class="cat-body"><span class="kick2">' + g.kick + '</span><h3>' + g.t + '</h3><p>' + g.s + '</p><div class="cat-tags">' + g.tags.map(t => '<span>' + t + '</span>').join('') + '</div><span class="cat-go">Découvrir <small>' + (n ? '· ' + n + ' article' + (n > 1 ? 's' : '') : '· bientôt') + '</small> →</span></div></a>';
-$('cats').innerHTML = G.map(g => cardHtml(g, 0)).join('');
+const COFFRET = { href: '#coffrets', kick: 'Cadeaux', t: 'Coffrets', s: 'Offres comparées, ou compose le tien.', tags: ['Offres', 'Cadeaux', 'Sur mesure'], photo: 'cat-coffrets.jpg', art: () => '<span class="glyph">✿</span>' };
+const cardHtml = (g, n, unit) => '<a class="cat" href="' + g.href + '"><div class="cat-art">' + g.art() + '<img class="ph" src="' + g.photo + '" alt="" loading="lazy" onload="this.parentNode.classList.add(\'has-photo\')" onerror="this.remove()"></div><div class="cat-body"><span class="kick2">' + g.kick + '</span><h3>' + g.t + '</h3><p>' + g.s + '</p><div class="cat-tags">' + g.tags.map(t => '<span>' + t + '</span>').join('') + '</div><span class="cat-go">Découvrir <small>' + (n ? '· ' + n + ' ' + (unit || 'article') + (n > 1 ? 's' : '') : '· bientôt') + '</small> →</span></div></a>';
+const drawCats = (counts, packN) => { $('cats').innerHTML = G.map((g, i) => cardHtml(g, counts[i])).join('') + cardHtml(COFFRET, packN, 'offre'); };
+drawCats([0, 0, 0], 0);
+
+/* ── rangée avec flèches ── */
+function rail(id, list) {
+  const el = $(id); el.innerHTML = '<div class="hrow">' + list.map(SE.productCard).join('') + '</div><button class="rail-nav l" aria-label="Précédent">‹</button><button class="rail-nav r" aria-label="Suivant">›</button>';
+  const row = el.querySelector('.hrow'), step = () => Math.max(240, row.clientWidth * .8);
+  el.querySelector('.l').onclick = () => row.scrollBy({ left: -step(), behavior: REDUCED ? 'auto' : 'smooth' });
+  el.querySelector('.r').onclick = () => row.scrollBy({ left: step(), behavior: REDUCED ? 'auto' : 'smooth' });
+}
+
+/* ── coup de cœur ── */
 function phare(a) {
   const left = a.quantite || 0;
   return '<div class="pf"><a class="im" href="' + link(a) + '"><img src="' + E(SE.imgUrl(a.photo_url, 800)) + '" alt="' + E(a.nom) + '"></a><div class="tx"><span class="tag" style="align-self:flex-start">✿ Coup de cœur</span><h2>' + E(a.nom) + '</h2><p>' + E(a.description || 'Un coup de cœur de la boutique.') + '</p><div class="fp"><b>' + SE.fprix(price(a)) + '</b>' + (isDeal(a) ? '<s>' + SE.fprix(a.prix_min_fcfa) + '</s>' : '') + '</div>' + (left > 0 && left <= 5 ? '<span class="low">Plus que ' + left + ' en stock</span>' : '') + '<a class="btn-p on-plum" style="align-self:flex-start" href="' + link(a) + '">Je le veux</a></div></div>';
 }
+
+/* ── Compose ton coffret : l'ajout au panier est réel ; le prix du coffret se confirme sur WhatsApp ── */
+function builder(pool) {
+  const box = $('cof'); if (pool.length < 3) return;
+  const sel = new Set();
+  box.classList.remove('hid');
+  box.innerHTML = '<h3>Compose <em>ton coffret</em></h3><p>Choisis ' + COF_MIN + ' à ' + COF_MAX + ' articles beauté. On te prépare le tout joliment et on te confirme le prix du coffret sur WhatsApp.</p><div class="picks" id="picks"></div><div class="cof-bar"><div class="tot"><span id="cof-n">Aucun article choisi</span><b id="cof-t">0 FCFA</b></div><div class="cof-act"><button class="go" id="cof-add" disabled>Ajouter au panier</button><a class="wa" id="cof-wa" target="_blank" rel="noopener" href="#" aria-disabled="true">Prix coffret sur WhatsApp</a></div></div><p class="cof-note">Les articles sont ajoutés au panier à leur prix habituel ; le prix coffret est confirmé par WhatsApp avant la commande.</p>';
+  $('picks').innerHTML = pool.map(a => '<button type="button" class="pk" data-r="' + E(a.reference) + '"><img loading="lazy" src="' + E(SE.imgUrl(a.photo_url, 300)) + '" alt=""><span>' + E(a.nom) + '</span><b>' + SE.fprix(price(a)) + '</b></button>').join('');
+  const byRef = Object.fromEntries(pool.map(a => [a.reference, a]));
+  function upd() {
+    const items = [...sel].map(r => byRef[r]), tot = items.reduce((t, a) => t + price(a), 0), ok = items.length >= COF_MIN;
+    $('cof-n').textContent = items.length ? items.length + ' article' + (items.length > 1 ? 's' : '') + (ok ? '' : ' · encore ' + (COF_MIN - items.length)) : 'Aucun article choisi';
+    $('cof-t').textContent = SE.fprix(tot);
+    $('cof-add').disabled = !ok;
+    const wa = $('cof-wa'), msg = 'Bonjour SenMarché, je compose un coffret : ' + items.map(a => a.nom).join(' + ') + '. Quel prix pour le coffret ?';
+    wa.href = ok ? 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg) : '#'; wa.setAttribute('aria-disabled', ok ? 'false' : 'true'); wa.style.opacity = ok ? 1 : .4; wa.style.pointerEvents = ok ? 'auto' : 'none';
+    box.querySelectorAll('.pk').forEach(b => { const on = sel.has(b.dataset.r); b.classList.toggle('on', on); b.disabled = !on && sel.size >= COF_MAX; b.setAttribute('aria-pressed', on); });
+  }
+  box.querySelectorAll('.pk').forEach(b => b.onclick = () => { const r = b.dataset.r; sel.has(r) ? sel.delete(r) : sel.add(r); upd(); });
+  $('cof-add').onclick = () => { [...sel].forEach(r => SE.Cart.add(r)); const btn = $('cof-add'); btn.textContent = '✓ Ajouté au panier'; setTimeout(() => { btn.textContent = 'Ajouter au panier'; sel.clear(); upd(); }, 1600); };
+  upd();
+}
+
 (async () => {
   try {
     await new Promise(r => setTimeout(r, 50));
@@ -116,16 +179,33 @@ function phare(a) {
       const n = (a.categorie && a.categorie.nom) || ''; if (!/fille/i.test(n)) return;
       const g = G.find(x => x.re.test(n)); if (g) { group[g.k].push(a); all.push(a); }
     });
-    $('cats').innerHTML = G.map(g => cardHtml(g, group[g.k].length)).join('');
-    const packs = all.filter(a => U.isPack(a, all)), notPack = all.filter(a => !U.isPack(a, all));
-    const star = packs.concat(notPack).sort((a, b) => (isDeal(b) ? pct(b) : 0) - (isDeal(a) ? pct(a) : 0))[0];
-    if (star) { $('pf-wrap').classList.remove('hid'); $('pf').innerHTML = phare(star); }
-    if (packs.length) { $('packs-wrap').classList.remove('hid'); $('packs').innerHTML = packs.slice(0, 3).map(p => U.packHtml(p, all)).join(''); }
+    const packs = all.filter(a => U.isPack(a, all)), plain = all.filter(a => !U.isPack(a, all));
+    drawCats(G.map(g => group[g.k].filter(a => !U.isPack(a, all)).length), packs.length);
+
+    /* Nouveautés : un peu de chaque rayon, dans l'ordre du chargement */
     const lists = G.map(g => group[g.k].filter(a => !U.isPack(a, all)).slice(0, 4)), mix = [];
     for (let i = 0; i < 4; i++) lists.forEach(l => { if (l[i]) mix.push(l[i]); });
-    $('grid').innerHTML = mix.length ? mix.slice(0, 8).map(SE.productCard).join('') : '<div class="empty"><h3>De nouvelles pépites arrivent</h3><p>La boutique se prépare.</p></div>';
-    document.addEventListener('error', e => { const x = e.target; if (x.tagName === 'IMG' && !x.dataset.f && !x.classList.contains('ph')) { x.dataset.f = 1; x.src = 'https://placehold.co/600x750/f8e9ee/a84863?text=SenMarch%C3%A9'; } }, true);
-  } catch (e) { console.error(e); $('grid').innerHTML = '<div class="empty"><h3>Un souci de chargement</h3><p>' + String(e.message).replace(/</g, '&lt;') + '</p></div>'; }
+    if (mix.length) { $('new-wrap').classList.remove('hid'); rail('new', mix.slice(0, 10)); }
+
+    /* Petits prix */
+    const cheap = plain.filter(a => price(a) > 0 && price(a) <= CHEAP_MAX).sort((a, b) => price(a) - price(b));
+    if (cheap.length >= 2) { $('cheap-wrap').classList.remove('hid'); $('cheap-sub').textContent = 'Moins de ' + SE.fnum(CHEAP_MAX) + ' FCFA, dès ' + SE.fprix(price(cheap[0])) + '.'; rail('cheap', cheap.slice(0, 10)); }
+
+    /* Coffrets : offres comparées + coffret à composer (beauté uniquement : pas de taille à choisir) */
+    if (packs.length) { const p = $('packs'); p.classList.remove('hid'); p.innerHTML = packs.slice(0, 3).map(x => U.packHtml(x, all)).join(''); }
+    const beauty = [...group.cos, ...group.soi].filter(a => !U.isPack(a, all) && !SE.needsSize(a)), a1 = beauty.filter(a => group.cos.includes(a)), a2 = beauty.filter(a => group.soi.includes(a)), pool = [];
+    for (let i = 0; i < 6; i++) { if (a1[i]) pool.push(a1[i]); if (a2[i]) pool.push(a2[i]); }
+    builder(pool.slice(0, 12));
+
+    /* Coup de cœur : la meilleure remise */
+    const star = packs.concat(plain).sort((a, b) => (isDeal(b) ? pct(b) : 0) - (isDeal(a) ? pct(a) : 0))[0];
+    if (star) { $('pf-wrap').classList.remove('hid'); $('pf').innerHTML = phare(star); }
+
+    if (!all.length) $('new-wrap').insertAdjacentHTML('beforebegin', '<div class="empty rv" style="margin-top:2rem"><h3>De nouvelles pépites arrivent</h3><p>La boutique se prépare.</p></div>');
+    reveal();
+    document.addEventListener('error', e => { const x = e.target; if (x.tagName === 'IMG' && !x.dataset.f && !x.classList.contains('ph') && !x.classList.contains('sl')) { x.dataset.f = 1; x.src = 'https://placehold.co/600x750/f8e9ee/a84863?text=SenMarch%C3%A9'; } }, true);
+  } catch (e) { console.error(e); $('new-wrap').classList.remove('hid'); $('new').innerHTML = '<div class="empty"><h3>Un souci de chargement</h3><p>' + String(e.message).replace(/</g, '&lt;') + '</p></div>'; reveal(); }
 })();
+reveal();
 })();
 </script>
