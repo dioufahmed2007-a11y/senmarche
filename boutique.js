@@ -15,6 +15,8 @@ const isDeal = a => a.prix_min_fcfa && a.prix_min_fcfa > price(a);
 const pct = a => Math.round((1 - price(a) / a.prix_min_fcfa) * 100);
 const link = a => 'produit.html?ref=' + encodeURIComponent(a.reference);
 const PACK = /coffret|\bpack\b|\blot de|\bkit\b|routine/i;
+const FL = '<div class="fl">' + "<svg class=\"fleuron\" viewBox=\"0 0 220 28\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\"><g stroke=\"currentColor\" stroke-width=\"1.2\" fill=\"none\"><path d=\"M8 14H84\"/><path d=\"M136 14H212\"/><path d=\"M84 14l5-3 5 3-5 3z\" fill=\"currentColor\"/><path d=\"M136 14l-5-3-5 3 5 3z\" fill=\"currentColor\"/></g><g transform=\"translate(110 14)\"><ellipse cx=\"0\" cy=\"-6.5\" rx=\"3.6\" ry=\"6.5\" transform=\"rotate(0)\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\"/><ellipse cx=\"0\" cy=\"-6.5\" rx=\"3.6\" ry=\"6.5\" transform=\"rotate(72)\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\"/><ellipse cx=\"0\" cy=\"-6.5\" rx=\"3.6\" ry=\"6.5\" transform=\"rotate(144)\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\"/><ellipse cx=\"0\" cy=\"-6.5\" rx=\"3.6\" ry=\"6.5\" transform=\"rotate(216)\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\"/><ellipse cx=\"0\" cy=\"-6.5\" rx=\"3.6\" ry=\"6.5\" transform=\"rotate(288)\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\"/><circle r=\"2.4\" fill=\"currentColor\"/></g><circle cx=\"20\" cy=\"14\" r=\"2\" fill=\"currentColor\"/><circle cx=\"200\" cy=\"14\" r=\"2\" fill=\"currentColor\"/></svg>" + '</div>';
+const real = a => a && a.photo_url && !/placehold\.co/.test(a.photo_url);
 const B = window.Boutique = { all: [] };
 
 /* Coffrets : on retrouve les produits cités dans la description pour comparer avec les vrais prix */
@@ -43,12 +45,12 @@ const initInner = function (cfg) {
     '<section class="bh"><div class="pw"><div class="bc"><a href="fille.html">Fille</a><i>/</i><span>' + cfg.title + '</span></div>' +
     '<h1>' + cfg.title + ' <em>' + cfg.em + '</em></h1><p class="lead">' + cfg.lead + '</p>' +
     (parts ? '<div class="parts" id="parts"></div>' : '') +
-    '<div class="hs"><input id="q" type="search" placeholder="' + E(cfg.placeholder || 'Chercher…') + '" autocomplete="off" aria-label="Chercher"></div></div><div class="pearls pb"></div></section>' +
+    '<div class="hs"><input id="q" type="search" placeholder="' + E(cfg.placeholder || 'Chercher…') + '" autocomplete="off" aria-label="Chercher"></div></div></section>' +
     (cfg.extraHtml || '') +
     '<div class="pw" id="view"></div>' +
     '<div id="listing" class="hid"><div class="tb" id="tb"><div class="pw"><div class="row"><button class="chip back" id="back">← Vitrine</button><div class="chips" id="chips"></div><select class="sel" id="sort" aria-label="Trier"><option value="recent">Nouveautés</option><option value="asc">Prix ↑</option><option value="desc">Prix ↓</option></select></div></div></div>' +
     '<div class="pw"><p class="count" id="count"></p><div class="p-grid" id="grid"></div><div class="more hid" id="more" aria-hidden="true"></div></div></div>' +
-    '<div class="pw"><section class="cross"><div class="sec" style="margin-top:0"><div class="pearls"></div><h2>Découvre <em>aussi</em></h2></div><div class="cc">' + (cfg.cross || []).map(c => '<a class="c" href="' + c.href + '"><i>→</i><b>' + c.t + '</b><span>' + c.s + '</span></a>').join('') + '</div></section></div>';
+    '<div class="pw"><section class="cross"><div class="sec" style="margin-top:0">' + FL + '<h2>Découvre <em>aussi</em></h2></div><div class="cc">' + (cfg.cross || []).map(c => '<a class="c" href="' + c.href + '"><i>→</i><b>' + c.t + '</b><span>' + c.s + '</span></a>').join('') + '</div></section></div>';
 
   function list() {
     const r = curRays().find(x => x.k === S.ray);
@@ -57,14 +59,15 @@ const initInner = function (cfg) {
     if (S.sort === 'desc') l.sort((a, b) => price(b) - price(a));
     return l;
   }
-  const sec = (t, sub) => '<section class="sec"><div class="pearls"></div><h2>' + t + '</h2>' + (sub ? '<p>' + sub + '</p>' : '') + '</section>';
+  const sec = (t, sub) => '<section class="sec">' + FL + '<h2>' + t + '</h2>' + (sub ? '<p>' + sub + '</p>' : '') + '</section>';
   const hrow = l => '<div class="hrow">' + l.map(card).join('') + '</div>';
 
   /* ── VITRINE ── */
   function vitrine() {
     const v = $('view');
     if (parts && !S.part) {
-      v.innerHTML = sec('Par quoi <em>commencer</em> ?', 'Choisis ta partie, tu pourras changer à tout moment.') + '<div class="doors2">' + parts.map(p => { const l = ALL.filter(a => a._p === p.k), f = l.find(a => a.photo_url); return '<button class="door" data-part="' + p.k + '">' + (f ? '<img loading="lazy" src="' + E(SE.imgUrl(f.photo_url, 600)) + '" alt="">' : '') + '<span class="k">' + l.length + ' article' + (l.length > 1 ? 's' : '') + '</span><span class="t"><b>' + p.t + '</b><small>' + p.s + '</small></span></button>'; }).join('') + '</div>';
+      const AR = window.FilleArt ? { abayas: FilleArt.tenues, tendances: FilleArt.tendances } : {};
+      v.innerHTML = sec('Par quoi <em>commencer</em> ?', 'Choisis ta partie, tu pourras changer à tout moment.') + '<div class="cats two">' + parts.map(p => { const l = ALL.filter(a => a._p === p.k); return '<button class="cat" data-part="' + p.k + '"><div class="cat-art">' + (AR[p.k] ? AR[p.k]() : '<span class="glyph">✿</span>') + '</div><div class="cat-body"><span class="kick2">' + l.length + ' article' + (l.length > 1 ? 's' : '') + '</span><h3>' + p.t + '</h3><p>' + p.s + '</p><span class="cat-go">Choisir <small>→</small></span></div></button>'; }).join('') + '</div>';
       v.querySelectorAll('[data-part]').forEach(b => b.onclick = () => setPart(b.dataset.part));
       return;
     }
@@ -80,11 +83,11 @@ const initInner = function (cfg) {
         const gr = rs.filter(x => (x.r.g || '') === g);
         if (g) h += '<p class="glabel">' + g + '</p>';
         if (gr[0].r.pill) h += '<div class="pillrow">' + gr.map(x => '<button class="pill" data-k="' + x.r.k + '">' + x.r.t + ' <small>' + x.l.length + '</small></button>').join('') + '</div>';
-        else h += '<div class="rays">' + gr.map(x => { const f = x.l.find(a => a.photo_url); return '<button class="ray" data-k="' + x.r.k + '"><span class="a">' + (f ? '<img loading="lazy" src="' + E(SE.imgUrl(f.photo_url, 400)) + '" alt="">' : '✿') + '</span><b>' + x.r.t + '</b><small>' + x.l.length + ' article' + (x.l.length > 1 ? 's' : '') + '</small></button>'; }).join('') + '</div>';
+        else h += '<div class="rays">' + gr.map(x => { const f = x.l.find(real); return '<button class="ray" data-k="' + x.r.k + '"><span class="a">' + (f ? '<img loading="lazy" src="' + E(SE.imgUrl(f.photo_url, 400)) + '" alt="">' : '✿') + '</span><b>' + x.r.t + '</b><small>' + x.l.length + ' article' + (x.l.length > 1 ? 's' : '') + '</small></button>'; }).join('') + '</div>';
       });
       if (deals.length) h += sec('Bons <em>plans</em>', 'Des prix qui font plaisir.') + hrow(deals.slice(0, 8));
       if (packs.length) h += sec('Coffrets &amp; <em>offres</em>', 'Plus de plaisir, un meilleur prix : compare.') + '<div class="packs">' + packs.slice(0, 4).map(p => packHtml(p, ALL)).join('') + '</div>';
-      if (ess.length) h += sec('Les <em>indispensables</em>', 'Nos pièces les plus récentes.') + '<div class="p-grid">' + ess.map(card).join('') + '</div>';
+      if (ess.length) h += sec('Les <em>indispensables</em>', 'Nos pièces les plus récentes.') + '<div class="p-grid vit">' + ess.map(card).join('') + '</div>';
       h += '<p class="all"><button class="btn-p" id="seeall">Voir les ' + its.length + ' articles</button></p>';
     }
     v.innerHTML = h;
