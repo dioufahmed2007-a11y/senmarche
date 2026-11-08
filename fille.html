@@ -227,9 +227,38 @@ body.se-mode .p-badge.offre{background:var(--m-bissap);color:var(--m-on-bissap)}
 .closing p{color:var(--stone);margin:0 auto 1.4rem;max-width:40ch;line-height:1.6}
 .closing .row{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center}
 .btn-o{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+
+/* ═════════ FILLE — touches girly & cosy (discrètes) ═════════ */
+.deco{position:absolute;pointer-events:none;display:block}
+.d-h1{right:-5%;top:20%;width:clamp(150px,27vw,360px);color:var(--m-on-vert);opacity:.9;z-index:-1}
+.d-h2{right:clamp(110px,24vw,330px);top:56%;width:clamp(64px,10vw,130px);color:var(--m-bissap-2);opacity:.95;z-index:-1}
+.d-s1{right:-26px;top:10px;width:120px;color:var(--m-bissap-2);opacity:.3;z-index:0}
+.d-m{right:-22px;bottom:-22px;width:130px;color:var(--m-bissap-2);opacity:.3}
+.d-c1{left:-26px;bottom:-26px;width:130px;color:var(--m-bissap-2);opacity:.3}
+.d-c2{right:-20px;top:-20px;width:100px;color:var(--m-bissap-2);opacity:.3}
+@media(prefers-reduced-motion:no-preference){.d-h1,.d-h2{animation:sway 9s ease-in-out infinite;transform-origin:50% 50%}.d-h2{animation-duration:7s;animation-direction:alternate-reverse}}
+@keyframes sway{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(6deg)}}
+/* du rose à la place du safran sur les petits détails */
+.street-track span::after{content:'✿';color:var(--m-bissap);font-size:.95rem}
+.sh-n{-webkit-text-stroke-color:var(--m-bissap-2)}
+.sh h2 i::after{content:' ✿';font-family:var(--m-body);font-style:normal;font-size:.5em;color:var(--m-bissap-2);vertical-align:.35em}
+body.se-mode .p-prix{color:var(--m-acc-bissap)}
+body.se-mode .p-action.add:hover{background:var(--m-bissap);color:var(--m-on-bissap);border-color:var(--m-bissap)}
+body.se-mode .btn-s{background:var(--m-bissap);color:var(--m-on-bissap);border-color:var(--m-bissap)}
+body.se-mode .btn-s.btn-o{background:transparent;color:var(--ink);border-color:var(--ink)}
+body.se-mode .hero-row .btn-s{background:var(--m-on-vert);color:var(--m-bissap);border-color:var(--m-on-vert)}
+.mkt-list li::before{background:var(--m-bissap-2);color:var(--m-on-bissap)}
+/* douceur : rayons sur fond rosé, coins plus ronds */
+#rayons{background:var(--m-tint-bissap);position:relative;overflow:hidden;padding-bottom:clamp(2.6rem,5vw,3.8rem)}
+#rayons .container{position:relative;z-index:1}
+.drops .drop{border-radius:28px}
+.mkt-text{position:relative}
+.closing{position:relative;overflow:hidden;border-color:var(--m-bissap-2);background:var(--m-tint-bissap)}
+.closing>*:not(.deco){position:relative}
 </style>
 </head>
 <body class="se-mode">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="flw" viewBox="-50 -50 100 100"><g fill="currentColor" stroke="rgba(0,0,0,.10)" stroke-width="1"><ellipse cx="0" cy="-27" rx="14" ry="22"/><ellipse cx="0" cy="-27" rx="14" ry="22" transform="rotate(45)"/><ellipse cx="0" cy="-27" rx="14" ry="22" transform="rotate(90)"/><ellipse cx="0" cy="-27" rx="14" ry="22" transform="rotate(135)"/><ellipse cx="0" cy="-27" rx="14" ry="22" transform="rotate(180)"/><ellipse cx="0" cy="-27" rx="14" ry="22" transform="rotate(225)"/><ellipse cx="0" cy="-27" rx="14" ry="22" transform="rotate(270)"/><ellipse cx="0" cy="-27" rx="14" ry="22" transform="rotate(315)"/></g><g fill="#fff" opacity=".28"><ellipse cx="0" cy="-17" rx="8" ry="12"/><ellipse cx="0" cy="-17" rx="8" ry="12" transform="rotate(60)"/><ellipse cx="0" cy="-17" rx="8" ry="12" transform="rotate(120)"/><ellipse cx="0" cy="-17" rx="8" ry="12" transform="rotate(180)"/><ellipse cx="0" cy="-17" rx="8" ry="12" transform="rotate(240)"/><ellipse cx="0" cy="-17" rx="8" ry="12" transform="rotate(300)"/></g><circle r="9" fill="var(--m-safran)"/><circle r="3" fill="var(--m-on-safran)" opacity=".5"/></symbol></defs></svg>
 
 <!-- PANIER COULISSANT -->
 <div class="drawer-overlay" id="drawer-overlay"></div>
@@ -259,6 +288,8 @@ body.se-mode .p-badge.offre{background:var(--m-bissap);color:var(--m-on-bissap)}
   <div class="hero-s-bg" id="hero-bg"></div>
   <div class="hero-s-tint"></div>
   <div class="hero-s-shade"></div>
+  <svg class="deco d-h1" viewBox="-50 -50 100 100" aria-hidden="true"><use href="#flw"/></svg>
+  <svg class="deco d-h2" viewBox="-50 -50 100 100" aria-hidden="true"><use href="#flw"/></svg>
   <div class="hero-s-top"><span class="mono">Tenues · Beauté · Soins</span><span class="sticker">Petits<br>prix</span></div>
   <h1 class="hero-title disp"><span>Pour elle</span><span class="ht-2 out">Tenues, beauté &amp; soins</span></h1>
   <div class="hero-row">
@@ -274,7 +305,7 @@ body.se-mode .p-badge.offre{background:var(--m-bissap);color:var(--m-on-bissap)}
 </div></div>
 
 <!-- 01 RAYONS -->
-<section class="sec" id="rayons"><div class="container">
+<section class="sec" id="rayons"><svg class="deco d-s1" viewBox="-50 -50 100 100" aria-hidden="true"><use href="#flw"/></svg><div class="container">
   <div class="sh"><span class="sh-n">01</span><h2>Nos <i>rayons</i></h2><span class="mono">Choisis le tien</span></div>
   <div class="drops" id="rayons-grid"></div>
 </div></section>
@@ -299,7 +330,8 @@ body.se-mode .p-badge.offre{background:var(--m-bissap);color:var(--m-on-bissap)}
       <h3>Ta routine <i>perso</i></h3>
       <p>Tu ne sais pas quoi choisir pour ta peau ? Réponds à 4 questions : on te compose une routine étape par étape, avec les vrais prix.</p>
       <ul class="mkt-list"><li>4 questions, 1 minute</li><li>Adaptée à ta peau et à ton budget</li><li>Tout dans le panier en un clic</li></ul>
-      <p style="margin:1.4rem 0 0"><a href="soins.html#routine" class="btn-s">Trouver ma routine →</a></p>
+      <svg class="deco d-m" viewBox="-50 -50 100 100" aria-hidden="true"><use href="#flw"/></svg>
+      <p style="margin:1.4rem 0 0;position:relative"><a href="soins.html#routine" class="btn-s">Trouver ma routine →</a></p>
     </div>
   </div>
 </div></section>
@@ -307,6 +339,7 @@ body.se-mode .p-badge.offre{background:var(--m-bissap);color:var(--m-on-bissap)}
 <!-- FIN -->
 <section class="sec"><div class="container">
   <div class="closing">
+    <svg class="deco d-c1" viewBox="-50 -50 100 100" aria-hidden="true"><use href="#flw"/></svg><svg class="deco d-c2" viewBox="-50 -50 100 100" aria-hidden="true"><use href="#flw"/></svg>
     <h3>Tu cherches <i>autre chose</i> ?</h3>
     <p>Une pièce, une marque, une teinte précise ? Dis-nous ce que tu veux, on te la déniche.</p>
     <div class="row"><a href="demande-speciale.html" class="btn-s">Demande spéciale →</a><a href="https://wa.me/221778038874?text=Bonjour%20SenMarch%C3%A9%2C%20j%E2%80%99ai%20une%20question%20sur%20l%E2%80%99univers%20Fille" target="_blank" rel="noopener" class="btn-s btn-o">Écrire sur WhatsApp</a></div>
