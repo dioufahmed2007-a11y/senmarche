@@ -349,9 +349,34 @@ body[data-part="abayas"] .drops .drop-title{text-transform:none}
 .nores{grid-column:1/-1;padding:clamp(2rem,6vw,3.5rem) 1.2rem;text-align:center;border:2px dashed var(--pt2);border-radius:22px;background:var(--pt-tint)}
 .nores h3{font:800 clamp(1.6rem,4vw,2.4rem)/1.05 var(--m-display);letter-spacing:-.03em;margin:0 0 .5rem;color:var(--ink)}
 .nores p{color:var(--stone);margin:0 auto 1.2rem;max-width:36ch;line-height:1.55}
+
+/* ═════════ TENUES v3 — 3 pages : porte d'entrée + abayas + tendances ═════════ */
+@view-transition{navigation:auto}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.4s}
+@media(prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
+body[data-part="hub"]{--pt:var(--m-bissap);--pt2:var(--m-bissap-2);--pt-on:var(--m-on-bissap);--pt-tint:var(--m-tint-bissap);--pt-acc:var(--m-acc-bissap);--pt-g:var(--m-g-bissap)}
+.doors{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:760px){.doors{grid-template-columns:1fr 1fr;gap:18px}}
+.door{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:clamp(320px,44vw,470px);border-radius:28px;overflow:hidden;padding:clamp(1.3rem,3vw,2rem);text-decoration:none;isolation:isolate;transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.door:hover{transform:translateY(-4px)}
+.door::before{content:'';position:absolute;inset:0;z-index:-2;background:var(--dg)}
+.door[data-k="abayas"]{--dg:var(--m-g-vert);color:var(--m-on-vert)}
+.door[data-k="tendances"]{--dg:var(--m-g-bissap);color:var(--m-on-bissap)}
+.door .deco{z-index:-1}
+.door[data-k="tendances"] .deco{right:-8%;top:-4%;width:min(78%,360px)}
+.door[data-k="abayas"] .arch{position:absolute;right:8%;top:10%;width:clamp(130px,30%,200px);height:64%;border:1.5px solid color-mix(in srgb,var(--m-on-vert) 40%,transparent);border-bottom:0;border-radius:999px 999px 0 0;z-index:-1}
+.door[data-k="abayas"] .arch::after{content:'';position:absolute;inset:12px 12px 0;border:1px solid color-mix(in srgb,var(--m-on-vert) 26%,transparent);border-bottom:0;border-radius:999px 999px 0 0}
+.door-tag{align-self:flex-start;background:var(--m-on-nuit);color:var(--m-nuit);border-radius:999px;padding:.4rem .8rem;font:800 .75rem/1 var(--m-body);margin-bottom:.9rem}
+.door h3{margin:0 0 .5rem;font-size:clamp(2rem,5vw,3.2rem);line-height:.95;letter-spacing:-.03em}
+.door[data-k="abayas"] h3{font-family:var(--m-serif);font-style:italic;font-weight:400;font-variation-settings:normal;text-transform:none;letter-spacing:-.03em}
+.door p{margin:0 0 1rem;max-width:30ch;font:500 .95rem/1.45 var(--m-body);opacity:.92}
+.door .go{display:inline-flex;gap:.5rem;align-self:flex-start;font:700 .88rem/1 var(--m-body);border-bottom:2px solid var(--m-safran);padding-bottom:.25rem;transition:gap .2s}
+.door:hover .go{gap:.9rem}
+.next{margin-top:0}
+.next .door{min-height:clamp(190px,26vw,260px)}
 </style>
 </head>
-<body class="se-mode" data-part="abayas">
+<body class="se-mode" data-part="hub">
 
 <!-- PANIER COULISSANT -->
 <div class="drawer-overlay" id="drawer-overlay"></div>
@@ -376,69 +401,36 @@ body[data-part="abayas"] .drops .drop-title{text-transform:none}
   </div>
 </nav>
 
-<!-- HERO ABAYAS & VOILES : sobre -->
-<header class="hero-s hero-a" id="hero-a">
-  <div class="hero-s-bg"></div><div class="hero-s-tint"></div><div class="hero-s-shade"></div>
-  <span class="arch" aria-hidden="true"></span>
-  <img class="deco d-h2" src="deco-branche.png" alt="" aria-hidden="true">
-  <div class="hero-s-top"><span class="crumb"><a href="fille.html">Fille</a> › Tenues › Abayas &amp; Voiles</span></div>
-  <h1 class="hero-title disp"><span>Abayas &amp; voiles</span><span class="ht-2 out">Simples, soignées, confortables</span></h1>
-  <div class="hero-row">
-    <div class="hero-tags"><span>Taille à choisir</span><span>Vérifié avant envoi</span><span>Paiement à la récupération</span></div>
-    <div class="go"><button type="button" class="hero-switch" data-go="tendances">Envie d'autre chose ? Les tendances →</button><a href="#pieces" class="btn-s">Voir les pièces →</a></div>
-  </div>
-</header>
-
-<!-- HERO TENDANCES : plus libre -->
-<header class="hero-s hero-t" id="hero-t">
+<!-- HERO -->
+<header class="hero-s" id="hero">
   <div class="hero-s-bg"></div><div class="hero-s-tint"></div><div class="hero-s-shade"></div>
   <img class="deco d-h1" src="deco-bouquet.png" alt="" aria-hidden="true">
   <img class="deco d-h2" src="deco-branche.png" alt="" aria-hidden="true">
-  <div class="hero-s-top"><span class="crumb"><a href="fille.html">Fille</a> › Tenues › Tendances</span><span class="sticker">Petits<br>prix</span></div>
-  <h1 class="hero-title disp"><span>Tendances</span><span class="ht-2 out">à toi de jouer</span></h1>
+  <div class="hero-s-top"><span class="crumb"><a href="fille.html">Fille</a> › Tenues</span><span class="sticker">Petits<br>prix</span></div>
+  <h1 class="hero-title disp"><span>Tenues</span><span class="ht-2 out">pour chaque envie</span></h1>
   <div class="hero-row">
-    <div class="hero-tags"><span>Robes, pantalons, hauts</span><span>Vérifié avant envoi</span><span>Paiement à la récupération</span></div>
-    <div class="go"><button type="button" class="hero-switch" data-go="abayas">← Abayas &amp; voiles</button><a href="#pieces" class="btn-s">Voir les pièces →</a></div>
+    <div class="hero-tags"><span>Taille à choisir</span><span>Vérifié avant envoi</span><span>Paiement à la récupération</span></div>
+    <a href="#parties" class="btn-s">Choisir ma partie →</a>
   </div>
 </header>
-
-<!-- BANDES -->
-<div class="street-tape tape-a" aria-hidden="true"><div class="street-track">
-  <span>Abayas</span><span>Voiles &amp; hijabs</span><span>Ensembles</span><span>Accessoires</span><span>Simplicité</span><span>Douceur</span>
-  <span>Abayas</span><span>Voiles &amp; hijabs</span><span>Ensembles</span><span>Accessoires</span><span>Simplicité</span><span>Douceur</span>
-</div></div>
-<div class="street-tape tape-t" aria-hidden="true"><div class="street-track">
-  <span>Robes</span><span>Pantalons</span><span>Hauts</span><span>Ensembles</span><span>Petits prix</span><span>Zéro avance</span>
-  <span>Robes</span><span>Pantalons</span><span>Hauts</span><span>Ensembles</span><span>Petits prix</span><span>Zéro avance</span>
+<div class="street-tape" aria-hidden="true"><div class="street-track">
+  <span>Abayas</span><span>Voiles &amp; hijabs</span><span>Robes</span><span>Pantalons</span><span>Hauts</span><span>Ensembles</span>
+  <span>Abayas</span><span>Voiles &amp; hijabs</span><span>Robes</span><span>Pantalons</span><span>Hauts</span><span>Ensembles</span>
 </div></div>
 
-<!-- 01 LES PIÈCES -->
-<section class="sec" id="pieces"><div class="container">
-  <div class="sh"><span class="sh-n">01</span><h2 id="grid-title">Les <i>pièces</i></h2><span class="mono" id="grid-count"></span></div>
-  <div class="parts" id="parts"></div>
-  <div class="filters-bar" id="fbar"></div>
-  <div class="prod-grid" id="grid"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
-</div></section>
-
-<!-- 02a BIEN CHOISIR (abayas) -->
-<section class="sec" id="tips-sec"><div class="container">
-  <div class="sh"><span class="sh-n">02</span><h2>Bien <i>choisir</i></h2><span class="mono">Taille, tissu, voile</span></div>
-  <div class="tips">
-    <div class="tip"><span class="n">I</span><h3>Ta taille</h3><p>Mesure de l'épaule jusqu'à la cheville pour la longueur. Entre deux tailles, prends la plus grande : la coupe sera plus ample et plus confortable.</p></div>
-    <div class="tip"><span class="n">II</span><h3>Ton tissu</h3><p>Le jersey est doux et ne glisse pas. La mousseline est légère quand il fait chaud. Le crêpe tombe bien et reste opaque. La soie de Médine est fluide, avec un beau reflet.</p></div>
-    <div class="tip"><span class="n">III</span><h3>Ton voile</h3><p>Un sous-voile ou un bonnet aide le voile à tenir en place. Les épingles et les broches finissent la tenue sans l'alourdir.</p></div>
+<section class="sec" id="parties"><div class="container">
+  <div class="sh"><span class="sh-n">01</span><h2>Choisis <i>ta partie</i></h2><span class="mono">Deux ambiances</span></div>
+  <div class="doors">
+    <a href="abayas.html" class="door" data-k="abayas"><span class="arch" aria-hidden="true"></span><span class="door-tag" id="c-abayas">Découvrir</span><h3>Abayas &amp; voiles</h3><p>Simples, soignées, confortables. Abayas, voiles, ensembles.</p><span class="go">Entrer →</span></a>
+    <a href="tendances.html" class="door" data-k="tendances"><img class="deco" src="deco-bouquet.png" alt="" aria-hidden="true"><span class="door-tag" id="c-tendances">Découvrir</span><h3 class="disp">Tendances</h3><p>Robes, pantalons, hauts : un style plus libre.</p><span class="go">Entrer →</span></a>
   </div>
-  <p class="tips-foot">Un doute ? <a target="_blank" rel="noopener" href="https://wa.me/221778038874?text=Bonjour%20SenMarch%C3%A9%2C%20j%E2%80%99ai%20besoin%20d%E2%80%99un%20conseil%20pour%20une%20abaya%20ou%20un%20voile">Écris-nous sur WhatsApp</a>, on te conseille.</p>
 </div></section>
 
-<!-- 02b LOOK DU MOMENT (tendances) -->
-<section class="sec" id="look-sec" hidden><div class="container">
-  <div class="sh"><span class="sh-n">02</span><h2>Le look <i>du moment</i></h2><span class="mono">Haut + pantalon</span></div>
-  <div class="look-grid" id="look-grid"></div>
-  <div class="look-bar" id="look-bar"></div>
+<section class="sec" id="new-sec" hidden><div class="container">
+  <div class="sh"><span class="sh-n">02</span><h2>Les dernières <i>arrivées</i></h2><span class="mono">Un peu de chaque partie</span></div>
+  <div class="prod-grid" id="grid"></div>
 </div></section>
 
-<!-- 03 COMPLÈTE TON LOOK -->
 <section class="sec"><div class="container">
   <div class="sh"><span class="sh-n">03</span><h2>Complète <i>ton look</i></h2><span class="mono">Beauté &amp; soins</span></div>
   <div class="drops">
@@ -584,88 +576,21 @@ body[data-part="abayas"] .drops .drop-title{text-transform:none}
     if (wishBtn){ e.preventDefault(); SE.Wishlist.toggle(wishBtn.dataset.ref); updateUI(); }
   }
 
-  const PARTS = [
-    { k: 'abayas', h: 'Abayas <i>&amp; Voiles</i>', t: 'Abayas & Voiles', s: 'Abayas, voiles, ensembles', catRe: /abaya|voile|[ée]l[ée]gance/i, rayons: [
-      { t: 'Ensembles', re: /ensemble|\bset\b/i },
-      { t: 'Abayas & kimonos', re: /abaya|kimono|jilbab|robe longue/i },
-      { t: 'Voiles & hijabs', re: /voile|hijab|foulard|khimar|[ée]charpe/i },
-      { t: 'Accessoires', re: /bonnet|sous-voile|[ée]pingle|broche/i }] },
-    { k: 'tendances', h: 'Les <i>tendances</i>', t: 'Tendances', s: 'Robes, pantalons, hauts', catRe: /tendance|robe/i, rayons: [
-      { t: 'Ensembles', re: /ensemble|\bset\b/i },
-      { t: 'Robes & jupes', re: /robe|jupe/i },
-      { t: 'Pantalons', re: /pantalon|jean|legging|short/i },
-      { t: 'Hauts', re: /\btop\b|haut|chemise|t-shirt|pull|body|blouse/i }] }
-  ];
-  const state = { part: location.hash === '#tendances' ? 'tendances' : 'abayas', rayon: -1, sort: 'default' };
-  let ITEMS = { abayas: [], tendances: [] }, LOOK = null;
+  const RE = { abayas: /abaya|voile|[ée]l[ée]gance/i, tendances: /tendance|robe/i };
   const $ = id => document.getElementById(id);
-  const WA = 'https://wa.me/221778038874?text=';
-
-  function drawParts(){
-    $('parts').innerHTML = PARTS.map(p => `<button type="button" class="part${p.k === state.part ? ' active' : ''}" data-k="${p.k}" aria-pressed="${p.k === state.part}"><b class="disp">${esc(p.t)}</b><small>${esc(p.s)} · ${ITEMS[p.k].length}</small></button>`).join('');
-  }
-  function drawBar(){
-    const part = PARTS.find(p => p.k === state.part), list = ITEMS[state.part];
-    const pills = part.rayons.map((r, i) => ({ i, t: r.t, n: list.filter(a => r.re.test(norm(a.nom))).length })).filter(x => x.n > 0);
-    $('fbar').innerHTML = (pills.length ? `<button type="button" class="filter-pill${state.rayon === -1 ? ' active' : ''}" data-r="-1">Tout · ${list.length}</button>` + pills.map(x => `<button type="button" class="filter-pill${state.rayon === x.i ? ' active' : ''}" data-r="${x.i}">${esc(x.t)} · ${x.n}</button>`).join('') : '')
-      + `<select class="sort-select" id="sort" aria-label="Trier"><option value="default"${state.sort === 'default' ? ' selected' : ''}>Trier par</option><option value="prix_asc"${state.sort === 'prix_asc' ? ' selected' : ''}>Prix ↑</option><option value="prix_desc"${state.sort === 'prix_desc' ? ' selected' : ''}>Prix ↓</option></select>`;
-  }
-  function drawGrid(){
-    const part = PARTS.find(p => p.k === state.part);
-    let list = ITEMS[state.part].slice();
-    if (state.rayon >= 0) list = list.filter(a => part.rayons[state.rayon].re.test(norm(a.nom)));
-    if (state.sort === 'prix_asc') list.sort((a, b) => (a.prix_vente_fcfa || 0) - (b.prix_vente_fcfa || 0));
-    if (state.sort === 'prix_desc') list.sort((a, b) => (b.prix_vente_fcfa || 0) - (a.prix_vente_fcfa || 0));
-    $('grid-title').innerHTML = part.h; $('grid-count').textContent = list.length + ' pièce' + (list.length > 1 ? 's' : '');
-    if (!list.length){
-      $('grid').innerHTML = `<div class="nores"><h3>Bientôt de nouvelles pièces</h3><p>Rien ici pour le moment. Dis-nous ce que tu cherches, on te le trouve.</p><a class="btn-s" target="_blank" rel="noopener" href="${WA}${encodeURIComponent('Bonjour SenMarché, je cherche : ' + part.t)}">Écrire sur WhatsApp</a></div>`;
-      return;
-    }
-    fill('grid', list.map(a => cardHtml(a)).join(''));
-  }
-  /* look du moment : un haut + un pantalon réels, s'ils existent */
-  function computeLook(){
-    const t = PARTS[1], list = ITEMS.tendances;
-    const haut = list.find(a => t.rayons[3].re.test(norm(a.nom))), bas = list.find(a => t.rayons[2].re.test(norm(a.nom)));
-    LOOK = haut && bas ? [haut, bas] : null;
-  }
-  function drawLook(){
-    const sec = $('look-sec');
-    sec.hidden = state.part !== 'tendances' || !LOOK;
-    if (sec.hidden) return;
-    $('look-grid').innerHTML = cardHtml(LOOK[0]) + '<span class="look-plus" aria-hidden="true">+</span>' + cardHtml(LOOK[1]);
-    $('look-grid').querySelectorAll('.reveal-stagger').forEach(el => el.classList.add('visible'));
-    const tot = LOOK.reduce((s, a) => s + (a.prix_vente_fcfa || 0), 0);
-    $('look-bar').innerHTML = `<div><b>${fprix(tot)}</b><br><span>Le look complet, tailles à choisir sur chaque fiche</span></div><a class="btn-s" href="#pieces">Voir toutes les tendances →</a>`;
-    updateUI();
-  }
-  function setPart(k, scroll){
-    state.part = k; state.rayon = -1; document.body.dataset.part = k;
-    try{ history.replaceState(null, '', '#' + k); }catch(e){}
-    drawAll(); if (scroll) $('pieces').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth', block: 'start' });
-  }
-  function drawAll(){ document.body.dataset.part = state.part; $('tips-sec').hidden = state.part !== 'abayas'; drawParts(); drawBar(); drawGrid(); drawLook(); renumber(); }
-
-  $('parts').addEventListener('click', e => { const b = e.target.closest('.part'); if (b) setPart(b.dataset.k, false); });
-  document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => { setPart(b.dataset.go, false); window.scrollTo({ top: 0, behavior: 'auto' }); }));
-  $('fbar').addEventListener('click', e => { const b = e.target.closest('.filter-pill'); if (!b) return; state.rayon = parseInt(b.dataset.r, 10); drawBar(); drawGrid(); });
-  $('fbar').addEventListener('change', e => { if (e.target.id === 'sort'){ state.sort = e.target.value; drawGrid(); } });
   $('grid').addEventListener('click', handleGridClick);
-  $('look-grid').addEventListener('click', handleGridClick);
-  document.body.dataset.part = state.part; drawParts();
-
   (async () => {
     try{
       await new Promise(r => setTimeout(r, 50));
       const arts = await SE.Articles.load();
-      arts.forEach(a => {
-        if ((a.quantite || 0) <= 0 || a.etat === 'Vendu') return;
-        const n = (a.categorie && a.categorie.nom) || ''; if (!/fille/i.test(n)) return;
-        const part = PARTS.find(p => p.catRe.test(n)); if (part) ITEMS[part.k].push(a);
-      });
-      if (!location.hash && !ITEMS[state.part].length){ const o = state.part === 'abayas' ? 'tendances' : 'abayas'; if (ITEMS[o].length) state.part = o; }
-      computeLook(); drawAll();
-    }catch(e){ console.warn('[Tenues]', e); $('grid').innerHTML = '<div class="nores"><h3>Chargement impossible</h3><p>Réessaie dans un instant.</p></div>'; }
+      const all = arts.filter(a => (a.quantite || 0) > 0 && a.etat !== 'Vendu' && /fille/i.test((a.categorie && a.categorie.nom) || ''));
+      const ab = all.filter(a => RE.abayas.test((a.categorie && a.categorie.nom) || '')), te = all.filter(a => RE.tendances.test((a.categorie && a.categorie.nom) || '') && !ab.includes(a));
+      $('c-abayas').textContent = ab.length ? ab.length + ' pièce' + (ab.length > 1 ? 's' : '') : 'Découvrir';
+      $('c-tendances').textContent = te.length ? te.length + ' pièce' + (te.length > 1 ? 's' : '') : 'Découvrir';
+      const mix = []; for (let i = 0; i < 2; i++){ if (ab[i]) mix.push(ab[i]); if (te[i]) mix.push(te[i]); }
+      if (mix.length){ $('new-sec').hidden = false; fill('grid', mix.slice(0, 4).map(a => cardHtml(a)).join('')); }
+      renumber();
+    }catch(e){ console.warn('[Tenues]', e); }
   })();
   renumber(); updateUI(); updateDrawer();
 })();
