@@ -826,6 +826,8 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
   /* articles de seconde main = tout ce qui n'est pas "Neuf" */
   let secondArts = [];
   const isNewArt = a => { const e = (a.etat || '').toLowerCase(); return !e || e.includes('neuf'); };
+  /* les vêtements de l'univers Fille (abayas, voiles, tendances…) vivent dans Fille : on les retire de Mode. Le reste (cosmétiques, soins…) reste ici. */
+  const isFilleHabit = a => { const n = (a.categorie && a.categorie.nom) || ''; return /fille/i.test(n) && /abaya|voile|tendance|robe|[ée]l[ée]gance/i.test(n); };
   document.querySelectorAll('[data-fjgenre]').forEach(btn => btn.addEventListener('click', () => {
     document.querySelectorAll('[data-fjgenre]').forEach(b => b.classList.remove('active')); btn.classList.add('active'); applyFJ();
   }));
@@ -917,7 +919,7 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
 
   async function loadArticles(){
     try{
-      const raw = await SE.Articles.load();
+      const raw = (await SE.Articles.load()).filter(a => !isFilleHabit(a));
       const sorted = raw.sort((a, b) => (b.quantite || 0) - (a.quantite || 0));
       allArticles = sorted.filter(isNewArt);          /* panneau Neuf */
       secondArts = sorted.filter(a => !isNewArt(a));  /* panneau Feug Jay */
