@@ -2,6 +2,7 @@ window.SE_IMAGES = {
   hero:          'hero-boutique-crop.jpg',
   tileMode:      'hero-mode-crop.jpg',
   tileMaison:    'tile-maison.jpg',
+  tileFille:     'tile-fille.jpg',
   tileCatalogue: 'hero-catalogue-crop.jpg',
   heroMode:      'hero-mode-crop.jpg',
   heroMaison:    'hero-maison.jpg',
