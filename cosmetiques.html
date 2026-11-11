@@ -487,14 +487,23 @@ html{scroll-padding-top:116px}
 .explorer{display:grid;gap:1.4rem}
 @media(min-width:1000px){.explorer{grid-template-columns:minmax(300px,370px) minmax(0,1fr);gap:2.4rem;align-items:start}.face-card{position:sticky;top:84px}}
 .face-card{background:linear-gradient(170deg,var(--m-tint-bissap),color-mix(in srgb,var(--m-bissap-2) 18%,var(--m-tint-bissap)));border:1px solid color-mix(in srgb,var(--m-bissap-2) 30%,transparent);border-radius:28px;padding:1.1rem 1rem 1.2rem;text-align:center;max-width:380px;width:100%;margin:0 auto}
-.face-card svg{width:100%;height:auto;max-width:340px;display:block;margin:.2rem auto 0;-webkit-tap-highlight-color:transparent;user-select:none}
-@media(max-width:999px){.face-card svg{max-width:270px}}
+.face-wrap{position:relative;max-width:360px;margin:.2rem auto 0}
+.face-wrap>svg{width:100%;height:auto;display:block;-webkit-tap-highlight-color:transparent;user-select:none}
+@media(max-width:999px){.face-wrap{max-width:330px}}
 .face-hint{margin:.1rem 0 .3rem;font:800 1.05rem/1.2 var(--m-display);letter-spacing:-.01em;color:var(--ink)}
 .face-label{margin:.5rem 0 0;font:600 .9rem/1.3 var(--m-body);color:var(--stone);min-height:1.3em}
 .face-label b{color:var(--m-acc-bissap)}
 .subchips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 .9rem}
 .subchips:empty{display:none}
 .explorer .prod-grid{grid-template-columns:repeat(auto-fill,minmax(176px,1fr))}
+
+/* étiquettes autour du visage (le texte reste net, lisible, cliquable) */
+.ftag{position:absolute;display:inline-flex;align-items:center;gap:.35rem;padding:.42rem .75rem .42rem .55rem;border-radius:999px;border:1.5px solid color-mix(in srgb,var(--m-bissap-2) 45%,transparent);background:var(--card);color:var(--ink);font:700 .78rem/1 var(--m-body);cursor:pointer;box-shadow:0 8px 16px -10px var(--glow);transition:transform .2s,background .2s,color .2s,border-color .2s;white-space:nowrap}
+.ftag svg{width:16px;height:16px;flex:0 0 16px;fill:none;stroke:var(--m-acc-bissap);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ftag:hover{transform:translateY(-2px);border-color:var(--m-bissap-2)}
+.ftag.active{background:var(--m-g-bissap);color:var(--m-on-bissap);border-color:var(--m-bissap)}
+.ftag.active svg{stroke:currentColor}
+.ftag.empty{opacity:.55}
 </style>
 </head>
 <body class="se-mode cosm" data-part="hub">
@@ -548,51 +557,35 @@ html{scroll-padding-top:116px}
   <div class="explorer">
     <aside class="face-card">
       <p class="face-hint">Touche ce que tu cherches</p>
-      <svg id="face" viewBox="0 0 400 440" role="group" aria-label="Choisis un rayon en touchant le visage"><style>
+      <div class="face-wrap"><svg id="face" viewBox="0 0 480 440" role="group" aria-label="Choisis un rayon en touchant le visage"><style>
 .z{cursor:pointer;outline:none}
 .z .hit{opacity:0}
-.z .ring{fill:none;stroke:var(--m-bissap);stroke-width:3.500;stroke-dasharray:7 6;opacity:0;transition:opacity .2s}
-.z:hover .ring,.z:focus-visible .ring{opacity:.65}
+.z .ring{fill:none;stroke:var(--m-bissap);stroke-width:3.5;stroke-dasharray:7 6;opacity:0;transition:opacity .2s}
+.z:hover .ring,.z:focus-visible .ring{opacity:.6}
 .z.active .ring{opacity:1}
-.z .dot{fill:#fff;stroke:var(--m-bissap);stroke-width:2.500}
-.z .pulse{fill:var(--m-bissap);opacity:.0}
-.z.empty{opacity:.55}
-@media(prefers-reduced-motion:no-preference){.z .pulse{animation:pls 2.4s ease-out infinite}.z:nth-of-type(2n) .pulse{animation-delay:.8s}.z:nth-of-type(3n) .pulse{animation-delay:1.5s}}
-@keyframes pls{0%{r:5;opacity:.55}100%{r:16;opacity:0}}
-.z.active .dot,.z.active .pulse{display:none}
-</style>
-<defs>
-<radialGradient id="sk" cx="45%" cy="38%" r="75%"><stop offset="0" stop-color="#d09366"/><stop offset="1" stop-color="#b9774f"/></radialGradient>
-<radialGradient id="ch" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f0708f" stop-opacity=".75"/><stop offset="1" stop-color="#f0708f" stop-opacity="0"/></radialGradient>
+.z.empty{opacity:.6}
+</style><defs>
+<radialGradient id="sk" cx="45%" cy="38%" r="75%"><stop offset="0" stop-color="#cf8f63"/><stop offset="1" stop-color="#b9774f"/></radialGradient>
+<radialGradient id="ch" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f0708f" stop-opacity=".7"/><stop offset="1" stop-color="#f0708f" stop-opacity="0"/></radialGradient>
 </defs>
-<circle cx="200" cy="215" r="196" fill="#fbd5de" opacity=".55"/>
-<!-- cheveux (derrière) -->
+<g transform="translate(40 0)">
+<circle cx="200" cy="225" r="200" fill="#fbd5de" opacity=".6"/>
 <circle cx="200" cy="66" r="46" fill="#2a1a17"/><ellipse cx="200" cy="190" rx="136" ry="150" fill="#2a1a17"/>
-<!-- fleurs dans les cheveux -->
-<g transform="translate(262 82)"><g fill="#f4a3bb" stroke="#d9577f" stroke-width="1.200"><circle cx="0" cy="-12" r="9"/><circle cx="11" cy="-4" r="9"/><circle cx="7" cy="10" r="9"/><circle cx="-7" cy="10" r="9"/><circle cx="-11" cy="-4" r="9"/></g><circle r="6" fill="#f6d27a"/></g>
-<g transform="translate(300 120) scale(.75)"><g fill="#fde6ec" stroke="#e57b9a" stroke-width="1.200"><circle cx="0" cy="-12" r="9"/><circle cx="11" cy="-4" r="9"/><circle cx="7" cy="10" r="9"/><circle cx="-7" cy="10" r="9"/><circle cx="-11" cy="-4" r="9"/></g><circle r="6" fill="#f6d27a"/></g>
-<!-- cou + haut -->
-<path d="M165 330V402Q200 422 235 402V330Z" fill="#94583a"/>
+<g transform="translate(262 82)"><g fill="#f4a3bb" stroke="#d9577f" stroke-width="1.2"><circle cx="0" cy="-12" r="9"/><circle cx="11" cy="-4" r="9"/><circle cx="7" cy="10" r="9"/><circle cx="-7" cy="10" r="9"/><circle cx="-11" cy="-4" r="9"/></g><circle r="6" fill="#f6d27a"/></g>
+<g transform="translate(300 120) scale(.75)"><g fill="#fde6ec" stroke="#e57b9a" stroke-width="1.2"><circle cx="0" cy="-12" r="9"/><circle cx="11" cy="-4" r="9"/><circle cx="7" cy="10" r="9"/><circle cx="-7" cy="10" r="9"/><circle cx="-11" cy="-4" r="9"/></g><circle r="6" fill="#f6d27a"/></g>
+<path d="M165 330V402Q200 422 235 402V330Z" fill="#9a5f3d"/>
 <path d="M70 440Q92 394 165 390Q200 412 235 390Q308 394 330 440Z" fill="#f4a3bb"/>
 <path d="M165 390Q200 412 235 390" fill="none" stroke="#e57b9a" stroke-width="2"/>
-<!-- oreilles -->
-<ellipse cx="97" cy="242" rx="12" ry="20" fill="#94583a"/><ellipse cx="303" cy="242" rx="12" ry="20" fill="#94583a"/>
-<circle cx="97" cy="262" r="4" fill="#f6d27a"/><circle cx="303" cy="262" r="4" fill="#f6d27a"/>
-<g class="z" data-f="peau" role="button" tabindex="0" aria-label="Peau, soins"><path d="M96 235C96 160 142 108 200 108C258 108 304 160 304 235C304 306 258 363 200 363C142 363 96 306 96 235Z" fill="url(#sk)"/><g class="hit"><path d="M96 235C96 160 142 108 200 108C258 108 304 160 304 235C304 306 258 363 200 363C142 363 96 306 96 235Z" fill="transparent"/></g><g class="ring"><path d="M96 235C96 160 142 108 200 108C258 108 304 160 304 235C304 306 258 363 200 363C142 363 96 306 96 235Z" fill="none"/></g><circle class="pulse" cx="200" cy="172" r="7"/><circle class="dot" cx="200" cy="172" r="5.500"/></g><path d="M96 222C98 148 146 102 200 102C254 102 302 148 304 222C282 172 250 152 200 152C150 152 118 172 96 222Z" fill="#2a1a17"/><g class="z" data-f="teint" role="button" tabindex="0" aria-label="Teint, joues"><ellipse cx="143" cy="288" rx="34" ry="27" fill="url(#ch)"/><ellipse cx="257" cy="288" rx="34" ry="27" fill="url(#ch)"/><g class="hit"><ellipse cx="143" cy="288" rx="38" ry="30" fill="transparent"/><ellipse cx="257" cy="288" rx="38" ry="30" fill="transparent"/></g><g class="ring"><ellipse cx="143" cy="288" rx="38" ry="30" fill="none"/><ellipse cx="257" cy="288" rx="38" ry="30" fill="none"/></g><circle class="pulse" cx="143" cy="292" r="7"/><circle class="dot" cx="143" cy="292" r="5.500"/></g><g class="z" data-f="yeux" role="button" tabindex="0" aria-label="Yeux et sourcils"><path d="M137 206Q164 188 190 203" fill="none" stroke="#2a1a17" stroke-width="7" stroke-linecap="round"/><path d="M210 203Q236 188 263 206" fill="none" stroke="#2a1a17" stroke-width="7" stroke-linecap="round"/><g>
-<ellipse cx="165" cy="223" rx="31" ry="15" fill="#e88aa6" opacity=".55"/>
-<ellipse cx="165" cy="232" rx="22" ry="15.500" fill="#fff"/>
-<circle cx="165" cy="233" r="11.500" fill="#4a2a1c"/><circle cx="165" cy="233" r="5.500" fill="#120a07"/>
-<circle cx="161" cy="229" r="3.600" fill="#fff"/><circle cx="169" cy="237" r="1.800" fill="#fff" opacity=".8"/>
-<path d="M140 233 Q165 208 190 233" fill="none" stroke="#120a07" stroke-width="4.500" stroke-linecap="round"/>
-<path d="M143 228 l-9 -6 M148 222 l-7 -8 M155 218 l-3 -9" stroke="#120a07" stroke-width="2.800" stroke-linecap="round"/>
+<ellipse cx="97" cy="242" rx="11" ry="19" fill="#9a5f3d"/><ellipse cx="303" cy="242" rx="11" ry="19" fill="#9a5f3d"/>
+<g class="z" data-f="peau" role="button" tabindex="0" aria-label="Peau, soins"><path d="M96 235C96 160 142 108 200 108C258 108 304 160 304 235C304 306 258 363 200 363C142 363 96 306 96 235Z" fill="url(#sk)"/><g class="ring"><path d="M96 235C96 160 142 108 200 108C258 108 304 160 304 235C304 306 258 363 200 363C142 363 96 306 96 235Z" fill="none"/></g><g class="hit"><path d="M96 235C96 160 142 108 200 108C258 108 304 160 304 235C304 306 258 363 200 363C142 363 96 306 96 235Z" fill="transparent"/></g></g><path d="M96 222C98 148 146 102 200 102C254 102 302 148 304 222C282 172 250 152 200 152C150 152 118 172 96 222Z" fill="#2a1a17"/><g class="z" data-f="teint" role="button" tabindex="0" aria-label="Teint, joues"><ellipse cx="143" cy="288" rx="34" ry="27" fill="url(#ch)"/><ellipse cx="257" cy="288" rx="34" ry="27" fill="url(#ch)"/><g class="ring"><ellipse cx="143" cy="288" rx="38" ry="30" fill="none"/><ellipse cx="257" cy="288" rx="38" ry="30" fill="none"/></g><g class="hit"><ellipse cx="143" cy="288" rx="38" ry="30" fill="transparent"/><ellipse cx="257" cy="288" rx="38" ry="30" fill="transparent"/></g></g><g class="z" data-f="yeux" role="button" tabindex="0" aria-label="Yeux et sourcils"><path d="M138 208Q164 192 190 205" fill="none" stroke="#2a1a17" stroke-width="5" stroke-linecap="round" opacity=".85"/><path d="M210 205Q236 192 262 208" fill="none" stroke="#2a1a17" stroke-width="5" stroke-linecap="round" opacity=".85"/><g>
+<ellipse cx="165" cy="226" rx="30" ry="13" fill="#e88aa6" opacity=".5"/>
+<path d="M141 233 Q165 251 189 233" fill="none" stroke="#1c120d" stroke-width="4.5" stroke-linecap="round"/>
+<path d="M147 240 l-3 6 M157 244 l-1.500 7 M168 245 l.5 7 M178 243 l2 6.500 M186 238 l4 5" stroke="#1c120d" stroke-width="2.400" stroke-linecap="round" fill="none"/>
 </g><g>
-<ellipse cx="235" cy="223" rx="31" ry="15" fill="#e88aa6" opacity=".55"/>
-<ellipse cx="235" cy="232" rx="22" ry="15.500" fill="#fff"/>
-<circle cx="235" cy="233" r="11.500" fill="#4a2a1c"/><circle cx="235" cy="233" r="5.500" fill="#120a07"/>
-<circle cx="231" cy="229" r="3.600" fill="#fff"/><circle cx="239" cy="237" r="1.800" fill="#fff" opacity=".8"/>
-<path d="M210 233 Q235 208 260 233" fill="none" stroke="#120a07" stroke-width="4.500" stroke-linecap="round"/>
-<path d="M257 228 l9 -6 M252 222 l7 -8 M245 218 l3 -9" stroke="#120a07" stroke-width="2.800" stroke-linecap="round"/>
-</g><g class="hit"><rect x="104" y="184" width="192" height="68" rx="34" fill="transparent"/></g><g class="ring"><rect x="104" y="184" width="192" height="68" rx="34" fill="none"/></g><circle class="pulse" cx="200" cy="206" r="7"/><circle class="dot" cx="200" cy="206" r="5.500"/></g><path d="M193 276Q200 283 207 276" fill="none" stroke="#94583a" stroke-width="3.200" stroke-linecap="round"/><path d="M200 246Q195 262 196 272" fill="none" stroke="#94583a" stroke-width="2.500" stroke-linecap="round" opacity=".5"/><g class="z" data-f="levres" role="button" tabindex="0" aria-label="Lèvres"><path d="M163 322Q182 303 200 313Q218 303 237 322Q218 328 200 328Q182 328 163 322Z" fill="#b53660"/><path d="M163 322Q200 328 237 322Q224 352 200 354Q176 352 163 322Z" fill="#d9577f"/><ellipse cx="200" cy="341" rx="13" ry="4.500" fill="#fff" opacity=".55"/><path d="M163 322Q200 330 237 322" fill="none" stroke="#8c2347" stroke-width="1.600"/><g class="hit"><ellipse cx="200" cy="328" rx="56" ry="32" fill="transparent"/></g><g class="ring"><ellipse cx="200" cy="328" rx="56" ry="32" fill="none"/></g><circle class="pulse" cx="200" cy="356" r="7"/><circle class="dot" cx="200" cy="356" r="5.500"/></g><g class="z" data-f="parfums" role="button" tabindex="0" aria-label="Parfums"><g><rect x="30" y="372" width="38" height="46" rx="10" fill="#fde6ec" stroke="#d9577f" stroke-width="2.500"/><rect x="41" y="354" width="16" height="18" rx="3" fill="#c9a063"/><rect x="38" y="346" width="22" height="9" rx="3" fill="#e6c98d"/><path d="M38 384Q49 392 60 384" fill="none" stroke="#d9577f" stroke-width="2.500" stroke-linecap="round"/><rect x="36" y="378" width="5" height="30" rx="2.500" fill="#fff" opacity=".7"/></g><g class="hit"><rect x="14" y="340" width="70" height="88" rx="14" fill="transparent"/></g><g class="ring"><rect x="14" y="340" width="70" height="88" rx="14" fill="none"/></g><circle class="pulse" cx="49" cy="432" r="7"/><circle class="dot" cx="49" cy="432" r="5.500"/></g><g class="z" data-f="ongles" role="button" tabindex="0" aria-label="Ongles"><g><rect x="334" y="376" width="38" height="42" rx="10" fill="#d9577f"/><rect x="343" y="356" width="20" height="20" rx="4" fill="#2a1a17"/><rect x="340" y="378" width="5" height="30" rx="2.500" fill="#fff" opacity=".4"/></g><g class="hit"><rect x="318" y="340" width="70" height="88" rx="14" fill="transparent"/></g><g class="ring"><rect x="318" y="340" width="70" height="88" rx="14" fill="none"/></g><circle class="pulse" cx="353" cy="432" r="7"/><circle class="dot" cx="353" cy="432" r="5.500"/></g><g class="z" data-f="acc" role="button" tabindex="0" aria-label="Accessoires"><g transform="rotate(-35 49 85)"><rect x="44" y="52" width="10" height="42" rx="5" fill="#c9a063"/><rect x="42" y="90" width="14" height="12" fill="#e6c98d"/><path d="M42 102Q49 124 56 102Z" fill="#f4a3bb" stroke="#d9577f" stroke-width="1.500"/></g><g class="hit"><rect x="14" y="40" width="70" height="90" rx="14" fill="transparent"/></g><g class="ring"><rect x="14" y="40" width="70" height="90" rx="14" fill="none"/></g><circle class="pulse" cx="49" cy="134" r="7"/><circle class="dot" cx="49" cy="134" r="5.500"/></g></svg>
+<ellipse cx="235" cy="226" rx="30" ry="13" fill="#e88aa6" opacity=".5"/>
+<path d="M211 233 Q235 251 259 233" fill="none" stroke="#1c120d" stroke-width="4.5" stroke-linecap="round"/>
+<path d="M217 240 l-3 6 M227 244 l-1.500 7 M238 245 l.5 7 M248 243 l2 6.500 M256 238 l4 5" stroke="#1c120d" stroke-width="2.400" stroke-linecap="round" fill="none"/>
+</g><g class="ring"><rect x="104" y="186" width="192" height="64" rx="32" fill="none"/></g><g class="hit"><rect x="104" y="186" width="192" height="64" rx="32" fill="transparent"/></g></g><path d="M194 282Q200 287 206 282" fill="none" stroke="#9a5f3d" stroke-width="2.800" stroke-linecap="round" opacity=".8"/><g class="z" data-f="levres" role="button" tabindex="0" aria-label="Lèvres"><path d="M170 316Q185 304 200 311Q215 304 230 316Q215 322 200 322Q185 322 170 316Z" fill="#b53660"/><path d="M170 316Q200 324 230 316Q219 340 200 342Q181 340 170 316Z" fill="#d9577f"/><ellipse cx="200" cy="331" rx="10" ry="3.500" fill="#fff" opacity=".5"/><g class="ring"><ellipse cx="200" cy="322" rx="54" ry="30" fill="none"/></g><g class="hit"><ellipse cx="200" cy="322" rx="54" ry="30" fill="transparent"/></g></g></g></svg><button type="button" class="ftag" data-f="acc" style="left:1%;top:9%" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3l2 2-8.5 8.5-2-2z"/><path d="M10.5 12.5C8 12 5.5 13.5 5.5 16.5c0 1.8-.8 3-2 4 3.5.8 7-.5 7.5-4"/></svg><span>Pinceaux</span></button><button type="button" class="ftag" data-f="yeux" style="left:1%;top:45%" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.8-6.5 10-6.5S22 12 22 12s-3.8 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Yeux</span></button><button type="button" class="ftag" data-f="parfums" style="left:1%;top:86%" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="11" width="12" height="10" rx="3"/><path d="M9 11V8h6v3M11 8V4h2v4"/></svg><span>Parfums</span></button><button type="button" class="ftag" data-f="peau" style="right:1%;top:28%" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg><span>Peau</span></button><button type="button" class="ftag" data-f="teint" style="right:1%;top:56%" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="4.2"/></svg><span>Teint</span></button><button type="button" class="ftag" data-f="levres" style="right:1%;top:72%" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12c2.2-3.2 4.4-4.2 6.4-3.2 1.5.7 3.7.7 5.2 0 2-1 4.2 0 6.4 3.2-2.2 4.2-5.4 6.2-9 6.2S5.2 16.2 3 12z"/><path d="M3 12h18"/></svg><span>Lèvres</span></button><button type="button" class="ftag" data-f="ongles" style="right:1%;top:89%" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="10" width="10" height="11" rx="3"/><rect x="9.5" y="3" width="5" height="7" rx="1.5"/></svg><span>Ongles</span></button></div>
       <p class="face-label" id="face-label" aria-live="polite"></p>
     </aside>
     <div class="explorer-main">
@@ -825,7 +818,7 @@ html{scroll-padding-top:116px}
     $('subchips').innerHTML = pill(-1, 'Toute la peau', base.length) + SUB.map((s, i) => { const n = base.filter(a => s.re.test(norm(a.nom))).length; return n ? pill(i, s.t, n) : ''; }).join('');
   }
   function drawFace(){
-    document.querySelectorAll('#face .z').forEach(z => { const k = z.dataset.f; z.classList.toggle('active', st.f === k); z.classList.toggle('empty', !count(k)); z.setAttribute('aria-pressed', st.f === k); });
+    document.querySelectorAll('#face .z, .ftag').forEach(z => { const k = z.dataset.f; z.classList.toggle('active', st.f === k); z.classList.toggle('empty', !count(k)); z.setAttribute('aria-pressed', st.f === k); });
     $('face-label').innerHTML = st.f === 'all' ? 'Lèvres, yeux, joues, peau, ongles, parfums…' : `<b>${esc(zname(st.f))}</b> · ${count(st.f)} produit${count(st.f) > 1 ? 's' : ''}`;
   }
   function drawTools(){
@@ -854,7 +847,7 @@ html{scroll-padding-top:116px}
     if (fromFace && st.f !== 'all' && window.innerWidth < 1000) $('activeline').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth', block: 'center' });
   }
   $('cats').addEventListener('click', e => { const b = e.target.closest('.cat-chip'); if (!b) return; const f = b.dataset.f; if (f === 'all'){ st.f = 'all'; st.sub = -1; drawCats(); drawSub(); drawFace(); drawGrid(); } else pickZone(f, false); });
-  document.querySelectorAll('#face .z').forEach(z => {
+  document.querySelectorAll('#face .z, .ftag').forEach(z => {
     z.addEventListener('click', () => pickZone(z.dataset.f, true));
     z.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); pickZone(z.dataset.f, true); } });
   });
