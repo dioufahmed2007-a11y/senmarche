@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cosmétiques — Univers Fille — SenMarché</title>
-<meta name="description" content="Gloss, teint, yeux, ongles et parfums à petits prix. Vérifié avant envoi, paiement à la récupération.">
+<meta name="description" content="Maquillage, soins de la peau et parfums à petits prix. Touche le visage pour trouver ton rayon. Paiement à la récupération.">
 <meta name="theme-color" content="#FAF6F0">
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="manifest" href="manifest.json">
@@ -482,6 +482,19 @@ html{scroll-padding-top:116px}
 .activeline{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin:0 0 1.1rem;font:600 .9rem/1.3 var(--m-body);color:var(--stone);min-height:1.3em}
 .activeline button{background:none;border:0;border-bottom:1px solid currentColor;color:var(--m-acc-bissap);font:700 .85rem/1.2 var(--m-body);cursor:pointer;padding:0}
 @media(max-width:560px){.toolbar .sort-select{margin-left:0;flex:1 1 auto}.pp-toggle{flex:1 1 auto;justify-content:center}}
+
+/* ═════════ v3 — le visage cliquable ═════════ */
+.explorer{display:grid;gap:1.4rem}
+@media(min-width:1000px){.explorer{grid-template-columns:minmax(300px,370px) minmax(0,1fr);gap:2.4rem;align-items:start}.face-card{position:sticky;top:84px}}
+.face-card{background:linear-gradient(170deg,var(--m-tint-bissap),color-mix(in srgb,var(--m-bissap-2) 18%,var(--m-tint-bissap)));border:1px solid color-mix(in srgb,var(--m-bissap-2) 30%,transparent);border-radius:28px;padding:1.1rem 1rem 1.2rem;text-align:center;max-width:380px;width:100%;margin:0 auto}
+.face-card svg{width:100%;height:auto;max-width:340px;display:block;margin:.2rem auto 0;-webkit-tap-highlight-color:transparent;user-select:none}
+@media(max-width:999px){.face-card svg{max-width:270px}}
+.face-hint{margin:.1rem 0 .3rem;font:800 1.05rem/1.2 var(--m-display);letter-spacing:-.01em;color:var(--ink)}
+.face-label{margin:.5rem 0 0;font:600 .9rem/1.3 var(--m-body);color:var(--stone);min-height:1.3em}
+.face-label b{color:var(--m-acc-bissap)}
+.subchips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 .9rem}
+.subchips:empty{display:none}
+.explorer .prod-grid{grid-template-columns:repeat(auto-fill,minmax(176px,1fr))}
 </style>
 </head>
 <body class="se-mode cosm" data-part="hub">
@@ -517,25 +530,79 @@ html{scroll-padding-top:116px}
   <div class="hero-s-top"><span class="crumb"><a href="fille.html">Fille</a> › Cosmétiques</span><span class="sticker">Petits<br>prix</span></div>
   <h1 class="hero-title disp"><span>Cosmétiques</span><span class="ht-2 out">un peu de brillance, beaucoup de toi</span></h1>
   <div class="hero-row">
-    <div class="hero-tags"><span>Gloss, teint, yeux</span><span>Vérifié avant envoi</span><span>Paiement à la récupération</span></div>
+    <div class="hero-tags"><span>Maquillage, soins, parfums</span><span>Vérifié avant envoi</span><span>Paiement à la récupération</span></div>
     <a href="#pieces" class="btn-s">Voir les produits →</a>
   </div>
 </header>
 
 <!-- BANDE -->
 <div class="street-tape" aria-hidden="true"><div class="street-track">
-  <span>Lèvres</span><span>Teint</span><span>Yeux</span><span>Ongles</span><span>Parfums</span><span>Pinceaux</span>
-  <span>Lèvres</span><span>Teint</span><span>Yeux</span><span>Ongles</span><span>Parfums</span><span>Pinceaux</span>
+  <span>Lèvres</span><span>Yeux</span><span>Teint</span><span>Soins</span><span>Ongles</span><span>Parfums</span>
+  <span>Lèvres</span><span>Yeux</span><span>Teint</span><span>Soins</span><span>Ongles</span><span>Parfums</span>
 </div></div>
 
 <!-- 01 PAR ENVIE -->
 <section class="sec" id="pieces"><div class="container">
   <div class="sh"><span class="sh-n">01</span><h2>Par <i>envie</i></h2><span class="mono" id="grid-count"></span></div>
-  <p class="hint">Maquillage et parfums. Pour la peau (crèmes, sérums, routine), c'est dans <a href="soins.html">Soins</a>.</p>
-  <div class="cats-strip" id="cats" role="group" aria-label="Choisir un rayon"></div>
-  <div class="toolbar" id="toolbar"></div>
-  <div class="activeline" id="activeline"></div>
-  <div class="prod-grid" id="grid"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+  <p class="hint">Maquillage, soins de la peau et parfums : tout est ici. Pas sûre de ta routine ? <a href="soins.html#routine">Fais le quiz</a>.</p>
+  <div class="explorer">
+    <aside class="face-card">
+      <p class="face-hint">Touche ce que tu cherches</p>
+      <svg id="face" viewBox="0 0 400 440" role="group" aria-label="Choisis un rayon en touchant le visage"><style>
+.z{cursor:pointer;outline:none}
+.z .hit{opacity:0}
+.z .ring{fill:none;stroke:var(--m-bissap);stroke-width:3.500;stroke-dasharray:7 6;opacity:0;transition:opacity .2s}
+.z:hover .ring,.z:focus-visible .ring{opacity:.65}
+.z.active .ring{opacity:1}
+.z .dot{fill:#fff;stroke:var(--m-bissap);stroke-width:2.500}
+.z .pulse{fill:var(--m-bissap);opacity:.0}
+.z.empty{opacity:.55}
+@media(prefers-reduced-motion:no-preference){.z .pulse{animation:pls 2.4s ease-out infinite}.z:nth-of-type(2n) .pulse{animation-delay:.8s}.z:nth-of-type(3n) .pulse{animation-delay:1.5s}}
+@keyframes pls{0%{r:5;opacity:.55}100%{r:16;opacity:0}}
+.z.active .dot,.z.active .pulse{display:none}
+</style>
+<defs>
+<radialGradient id="sk" cx="45%" cy="38%" r="75%"><stop offset="0" stop-color="#d09366"/><stop offset="1" stop-color="#b9774f"/></radialGradient>
+<radialGradient id="ch" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f0708f" stop-opacity=".75"/><stop offset="1" stop-color="#f0708f" stop-opacity="0"/></radialGradient>
+</defs>
+<circle cx="200" cy="215" r="196" fill="#fbd5de" opacity=".55"/>
+<!-- cheveux (derrière) -->
+<circle cx="200" cy="66" r="46" fill="#2a1a17"/><ellipse cx="200" cy="190" rx="136" ry="150" fill="#2a1a17"/>
+<!-- fleurs dans les cheveux -->
+<g transform="translate(262 82)"><g fill="#f4a3bb" stroke="#d9577f" stroke-width="1.200"><circle cx="0" cy="-12" r="9"/><circle cx="11" cy="-4" r="9"/><circle cx="7" cy="10" r="9"/><circle cx="-7" cy="10" r="9"/><circle cx="-11" cy="-4" r="9"/></g><circle r="6" fill="#f6d27a"/></g>
+<g transform="translate(300 120) scale(.75)"><g fill="#fde6ec" stroke="#e57b9a" stroke-width="1.200"><circle cx="0" cy="-12" r="9"/><circle cx="11" cy="-4" r="9"/><circle cx="7" cy="10" r="9"/><circle cx="-7" cy="10" r="9"/><circle cx="-11" cy="-4" r="9"/></g><circle r="6" fill="#f6d27a"/></g>
+<!-- cou + haut -->
+<path d="M165 330V402Q200 422 235 402V330Z" fill="#94583a"/>
+<path d="M70 440Q92 394 165 390Q200 412 235 390Q308 394 330 440Z" fill="#f4a3bb"/>
+<path d="M165 390Q200 412 235 390" fill="none" stroke="#e57b9a" stroke-width="2"/>
+<!-- oreilles -->
+<ellipse cx="97" cy="242" rx="12" ry="20" fill="#94583a"/><ellipse cx="303" cy="242" rx="12" ry="20" fill="#94583a"/>
+<circle cx="97" cy="262" r="4" fill="#f6d27a"/><circle cx="303" cy="262" r="4" fill="#f6d27a"/>
+<g class="z" data-f="peau" role="button" tabindex="0" aria-label="Peau, soins"><path d="M96 235C96 160 142 108 200 108C258 108 304 160 304 235C304 306 258 363 200 363C142 363 96 306 96 235Z" fill="url(#sk)"/><g class="hit"><path d="M96 235C96 160 142 108 200 108C258 108 304 160 304 235C304 306 258 363 200 363C142 363 96 306 96 235Z" fill="transparent"/></g><g class="ring"><path d="M96 235C96 160 142 108 200 108C258 108 304 160 304 235C304 306 258 363 200 363C142 363 96 306 96 235Z" fill="none"/></g><circle class="pulse" cx="200" cy="172" r="7"/><circle class="dot" cx="200" cy="172" r="5.500"/></g><path d="M96 222C98 148 146 102 200 102C254 102 302 148 304 222C282 172 250 152 200 152C150 152 118 172 96 222Z" fill="#2a1a17"/><g class="z" data-f="teint" role="button" tabindex="0" aria-label="Teint, joues"><ellipse cx="143" cy="288" rx="34" ry="27" fill="url(#ch)"/><ellipse cx="257" cy="288" rx="34" ry="27" fill="url(#ch)"/><g class="hit"><ellipse cx="143" cy="288" rx="38" ry="30" fill="transparent"/><ellipse cx="257" cy="288" rx="38" ry="30" fill="transparent"/></g><g class="ring"><ellipse cx="143" cy="288" rx="38" ry="30" fill="none"/><ellipse cx="257" cy="288" rx="38" ry="30" fill="none"/></g><circle class="pulse" cx="143" cy="292" r="7"/><circle class="dot" cx="143" cy="292" r="5.500"/></g><g class="z" data-f="yeux" role="button" tabindex="0" aria-label="Yeux et sourcils"><path d="M137 206Q164 188 190 203" fill="none" stroke="#2a1a17" stroke-width="7" stroke-linecap="round"/><path d="M210 203Q236 188 263 206" fill="none" stroke="#2a1a17" stroke-width="7" stroke-linecap="round"/><g>
+<ellipse cx="165" cy="223" rx="31" ry="15" fill="#e88aa6" opacity=".55"/>
+<ellipse cx="165" cy="232" rx="22" ry="15.500" fill="#fff"/>
+<circle cx="165" cy="233" r="11.500" fill="#4a2a1c"/><circle cx="165" cy="233" r="5.500" fill="#120a07"/>
+<circle cx="161" cy="229" r="3.600" fill="#fff"/><circle cx="169" cy="237" r="1.800" fill="#fff" opacity=".8"/>
+<path d="M140 233 Q165 208 190 233" fill="none" stroke="#120a07" stroke-width="4.500" stroke-linecap="round"/>
+<path d="M143 228 l-9 -6 M148 222 l-7 -8 M155 218 l-3 -9" stroke="#120a07" stroke-width="2.800" stroke-linecap="round"/>
+</g><g>
+<ellipse cx="235" cy="223" rx="31" ry="15" fill="#e88aa6" opacity=".55"/>
+<ellipse cx="235" cy="232" rx="22" ry="15.500" fill="#fff"/>
+<circle cx="235" cy="233" r="11.500" fill="#4a2a1c"/><circle cx="235" cy="233" r="5.500" fill="#120a07"/>
+<circle cx="231" cy="229" r="3.600" fill="#fff"/><circle cx="239" cy="237" r="1.800" fill="#fff" opacity=".8"/>
+<path d="M210 233 Q235 208 260 233" fill="none" stroke="#120a07" stroke-width="4.500" stroke-linecap="round"/>
+<path d="M257 228 l9 -6 M252 222 l7 -8 M245 218 l3 -9" stroke="#120a07" stroke-width="2.800" stroke-linecap="round"/>
+</g><g class="hit"><rect x="104" y="184" width="192" height="68" rx="34" fill="transparent"/></g><g class="ring"><rect x="104" y="184" width="192" height="68" rx="34" fill="none"/></g><circle class="pulse" cx="200" cy="206" r="7"/><circle class="dot" cx="200" cy="206" r="5.500"/></g><path d="M193 276Q200 283 207 276" fill="none" stroke="#94583a" stroke-width="3.200" stroke-linecap="round"/><path d="M200 246Q195 262 196 272" fill="none" stroke="#94583a" stroke-width="2.500" stroke-linecap="round" opacity=".5"/><g class="z" data-f="levres" role="button" tabindex="0" aria-label="Lèvres"><path d="M163 322Q182 303 200 313Q218 303 237 322Q218 328 200 328Q182 328 163 322Z" fill="#b53660"/><path d="M163 322Q200 328 237 322Q224 352 200 354Q176 352 163 322Z" fill="#d9577f"/><ellipse cx="200" cy="341" rx="13" ry="4.500" fill="#fff" opacity=".55"/><path d="M163 322Q200 330 237 322" fill="none" stroke="#8c2347" stroke-width="1.600"/><g class="hit"><ellipse cx="200" cy="328" rx="56" ry="32" fill="transparent"/></g><g class="ring"><ellipse cx="200" cy="328" rx="56" ry="32" fill="none"/></g><circle class="pulse" cx="200" cy="356" r="7"/><circle class="dot" cx="200" cy="356" r="5.500"/></g><g class="z" data-f="parfums" role="button" tabindex="0" aria-label="Parfums"><g><rect x="30" y="372" width="38" height="46" rx="10" fill="#fde6ec" stroke="#d9577f" stroke-width="2.500"/><rect x="41" y="354" width="16" height="18" rx="3" fill="#c9a063"/><rect x="38" y="346" width="22" height="9" rx="3" fill="#e6c98d"/><path d="M38 384Q49 392 60 384" fill="none" stroke="#d9577f" stroke-width="2.500" stroke-linecap="round"/><rect x="36" y="378" width="5" height="30" rx="2.500" fill="#fff" opacity=".7"/></g><g class="hit"><rect x="14" y="340" width="70" height="88" rx="14" fill="transparent"/></g><g class="ring"><rect x="14" y="340" width="70" height="88" rx="14" fill="none"/></g><circle class="pulse" cx="49" cy="432" r="7"/><circle class="dot" cx="49" cy="432" r="5.500"/></g><g class="z" data-f="ongles" role="button" tabindex="0" aria-label="Ongles"><g><rect x="334" y="376" width="38" height="42" rx="10" fill="#d9577f"/><rect x="343" y="356" width="20" height="20" rx="4" fill="#2a1a17"/><rect x="340" y="378" width="5" height="30" rx="2.500" fill="#fff" opacity=".4"/></g><g class="hit"><rect x="318" y="340" width="70" height="88" rx="14" fill="transparent"/></g><g class="ring"><rect x="318" y="340" width="70" height="88" rx="14" fill="none"/></g><circle class="pulse" cx="353" cy="432" r="7"/><circle class="dot" cx="353" cy="432" r="5.500"/></g><g class="z" data-f="acc" role="button" tabindex="0" aria-label="Accessoires"><g transform="rotate(-35 49 85)"><rect x="44" y="52" width="10" height="42" rx="5" fill="#c9a063"/><rect x="42" y="90" width="14" height="12" fill="#e6c98d"/><path d="M42 102Q49 124 56 102Z" fill="#f4a3bb" stroke="#d9577f" stroke-width="1.500"/></g><g class="hit"><rect x="14" y="40" width="70" height="90" rx="14" fill="transparent"/></g><g class="ring"><rect x="14" y="40" width="70" height="90" rx="14" fill="none"/></g><circle class="pulse" cx="49" cy="134" r="7"/><circle class="dot" cx="49" cy="134" r="5.500"/></g></svg>
+      <p class="face-label" id="face-label" aria-live="polite"></p>
+    </aside>
+    <div class="explorer-main">
+      <div class="cats-strip" id="cats" role="group" aria-label="Choisir un rayon"></div>
+      <div class="subchips" id="subchips"></div>
+      <div class="toolbar" id="toolbar"></div>
+      <div class="activeline" id="activeline"></div>
+      <div class="prod-grid" id="grid"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    </div>
+  </div>
 </div></section>
 
 <!-- 02 COFFRETS & OFFRES (seulement s'il y en a) -->
@@ -557,7 +624,7 @@ html{scroll-padding-top:116px}
   <div class="sh"><span class="sh-n">03</span><h2>Complète <i>ton look</i></h2><span class="mono">Tenues &amp; soins</span></div>
   <div class="drops">
     <a href="tenues.html" class="drop"><div class="drop-bg" style="background-image:url('cat-tenues.jpg')"></div><div class="drop-body"><span class="drop-tag">Habits</span><h3 class="drop-title disp">Tenues</h3><p class="drop-desc">Abayas, voiles, robes, pantalons.</p><span class="drop-go">Voir le rayon →</span></div></a>
-    <a href="soins.html" class="drop"><div class="drop-bg" style="background-image:url('cat-soins.jpg')"></div><div class="drop-body"><span class="drop-tag">Peau</span><h3 class="drop-title disp">Soins &amp; routine</h3><p class="drop-desc">Crèmes, sérums, nettoyants : ta peau avant le maquillage.</p><span class="drop-go">Voir le rayon →</span></div></a>
+    <a href="soins.html#routine" class="drop"><div class="drop-bg" style="background-image:url('cat-soins.jpg')"></div><div class="drop-body"><span class="drop-tag">Peau</span><h3 class="drop-title disp">Ma routine perso</h3><p class="drop-desc">4 questions : ta routine soin, étape par étape.</p><span class="drop-go">Faire le quiz →</span></div></a>
   </div>
 </div></section>
 
@@ -698,37 +765,49 @@ html{scroll-padding-top:116px}
     if (wishBtn){ e.preventDefault(); SE.Wishlist.toggle(wishBtn.dataset.ref); updateUI(); }
   }
 
-  const CAT_RE = /cosm[ée]tique|gloss|maquillage|l[eè]vres/i;
+  const CAT_RE = /cosm[ée]tique|gloss|maquillage|l[eè]vres/i, SOIN_CAT = /soins?\b/i;
   const IC = {
     all: '<path d="M12 3l2.1 5.9L20 11l-5.9 2.1L12 19l-2.1-5.9L4 11l5.9-2.1z"/>',
     levres: '<path d="M3 12c2.2-3.2 4.4-4.2 6.4-3.2 1.5.7 3.7.7 5.2 0 2-1 4.2 0 6.4 3.2-2.2 4.2-5.4 6.2-9 6.2S5.2 16.2 3 12z"/><path d="M3 12h18"/>',
-    teint: '<rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="4.2"/><path d="M12 7.8v8.4"/>',
+    teint: '<rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="4.2"/>',
     yeux: '<path d="M2 12s3.8-6.5 10-6.5S22 12 22 12s-3.8 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+    peau: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
     ongles: '<rect x="7" y="10" width="10" height="11" rx="3"/><rect x="9.5" y="3" width="5" height="7" rx="1.5"/>',
     parfums: '<rect x="6" y="11" width="12" height="10" rx="3"/><path d="M9 11V8h6v3M11 8V4h2v4"/>',
     acc: '<path d="M19 3l2 2-8.5 8.5-2-2z"/><path d="M10.5 12.5C8 12 5.5 13.5 5.5 16.5c0 1.8-.8 3-2 4 3.5.8 7-.5 7.5-4"/>'
   };
-  const RAYONS = [
+  const ZONES = [
     { k: 'levres', t: 'Lèvres', re: /gloss|levre|rouge|baume|\blip/ },
-    { k: 'teint', t: 'Teint', re: /teint|poudre|blush|anticerne|correcteur|illuminateur|highlight/ },
     { k: 'yeux', t: 'Yeux', re: /mascara|palette|fard|eye ?liner|liner|sourcil|\bcils?\b|khol|kajal/ },
+    { k: 'teint', t: 'Teint', re: /teint|poudre|blush|anticerne|correcteur|illuminateur|highlight/ },
+    { k: 'peau', t: 'Peau', re: null },
     { k: 'ongles', t: 'Ongles', re: /vernis|ongle/ },
     { k: 'parfums', t: 'Parfums', re: /parfum|brume|eau de|musc|\boud\b/ },
     { k: 'acc', t: 'Accessoires', re: /pinceau|eponge|miroir|trousse|bijou|bracelet|collier|elastique|pince|accessoire/ }
   ];
+  const SUB = [
+    { t: 'Nettoyants', re: /nettoy|demaquill|mousse|\bgel\b/ },
+    { t: 'Sérums', re: /serum/ },
+    { t: 'Crèmes', re: /creme|hydrat|\blait\b|beurre/ },
+    { t: 'Solaire', re: /solaire|\bspf\b|ecran/ },
+    { t: 'Gommages & masques', re: /gommage|masque|peeling/ }
+  ];
   const PETIT = 3000, PACK = /coffret|\bpack\b|\blot de|\bkit\b/i;
   const $ = id => document.getElementById(id), WA = 'https://wa.me/221778038874?text=';
-  const st = { f: 'all', pp: false, q: '', sort: 'default' };
+  const st = { f: 'all', sub: -1, pp: false, q: '', sort: 'default' };
   let ITEMS = [], PACKS = [], ALLF = [];
-  const rayonOf = a => RAYONS.findIndex(r => r.re.test(norm(a.nom)));
-  const price = a => a.prix_vente_fcfa || 0;
-  const isPetit = a => price(a) > 0 && price(a) <= PETIT;
+  const price = a => a.prix_vente_fcfa || 0, isPetit = a => price(a) > 0 && price(a) <= PETIT;
+  const catName = a => (a.categorie && a.categorie.nom) || '';
+  const zoneOf = a => { if (SOIN_CAT.test(catName(a))) return 'peau'; const z = ZONES.find(z => z.re && z.re.test(norm(a.nom))); return z ? z.k : null; };
+  const zname = k => (ZONES.find(z => z.k === k) || {}).t || '';
   const comps = (p, all) => { const d = norm(p.description || ''); return all.filter(a => a !== p && norm(a.nom).length > 5 && d.includes(norm(a.nom))); };
   const svg = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${IC[k]}</svg>`;
+  const count = k => ITEMS.filter(a => zoneOf(a) === k).length;
 
   function applyFilter(){
     let list = ITEMS.slice();
-    if (st.f !== 'all') list = list.filter(a => rayonOf(a) === st.f);
+    if (st.f !== 'all') list = list.filter(a => zoneOf(a) === st.f);
+    if (st.f === 'peau' && st.sub >= 0) list = list.filter(a => SUB[st.sub].re.test(norm(a.nom)));
     if (st.pp) list = list.filter(isPetit);
     if (st.q.trim()){ const q = norm(st.q.trim()); list = list.filter(a => norm(a.nom).includes(q)); }
     if (st.sort === 'prix_asc') list.sort((a, b) => price(a) - price(b));
@@ -736,31 +815,50 @@ html{scroll-padding-top:116px}
     return list;
   }
   function drawCats(){
-    const cnt = RAYONS.map((r, i) => ITEMS.filter(a => rayonOf(a) === i).length);
-    const chip = (f, k, label, n) => `<button type="button" class="cat-chip${st.f === f ? ' active' : ''}" data-f="${f}" aria-pressed="${st.f === f}"><span class="ic">${svg(k)}</span><span class="l">${label}</span><small>${n}</small></button>`;
-    $('cats').innerHTML = ITEMS.length ? chip('all', 'all', 'Tout', ITEMS.length) + RAYONS.map((r, i) => cnt[i] ? chip(i, r.k, r.t, cnt[i]) : '').join('') : '';
+    const chip = (f, label, n) => `<button type="button" class="cat-chip${st.f === f ? ' active' : ''}" data-f="${f}" aria-pressed="${st.f === f}"><span class="ic">${svg(f)}</span><span class="l">${label}</span><small>${n}</small></button>`;
+    $('cats').innerHTML = ITEMS.length ? chip('all', 'Tout', ITEMS.length) + ZONES.map(z => count(z.k) ? chip(z.k, z.t, count(z.k)) : '').join('') : '';
+  }
+  function drawSub(){
+    if (st.f !== 'peau'){ $('subchips').innerHTML = ''; return; }
+    const base = ITEMS.filter(a => zoneOf(a) === 'peau');
+    const pill = (i, label, n) => `<button type="button" class="filter-pill${st.sub === i ? ' active' : ''}" data-s="${i}">${label} · ${n}</button>`;
+    $('subchips').innerHTML = pill(-1, 'Toute la peau', base.length) + SUB.map((s, i) => { const n = base.filter(a => s.re.test(norm(a.nom))).length; return n ? pill(i, s.t, n) : ''; }).join('');
+  }
+  function drawFace(){
+    document.querySelectorAll('#face .z').forEach(z => { const k = z.dataset.f; z.classList.toggle('active', st.f === k); z.classList.toggle('empty', !count(k)); z.setAttribute('aria-pressed', st.f === k); });
+    $('face-label').innerHTML = st.f === 'all' ? 'Lèvres, yeux, joues, peau, ongles, parfums…' : `<b>${esc(zname(st.f))}</b> · ${count(st.f)} produit${count(st.f) > 1 ? 's' : ''}`;
   }
   function drawTools(){
     const nPP = ITEMS.filter(isPetit).length;
-    $('toolbar').innerHTML = ITEMS.length ? `<input type="search" class="cq" id="cq" placeholder="Un gloss ? Un mascara ? Une brume ?" value="${esc(st.q)}" aria-label="Rechercher">`
-      + (nPP ? `<label class="pp-toggle${st.pp ? ' on' : ''}"><input type="checkbox" id="pp"${st.pp ? ' checked' : ''}> Petits prix <small>moins de ${SE.fnum ? SE.fnum(PETIT) : PETIT} FCFA · ${nPP}</small></label>` : '')
+    $('toolbar').innerHTML = ITEMS.length ? `<input type="search" class="cq" id="cq" placeholder="Un gloss ? Un sérum ? Une brume ?" value="${esc(st.q)}" aria-label="Rechercher">`
+      + (nPP ? `<label class="pp-toggle${st.pp ? ' on' : ''}"><input type="checkbox" id="pp"${st.pp ? ' checked' : ''}> Petits prix <small>moins de ${PETIT.toLocaleString('fr-FR')} FCFA · ${nPP}</small></label>` : '')
       + `<select class="sort-select" id="sort" aria-label="Trier"><option value="default"${st.sort === 'default' ? ' selected' : ''}>Trier par</option><option value="prix_asc"${st.sort === 'prix_asc' ? ' selected' : ''}>Prix ↑</option><option value="prix_desc"${st.sort === 'prix_desc' ? ' selected' : ''}>Prix ↓</option></select>` : '';
     const q = $('cq'); if (q) q.addEventListener('input', e => { st.q = e.target.value; drawGrid(); });
   }
   function drawGrid(){
     const list = applyFilter(), on = st.f !== 'all' || st.pp || st.q.trim();
     $('grid-count').textContent = ITEMS.length + ' produit' + (ITEMS.length > 1 ? 's' : '');
-    $('activeline').innerHTML = ITEMS.length ? `<span>${list.length} résultat${list.length > 1 ? 's' : ''}${st.f !== 'all' ? ' · ' + esc(RAYONS[st.f].t) : ''}${st.pp ? ' · petits prix' : ''}</span>${on ? '<button type="button" id="reset">Tout afficher</button>' : ''}` : '';
-    const rs = $('reset'); if (rs) rs.addEventListener('click', () => { st.f = 'all'; st.pp = false; st.q = ''; st.sort = 'default'; drawAll(); });
+    $('activeline').innerHTML = ITEMS.length ? `<span>${list.length} résultat${list.length > 1 ? 's' : ''}${st.f !== 'all' ? ' · ' + esc(zname(st.f)) : ''}${st.pp ? ' · petits prix' : ''}</span>${on ? '<button type="button" id="reset">Tout afficher</button>' : ''}` : '';
+    const rs = $('reset'); if (rs) rs.addEventListener('click', () => { st.f = 'all'; st.sub = -1; st.pp = false; st.q = ''; st.sort = 'default'; drawAll(); });
     if (!list.length){
       const none = !ITEMS.length;
-      $('grid').innerHTML = `<div class="nores"><h3>${none ? 'Bientôt de nouveaux produits' : 'Rien pour ça, pour l\'instant'}</h3><p>${none ? 'Rien ici pour le moment. Dis-nous ce que tu cherches, on te le trouve.' : 'Aucun produit ne correspond. Dis-nous ce que tu cherches, on te le trouve.'}</p><a class="btn-s" target="_blank" rel="noopener" href="${WA}${encodeURIComponent('Bonjour SenMarché, je cherche en cosmétiques : ' + (st.q || ''))}">Écrire sur WhatsApp</a></div>`;
+      $('grid').innerHTML = `<div class="nores"><h3>${none ? 'Bientôt de nouveaux produits' : 'Rien pour ça, pour l\'instant'}</h3><p>${none ? 'Rien ici pour le moment.' : 'Aucun produit ne correspond.'} Dis-nous ce que tu cherches, on te le trouve.</p><a class="btn-s" target="_blank" rel="noopener" href="${WA}${encodeURIComponent('Bonjour SenMarché, je cherche en beauté : ' + (st.f !== 'all' ? zname(st.f) + ' ' : '') + (st.q || ''))}">Écrire sur WhatsApp</a></div>`;
       return;
     }
     fill('grid', list.map(a => cardHtml(a)).join(''));
   }
-  function drawAll(){ drawCats(); drawTools(); drawGrid(); }
-  $('cats').addEventListener('click', e => { const b = e.target.closest('.cat-chip'); if (!b) return; const f = b.dataset.f; st.f = f === 'all' ? 'all' : parseInt(f, 10); drawCats(); drawGrid(); });
+  function drawAll(){ drawCats(); drawSub(); drawFace(); drawTools(); drawGrid(); }
+  /* choisir un rayon : en touchant le visage ou une puce (re-toucher = tout afficher) */
+  function pickZone(k, fromFace){
+    st.f = st.f === k ? 'all' : k; st.sub = -1; drawCats(); drawSub(); drawFace(); drawGrid();
+    if (fromFace && st.f !== 'all' && window.innerWidth < 1000) $('activeline').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+  }
+  $('cats').addEventListener('click', e => { const b = e.target.closest('.cat-chip'); if (!b) return; const f = b.dataset.f; if (f === 'all'){ st.f = 'all'; st.sub = -1; drawCats(); drawSub(); drawFace(); drawGrid(); } else pickZone(f, false); });
+  document.querySelectorAll('#face .z').forEach(z => {
+    z.addEventListener('click', () => pickZone(z.dataset.f, true));
+    z.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); pickZone(z.dataset.f, true); } });
+  });
+  $('subchips').addEventListener('click', e => { const b = e.target.closest('.filter-pill'); if (!b) return; st.sub = parseInt(b.dataset.s, 10); drawSub(); drawGrid(); });
   $('toolbar').addEventListener('change', e => {
     if (e.target.id === 'sort'){ st.sort = e.target.value; drawGrid(); }
     if (e.target.id === 'pp'){ st.pp = e.target.checked; e.target.closest('.pp-toggle').classList.toggle('on', st.pp); drawGrid(); }
@@ -773,7 +871,7 @@ html{scroll-padding-top:116px}
       await new Promise(r => setTimeout(r, 50));
       const arts = await SE.Articles.load();
       ALLF = arts.filter(a => (a.quantite || 0) > 0 && a.etat !== 'Vendu' && /fille/i.test((a.categorie && a.categorie.nom) || ''));
-      const cosm = ALLF.filter(a => CAT_RE.test((a.categorie && a.categorie.nom) || ''));
+      const cosm = ALLF.filter(a => CAT_RE.test(catName(a)) || SOIN_CAT.test(catName(a)));
       PACKS = cosm.filter(a => PACK.test(a.nom || '')); ITEMS = cosm.filter(a => !PACK.test(a.nom || ''));
       drawAll();
       if (PACKS.length){
