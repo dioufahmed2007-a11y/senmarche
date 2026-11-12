@@ -491,6 +491,42 @@ html{scroll-padding-top:116px}
 .cat-chip .ic{width:clamp(64px,15vw,84px);height:clamp(64px,15vw,84px)}
 .subchips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 .9rem}
 .subchips:empty{display:none}
+
+/* ═════════ v5 — du contraste : bandeau sombre, bande jaune, titre noir, boutons foncés ═════════ */
+body.cosm .street-tape{background:var(--m-safran);color:var(--m-nuit)}
+body.cosm .street-track span::after{color:var(--m-bissap)}
+.cosm .hero-s{background:var(--bg)}
+.cosm .hero-s::before{background:radial-gradient(55% 65% at 92% 95%,color-mix(in srgb,var(--m-bissap-2) 32%,transparent),transparent 70%),radial-gradient(40% 50% at 0% 0%,color-mix(in srgb,var(--m-safran) 28%,transparent),transparent 70%),var(--bg)}
+.cosm .hero-title{color:var(--ink)}
+.cosm .hero-title .ht-2.out{color:var(--m-bissap)}
+.cosm .hero-s-top .mono,.cosm .crumb{color:var(--ink)}
+.cosm .hero-tags span{border-color:var(--ink);color:var(--ink)}
+body.cosm .btn-s,body.cosm .hero-row .btn-s{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+body.cosm .btn-s.btn-o{background:transparent;color:var(--ink)}
+.band-dark{background:var(--m-nuit);color:var(--m-on-nuit);padding-bottom:clamp(1.8rem,4vw,2.8rem)}
+.band-dark .sh h2{color:var(--m-on-nuit)}
+.band-dark .sh h2 i{color:var(--m-safran-2)}
+.band-dark .sh h2 i::after{color:var(--m-safran-2)}
+.band-dark .sh-n{-webkit-text-stroke-color:var(--m-safran)}
+.band-dark .mono{color:color-mix(in srgb,var(--m-on-nuit) 70%,transparent)}
+.band-dark .hint{color:color-mix(in srgb,var(--m-on-nuit) 80%,transparent)}
+.band-dark .hint a{color:var(--m-safran-2)}
+.band-dark .cats-strip{padding-bottom:.2rem}
+.band-dark .cat-chip{color:var(--m-on-nuit)}
+.band-dark .cat-chip .ic{background:color-mix(in srgb,var(--m-on-nuit) 12%,transparent);color:var(--m-on-nuit);border-color:color-mix(in srgb,var(--m-on-nuit) 28%,transparent)}
+.band-dark .cat-chip small{color:color-mix(in srgb,var(--m-on-nuit) 65%,transparent)}
+.band-dark .cat-chip.active .ic{background:var(--m-safran);color:var(--m-nuit);border-color:var(--m-safran)}
+.band-dark .cat-chip.active .l{color:var(--m-safran-2)}
+.cosm .filter-pill.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pp-toggle.on{background:var(--m-safran);border-color:var(--m-safran);color:var(--m-nuit)}
+.pp-toggle.on small{color:var(--m-nuit);opacity:.8}
+.cosm .advice{background:var(--m-nuit);color:var(--m-on-nuit);border:0}
+.cosm .advice h3{color:var(--m-on-nuit)}
+.cosm .advice h3 i{color:var(--m-safran-2)}
+.cosm .advice p{color:color-mix(in srgb,var(--m-on-nuit) 82%,transparent)}
+body.cosm .advice .btn-s{background:var(--m-safran);color:var(--m-nuit);border-color:var(--m-safran)}
+.more{display:flex;justify-content:center;margin-top:1.6rem}
+.more:empty{display:none}
 </style>
 </head>
 <body class="se-mode cosm" data-part="hub">
@@ -526,26 +562,30 @@ html{scroll-padding-top:116px}
   <div class="hero-s-top"><span class="crumb"><a href="fille.html">Fille</a> › Cosmétiques</span><span class="sticker">Petits<br>prix</span></div>
   <h1 class="hero-title disp"><span>Cosmétiques</span><span class="ht-2 out">un peu de brillance, beaucoup de toi</span></h1>
   <div class="hero-row">
-    <div class="hero-tags"><span>Maquillage, soins, parfums</span><span>Vérifié avant envoi</span><span>Paiement à la récupération</span></div>
+    <div class="hero-tags"><span>Maquillage, parfums, accessoires</span><span>Vérifié avant envoi</span><span>Paiement à la récupération</span></div>
     <a href="#pieces" class="btn-s">Voir les produits →</a>
   </div>
 </header>
 
 <!-- BANDE -->
 <div class="street-tape" aria-hidden="true"><div class="street-track">
-  <span>Lèvres</span><span>Yeux</span><span>Teint</span><span>Soins</span><span>Ongles</span><span>Parfums</span>
-  <span>Lèvres</span><span>Yeux</span><span>Teint</span><span>Soins</span><span>Ongles</span><span>Parfums</span>
+  <span>Lèvres</span><span>Yeux</span><span>Teint</span><span>Ongles</span><span>Parfums</span><span>Accessoires</span>
+  <span>Lèvres</span><span>Yeux</span><span>Teint</span><span>Ongles</span><span>Parfums</span><span>Accessoires</span>
 </div></div>
 
-<!-- 01 PAR ENVIE -->
-<section class="sec" id="pieces"><div class="container">
+<!-- 01 PAR ENVIE : bandeau sombre pour le contraste -->
+<section class="sec band-dark" id="rayons"><div class="container">
   <div class="sh"><span class="sh-n">01</span><h2>Par <i>envie</i></h2><span class="mono" id="grid-count"></span></div>
-  <p class="hint">Maquillage, soins de la peau et parfums : tout est ici. Pas sûre de ta routine ? <a href="soins.html#routine">Fais le quiz</a>.</p>
+  <p class="hint">Maquillage et parfums. Pour la peau (crèmes, sérums, routine), c'est dans <a href="soins.html">Soins</a>.</p>
   <div class="cats-strip" id="cats" role="group" aria-label="Choisir un rayon"></div>
+</div></section>
+
+<section class="sec" id="pieces"><div class="container">
   <div class="subchips" id="subchips"></div>
   <div class="toolbar" id="toolbar"></div>
   <div class="activeline" id="activeline"></div>
   <div class="prod-grid" id="grid"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+  <div class="more" id="more"></div>
 </div></section>
 
 <!-- 02 COFFRETS & OFFRES (seulement s'il y en a) -->
@@ -567,7 +607,7 @@ html{scroll-padding-top:116px}
   <div class="sh"><span class="sh-n">03</span><h2>Complète <i>ton look</i></h2><span class="mono">Tenues &amp; soins</span></div>
   <div class="drops">
     <a href="tenues.html" class="drop"><div class="drop-bg" style="background-image:url('cat-tenues.jpg')"></div><div class="drop-body"><span class="drop-tag">Habits</span><h3 class="drop-title disp">Tenues</h3><p class="drop-desc">Abayas, voiles, robes, pantalons.</p><span class="drop-go">Voir le rayon →</span></div></a>
-    <a href="soins.html#routine" class="drop"><div class="drop-bg" style="background-image:url('cat-soins.jpg')"></div><div class="drop-body"><span class="drop-tag">Peau</span><h3 class="drop-title disp">Ma routine perso</h3><p class="drop-desc">4 questions : ta routine soin, étape par étape.</p><span class="drop-go">Faire le quiz →</span></div></a>
+    <a href="soins.html" class="drop"><div class="drop-bg" style="background-image:url('cat-soins.jpg')"></div><div class="drop-body"><span class="drop-tag">Peau</span><h3 class="drop-title disp">Soins &amp; routine</h3><p class="drop-desc">Crèmes, sérums, nettoyants, et ta routine perso.</p><span class="drop-go">Voir le rayon →</span></div></a>
   </div>
 </div></section>
 
@@ -708,7 +748,7 @@ html{scroll-padding-top:116px}
     if (wishBtn){ e.preventDefault(); SE.Wishlist.toggle(wishBtn.dataset.ref); updateUI(); }
   }
 
-  const CAT_RE = /cosm[ée]tique|gloss|maquillage|l[eè]vres/i, SOIN_CAT = /soins?\b/i;
+  const CAT_RE = /cosm[ée]tique|gloss|maquillage|l[eè]vres/i;
   const IC = {
     all: '<path d="M12 3l2.1 5.9L20 11l-5.9 2.1L12 19l-2.1-5.9L4 11l5.9-2.1z"/>',
     levres: '<path d="M3 12c2.2-3.2 4.4-4.2 6.4-3.2 1.5.7 3.7.7 5.2 0 2-1 4.2 0 6.4 3.2-2.2 4.2-5.4 6.2-9 6.2S5.2 16.2 3 12z"/><path d="M3 12h18"/>',
@@ -723,18 +763,17 @@ html{scroll-padding-top:116px}
     { k: 'levres', t: 'Lèvres', re: /gloss|levre|rouge|baume|\blip/ },
     { k: 'yeux', t: 'Yeux', re: /mascara|palette|fard a paupiere|fard paupiere|eye ?liner|liner|sourcil|\bcils?\b|khol|kajal/ },
     { k: 'teint', t: 'Teint', re: /teint|poudre|blush|fard a joue|anticerne|correcteur|illuminateur|highlight|contour|\bbb\b|\bcc\b/ },
-    { k: 'peau', t: 'Peau', re: null },
     { k: 'ongles', t: 'Ongles', re: /vernis|ongle/ },
     { k: 'parfums', t: 'Parfums', re: /parfum|brume|eau de|musc|\boud\b/ },
     { k: 'acc', t: 'Accessoires', re: /pinceau|eponge|miroir|trousse|bijou|bracelet|collier|elastique|pince|accessoire/ }
   ];
-  const SUB = [
-    { t: 'Nettoyants', re: /nettoy|demaquill|mousse|\bgel\b/ },
-    { t: 'Sérums', re: /serum/ },
-    { t: 'Crèmes', re: /creme|hydrat|\blait\b|beurre/ },
-    { t: 'Solaire', re: /solaire|\bspf\b|ecran/ },
-    { t: 'Gommages & masques', re: /gommage|masque|peeling/ }
-  ];
+  /* sous-filtres : seulement quand un rayon est grand (6 produits ou plus) */
+  const SUB_MIN = 6;
+  const SUBS = {
+    levres: [{ t: 'Gloss', re: /gloss/ }, { t: 'Rouges à lèvres', re: /rouge|lipstick/ }, { t: 'Baumes', re: /baume/ }, { t: 'Gommages', re: /gommage/ }],
+    yeux: [{ t: 'Mascaras', re: /mascara/ }, { t: 'Eyeliners & crayons', re: /liner|crayon|khol|kajal/ }, { t: 'Palettes', re: /palette|fard/ }, { t: 'Sourcils', re: /sourcil/ }],
+    teint: [{ t: 'Fonds de teint', re: /fond de teint|\bbb\b|\bcc\b/ }, { t: 'Anticernes & correcteurs', re: /anticerne|correcteur/ }, { t: 'Poudres', re: /poudre/ }, { t: 'Blush & illuminateurs', re: /blush|fard a joue|illuminateur|highlight|contour/ }]
+  };
   const PETIT = 3000, PACK = /coffret|\bpack\b|\blot de|\bkit\b/i;
   const $ = id => document.getElementById(id), WA = 'https://wa.me/221778038874?text=';
   const st = { f: 'all', sub: -1, pp: false, q: '', sort: 'default' };
@@ -743,7 +782,7 @@ html{scroll-padding-top:116px}
   const catName = a => (a.categorie && a.categorie.nom) || '';
   /* ordre de priorité : le plus précis d'abord (un vernis « poudré » reste un vernis) */
   const PRIO = ['ongles', 'parfums', 'levres', 'yeux', 'teint', 'acc'];
-  const zoneOf = a => { if (SOIN_CAT.test(catName(a))) return 'peau'; const n = norm(a.nom); const k = PRIO.find(k => ZONES.find(z => z.k === k).re.test(n)); return k || null; };
+  const zoneOf = a => { const n = norm(a.nom); const k = PRIO.find(k => ZONES.find(z => z.k === k).re.test(n)); return k || null; };
   const zname = k => (ZONES.find(z => z.k === k) || {}).t || '';
   const comps = (p, all) => { const d = norm(p.description || ''); return all.filter(a => a !== p && norm(a.nom).length > 5 && d.includes(norm(a.nom))); };
   const svg = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${IC[k]}</svg>`;
@@ -752,7 +791,7 @@ html{scroll-padding-top:116px}
   function applyFilter(){
     let list = ITEMS.slice();
     if (st.f !== 'all') list = list.filter(a => zoneOf(a) === st.f);
-    if (st.f === 'peau' && st.sub >= 0) list = list.filter(a => SUB[st.sub].re.test(norm(a.nom)));
+    if (st.sub >= 0 && SUBS[st.f]) list = list.filter(a => SUBS[st.f][st.sub].re.test(norm(a.nom)));
     if (st.pp) list = list.filter(isPetit);
     if (st.q.trim()){ const q = norm(st.q.trim()); list = list.filter(a => norm(a.nom).includes(q)); }
     if (st.sort === 'prix_asc') list.sort((a, b) => price(a) - price(b));
@@ -764,10 +803,13 @@ html{scroll-padding-top:116px}
     $('cats').innerHTML = ITEMS.length ? chip('all', 'Tout', ITEMS.length) + ZONES.map(z => count(z.k) ? chip(z.k, z.t, count(z.k)) : '').join('') : '';
   }
   function drawSub(){
-    if (st.f !== 'peau'){ $('subchips').innerHTML = ''; return; }
-    const base = ITEMS.filter(a => zoneOf(a) === 'peau');
+    const subs = SUBS[st.f], base = st.f === 'all' ? [] : ITEMS.filter(a => zoneOf(a) === st.f);
+    const off = () => { $('subchips').innerHTML = ''; st.sub = -1; };
+    if (!subs || base.length < SUB_MIN) return off();
+    const rows = subs.map((s, i) => ({ i, t: s.t, n: base.filter(a => s.re.test(norm(a.nom))).length })).filter(x => x.n > 0);
+    if (rows.length < 2) return off();
     const pill = (i, label, n) => `<button type="button" class="filter-pill${st.sub === i ? ' active' : ''}" data-s="${i}">${label} · ${n}</button>`;
-    $('subchips').innerHTML = pill(-1, 'Toute la peau', base.length) + SUB.map((s, i) => { const n = base.filter(a => s.re.test(norm(a.nom))).length; return n ? pill(i, s.t, n) : ''; }).join('');
+    $('subchips').innerHTML = pill(-1, 'Tout ' + zname(st.f).toLowerCase(), base.length) + rows.map(x => pill(x.i, x.t, x.n)).join('');
   }
   function drawTools(){
     const nPP = ITEMS.filter(isPetit).length;
@@ -783,10 +825,15 @@ html{scroll-padding-top:116px}
     const rs = $('reset'); if (rs) rs.addEventListener('click', () => { st.f = 'all'; st.sub = -1; st.pp = false; st.q = ''; st.sort = 'default'; drawAll(); });
     if (!list.length){
       const none = !ITEMS.length;
+      $('more').innerHTML = '';
       $('grid').innerHTML = `<div class="nores"><h3>${none ? 'Bientôt de nouveaux produits' : 'Rien pour ça, pour l\'instant'}</h3><p>${none ? 'Rien ici pour le moment.' : 'Aucun produit ne correspond.'} Dis-nous ce que tu cherches, on te le trouve.</p><a class="btn-s" target="_blank" rel="noopener" href="${WA}${encodeURIComponent('Bonjour SenMarché, je cherche en beauté : ' + (st.f !== 'all' ? zname(st.f) + ' ' : '') + (st.q || ''))}">Écrire sur WhatsApp</a></div>`;
       return;
     }
-    fill('grid', list.map(a => cardHtml(a)).join(''));
+    const key = [st.f, st.sub, st.pp, st.q, st.sort].join('|'); if (key !== st.key){ st.more = false; st.key = key; }
+    const LIMIT = 12, shown = (st.more || list.length <= LIMIT) ? list : list.slice(0, LIMIT);
+    fill('grid', shown.map(a => cardHtml(a)).join(''));
+    $('more').innerHTML = shown.length < list.length ? `<button type="button" class="btn-s" id="morebtn">Voir les ${list.length - shown.length} autres</button>` : '';
+    const mb = $('morebtn'); if (mb) mb.addEventListener('click', () => { st.more = true; drawGrid(); });
   }
   function drawAll(){ drawCats(); drawSub(); drawTools(); drawGrid(); }
   /* choisir un rayon (re-toucher la même puce = tout afficher) */
@@ -805,7 +852,7 @@ html{scroll-padding-top:116px}
       await new Promise(r => setTimeout(r, 50));
       const arts = await SE.Articles.load();
       ALLF = arts.filter(a => (a.quantite || 0) > 0 && a.etat !== 'Vendu' && /fille/i.test((a.categorie && a.categorie.nom) || ''));
-      const cosm = ALLF.filter(a => CAT_RE.test(catName(a)) || SOIN_CAT.test(catName(a)));
+      const cosm = ALLF.filter(a => CAT_RE.test(catName(a)));
       PACKS = cosm.filter(a => PACK.test(a.nom || '')); ITEMS = cosm.filter(a => !PACK.test(a.nom || ''));
       drawAll();
       if (PACKS.length){
