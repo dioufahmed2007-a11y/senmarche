@@ -497,39 +497,37 @@ body.cosm .street-track span::after{color:var(--m-bissap)}
 .cosm .hero-tags span{border-color:var(--ink);color:var(--ink)}
 body.cosm .btn-s,body.cosm .hero-row .btn-s{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 body.cosm .btn-s.btn-o{background:transparent;color:var(--ink)}
-.band-dark{background:var(--m-nuit);color:var(--m-on-nuit);padding-bottom:clamp(1.8rem,4vw,2.8rem)}
-.band-dark .sh h2{color:var(--m-on-nuit)}
-.band-dark .mono{color:color-mix(in srgb,var(--m-on-nuit) 70%,transparent)}
-.band-dark .hint{color:color-mix(in srgb,var(--m-on-nuit) 80%,transparent)}
-.band-dark .cats-strip{padding-bottom:.2rem}
-.band-dark .cat-chip{color:var(--m-on-nuit)}
-.band-dark .cat-chip .ic{background:color-mix(in srgb,var(--m-on-nuit) 12%,transparent);color:var(--m-on-nuit);border-color:color-mix(in srgb,var(--m-on-nuit) 28%,transparent)}
-.band-dark .cat-chip small{color:color-mix(in srgb,var(--m-on-nuit) 65%,transparent)}
 .cosm .filter-pill.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.pp-toggle.on small{color:var(--m-nuit);opacity:.8}
-.cosm .advice{background:var(--m-nuit);color:var(--m-on-nuit);border:0}
-.cosm .advice h3{color:var(--m-on-nuit)}
-.cosm .advice p{color:color-mix(in srgb,var(--m-on-nuit) 82%,transparent)}
 .more{display:flex;justify-content:center;margin-top:1.6rem}
 .more:empty{display:none}
 
 /* ═════════ v6 — palette : rose + bordeaux + crème (plus de jaune) ═════════ */
-.cosm{--cp:color-mix(in srgb,var(--m-bissap) 42%,var(--m-nuit));--cr:color-mix(in srgb,var(--m-bissap-2) 55%,white)}
 .cosm .hero-s::before{background:radial-gradient(55% 65% at 92% 95%,color-mix(in srgb,var(--m-bissap-2) 32%,transparent),transparent 70%),radial-gradient(42% 52% at 0% 0%,color-mix(in srgb,var(--m-bissap-2) 16%,transparent),transparent 70%),var(--bg)}
-body.cosm .street-tape{background:var(--cp);color:var(--m-on-nuit)}
 body.cosm .street-track span::after{color:var(--cr)}
-.cosm .sticker{background:var(--cp);color:var(--m-on-nuit)}
-.band-dark{background:var(--cp)}
-.band-dark .sh h2 i,.band-dark .sh h2 i::after{color:var(--cr)}
-.band-dark .sh-n{-webkit-text-stroke-color:var(--cr)}
-.band-dark .hint a{color:var(--cr)}
-.band-dark .cat-chip.active .ic{background:var(--m-on-nuit);color:var(--cp);border-color:var(--m-on-nuit)}
-.band-dark .cat-chip.active .l{color:var(--m-on-nuit)}
-.pp-toggle.on{background:var(--m-tint-bissap);border-color:var(--m-bissap);color:var(--m-acc-bissap)}
-.pp-toggle.on small{color:var(--m-acc-bissap);opacity:1}
-.cosm .advice{background:var(--cp)}
 .cosm .advice h3 i{color:var(--cr)}
-body.cosm .advice .btn-s{background:var(--m-on-nuit);color:var(--cp);border-color:var(--m-on-nuit)}
+
+/* ═════════ v7 — couleurs amenées en douceur : crème → framboise → rose clair → crème ═════════ */
+.cosm{--cr:color-mix(in srgb,var(--m-bissap-2) 45%,white)}
+body.cosm .street-tape{background:var(--m-bissap);color:var(--m-on-bissap)}
+body.cosm .street-track span::after{color:var(--cr)}
+.cosm .sticker{background:var(--m-bissap);color:var(--m-on-bissap)}
+.band-soft{background:color-mix(in srgb,var(--m-tint-bissap) 62%,var(--bg));padding-bottom:clamp(1.3rem,3vw,2rem)}
+.band-soft .sh h2 i,.band-soft .sh h2 i::after{color:var(--m-acc-bissap)}
+.band-soft .sh-n{-webkit-text-stroke-color:var(--m-bissap)}
+.band-soft .cats-strip{padding-bottom:.3rem}
+.band-soft .cat-chip .ic{background:var(--card);color:var(--m-acc-bissap);border-color:color-mix(in srgb,var(--m-bissap-2) 32%,transparent)}
+.band-soft .cat-chip.active .ic{background:var(--m-bissap);color:var(--m-on-bissap);border-color:var(--m-bissap)}
+.band-soft .cat-chip.active .l{color:var(--m-acc-bissap)}
+.band-soft .toolbar{margin:1rem 0 0}
+.band-soft .subchips{margin:.8rem 0 0}
+.band-soft .cq,.band-soft .pp-toggle,.band-soft .sort-select{background:var(--card)}
+.band-soft .pp-toggle.on{background:color-mix(in srgb,var(--m-bissap) 12%,var(--card))}
+#pieces{padding-top:clamp(1.1rem,2.6vw,1.6rem)}
+.cosm .activeline{margin-top:0}
+.cosm .advice{background:var(--m-g-bissap);color:var(--m-on-bissap);border:0}
+.cosm .advice h3,.cosm .advice h3 i{color:var(--m-on-bissap)}
+.cosm .advice p{color:color-mix(in srgb,var(--m-on-bissap) 88%,transparent)}
+body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);border-color:var(--m-on-bissap)}
 </style>
 </head>
 <body class="se-mode cosm" data-part="hub">
@@ -577,15 +575,15 @@ body.cosm .advice .btn-s{background:var(--m-on-nuit);color:var(--cp);border-colo
 </div></div>
 
 <!-- 01 PAR ENVIE : bandeau sombre pour le contraste -->
-<section class="sec band-dark" id="envies"><div class="container">
+<section class="sec band-soft" id="envies"><div class="container">
   <div class="sh"><span class="sh-n">01</span><h2>Par <i>envie</i></h2><span class="mono" id="grid-count"></span></div>
   <p class="hint">Maquillage et parfums. Pour la peau (crèmes, sérums, routine), c'est dans <a href="soins.html">Soins</a>.</p>
   <div class="cats-strip" id="cats" role="group" aria-label="Choisir un rayon"></div>
+  <div class="toolbar" id="toolbar"></div>
+  <div class="subchips" id="subchips"></div>
 </div></section>
 
 <section class="sec" id="pieces"><div class="container">
-  <div class="subchips" id="subchips"></div>
-  <div class="toolbar" id="toolbar"></div>
   <div class="activeline" id="activeline"></div>
   <div class="prod-grid" id="grid"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
   <div class="more" id="more"></div>
