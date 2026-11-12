@@ -240,8 +240,6 @@ body.se-mode .btn-s.btn-o{background:transparent;color:var(--ink);border-color:v
 body.se-mode .hero-row .btn-s{background:var(--m-on-vert);color:var(--m-bissap);border-color:var(--m-on-vert)}
 .mkt-list li::before{background:var(--m-bissap-2);color:var(--m-on-bissap)}
 /* douceur : rayons sur fond rosé, coins plus ronds */
-#rayons{background:var(--m-tint-bissap);position:relative;overflow:hidden;padding-bottom:clamp(2.6rem,5vw,3.8rem)}
-#rayons .container{position:relative;z-index:1}
 .drops .drop{border-radius:28px}
 .mkt-text{position:relative}
 .closing{position:relative;overflow:hidden;border-color:var(--m-bissap-2);background:var(--m-tint-bissap)}
@@ -333,7 +331,6 @@ body[data-part="abayas"] .drops .drop-title{text-transform:none}
 .tip p{margin:0;color:var(--stone);line-height:1.65;font-size:.98rem}
 .tips-foot{margin:1.8rem 0 0;color:var(--stone)}
 .tips-foot a{color:var(--pt-acc);font-weight:700}
-#tips-sec{background:var(--pt-tint);padding-bottom:clamp(2.6rem,5vw,3.8rem)}
 
 /* ── look du moment (tendances) ── */
 .look-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(.6rem,2vw,1.4rem);align-items:center;max-width:680px;margin:0 auto}
@@ -342,7 +339,6 @@ body[data-part="abayas"] .drops .drop-title{text-transform:none}
 .look-bar b{font:800 1.4rem/1 var(--m-display)}
 .look-bar span{font:600 .85rem/1.3 var(--m-body);opacity:.9}
 .look-bar .btn-s{background:var(--m-on-bissap);color:var(--m-bissap)}
-#look-sec{background:var(--pt-tint);padding-bottom:clamp(2.6rem,5vw,3.8rem)}
 
 .closing{border-color:var(--pt2);background:var(--pt-tint)}
 .closing h3 i{color:var(--pt-acc)}
@@ -493,10 +489,8 @@ html{scroll-padding-top:116px}
 .subchips:empty{display:none}
 
 /* ═════════ v5 — du contraste : bandeau sombre, bande jaune, titre noir, boutons foncés ═════════ */
-body.cosm .street-tape{background:var(--m-safran);color:var(--m-nuit)}
 body.cosm .street-track span::after{color:var(--m-bissap)}
 .cosm .hero-s{background:var(--bg)}
-.cosm .hero-s::before{background:radial-gradient(55% 65% at 92% 95%,color-mix(in srgb,var(--m-bissap-2) 32%,transparent),transparent 70%),radial-gradient(40% 50% at 0% 0%,color-mix(in srgb,var(--m-safran) 28%,transparent),transparent 70%),var(--bg)}
 .cosm .hero-title{color:var(--ink)}
 .cosm .hero-title .ht-2.out{color:var(--m-bissap)}
 .cosm .hero-s-top .mono,.cosm .crumb{color:var(--ink)}
@@ -505,28 +499,37 @@ body.cosm .btn-s,body.cosm .hero-row .btn-s{background:var(--ink);color:var(--bg
 body.cosm .btn-s.btn-o{background:transparent;color:var(--ink)}
 .band-dark{background:var(--m-nuit);color:var(--m-on-nuit);padding-bottom:clamp(1.8rem,4vw,2.8rem)}
 .band-dark .sh h2{color:var(--m-on-nuit)}
-.band-dark .sh h2 i{color:var(--m-safran-2)}
-.band-dark .sh h2 i::after{color:var(--m-safran-2)}
-.band-dark .sh-n{-webkit-text-stroke-color:var(--m-safran)}
 .band-dark .mono{color:color-mix(in srgb,var(--m-on-nuit) 70%,transparent)}
 .band-dark .hint{color:color-mix(in srgb,var(--m-on-nuit) 80%,transparent)}
-.band-dark .hint a{color:var(--m-safran-2)}
 .band-dark .cats-strip{padding-bottom:.2rem}
 .band-dark .cat-chip{color:var(--m-on-nuit)}
 .band-dark .cat-chip .ic{background:color-mix(in srgb,var(--m-on-nuit) 12%,transparent);color:var(--m-on-nuit);border-color:color-mix(in srgb,var(--m-on-nuit) 28%,transparent)}
 .band-dark .cat-chip small{color:color-mix(in srgb,var(--m-on-nuit) 65%,transparent)}
-.band-dark .cat-chip.active .ic{background:var(--m-safran);color:var(--m-nuit);border-color:var(--m-safran)}
-.band-dark .cat-chip.active .l{color:var(--m-safran-2)}
 .cosm .filter-pill.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.pp-toggle.on{background:var(--m-safran);border-color:var(--m-safran);color:var(--m-nuit)}
 .pp-toggle.on small{color:var(--m-nuit);opacity:.8}
 .cosm .advice{background:var(--m-nuit);color:var(--m-on-nuit);border:0}
 .cosm .advice h3{color:var(--m-on-nuit)}
-.cosm .advice h3 i{color:var(--m-safran-2)}
 .cosm .advice p{color:color-mix(in srgb,var(--m-on-nuit) 82%,transparent)}
-body.cosm .advice .btn-s{background:var(--m-safran);color:var(--m-nuit);border-color:var(--m-safran)}
 .more{display:flex;justify-content:center;margin-top:1.6rem}
 .more:empty{display:none}
+
+/* ═════════ v6 — palette : rose + bordeaux + crème (plus de jaune) ═════════ */
+.cosm{--cp:color-mix(in srgb,var(--m-bissap) 42%,var(--m-nuit));--cr:color-mix(in srgb,var(--m-bissap-2) 55%,white)}
+.cosm .hero-s::before{background:radial-gradient(55% 65% at 92% 95%,color-mix(in srgb,var(--m-bissap-2) 32%,transparent),transparent 70%),radial-gradient(42% 52% at 0% 0%,color-mix(in srgb,var(--m-bissap-2) 16%,transparent),transparent 70%),var(--bg)}
+body.cosm .street-tape{background:var(--cp);color:var(--m-on-nuit)}
+body.cosm .street-track span::after{color:var(--cr)}
+.cosm .sticker{background:var(--cp);color:var(--m-on-nuit)}
+.band-dark{background:var(--cp)}
+.band-dark .sh h2 i,.band-dark .sh h2 i::after{color:var(--cr)}
+.band-dark .sh-n{-webkit-text-stroke-color:var(--cr)}
+.band-dark .hint a{color:var(--cr)}
+.band-dark .cat-chip.active .ic{background:var(--m-on-nuit);color:var(--cp);border-color:var(--m-on-nuit)}
+.band-dark .cat-chip.active .l{color:var(--m-on-nuit)}
+.pp-toggle.on{background:var(--m-tint-bissap);border-color:var(--m-bissap);color:var(--m-acc-bissap)}
+.pp-toggle.on small{color:var(--m-acc-bissap);opacity:1}
+.cosm .advice{background:var(--cp)}
+.cosm .advice h3 i{color:var(--cr)}
+body.cosm .advice .btn-s{background:var(--m-on-nuit);color:var(--cp);border-color:var(--m-on-nuit)}
 </style>
 </head>
 <body class="se-mode cosm" data-part="hub">
@@ -574,7 +577,7 @@ body.cosm .advice .btn-s{background:var(--m-safran);color:var(--m-nuit);border-c
 </div></div>
 
 <!-- 01 PAR ENVIE : bandeau sombre pour le contraste -->
-<section class="sec band-dark" id="rayons"><div class="container">
+<section class="sec band-dark" id="envies"><div class="container">
   <div class="sh"><span class="sh-n">01</span><h2>Par <i>envie</i></h2><span class="mono" id="grid-count"></span></div>
   <p class="hint">Maquillage et parfums. Pour la peau (crèmes, sérums, routine), c'est dans <a href="soins.html">Soins</a>.</p>
   <div class="cats-strip" id="cats" role="group" aria-label="Choisir un rayon"></div>
