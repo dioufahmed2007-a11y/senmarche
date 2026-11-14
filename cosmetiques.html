@@ -528,6 +528,18 @@ body.cosm .street-track span::after{color:var(--cr)}
 .cosm .advice h3,.cosm .advice h3 i{color:var(--m-on-bissap)}
 .cosm .advice p{color:color-mix(in srgb,var(--m-on-bissap) 88%,transparent)}
 body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);border-color:var(--m-on-bissap)}
+
+/* ═════════ v8 — comprendre où sont les crèmes ═════════ */
+.seg{display:flex;gap:.55rem;flex-wrap:wrap;margin:0 0 1.5rem}
+.seg .on,.seg .off{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.25rem;border-radius:999px;font:700 .92rem/1.1 var(--m-body);text-decoration:none}
+.seg .on{background:var(--m-bissap);color:var(--m-on-bissap)}
+.seg .off{background:var(--card);color:var(--ink);border:1.5px solid color-mix(in srgb,var(--m-bissap-2) 50%,transparent);transition:border-color .2s,transform .2s}
+.seg .off:hover{border-color:var(--m-bissap);transform:translateY(-2px)}
+.cat-chip.link .ic{background:transparent;border-style:dashed;border-color:color-mix(in srgb,var(--m-bissap-2) 60%,transparent)}
+.cat-chip.link .l{color:var(--m-acc-bissap)}
+.cat-chip.link{text-decoration:none}
+.soin-note{display:block;margin-top:.35rem;color:var(--ink)}
+.soin-note a{color:var(--m-acc-bissap);font-weight:700}
 </style>
 </head>
 <body class="se-mode cosm" data-part="hub">
@@ -576,9 +588,9 @@ body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);bor
 
 <!-- 01 PAR ENVIE : bandeau sombre pour le contraste -->
 <section class="sec band-soft" id="envies"><div class="container">
+  <nav class="seg" aria-label="Rayons beauté"><span class="on" aria-current="page">Maquillage &amp; parfums</span><a class="off" href="soins.html">Soins : crèmes, sérums, routine <span aria-hidden="true">→</span></a></nav>
   <div class="sh"><span class="sh-n">01</span><h2>Par <i>envie</i></h2><span class="mono" id="grid-count"></span></div>
-  <p class="hint">Maquillage et parfums. Pour la peau (crèmes, sérums, routine), c'est dans <a href="soins.html">Soins</a>.</p>
-  <div class="cats-strip" id="cats" role="group" aria-label="Choisir un rayon"></div>
+    <div class="cats-strip" id="cats" role="group" aria-label="Choisir un rayon"></div>
   <div class="toolbar" id="toolbar"></div>
   <div class="subchips" id="subchips"></div>
 </div></section>
@@ -801,7 +813,8 @@ body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);bor
   }
   function drawCats(){
     const chip = (f, label, n) => `<button type="button" class="cat-chip${st.f === f ? ' active' : ''}" data-f="${f}" aria-pressed="${st.f === f}"><span class="ic">${svg(f)}</span><span class="l">${label}</span><small>${n}</small></button>`;
-    $('cats').innerHTML = ITEMS.length ? chip('all', 'Tout', ITEMS.length) + ZONES.map(z => count(z.k) ? chip(z.k, z.t, count(z.k)) : '').join('') : '';
+    const soins = `<a class="cat-chip link" href="soins.html"><span class="ic">${svg('peau')}</span><span class="l">Crèmes &amp; soins</span><small>autre page →</small></a>`;
+    $('cats').innerHTML = (ITEMS.length ? chip('all', 'Tout', ITEMS.length) + ZONES.map(z => count(z.k) ? chip(z.k, z.t, count(z.k)) : '').join('') : '') + soins;
   }
   function drawSub(){
     const subs = SUBS[st.f], base = st.f === 'all' ? [] : ITEMS.filter(a => zoneOf(a) === st.f);
@@ -814,19 +827,22 @@ body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);bor
   }
   function drawTools(){
     const nPP = ITEMS.filter(isPetit).length;
-    $('toolbar').innerHTML = ITEMS.length ? `<input type="search" class="cq" id="cq" placeholder="Un gloss ? Un sérum ? Une brume ?" value="${esc(st.q)}" aria-label="Rechercher">`
+    $('toolbar').innerHTML = ITEMS.length ? `<input type="search" class="cq" id="cq" placeholder="Un gloss ? Un mascara ? Une brume ?" value="${esc(st.q)}" aria-label="Rechercher">`
       + (nPP ? `<label class="pp-toggle${st.pp ? ' on' : ''}"><input type="checkbox" id="pp"${st.pp ? ' checked' : ''}> Petits prix <small>moins de ${PETIT.toLocaleString('fr-FR')} FCFA · ${nPP}</small></label>` : '')
       + `<select class="sort-select" id="sort" aria-label="Trier"><option value="default"${st.sort === 'default' ? ' selected' : ''}>Trier par</option><option value="prix_asc"${st.sort === 'prix_asc' ? ' selected' : ''}>Prix ↑</option><option value="prix_desc"${st.sort === 'prix_desc' ? ' selected' : ''}>Prix ↓</option></select>` : '';
     const q = $('cq'); if (q) q.addEventListener('input', e => { st.q = e.target.value; drawGrid(); });
   }
+  const SOIN_WORDS = /creme|serum|nettoy|demaquill|solaire|\bspf\b|karite|beurre|huile|\blait\b|masque|hydrat|shampo|capillaire|savon|deodorant|gel douche/;
   function drawGrid(){
     const list = applyFilter(), on = st.f !== 'all' || st.pp || st.q.trim();
     $('grid-count').textContent = ITEMS.length + ' produit' + (ITEMS.length > 1 ? 's' : '');
-    $('activeline').innerHTML = ITEMS.length ? `<span>${list.length} résultat${list.length > 1 ? 's' : ''}${st.f !== 'all' ? ' · ' + esc(zname(st.f)) : ''}${st.pp ? ' · petits prix' : ''}</span>${on ? '<button type="button" id="reset">Tout afficher</button>' : ''}` : '';
+    const soinQ = st.q.trim() && SOIN_WORDS.test(norm(st.q));
+    $('activeline').innerHTML = ITEMS.length ? `<span>${list.length} résultat${list.length > 1 ? 's' : ''}${st.f !== 'all' ? ' · ' + esc(zname(st.f)) : ''}${st.pp ? ' · petits prix' : ''}${soinQ ? '<span class="soin-note">Tu cherches un soin ? <a href="soins.html">Les crèmes et sérums sont dans Soins →</a></span>' : ''}</span>${on ? '<button type="button" id="reset">Tout afficher</button>' : ''}` : '';
     const rs = $('reset'); if (rs) rs.addEventListener('click', () => { st.f = 'all'; st.sub = -1; st.pp = false; st.q = ''; st.sort = 'default'; drawAll(); });
     if (!list.length){
       const none = !ITEMS.length;
       $('more').innerHTML = '';
+      if (soinQ){ $('grid').innerHTML = '<div class="nores"><h3>Ça se trouve dans Soins</h3><p>Les crèmes, sérums et nettoyants ont leur propre page, avec leurs filtres.</p><a class="btn-s" href="soins.html">Aller dans Soins →</a></div>'; return; }
       $('grid').innerHTML = `<div class="nores"><h3>${none ? 'Bientôt de nouveaux produits' : 'Rien pour ça, pour l\'instant'}</h3><p>${none ? 'Rien ici pour le moment.' : 'Aucun produit ne correspond.'} Dis-nous ce que tu cherches, on te le trouve.</p><a class="btn-s" target="_blank" rel="noopener" href="${WA}${encodeURIComponent('Bonjour SenMarché, je cherche en beauté : ' + (st.f !== 'all' ? zname(st.f) + ' ' : '') + (st.q || ''))}">Écrire sur WhatsApp</a></div>`;
       return;
     }
@@ -839,7 +855,7 @@ body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);bor
   function drawAll(){ drawCats(); drawSub(); drawTools(); drawGrid(); }
   /* choisir un rayon (re-toucher la même puce = tout afficher) */
   function pickZone(k){ st.f = st.f === k ? 'all' : k; st.sub = -1; drawCats(); drawSub(); drawGrid(); }
-  $('cats').addEventListener('click', e => { const b = e.target.closest('.cat-chip'); if (!b) return; const f = b.dataset.f; if (f === 'all'){ st.f = 'all'; st.sub = -1; drawCats(); drawSub(); drawGrid(); } else pickZone(f); });
+  $('cats').addEventListener('click', e => { const b = e.target.closest('.cat-chip'); if (!b || !b.dataset.f) return; const f = b.dataset.f; if (f === 'all'){ st.f = 'all'; st.sub = -1; drawCats(); drawSub(); drawGrid(); } else pickZone(f); });
   $('subchips').addEventListener('click', e => { const b = e.target.closest('.filter-pill'); if (!b) return; st.sub = parseInt(b.dataset.s, 10); drawSub(); drawGrid(); });
   $('toolbar').addEventListener('change', e => {
     if (e.target.id === 'sort'){ st.sort = e.target.value; drawGrid(); }
