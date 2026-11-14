@@ -458,8 +458,8 @@ body.se-mode .hero-row .btn-s{background:var(--m-bissap);color:var(--m-on-bissap
   /* RAYONS */
   const G = [
     { href: 'tenues.html', t: 'Tenues', s: 'Abayas, voiles, robes, pantalons.', img: 'cat-tenues.jpg', re: /abaya|voile|[ée]l[ée]gance|tendance|robe/i },
-    { href: 'cosmetiques.html', t: 'Cosmétiques', s: 'Gloss, teint, yeux, ongles, parfums.', img: 'cat-cosmetiques.jpg', re: /cosm[ée]tique|gloss|maquillage|l[eè]vres/i },
-    { href: 'soins.html', t: 'Soins', s: 'Crèmes, sérums, nettoyants.', img: 'cat-soins.jpg', re: /soins?\b/i }
+    { href: 'cosmetiques.html', t: 'Cosmétiques', s: 'Maquillage et parfums : lèvres, yeux, teint, ongles.', img: 'cat-cosmetiques.jpg', re: /cosm[ée]tique|gloss|maquillage|l[eè]vres/i },
+    { href: 'soins.html', t: 'Soins', s: 'Crèmes, sérums, nettoyants, et ta routine perso.', img: 'cat-soins.jpg', re: /soins?\b/i }
   ];
   function drawRayons(counts){
     document.getElementById('rayons-grid').innerHTML = G.map((g, i) => `<a href="${g.href}" class="drop"><div class="drop-bg" style="background-image:url('${g.img}')"></div><div class="drop-body"><span class="drop-tag">${counts && counts[i] ? counts[i] + ' article' + (counts[i] > 1 ? 's' : '') : 'Découvrir'}</span><h3 class="drop-title disp">${g.t}</h3><p class="drop-desc">${g.s}</p><span class="drop-go">Voir le rayon →</span></div></a>`).join('');
