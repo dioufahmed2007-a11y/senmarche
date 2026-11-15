@@ -586,11 +586,72 @@ body.cosm .advice .btn-s{background:var(--ac-on);color:var(--ac);border-color:va
 .band-soft .filter-pill.active{background:var(--ink);color:var(--bg)}
 .disclaimer{margin:0;padding:1rem 0 0;color:var(--stone);font:500 .8rem/1.55 var(--m-body);max-width:80ch}
 
-/* ═════════ Soins : même famille que Cosmétiques, accent vert (le rose reste en touches) ═════════ */
-body.soin{--ac:var(--m-vert);--ac2:var(--m-vert-2);--ac-tint:var(--m-tint-vert);--ac-acc:var(--m-acc-vert);--ac-on:var(--m-on-vert);--ac-g:var(--m-g-vert)}
-.soin .hero-title .ht-2.out{color:var(--m-bissap)}
-.soin .sticker{background:var(--m-bissap);color:var(--m-on-bissap)}
-.soin .hero-s::before{background:radial-gradient(55% 65% at 92% 95%,color-mix(in srgb,var(--m-bissap-2) 26%,transparent),transparent 70%),radial-gradient(42% 52% at 0% 0%,color-mix(in srgb,var(--m-vert-2) 20%,transparent),transparent 70%),var(--bg)}
+/* ═════════ Soins : même rose que Cosmétiques ; la différence est dans la forme, pas dans la couleur ═════════ */
+body.soin{--ac:var(--m-bissap);--ac2:var(--m-bissap-2);--ac-tint:var(--m-tint-bissap);--ac-acc:var(--m-acc-bissap);--ac-on:var(--m-on-bissap);--ac-g:var(--m-g-bissap)}
+
+/* ═════════ Soins : forme propre (titre calme, étapes numérotées) + routine ═════════ */
+.soin .hero-title{font-family:var(--m-serif);font-style:italic;font-weight:400;font-variation-settings:normal;text-transform:none;letter-spacing:-.04em;line-height:.9;font-size:clamp(4.4rem,18vw,14rem)}
+.soin .hero-title .ht-2.out{font-size:max(.36em,1.6rem)}
+.band-soft{background:color-mix(in srgb,var(--m-tint-bissap) 38%,var(--bg))}
+.stepbar{display:flex;flex-wrap:wrap;gap:.6rem}
+.stp{display:flex;align-items:center;gap:.7rem;padding:.65rem 1.1rem .65rem .65rem;border-radius:18px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;color:var(--ink);font:inherit;text-align:left;text-decoration:none;transition:border-color .2s,background .2s,transform .2s}
+.stp:hover{border-color:var(--ac);transform:translateY(-2px)}
+.stp .no{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--ac-tint);color:var(--ac-acc);font:800 1rem/1 var(--m-display);flex:0 0 36px}
+.stp .no svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.stp b{display:block;font:800 .95rem/1.1 var(--m-body)}
+.stp small{display:block;margin-top:.2rem;color:var(--stone);font:600 .72rem/1 var(--m-body)}
+.stp.active{background:var(--ac);border-color:var(--ac);color:var(--ac-on)}
+.stp.active .no{background:color-mix(in srgb,var(--ac-on) 22%,transparent);color:var(--ac-on)}
+.stp.active small{color:color-mix(in srgb,var(--ac-on) 82%,transparent)}
+.stp.link{border-style:dashed}
+@media(max-width:560px){.stp{flex:1 1 calc(50% - .6rem)}}
+.rstage{min-height:460px;overflow-anchor:none}
+.qpoints{margin:0 0 1.4rem;padding:0;list-style:none;display:grid;gap:.4rem}
+.qpoints li{position:relative;padding-left:1.4rem;color:var(--ink);font:500 .95rem/1.4 var(--m-body)}
+.qpoints li::before{content:'✓';position:absolute;left:0;color:var(--ac-acc);font-weight:800}
+.qmeta{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin:0 0 .6rem;font:700 .78rem/1 var(--m-body);letter-spacing:.12em;text-transform:uppercase;color:var(--stone)}
+.qwhy{margin:1rem 0 0;padding:.8rem 1rem;border-radius:14px;background:var(--ac-tint);color:var(--ink);font:500 .88rem/1.5 var(--m-body)}
+.qwhy b{color:var(--ac-acc)}
+.qo button.sel{border-color:var(--ac);background:var(--ac-tint)}
+.qo button[aria-pressed="true"]{border-color:var(--ac);background:var(--ac-tint);box-shadow:inset 0 0 0 1px var(--ac)}
+.qo button[aria-pressed="true"]::after{content:' ✓';color:var(--ac-acc);font-weight:800}
+.qo button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.qnext{margin-top:1rem}
+.qnext:disabled{opacity:.4;cursor:not-allowed}
+.qan{list-style:none;margin:1rem 0 0;padding:0;display:grid;gap:.9rem}
+.qan li{display:flex;align-items:center;gap:.8rem;font:600 1rem/1.3 var(--m-body);color:var(--ink);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s}
+.qan li.on{opacity:1;transform:none}
+.qan li i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--ac);color:var(--ac-on);font:800 .8rem/1 var(--m-body);font-style:normal;flex:0 0 26px}
+.qwarn{margin:0 0 1rem;padding:1rem 1.1rem;border-radius:16px;border:1.5px solid var(--ac);background:var(--ac-tint);font:500 .9rem/1.55 var(--m-body);color:var(--ink)}
+.qwarn b{display:block;margin-bottom:.25rem;color:var(--ac-acc);font:800 .95rem/1.2 var(--m-body)}
+.qplan{display:grid;gap:10px;grid-template-columns:1fr;margin:0 0 1rem}
+@media(min-width:640px){.qplan{grid-template-columns:1fr 1fr}}
+.qp{padding:1rem 1.1rem;border-radius:16px;background:var(--bg);border:1px solid var(--border)}
+.qp h4{margin:0 0 .5rem;font:800 .78rem/1 var(--m-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ac-acc)}
+.qp ol{margin:0;padding-left:1.2rem;display:grid;gap:.25rem;font:600 .92rem/1.35 var(--m-body);color:var(--ink)}
+.qp small{display:block;margin-top:.5rem;color:var(--stone);font:500 .78rem/1.4 var(--m-body)}
+.qstep{display:grid;grid-template-columns:24px 84px 1fr;gap:.9rem;align-items:start;padding:1rem 0;border-top:1px solid var(--border);color:inherit}
+.qstep.off{opacity:.5}
+.qchk{margin-top:.2rem;width:20px;height:20px;accent-color:var(--ac)}
+.qstep .qimg{display:block}
+.qstep .moment{display:inline-block;margin-left:.4rem;padding:.2rem .5rem;border-radius:99px;background:var(--ac-tint);color:var(--ac-acc);font:800 .66rem/1 var(--m-body);letter-spacing:.08em;text-transform:uppercase}
+.qstep .moment.later{background:var(--bg);border:1px solid var(--border);color:var(--stone)}
+.qstep ul{margin:.35rem 0 0;padding:0;list-style:none;display:grid;gap:.15rem}
+.qstep li{position:relative;padding-left:1rem;font:500 .84rem/1.4 var(--m-body);color:var(--stone)}
+.qstep li::before{content:'•';position:absolute;left:0;color:var(--ac-acc)}
+.qstep .how{margin:.45rem 0 0;font:500 .84rem/1.45 var(--m-body);color:var(--ink)}
+.qstep .how b{color:var(--ac-acc)}
+.qstep .row{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1rem;margin-top:.5rem}
+.qstep .swap{background:none;border:0;border-bottom:1px solid currentColor;padding:0;color:var(--stone);font:600 .8rem/1.2 var(--m-body);cursor:pointer}
+.qstep .name{display:block;margin:.3rem 0 .1rem;font:800 1.05rem/1.2 var(--m-body);color:var(--ink);text-decoration:none}
+.qstep .name:hover{color:var(--ac-acc)}
+@media(max-width:520px){.qstep{grid-template-columns:22px 64px 1fr;gap:.7rem}.qstep .qimg,.qstep .qph{width:64px;height:64px}}
+.qstart{margin:1rem 0;padding:1.1rem 1.2rem;border-radius:16px;background:var(--bg);border:1px solid var(--border)}
+.qstart h4{margin:0 0 .5rem;font:800 1rem/1.2 var(--m-display);letter-spacing:-.01em;color:var(--ink)}
+.qstart ol{margin:0;padding-left:1.2rem;display:grid;gap:.3rem;font:500 .9rem/1.5 var(--m-body);color:var(--ink)}
+.qtips{margin:1rem 0 0;display:grid;gap:.5rem}
+.qtips p{margin:0;padding:.7rem .9rem;border-radius:12px;background:var(--bg);font:500 .86rem/1.5 var(--m-body);color:var(--ink)}
+.qtips p b{color:var(--ac-acc)}
 </style>
 </head>
 <body class="se-mode cosm soin" data-part="hub">
@@ -639,23 +700,27 @@ body.soin{--ac:var(--m-vert);--ac2:var(--m-vert-2);--ac-tint:var(--m-tint-vert);
 
 <!-- 01 MA ROUTINE PERSO -->
 <section class="sec" id="routine"><div class="container">
-  <div class="sh"><span class="sh-n">01</span><h2>Ma routine <i>perso</i></h2><span class="mono">4 questions · 1 minute</span></div>
-  <p class="qlead" style="max-width:56ch">Une routine, c'est l'enchaînement de quelques gestes, matin et soir. Réponds à 4 questions : on te compose la tienne avec nos vrais produits.</p>
-  <div class="steps4">
-    <div class="st4"><span class="n">1</span><b>Nettoyer</b><p>Enlever la saleté et le maquillage, en douceur.</p></div>
-    <div class="st4"><span class="n">2</span><b>Cibler</b><p>Un sérum ou un masque pour ton souci du moment.</p></div>
-    <div class="st4"><span class="n">3</span><b>Hydrater</b><p>Une crème pour une peau confortable.</p></div>
-    <div class="st4"><span class="n">4</span><b>Protéger</b><p>La crème solaire, chaque matin.</p></div>
+  <div class="sh"><span class="sh-n">01</span><h2>Ma routine <i>perso</i></h2><span class="mono">6 questions · 2 minutes</span></div>
+  <div class="rstage" id="rstage" aria-live="polite">
+    <div class="qintro">
+      <p class="qlead">Une routine, c'est l'enchaînement de quelques gestes, matin et soir. On regarde ta peau, ce qui te gêne et ton budget, puis on te compose une routine avec nos produits, avec des conseils pour bien la démarrer.</p>
+      <div class="steps4">
+        <div class="st4"><span class="n">1</span><b>Nettoyer</b><p>Enlever la saleté et le maquillage, en douceur.</p></div>
+        <div class="st4"><span class="n">2</span><b>Cibler</b><p>Un sérum pour ton souci du moment.</p></div>
+        <div class="st4"><span class="n">3</span><b>Hydrater</b><p>Une crème pour une peau confortable.</p></div>
+        <div class="st4"><span class="n">4</span><b>Protéger</b><p>La crème solaire, chaque matin.</p></div>
+      </div>
+      <ul class="qpoints"><li>Facultatif, et sans compte.</li><li>Adaptée à ta situation : grossesse, peau irritée, allergies.</li><li>Des conseils de dermatologie, pas de remède miracle.</li></ul>
+      <button type="button" class="btn-s" id="start-q">Commencer ma routine</button>
+    </div>
   </div>
-  <div class="routine-go" id="routine-go"><button type="button" class="btn-s" id="start-q">Commencer ma routine</button><span>Facultatif, et sans compte.</span></div>
-  <div class="qwrap hid" id="parcours-wrap"><div id="parcours"></div></div>
 </div></section>
 
 <!-- 02 LES SOINS (panneau de filtres) -->
 <section class="sec band-soft" id="soins"><div class="container">
   <nav class="seg" aria-label="Rayons beauté"><span class="on" aria-current="page">Soins : crèmes, sérums, routine</span><a class="off" href="cosmetiques.html">Maquillage &amp; parfums <span aria-hidden="true">→</span></a></nav>
   <div class="sh"><span class="sh-n">02</span><h2>Par <i>étape</i></h2><span class="mono" id="grid-count"></span></div>
-  <div class="cats-strip" id="cats" role="group" aria-label="Choisir une étape"></div>
+  <div class="stepbar" id="cats" role="group" aria-label="Choisir une étape"></div>
   <div class="probrow" id="probrow"></div>
   <div class="toolbar" id="toolbar"></div>
   <div class="subchips" id="subchips"></div>
@@ -830,39 +895,84 @@ body.soin{--ac:var(--m-vert);--ac2:var(--m-vert-2);--ac-tint:var(--m-tint-vert);
 
   const SOIN_CAT = /soins?\b/i, PACK = /coffret|\bpack\b|\blot de|\bkit\b|routine/i;
   const $ = id => document.getElementById(id), WA = 'https://wa.me/221778038874?text=';
-  /* ── données de la routine : reprises de ta page Soins (fiches Supabase si elles existent, sinon on lit le nom) ── */
+  /* ── données de la routine ── */
   const F = a => a._f || {}, H = (s, k) => (s || '').split(',').map(x => x.trim()).includes(k), T = a => (a.nom || '') + ' ' + (a.description || '');
   async function prepareFiches(all) {
     const m = {};
     try { const { data } = await SE.sb.from('soins_fiches').select('*'); (data || []).forEach(f => m[f.article_reference] = f); } catch (e) {}
     all.forEach(a => a._f = m[a.reference]);
   }
-  
-  
-  const Q = [
-    { k: 'peau', t: 'Ta peau ressemble plutôt à…', o: [['grasse', 'Grasse (ça brille)'], ['seche', 'Sèche (ça tiraille)'], ['mixte', 'Mixte'], ['sensible', 'Sensible (ça réagit vite)'], ['nsp', 'Je ne sais pas']] },
-    { k: 'souci', t: 'Ton souci principal ?', o: [['imperfections', 'Boutons et imperfections'], ['secheresse', 'Sécheresse, tiraillements'], ['taches', 'Taches et teint terne'], ['sensibilite', 'Rougeurs, sensibilité'], ['soleil', 'Me protéger du soleil'], ['routine', 'Rien de précis, une routine de base']] },
-    { k: 'budget', t: 'Ton budget pour la routine ?', o: [['10000', 'Jusqu’à 10 000 FCFA'], ['20000', 'Jusqu’à 20 000 FCFA'], ['0', 'Peu importe']] },
-    { k: 'taille', t: 'Tu préfères…', o: [['express', 'Express : 2 à 3 produits'], ['complete', 'Complète : 4 produits']] }
-  ];
-  const LAB = { grasse: 'peau grasse', seche: 'peau sèche', mixte: 'peau mixte', sensible: 'peau sensible', nsp: 'type de peau non précisé', imperfections: 'imperfections', secheresse: 'sécheresse', taches: 'taches et teint terne', sensibilite: 'rougeurs et sensibilité', soleil: 'protection solaire', routine: 'routine de base' };
-  const KW = { grasse: /grasse|s[ée]bum|purifiant|imperfection|argile|niacinamide/i, mixte: /mixte|grasse|l[ée]g[èe]re/i, seche: /s[èe]che|nourrissant|riche|karit[ée]/i, sensible: /sensible|apais|rougeur|doux|douce/i, taches: /tache|[ée]clat|teint|vitamine|niacinamide/i, soleil: /solaire|spf/i, secheresse: /s[èe]che|nourrissant|riche|karit[ée]/i, imperfections: /imperfection|purifiant|argile|s[ée]bum/i, sensibilite: /sensible|apais|rougeur/i };
-  const SK = { grasse: 'grasse', seche: 'seche', mixte: 'mixte', sensible: 'sensible', nsp: 'normale' };
-  const STEPRE = { nettoyer: /nettoy|moussant|d[ée]maquill/i, cibler: /s[ée]rum|masque/i, hydrater: /cr[èe]me|hydratant|baume|karit/i, proteger: /solaire|spf/i };
-  const WHY = { nettoyer: 'Première étape : nettoyer en douceur, matin et soir.', cibler: 'Le soin ciblé, pour ton souci du moment.', hydrater: 'Hydrater : la base d’une peau confortable.', proteger: 'Protéger du soleil chaque matin : le geste le plus important.' };
+  const KW = { grasse: /grasse|s[ée]bum|purifiant|imperfection|argile|niacinamide|l[ée]g[èe]re|\bgel\b/i, mixte: /mixte|grasse|l[ée]g[èe]re/i, seche: /s[èe]che|nourrissant|riche|karit[ée]|beurre/i, normale: /normale|tous types/i, sensible: /sensible|apais|rougeur|doux|douce|hypoallerg/i,
+    taches: /tache|[ée]clat|teint|vitamine|niacinamide|uniformis|pigment/i, terne: /[ée]clat|terne|vitamine|lumi/i, secheresse: /s[èe]che|nourrissant|riche|karit[ée]|beurre|hydrat/i, imperfections: /imperfection|purifiant|argile|s[ée]bum|niacinamide|acn[ée]/i, sensibilite: /sensible|apais|rougeur|doux/i, brillance: /matifi|s[ée]bum|pores|purifiant|niacinamide|argile/i };
+  const STEPRE = { nettoyer: /nettoy|moussant|d[ée]maquill|micellaire|lotion|tonique/i, cibler: /s[ée]rum|masque|ampoule/i, hydrater: /cr[èe]me|hydratant|baume|karit|lait|gel[- ]cr[èe]me/i, proteger: /solaire|spf|[ée]cran/i };
+  const ACTIVE = /acide|\baha\b|\bbha\b|salicyl|glycolique|lactique|r[ée]tinol|r[ée]tino|exfoli|peeling|gommage|\bpha\b/i;
+  const PREG_NO = /r[ée]tinol|r[ée]tino[iï]d|r[ée]tinal|hydroquinone|arbutin|salicyl|\bbha\b|peeling/i;
+  const HEAVY = /karit|beurre|huile/i, STRONG_CLEAN = /purifiant|moussant|argile|exfoli|gommage|scrub/i, PARFUM = /parfum/i;
+  const SKL = { grasse: 'grasses', mixte: 'mixtes', seche: 'sèches', normale: 'normales', sensible: 'sensibles' };
+  const CL = { imperfections: 'boutons et imperfections', taches: 'taches et marques', terne: 'teint terne', secheresse: 'sécheresse', sensibilite: 'rougeurs et sensibilité', brillance: 'peau qui brille' };
   const NAME = { nettoyer: 'Nettoyer', cibler: 'Cibler', hydrater: 'Hydrater', proteger: 'Protéger' };
-  
-  function pick(step, skin, concern) {
-    let best = null, bs = -1;
-    POOL.forEach(a => {
-      const f = a._f; let s = 0;
-      if (f) { if (f.etape !== step) return; if (skin && H(f.types_peau, skin)) s += 2; if (concern && H(f.preoccupations, concern)) s += 3; }
-      else { const t = T(a); if (!STEPRE[step].test(t) || /coffret|routine|pack|mains?\b/i.test(a.nom || '')) return; if (step === 'hydrater' && /solaire|spf/i.test(t)) return; if (step !== 'proteger' && /solaire|spf/i.test(t)) return; if (skin && KW[skin] && KW[skin].test(t)) s += 2; if (concern && KW[concern] && KW[concern].test(t)) s += 3; }
-      if (s > bs || (s === bs && best && P(a) < P(best))) { best = a; bs = s; }
-    });
-    return best;
+  const HOW = {
+    nettoyer: 'Masse 30 secondes sur peau mouillée, puis rince à l’eau tiède. Ta peau doit être propre, pas qui tire.',
+    cibler: 'Quelques gouttes ou une noisette sur peau propre. Commence 1 soir sur 2, puis plus souvent si ta peau le supporte.',
+    hydrater: 'Une noisette sur le visage et le cou, matin et soir, même si ta peau est grasse.',
+    proteger: 'En dernier geste du matin, en quantité généreuse sur le visage et le cou. Renouvelle si tu restes longtemps dehors.'
+  };
+  const Q = [
+    { k: 'peau', t: 'Quelques heures après avoir lavé ton visage, ta peau…', why: 'Le type de peau décide de la texture : un gel léger pour une peau qui brille, une crème plus riche pour une peau qui tiraille.', o: [['grasse', 'Brille partout'], ['mixte', 'Brille surtout au front, au nez et au menton'], ['seche', 'Tiraille ou pèle'], ['normale', 'Est confortable, ni grasse ni sèche'], ['sensible', 'Rougit, picote ou réagit vite']] },
+    { k: 'souci', multi: true, max: 2, excl: 'base', t: 'Qu’est-ce qui te gêne le plus ?', hint: '2 choix maximum', why: 'On soigne d’abord ce qui te gêne le plus. Trop de soins d’un coup fatiguent la peau.', o: [['imperfections', 'Boutons et imperfections'], ['taches', 'Taches et marques'], ['terne', 'Teint terne ou fatigué'], ['secheresse', 'Sécheresse, tiraillements'], ['sensibilite', 'Rougeurs, sensibilité'], ['brillance', 'Peau qui brille, pores visibles'], ['base', 'Rien de précis, une routine de base']] },
+    { k: 'special', multi: true, excl: 'aucune', t: 'Une de ces situations te concerne ?', hint: 'Plusieurs choix possibles', why: 'Certains actifs ne conviennent pas dans ces situations. On adapte la routine, ou on te conseille d’en parler à un médecin.', o: [['enceinte', 'Je suis enceinte ou j’allaite'], ['irritee', 'Ma peau est très irritée ou abîmée, ou j’ai de l’eczéma'], ['allergie', 'J’ai déjà eu des allergies ou des réactions à des produits'], ['traitement', 'Je suis un traitement médical pour la peau'], ['aucune', 'Aucune de ces situations']] },
+    { k: 'maquillage', t: 'Tu te maquilles ?', why: 'Le maquillage et la crème solaire demandent un nettoyage plus soigné le soir.', o: [['jour', 'Tous les jours'], ['parfois', 'De temps en temps'], ['jamais', 'Presque jamais']] },
+    { k: 'niveau', t: 'Ta routine aujourd’hui ?', why: 'Une peau qui débute n’a pas besoin de dix produits. On avance par étapes, pour que tu saches ce qui te réussit.', o: [['debut', 'Je n’ai pas de routine, ou presque'], ['base', 'J’utilise 1 ou 2 produits'], ['avance', 'Je suis déjà à l’aise avec 3 produits ou plus']] },
+    { k: 'budget', t: 'Ton budget pour la routine ?', why: 'On te propose d’abord l’essentiel : nettoyant, crème et solaire. Le soin ciblé vient ensuite.', o: [['10000', 'Jusqu’à 10 000 FCFA'], ['20000', 'Jusqu’à 20 000 FCFA'], ['0', 'Peu importe']] }
+  ];
+  const LAB = { grasse: 'peau grasse', mixte: 'peau mixte', seche: 'peau sèche', normale: 'peau normale', sensible: 'peau sensible' };
+  function profile(ans){
+    const sp = ans.special || [], co = (ans.souci || []).filter(c => c !== 'base');
+    const irritee = sp.includes('irritee') || sp.includes('traitement');
+    return { skin: ans.peau, concerns: co, enceinte: sp.includes('enceinte'), irritee, allergie: sp.includes('allergie'), traitement: sp.includes('traitement'),
+      sensible: ans.peau === 'sensible' || co.includes('sensibilite') || irritee || sp.includes('allergie'), maquillage: ans.maquillage, niveau: ans.niveau, budget: +ans.budget || 0 };
   }
-  
+  /* un produit n'appartient qu'à UNE étape (« Lait nettoyant » est un nettoyant, pas une crème) */
+  function primaryStep(txt){
+    if (/solaire|\bspf\b|[ée]cran/i.test(txt)) return 'proteger';
+    if (/nettoy|moussant|d[ée]maquill|micellaire|\blotion\b|tonique/i.test(txt)) return 'nettoyer';
+    if (/s[ée]rum|masque|ampoule/i.test(txt)) return 'cibler';
+    if (/cr[èe]me|hydratant|baume|karit|\blait\b|gel[- ]cr[èe]me|beurre/i.test(txt)) return 'hydrater';
+    return null;
+  }
+  /* classer les produits d'une étape : sécurité d'abord, puis adéquation, puis prix */
+  function rank(step, pf){
+    const out = [];
+    POOL.forEach(a => {
+      const f = a._f, t = T(a); let s = 0; const why = [];
+      if (f){
+        if (f.etape !== step) return;
+        if (pf.skin && H(f.types_peau, pf.skin)){ s += 2; why.push('Convient aux peaux ' + SKL[pf.skin]); }
+        pf.concerns.forEach(c => { if (H(f.preoccupations, c)){ s += 3; why.push('Pensé pour : ' + CL[c]); } });
+      } else {
+        if (/coffret|routine|pack|\bmains?\b/i.test(a.nom || '')) return;
+        if ((primaryStep(a.nom || '') || primaryStep(t)) !== step) return;
+        if (pf.skin && KW[pf.skin] && KW[pf.skin].test(t)){ s += 2; why.push('Convient aux peaux ' + SKL[pf.skin]); }
+        pf.concerns.forEach(c => { if (KW[c] && KW[c].test(t)){ s += 3; why.push('Pensé pour : ' + CL[c]); } });
+      }
+      if (pf.enceinte && (PREG_NO.test(t) || /enceinte|allait/i.test((f && f.precautions) || ''))) return;
+      if (pf.irritee && (step === 'cibler' || ACTIVE.test(t))) return;
+      if (pf.sensible && ACTIVE.test(t)) s -= 4;
+      if (pf.sensible && PARFUM.test(t)) s -= 2;
+      if (step === 'hydrater' && (pf.skin === 'grasse' || pf.concerns.includes('imperfections') || pf.concerns.includes('brillance')) && HEAVY.test(t)) s -= 3;
+      if (step === 'nettoyer' && (pf.skin === 'seche' || pf.sensible) && STRONG_CLEAN.test(t)) s -= 2;
+      out.push({ a, s, why });
+    });
+    out.sort((x, y) => y.s - x.s || P(x.a) - P(y.a));
+    return out;
+  }
+  function slot(step, a){
+    const t = T(a);
+    if (step === 'proteger') return 'Matin';
+    if (step === 'cibler') return /vitamine c|vit\.? ?c\b|antioxydant/i.test(t) ? 'Matin' : 'Soir';
+    if (step === 'hydrater') return /nuit/i.test(a.nom || '') ? 'Soir' : /\bjour\b/i.test(a.nom || '') ? 'Matin' : 'Matin & soir';
+    return 'Matin & soir';
+  }
   const P = a => a.prix_vente_fcfa || 0, catName = a => (a.categorie && a.categorie.nom) || '';
   const PETIT = 5000;
   const IC = {
@@ -875,11 +985,12 @@ body.soin{--ac:var(--m-vert);--ac2:var(--m-vert-2);--ac-tint:var(--m-tint-vert);
   };
   const svg = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${IC[k]}</svg>`;
   /* étapes (puces) et soucis (pastilles) : mêmes règles que ta page d'origine */
+  const NS = a => primaryStep(a.nom || '') || primaryStep(T(a));   /* une seule étape par produit */
   const STEPS = [
-    { k: 'nettoyants', t: 'Nettoyants', fn: a => /nettoyer|tonifier/.test(F(a).etape || '') || (!a._f && /nettoy|moussant|d[ée]maquill|lotion|tonique/i.test(a.nom || '')) },
-    { k: 'serums', t: 'Sérums & masques', fn: a => F(a).etape === 'cibler' || (!a._f && /s[ée]rum|masque/i.test(a.nom || '')) },
-    { k: 'cremes', t: 'Crèmes', fn: a => F(a).etape === 'hydrater' || (!a._f && /cr[èe]me|hydratant|baume|karit/i.test(a.nom || '')) },
-    { k: 'solaire', t: 'Solaire', fn: a => F(a).etape === 'proteger' || (!a._f && /solaire|spf/i.test(T(a))) }
+    { k: 'nettoyants', t: 'Nettoyants', fn: a => /nettoyer|tonifier/.test(F(a).etape || '') || (!a._f && NS(a) === 'nettoyer') },
+    { k: 'serums', t: 'Sérums & masques', fn: a => F(a).etape === 'cibler' || (!a._f && NS(a) === 'cibler') },
+    { k: 'cremes', t: 'Crèmes', fn: a => F(a).etape === 'hydrater' || (!a._f && NS(a) === 'hydrater') },
+    { k: 'solaire', t: 'Solaire', fn: a => F(a).etape === 'proteger' || (!a._f && NS(a) === 'proteger') }
   ];
   const PROBS = [
     { k: 'imperfections', t: 'Boutons & imperfections', fn: a => H(F(a).preoccupations, 'imperfections') || (!a._f && KW.imperfections.test(T(a))) },
@@ -911,10 +1022,10 @@ body.soin{--ac:var(--m-vert);--ac2:var(--m-vert-2);--ac-tint:var(--m-tint-vert);
     return list;
   }
   function drawCats(){
-    const chip = (f, k, label, n) => `<button type="button" class="cat-chip${st.step === f ? ' active' : ''}" data-f="${f}" aria-pressed="${st.step === f}"><span class="ic">${svg(k)}</span><span class="l">${label}</span><small>${n}</small></button>`;
+    const tile = (f, no, label, n) => `<button type="button" class="stp${st.step === f ? ' active' : ''}" data-f="${f}" aria-pressed="${st.step === f}"><span class="no">${no}</span><span><b>${label}</b><small>${n} produit${n > 1 ? 's' : ''}</small></span></button>`;
     const cnt = STEPS.map(s => ITEMS.filter(s.fn).length);
-    const link = `<a class="cat-chip link" href="cosmetiques.html"><span class="ic">${svg('makeup')}</span><span class="l">Maquillage</span><small>autre page →</small></a>`;
-    $('cats').innerHTML = (ITEMS.length ? chip('all', 'all', 'Tout', ITEMS.length) + STEPS.map((s, i) => cnt[i] ? chip(s.k, s.k, s.t, cnt[i]) : '').join('') : '') + link;
+    const link = `<a class="stp link" href="cosmetiques.html"><span class="no">${svg('makeup')}</span><span><b>Maquillage</b><small>autre page →</small></span></a>`;
+    $('cats').innerHTML = (ITEMS.length ? tile('all', svg('all'), 'Tout', ITEMS.length) + STEPS.map((s, i) => cnt[i] ? tile(s.k, i + 1, s.t, cnt[i]) : '').join('') : '') + link;
   }
   function drawProbs(){
     const rows = PROBS.map(p => ({ k: p.k, t: p.t, n: ITEMS.filter(p.fn).length })).filter(x => x.n > 0);
@@ -958,7 +1069,7 @@ body.soin{--ac:var(--m-vert);--ac2:var(--m-vert-2);--ac-tint:var(--m-tint-vert);
     const mb = $('morebtn'); if (mb) mb.addEventListener('click', () => { st.more = true; drawGrid(); });
   }
   function drawAll(){ drawCats(); drawProbs(); drawSub(); drawTools(); drawGrid(); }
-  $('cats').addEventListener('click', e => { const b = e.target.closest('.cat-chip'); if (!b || !b.dataset.f) return; const f = b.dataset.f; st.step = (f === 'all' || st.step === f) ? 'all' : f; st.sub = -1; drawCats(); drawSub(); drawGrid(); });
+  $('cats').addEventListener('click', e => { const b = e.target.closest('.stp'); if (!b || !b.dataset.f) return; const f = b.dataset.f; st.step = (f === 'all' || st.step === f) ? 'all' : f; st.sub = -1; drawCats(); drawSub(); drawGrid(); });
   $('probrow').addEventListener('click', e => { const b = e.target.closest('.filter-pill'); if (!b) return; st.prob = st.prob === b.dataset.p ? null : b.dataset.p; drawProbs(); drawGrid(); });
   $('subchips').addEventListener('click', e => { const b = e.target.closest('.filter-pill'); if (!b) return; st.sub = parseInt(b.dataset.s, 10); drawSub(); drawGrid(); });
   $('toolbar').addEventListener('change', e => {
@@ -968,37 +1079,129 @@ body.soin{--ac:var(--m-vert);--ac2:var(--m-vert-2);--ac-tint:var(--m-tint-vert);
   $('grid').addEventListener('click', handleGridClick);
   $('grid-packs').addEventListener('click', handleGridClick);
 
-  /* ── ROUTINE PERSO : 4 questions → une routine avec de vrais produits ── */
-  let ans = {}, qi = 0, POOL = [];
-  function renderQ(){
-    const box = $('parcours'), q = Q[qi];
-    box.innerHTML = '<div class="qcard"><div class="qprog">' + Q.map((_, i) => '<span class="' + (i <= qi ? 'on' : '') + '"></span>').join('') + '</div><h2>' + q.t + '</h2><div class="qo">' + q.o.map(o => '<button type="button" data-v="' + o[0] + '">' + o[1] + '</button>').join('') + '</div>' + (qi > 0 ? '<button type="button" class="qback" id="qback">← Question précédente</button>' : '') + '<p class="qnote">Conseils cosmétiques, pas un avis médical.</p></div>';
-    box.querySelectorAll('.qo button').forEach(b => b.onclick = () => { ans[q.k] = b.dataset.v; qi++; qi < Q.length ? renderQ() : renderR(); });
-    const bk = $('qback'); if (bk) bk.onclick = () => { qi--; renderQ(); };
+  /* ── ROUTINE PERSO : une seule scène qui ne bouge pas (plus de saut vers le haut) ── */
+  let ans = {}, qi = 0, POOL = [], RES = null, TIM = [];
+  const RM = () => matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const stage = () => $('rstage');
+  const clearTim = () => { TIM.forEach(clearTimeout); TIM = []; };
+  /* on ne fait défiler que si le haut de la scène est hors de vue ; jamais vers le haut sans raison */
+  function keepInView(){
+    const r = stage().getBoundingClientRect();
+    if (r.top < 70 || r.top > innerHeight * 0.5) window.scrollTo({ top: window.scrollY + r.top - 96, behavior: RM() ? 'auto' : 'smooth' });
   }
-  function renderR(){
-    const skin = SK[ans.peau], concern = ans.souci, budget = +ans.budget, comp = ans.taille === 'complete';
-    const steps = comp ? ['nettoyer', 'cibler', 'hydrater', 'proteger'] : (concern === 'imperfections' || concern === 'taches' ? ['nettoyer', 'cibler', 'hydrater'] : ['nettoyer', 'hydrater', 'proteger']);
-    let plan = steps.map(s => ({ s, a: pick(s, skin, concern) })).filter(x => x.a);
-    const total = () => plan.reduce((t, x) => t + P(x.a), 0); let over = false;
-    if (budget){ while (total() > budget && plan.length > 2){ const opt = plan.filter(x => x.s !== 'nettoyer' && x.s !== 'hydrater').sort((a, b) => P(b.a) - P(a.a))[0]; if (!opt) break; plan = plan.filter(x => x !== opt); } over = total() > budget; }
-    const box = $('parcours');
-    if (!plan.length){
-      box.innerHTML = '<div class="qcard"><h2>Je n\'ai pas <em>encore</em> la routine idéale</h2><p class="qlead">Ma sélection de soins se complète. Écris-nous : on te guide sur WhatsApp.</p><div class="qact"><a class="btn-s" target="_blank" rel="noopener" href="' + WA + encodeURIComponent('Bonjour SenMarché, je cherche une routine de soins : ' + LAB[ans.peau] + ', ' + LAB[ans.souci]) + '">Demander conseil</a><button type="button" class="btn-s btn-o" id="again">Recommencer</button></div></div>';
-      $('again').onclick = restart; return;
+  function setStage(html, move){
+    const y = window.scrollY; clearTim(); stage().innerHTML = html;
+    if (move) keepInView(); else window.scrollTo(0, y);   /* mise à jour sur place : on garde la position */
+  }
+  function startQuiz(){ ans = {}; qi = 0; renderQ(true); }
+  function renderQ(move){
+    const q = Q[qi], cur = ans[q.k] || (q.multi ? [] : null);
+    const opts = q.o.map(o => q.multi
+      ? '<button type="button" data-v="' + o[0] + '" aria-pressed="' + cur.includes(o[0]) + '">' + o[1] + '</button>'
+      : '<button type="button" data-v="' + o[0] + '"' + (cur === o[0] ? ' class="sel"' : '') + '>' + o[1] + '</button>').join('');
+    setStage('<div class="qcard"><div class="qprog">' + Q.map((_, i) => '<span class="' + (i <= qi ? 'on' : '') + '"></span>').join('') + '</div>' +
+      '<div class="qmeta"><span>Question ' + (qi + 1) + ' sur ' + Q.length + '</span>' + (q.hint ? '<span>' + q.hint + '</span>' : '') + '</div>' +
+      '<h2>' + q.t + '</h2><div class="qo">' + opts + '</div>' +
+      (q.multi ? '<button type="button" class="btn-s qnext" id="qnext"' + (cur.length ? '' : ' disabled') + '>Continuer</button>' : '') +
+      '<p class="qwhy"><b>Pourquoi on te demande ça ?</b> ' + q.why + '</p>' +
+      (qi > 0 ? '<button type="button" class="qback" id="qback">← Question précédente</button>' : '') + '</div>', move);
+    const box = stage();
+    if (q.multi){
+      const sync = () => { const sel = ans[q.k] || []; box.querySelectorAll('.qo button').forEach(b => { b.setAttribute('aria-pressed', sel.includes(b.dataset.v)); b.disabled = !!q.max && sel.length >= q.max && !sel.includes(b.dataset.v) && b.dataset.v !== q.excl; }); $('qnext').disabled = !sel.length; };
+      box.querySelectorAll('.qo button').forEach(b => b.onclick = () => {
+        let sel = (ans[q.k] || []).slice(); const v = b.dataset.v;
+        if (sel.includes(v)) sel = sel.filter(x => x !== v);
+        else { if (v === q.excl) sel = [v]; else { sel = sel.filter(x => x !== q.excl); if (!q.max || sel.length < q.max) sel.push(v); } }
+        ans[q.k] = sel; sync();
+      });
+      sync();
+      $('qnext').onclick = () => next();
+    } else {
+      box.querySelectorAll('.qo button').forEach(b => b.onclick = () => { ans[q.k] = b.dataset.v; b.classList.add('sel'); setTimeout(next, 140); });
     }
-    const msg = 'Bonjour SenMarché, voici ma routine (' + LAB[ans.peau] + ', ' + LAB[ans.souci] + ') : ' + plan.map(x => x.a.nom).join(', ') + '. Pouvez-vous me conseiller ?';
-    box.innerHTML = '<div class="qcard"><h2>Ta routine <em>sur mesure</em></h2><p class="qlead">Pour : ' + LAB[ans.peau] + ' · ' + LAB[ans.souci] + '</p>' +
-      plan.map(x => { const ph = imgUrl(x.a.photo_url, 200); return '<a class="qstep" href="produit.html?ref=' + encodeURIComponent(x.a.reference) + '">' + (ph ? '<img loading="lazy" src="' + esc(ph) + '" alt="" onerror="this.outerHTML=\'<span class=&quot;qph&quot;></span>\'">' : '<span class="qph"></span>') + '<div><small>' + NAME[x.s] + '</small><b>' + esc(x.a.nom) + '</b><em>' + WHY[x.s] + '</em>' + (F(x.a).precautions ? '<em>⚠ ' + esc(F(x.a).precautions) + '</em>' : '') + '<strong>' + fprix(P(x.a)) + '</strong></div></a>'; }).join('') +
-      '<div class="qtot"><span>Total de la routine</span><b>' + fprix(total()) + '</b></div>' + (over ? '<p class="qnote">Cette routine dépasse un peu ton budget : tu peux commencer par le nettoyant et la crème.</p>' : '') +
-      '<div class="qact"><button type="button" class="btn-s" id="addall">Ajouter la routine au panier</button><a class="btn-s btn-o" target="_blank" rel="noopener" href="' + WA + encodeURIComponent(msg) + '">Demander conseil sur WhatsApp</a><button type="button" class="btn-s btn-o" id="again">Recommencer</button></div>' +
-      '<p class="qnote">Ces conseils sont cosmétiques et ne remplacent pas l\'avis d\'un médecin ou d\'un dermatologue. Consulte un professionnel en cas de douleur, de plaie, de gonflement, d\'aggravation rapide, ou si tu es enceinte ou allaites avant d\'utiliser un actif. En cas d\'irritation, arrête le produit.</p></div>';
-    $('addall').onclick = () => { plan.forEach(x => SE.Cart.add(x.a.reference, 1)); updateUI(); updateDrawer(); const b = $('addall'); b.textContent = '✓ Routine ajoutée au panier'; setTimeout(openDrawer, 350); };
-    $('again').onclick = restart;
+    const bk = $('qback'); if (bk) bk.onclick = () => { qi--; renderQ(false); };
   }
-  function restart(){ ans = {}; qi = 0; renderQ(); }
-  function openQ(){ $('parcours-wrap').classList.remove('hid'); $('routine-go').style.display = 'none'; restart(); $('routine').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth', block: 'start' }); }
-  $('start-q').onclick = openQ;
+  function next(){ qi++; qi < Q.length ? renderQ(false) : renderAnalysis(); }
+  /* petit temps d'analyse : la personne voit que ses réponses sont prises en compte */
+  function renderAnalysis(){
+    const lines = ['On regarde ta peau et tes priorités', 'On choisit dans nos soins ceux qui te conviennent', 'On vérifie la sécurité et ton budget'];
+    setStage('<div class="qcard"><div class="qprog">' + Q.map(() => '<span class="on"></span>').join('') + '</div><h2>On prépare <em>ta routine</em></h2><ul class="qan">' + lines.map(l => '<li><i>✓</i>' + l + '</li>').join('') + '</ul></div>', false);
+    const items = stage().querySelectorAll('.qan li');
+    if (RM()){ items.forEach(li => li.classList.add('on')); TIM.push(setTimeout(buildResult, 500)); return; }
+    items.forEach((li, i) => TIM.push(setTimeout(() => li.classList.add('on'), 250 + i * 750)));
+    TIM.push(setTimeout(buildResult, 250 + lines.length * 750 + 350));
+  }
+  function buildResult(){
+    const pf = profile(ans);
+    let steps = pf.niveau === 'avance' ? ['nettoyer', 'cibler', 'hydrater', 'proteger'] : ['nettoyer', 'hydrater', 'proteger'];
+    const wants = pf.concerns.some(c => ['imperfections', 'taches', 'terne'].includes(c));
+    let laterCibler = false;
+    if (pf.irritee) steps = ['nettoyer', 'hydrater', 'proteger'];
+    else if (pf.niveau !== 'avance' && wants){ steps = ['nettoyer', 'cibler', 'hydrater', 'proteger']; laterCibler = true; }
+    const cands = {}, plan = [], missing = [];
+    steps.forEach(s => { cands[s] = rank(s, pf); cands[s].length ? plan.push({ s, i: 0, inc: !(s === 'cibler' && laterCibler), later: s === 'cibler' && laterCibler }) : missing.push(s); });
+    const cur = x => cands[x.s][x.i], price = x => P(cur(x).a), total = () => plan.filter(x => x.inc).reduce((t, x) => t + price(x), 0);
+    let over = false;
+    if (pf.budget){
+      for (let g = 0; g < 8 && total() > pf.budget; g++){
+        const opt = plan.find(x => x.s === 'cibler' && x.inc);
+        if (opt){ opt.inc = false; continue; }
+        let best = null;
+        plan.filter(x => x.inc).forEach(x => cands[x.s].forEach((c, i) => { const sav = price(x) - P(c.a); if (sav > 0 && c.s >= Math.min(0, cands[x.s][x.i].s) && (!best || sav > best.sav)) best = { x, i, sav }; }));
+        if (!best) break; best.x.i = best.i;
+      }
+      over = total() > pf.budget;
+    }
+    RES = { pf, plan, cands, missing, over, laterCibler };
+    renderResult(true);
+  }
+  function renderResult(move){
+    const { pf, plan, cands, missing, over, laterCibler } = RES;
+    const cur = x => cands[x.s][x.i], inc = plan.filter(x => x.inc), total = inc.reduce((t, x) => t + P(cur(x).a), 0);
+    const summary = [LAB[pf.skin] || 'peau', pf.concerns.length ? 'priorité : ' + pf.concerns.map(c => CL[c]).join(', ') : 'routine de base', { debut: 'tu débutes', base: 'routine simple', avance: 'à l’aise' }[pf.niveau]].join(' · ');
+    if (!plan.length){
+      setStage('<div class="qcard"><h2>Je n’ai pas <em>encore</em> la routine idéale</h2><p class="qlead">Ma sélection de soins se complète. Écris-nous : on te guide sur WhatsApp.</p><div class="qact"><a class="btn-s" target="_blank" rel="noopener" href="' + WA + encodeURIComponent('Bonjour SenMarché, je cherche une routine de soins : ' + summary) + '">Demander conseil</a><button type="button" class="btn-s btn-o" id="again">Recommencer</button></div></div>', move);
+      $('again').onclick = startQuiz; return;
+    }
+    const warn = [];
+    if (pf.enceinte) warn.push('<div class="qwarn"><b>Tu es enceinte ou tu allaites</b>On a écarté les produits dont la description cite du rétinol, de l’hydroquinone, de l’arbutine ou des acides forts. Vérifie toujours la liste des ingrédients, et demande l’avis de ton médecin avant d’ajouter un actif. Certains dermatologues conseillent aussi un solaire minéral (à l’oxyde de zinc).</div>');
+    if (pf.irritee) warn.push('<div class="qwarn"><b>Ta peau est fragile ou tu suis un traitement</b>On te propose seulement des soins très doux : nettoyant, crème et solaire. Parles-en à un médecin ou à un dermatologue avant d’ajouter un soin actif.</div>');
+    if (pf.allergie) warn.push('<div class="qwarn"><b>Tu as déjà eu des réactions</b>Lis la liste des ingrédients et teste chaque produit sur l’avant-bras avant de l’utiliser sur le visage. Si tu sais ce qui te réagit, écris-le-nous sur WhatsApp.</div>');
+    if (missing.length) warn.push('<div class="qwarn"><b>Il nous manque une étape en ce moment</b>Pas de produit adapté pour : ' + missing.map(s => NAME[s].toLowerCase()).join(', ') + '. Écris-nous sur WhatsApp, on te trouve ça.</div>');
+    const AM = ['nettoyer', 'cibler', 'hydrater', 'proteger'].map(s => inc.find(x => x.s === s)).filter(x => x && /Matin/.test(slot(x.s, cur(x).a)));
+    const PM = ['nettoyer', 'cibler', 'hydrater'].map(s => inc.find(x => x.s === s)).filter(x => x && /Soir|soir/.test(slot(x.s, cur(x).a)));
+    const dbl = pf.maquillage !== 'jamais';
+    const plan2 = '<div class="qplan"><div class="qp"><h4>☀ Matin</h4><ol>' + (AM.map(x => '<li>' + NAME[x.s] + ' · ' + esc(cur(x).a.nom) + '</li>').join('') || '<li>—</li>') + '</ol></div><div class="qp"><h4>☾ Soir</h4><ol>' + (PM.map(x => '<li>' + NAME[x.s] + ' · ' + esc(cur(x).a.nom) + '</li>').join('') || '<li>—</li>') + '</ol>' + (dbl ? '<small>Si tu portes du maquillage ou de la crème solaire, nettoie en deux temps : démaquillant, puis nettoyant.</small>' : '') + '</div></div>';
+    const cards = plan.map((x, idx) => {
+      const c = cur(x), a = c.a, ph = imgUrl(a.photo_url, 200), f = F(a), reasons = c.why.length ? c.why : [];
+      return '<div class="qstep' + (x.inc ? '' : ' off') + '"><input class="qchk" type="checkbox" data-i="' + idx + '" ' + (x.inc ? 'checked' : '') + ' aria-label="Inclure ' + esc(a.nom) + '">' +
+        '<a class="qimg" href="produit.html?ref=' + encodeURIComponent(a.reference) + '">' + (ph ? '<img loading="lazy" src="' + esc(ph) + '" alt="" onerror="this.outerHTML=\'<span class=&quot;qph&quot;></span>\'">' : '<span class="qph"></span>') + '</a>' +
+        '<div><small style="font:800 .72rem/1 var(--m-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ac-acc)">Étape ' + (idx + 1) + ' · ' + NAME[x.s] + '</small><span class="moment' + (x.later ? ' later' : '') + '">' + (x.later ? 'À ajouter plus tard' : slot(x.s, a)) + '</span>' +
+        '<a class="name" href="produit.html?ref=' + encodeURIComponent(a.reference) + '">' + esc(a.nom) + '</a>' +
+        '<ul>' + (reasons.length ? reasons.slice(0, 3).map(r => '<li>' + esc(r) + '</li>').join('') : '<li>' + { nettoyer: 'Nettoyer en douceur, matin et soir.', cibler: 'Le soin ciblé pour ton souci du moment.', hydrater: 'La base d’une peau confortable.', proteger: 'Le geste le plus important du matin.' }[x.s] + '</li>') + (f.precautions ? '<li>⚠ ' + esc(f.precautions) + '</li>' : '') + '</ul>' +
+        '<p class="how"><b>Comment :</b> ' + HOW[x.s] + '</p>' +
+        '<div class="row"><strong style="font:800 1.05rem/1 var(--m-display);color:var(--ac-acc)">' + fprix(P(a)) + '</strong>' + (cands[x.s].length > 1 ? '<button type="button" class="swap" data-i="' + idx + '">↻ Voir un autre choix</button>' : '') + '</div></div></div>';
+    }).join('');
+    const lvl = { debut: ['Tu débutes : avance doucement.', 'Ajoute <b>un seul produit à la fois</b>, avec 3 à 7 jours entre deux. Ordre conseillé : nettoyant, crème, solaire, puis le soin ciblé en dernier.'], base: ['Tu as déjà une base.', 'Remplace ou ajoute <b>un produit à la fois</b>, en laissant quelques jours entre deux, pour savoir ce qui te réussit.'], avance: ['Tu es déjà à l’aise.', 'Tu peux avancer plus vite, mais garde le soin ciblé pour la fin et ajoute-le <b>seul</b>.'] }[pf.niveau];
+    const start = '<div class="qstart"><h4>Pour bien démarrer</h4><ol><li><b>Teste d’abord</b> chaque produit sur l’avant-bras (ou derrière l’oreille) pendant 24 heures. Certaines réactions mettent jusqu’à 72 heures à apparaître.</li><li>' + lvl[1] + '</li>' + (laterCibler ? '<li>Le soin ciblé est mis de côté : commence par le reste, et ajoute-le quand ta peau est bien habituée.</li>' : '') + '<li>En cas de rougeur, de brûlure ou de gonflement, arrête le produit. Si ça persiste plus de 24 à 48 heures, vois un médecin.</li></ol></div>';
+    const tips = [];
+    tips.push('<p><b>Le solaire, tous les matins.</b> Quelle que soit la couleur de ta peau, c’est le dernier geste de la routine du matin, après la crème.</p>');
+    if (pf.concerns.includes('taches') || pf.concerns.includes('terne')) tips.push('<p><b>Pour les taches, on uniformise sans éclaircir.</b> Vitamine C ou niacinamide, plus le solaire chaque jour. Méfie-toi des produits éclaircissants non contrôlés : certains contiennent du mercure, de l’hydroquinone ou des corticoïdes forts, qui peuvent abîmer la peau et la santé (alerte de l’OMS en Afrique).</p>');
+    if (pf.concerns.includes('imperfections') || pf.skin === 'grasse') tips.push('<p><b>Boutons : ne perce pas, ne frotte pas.</b> Hydrate quand même : une peau grasse a besoin d’une crème légère.</p>');
+    const eco = over ? '<p class="qnote">Cette routine dépasse un peu ton budget. Commence par le nettoyant, la crème et le solaire : c’est l’essentiel.</p>' : '';
+    const msg = 'Bonjour SenMarché, voici ma routine (' + summary + ') : ' + inc.map(x => cur(x).a.nom).join(', ') + '. Pouvez-vous me conseiller ?';
+    setStage('<div class="qcard"><div class="qprog">' + Q.map(() => '<span class="on"></span>').join('') + '</div><h2>Ta routine <em>sur mesure</em></h2><p class="qlead">' + esc(summary) + '</p>' + warn.join('') + plan2 + cards +
+      '<div class="qtot"><span>Total de la sélection</span><b>' + fprix(total) + '</b></div>' + eco +
+      '<div class="qact"><button type="button" class="btn-s" id="addall"' + (inc.length ? '' : ' disabled') + '>Ajouter la sélection au panier</button><a class="btn-s btn-o" target="_blank" rel="noopener" href="' + WA + encodeURIComponent(msg) + '">Demander conseil sur WhatsApp</a><button type="button" class="btn-s btn-o" id="again">Recommencer</button></div>' +
+      start + '<div class="qtips">' + tips.join('') + '</div>' +
+      '<p class="qnote">Ces conseils sont cosmétiques et ne remplacent pas l’avis d’un médecin ou d’un dermatologue. Consulte un professionnel en cas de douleur, de plaie, de gonflement, d’aggravation rapide, ou si tu es enceinte ou allaites avant d’utiliser un actif. En cas d’irritation, arrête le produit.</p></div>', move);
+    const box = stage();
+    box.querySelectorAll('.qchk').forEach(c => c.onchange = () => { RES.plan[+c.dataset.i].inc = c.checked; renderResult(false); });
+    box.querySelectorAll('.swap').forEach(b => b.onclick = () => { const x = RES.plan[+b.dataset.i]; x.i = (x.i + 1) % RES.cands[x.s].length; renderResult(false); });
+    $('again').onclick = startQuiz;
+    const ad = $('addall'); if (ad) ad.onclick = () => { inc.forEach(x => SE.Cart.add(cur(x).a.reference, 1)); updateUI(); updateDrawer(); ad.textContent = '✓ Ajouté au panier'; setTimeout(openDrawer, 350); };
+  }
+  $('start-q').onclick = startQuiz;
 
   (async () => {
     try{
@@ -1018,7 +1221,6 @@ body.soin{--ac:var(--m-vert);--ac2:var(--m-vert-2);--ac-tint:var(--m-tint-vert);
         }).join(''));
       }
       renumber();
-      if (location.hash === '#routine') openQ();
     }catch(e){ console.warn('[Soins]', e); $('grid').innerHTML = '<div class="nores"><h3>Chargement impossible</h3><p>Réessaie dans un instant.</p></div>'; }
   })();
   renumber(); updateUI(); updateDrawer();
