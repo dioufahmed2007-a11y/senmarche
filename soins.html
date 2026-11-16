@@ -652,6 +652,43 @@ body.soin{--ac:var(--m-bissap);--ac2:var(--m-bissap-2);--ac-tint:var(--m-tint-bi
 .qtips{margin:1rem 0 0;display:grid;gap:.5rem}
 .qtips p{margin:0;padding:.7rem .9rem;border-radius:12px;background:var(--bg);font:500 .86rem/1.5 var(--m-body);color:var(--ink)}
 .qtips p b{color:var(--ac-acc)}
+
+/* ═════════ Structure : la routine s'ouvre en panneau, sans cacher les produits ═════════ */
+.rbar{background:var(--card);border-bottom:1px solid var(--border)}
+.rbar-in{display:flex;align-items:center;gap:.9rem 1.2rem;flex-wrap:wrap;padding:.85rem 0}
+.rbar-ic{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--ac-tint);color:var(--ac-acc);font-size:1rem;flex:0 0 34px}
+.rbar-in p{margin:0;flex:1 1 260px;font:500 .95rem/1.35 var(--m-body);color:var(--stone)}
+.rbar-in p b{color:var(--ink);font-weight:800}
+.rbar-in .btn-s{min-height:42px;padding:0 1.2rem}
+.rremind{margin-top:2.2rem;display:flex;flex-wrap:wrap;gap:.8rem 1.4rem;align-items:center;justify-content:space-between;padding:1.3rem 1.5rem;border-radius:22px;border:1.5px dashed var(--ac2);background:var(--ac-tint)}
+.rremind h3{margin:0 0 .25rem;font:800 clamp(1.25rem,3vw,1.7rem)/1.05 var(--m-display);letter-spacing:-.02em;color:var(--ink)}
+.rremind h3 i{font-family:var(--m-serif);font-weight:500;color:var(--ac-acc)}
+.rremind p{margin:0;color:var(--stone);max-width:46ch;line-height:1.5}
+.rfloat{position:fixed;left:16px;bottom:16px;z-index:240;min-height:46px;padding:0 1.2rem;border-radius:999px;border:0;background:var(--ac);color:var(--ac-on);font:800 .9rem/1 var(--m-body);cursor:pointer;box-shadow:0 14px 26px -12px var(--glow);opacity:0;transform:translateY(14px);pointer-events:none;transition:opacity .25s,transform .25s}
+.rfloat.on{opacity:1;transform:none;pointer-events:auto}
+.rpanel{position:fixed;inset:0;z-index:9000}
+.rpanel[hidden]{display:none}
+.rp-overlay{position:absolute;inset:0;background:color-mix(in srgb,var(--m-nuit) 55%,transparent);opacity:0;transition:opacity .3s}
+.rp-sheet{position:absolute;left:50%;bottom:0;width:min(680px,100%);height:92vh;height:92dvh;background:var(--bg);border-radius:24px 24px 0 0;display:flex;flex-direction:column;transform:translate(-50%,100%);transition:transform .38s cubic-bezier(.16,1,.3,1);box-shadow:0 -24px 60px -30px rgba(0,0,0,.45)}
+.rpanel.open .rp-overlay{opacity:1}
+.rpanel.open .rp-sheet{transform:translate(-50%,0)}
+@media(prefers-reduced-motion:reduce){.rp-overlay,.rp-sheet,.rfloat{transition:none}}
+.rp-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.9rem 1.2rem;border-bottom:1px solid var(--border);flex:0 0 auto}
+.rp-t{font:800 1.02rem/1 var(--m-display);letter-spacing:-.01em;color:var(--ink)}
+.rp-x{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--border);background:var(--card);font-size:1.5rem;line-height:1;cursor:pointer;color:var(--ink)}
+.rp-body{flex:1 1 auto;overflow-y:auto;padding:1.2rem 1.2rem 2rem;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;overflow-anchor:none}
+.rp-body .rstage{min-height:0}
+.rp-body .qcard{border:0;box-shadow:none;padding:0;background:transparent}
+.rp-h{margin:0 0 1rem;font:800 clamp(1.6rem,4.4vw,2.2rem)/1.05 var(--m-display);letter-spacing:-.03em;color:var(--ink)}
+.rp-h em{font-family:var(--m-serif);font-weight:500;color:var(--ac-acc)}
+.qex{margin:0 0 1.2rem}
+.qex-t{display:block;margin-bottom:.5rem;font:800 .72rem/1 var(--m-body);letter-spacing:.14em;text-transform:uppercase;color:var(--stone)}
+.rp-body .steps4{grid-template-columns:1fr 1fr}
+.seg .on,.seg .off{flex-direction:column;align-items:flex-start;gap:.2rem;padding:.75rem 1.2rem}
+.seg b{font:800 .95rem/1 var(--m-body)}
+.seg small{font:500 .78rem/1.2 var(--m-body);opacity:.85}
+.seg .off small{color:var(--stone);opacity:1}
+body.rp-lock{overflow:hidden}
 </style>
 </head>
 <body class="se-mode cosm soin" data-part="hub">
@@ -688,7 +725,7 @@ body.soin{--ac:var(--m-bissap);--ac2:var(--m-bissap-2);--ac-tint:var(--m-tint-bi
   <h1 class="hero-title disp"><span>Soins</span><span class="ht-2 out">rien que pour ta peau</span></h1>
   <div class="hero-row">
     <div class="hero-tags"><span>Crèmes, sérums, nettoyants</span><span>Vérifié avant envoi</span><span>Paiement à la récupération</span></div>
-    <a href="#routine" class="btn-s">Faire ma routine →</a>
+    <a href="#routine" class="btn-s" data-open-routine>Faire ma routine →</a>
   </div>
 </header>
 
@@ -698,28 +735,17 @@ body.soin{--ac:var(--m-bissap);--ac2:var(--m-bissap-2);--ac-tint:var(--m-tint-bi
   <span>Nettoyer</span><span>Cibler</span><span>Hydrater</span><span>Protéger</span><span>Ta routine</span><span>Ta peau</span>
 </div></div>
 
-<!-- 01 MA ROUTINE PERSO -->
-<section class="sec" id="routine"><div class="container">
-  <div class="sh"><span class="sh-n">01</span><h2>Ma routine <i>perso</i></h2><span class="mono">6 questions · 2 minutes</span></div>
-  <div class="rstage" id="rstage" aria-live="polite">
-    <div class="qintro">
-      <p class="qlead">Une routine, c'est l'enchaînement de quelques gestes, matin et soir. On regarde ta peau, ce qui te gêne et ton budget, puis on te compose une routine avec nos produits, avec des conseils pour bien la démarrer.</p>
-      <div class="steps4">
-        <div class="st4"><span class="n">1</span><b>Nettoyer</b><p>Enlever la saleté et le maquillage, en douceur.</p></div>
-        <div class="st4"><span class="n">2</span><b>Cibler</b><p>Un sérum pour ton souci du moment.</p></div>
-        <div class="st4"><span class="n">3</span><b>Hydrater</b><p>Une crème pour une peau confortable.</p></div>
-        <div class="st4"><span class="n">4</span><b>Protéger</b><p>La crème solaire, chaque matin.</p></div>
-      </div>
-      <ul class="qpoints"><li>Facultatif, et sans compte.</li><li>Adaptée à ta situation : grossesse, peau irritée, allergies.</li><li>Des conseils de dermatologie, pas de remède miracle.</li></ul>
-      <button type="button" class="btn-s" id="start-q">Commencer ma routine</button>
-    </div>
-  </div>
-</div></section>
+<!-- BANDEAU ROUTINE : une seule ligne, il ne cache aucun produit -->
+<div class="rbar" id="rbar"><div class="container rbar-in">
+  <span class="rbar-ic" aria-hidden="true">✦</span>
+  <p><b>Pas sûre de ce qu'il te faut ?</b> <span>6 questions, une routine matin et soir.</span></p>
+  <button type="button" class="btn-s" data-open-routine>Faire ma routine</button>
+</div></div>
 
 <!-- 02 LES SOINS (panneau de filtres) -->
 <section class="sec band-soft" id="soins"><div class="container">
-  <nav class="seg" aria-label="Rayons beauté"><span class="on" aria-current="page">Soins : crèmes, sérums, routine</span><a class="off" href="cosmetiques.html">Maquillage &amp; parfums <span aria-hidden="true">→</span></a></nav>
-  <div class="sh"><span class="sh-n">02</span><h2>Par <i>étape</i></h2><span class="mono" id="grid-count"></span></div>
+  <nav class="seg" aria-label="Rayons beauté"><a class="off" href="cosmetiques.html"><b>Cosmétiques</b><small>maquillage et parfums</small></a><span class="on" aria-current="page"><b>Soins</b><small>crèmes, sérums, routine</small></span></nav>
+  <div class="sh"><span class="sh-n">01</span><h2>Par <i>étape</i></h2><span class="mono" id="grid-count"></span></div>
   <div class="stepbar" id="cats" role="group" aria-label="Choisir une étape"></div>
   <div class="probrow" id="probrow"></div>
   <div class="toolbar" id="toolbar"></div>
@@ -730,6 +756,7 @@ body.soin{--ac:var(--m-bissap);--ac2:var(--m-bissap-2);--ac-tint:var(--m-tint-bi
   <div class="activeline" id="activeline"></div>
   <div class="prod-grid" id="grid"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
   <div class="more" id="more"></div>
+  <div class="rremind"><div><h3>Tu n'as pas trouvé <i>ce qu'il te faut</i> ?</h3><p>Réponds à 6 questions : on te compose une routine avec nos soins.</p></div><button type="button" class="btn-s" data-open-routine>Faire ma routine</button></div>
 </div></section>
 
 <!-- 03 COFFRETS & ROUTINES (seulement s'il y en a) -->
@@ -778,6 +805,37 @@ body.soin{--ac:var(--m-bissap);--ac2:var(--m-bissap-2);--ac-tint:var(--m-tint-bi
   </div>
   <div class="footer-bottom"><p>© 2026 SenMarché</p><a href="cgv.html">Conditions générales</a></div>
 </footer>
+
+<button type="button" class="rfloat" id="rfloat" data-open-routine aria-label="Faire ma routine perso">✦ Ma routine</button>
+
+<div class="rpanel" id="rpanel" role="dialog" aria-modal="true" aria-labelledby="rp-title" hidden>
+  <div class="rp-overlay" id="rp-overlay"></div>
+  <div class="rp-sheet">
+    <div class="rp-top"><span class="rp-t" id="rp-title">Ma routine perso</span><button type="button" class="rp-x" id="rp-close" aria-label="Fermer">×</button></div>
+    <div class="rp-body" id="rp-body">
+      <div class="rstage" id="rstage" aria-live="polite">
+        <div class="qintro">
+          <h2 class="rp-h">Ta routine, <em>étape par étape</em></h2>
+          <ul class="qpoints">
+            <li><b>Ce que tu reçois :</b> un plan matin et soir, avec nos produits.</li>
+            <li><b>Combien de temps :</b> 6 questions, 2 minutes. Facultatif, sans compte.</li>
+            <li><b>Ce que ce n'est pas :</b> un avis médical. On adapte si tu es enceinte, si ta peau est irritée ou allergique.</li>
+          </ul>
+          <div class="qex"><span class="qex-t">Exemple de résultat · peau mixte, boutons</span>
+            <div class="qplan"><div class="qp"><h4>☀ Matin</h4><ol><li>Nettoyant doux</li><li>Crème légère</li><li>Solaire</li></ol></div><div class="qp"><h4>☾ Soir</h4><ol><li>Nettoyant</li><li>Sérum ciblé</li><li>Crème légère</li></ol></div></div>
+          </div>
+          <div class="steps4">
+            <div class="st4"><span class="n">1</span><b>Nettoyer</b><p>Enlever la saleté et le maquillage.</p></div>
+            <div class="st4"><span class="n">2</span><b>Cibler</b><p>Un sérum pour ton souci.</p></div>
+            <div class="st4"><span class="n">3</span><b>Hydrater</b><p>Une crème pour le confort.</p></div>
+            <div class="st4"><span class="n">4</span><b>Protéger</b><p>Le solaire, chaque matin.</p></div>
+          </div>
+          <button type="button" class="btn-s" id="start-q">Commencer ma routine</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <a href="https://wa.me/221778038874" class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -1084,14 +1142,10 @@ body.soin{--ac:var(--m-bissap);--ac2:var(--m-bissap-2);--ac-tint:var(--m-tint-bi
   const RM = () => matchMedia('(prefers-reduced-motion:reduce)').matches;
   const stage = () => $('rstage');
   const clearTim = () => { TIM.forEach(clearTimeout); TIM = []; };
-  /* on ne fait défiler que si le haut de la scène est hors de vue ; jamais vers le haut sans raison */
-  function keepInView(){
-    const r = stage().getBoundingClientRect();
-    if (r.top < 70 || r.top > innerHeight * 0.5) window.scrollTo({ top: window.scrollY + r.top - 96, behavior: RM() ? 'auto' : 'smooth' });
-  }
+  /* tout se passe dans le panneau : la page derrière ne bouge pas. move = true -> on revient en haut du panneau ; false -> on garde la position */
   function setStage(html, move){
-    const y = window.scrollY; clearTim(); stage().innerHTML = html;
-    if (move) keepInView(); else window.scrollTo(0, y);   /* mise à jour sur place : on garde la position */
+    const sc = $('rp-body'), y = sc.scrollTop; clearTim(); stage().innerHTML = html;
+    sc.scrollTop = move ? 0 : y;
   }
   function startQuiz(){ ans = {}; qi = 0; renderQ(true); }
   function renderQ(move){
@@ -1119,17 +1173,17 @@ body.soin{--ac:var(--m-bissap);--ac2:var(--m-bissap-2);--ac-tint:var(--m-tint-bi
     } else {
       box.querySelectorAll('.qo button').forEach(b => b.onclick = () => { ans[q.k] = b.dataset.v; b.classList.add('sel'); setTimeout(next, 140); });
     }
-    const bk = $('qback'); if (bk) bk.onclick = () => { qi--; renderQ(false); };
+    const bk = $('qback'); if (bk) bk.onclick = () => { qi--; renderQ(true); };
   }
-  function next(){ qi++; qi < Q.length ? renderQ(false) : renderAnalysis(); }
+  function next(){ qi++; qi < Q.length ? renderQ(true) : renderAnalysis(); }
   /* petit temps d'analyse : la personne voit que ses réponses sont prises en compte */
   function renderAnalysis(){
     const lines = ['On regarde ta peau et tes priorités', 'On choisit dans nos soins ceux qui te conviennent', 'On vérifie la sécurité et ton budget'];
     setStage('<div class="qcard"><div class="qprog">' + Q.map(() => '<span class="on"></span>').join('') + '</div><h2>On prépare <em>ta routine</em></h2><ul class="qan">' + lines.map(l => '<li><i>✓</i>' + l + '</li>').join('') + '</ul></div>', false);
     const items = stage().querySelectorAll('.qan li');
-    if (RM()){ items.forEach(li => li.classList.add('on')); TIM.push(setTimeout(buildResult, 500)); return; }
+    if (RM()){ items.forEach(li => li.classList.add('on')); TIM.push(setTimeout(() => ready.then(buildResult), 500)); return; }
     items.forEach((li, i) => TIM.push(setTimeout(() => li.classList.add('on'), 250 + i * 750)));
-    TIM.push(setTimeout(buildResult, 250 + lines.length * 750 + 350));
+    TIM.push(setTimeout(() => ready.then(buildResult), 250 + lines.length * 750 + 350));
   }
   function buildResult(){
     const pf = profile(ans);
@@ -1199,9 +1253,35 @@ body.soin{--ac:var(--m-bissap);--ac2:var(--m-bissap-2);--ac-tint:var(--m-tint-bi
     box.querySelectorAll('.qchk').forEach(c => c.onchange = () => { RES.plan[+c.dataset.i].inc = c.checked; renderResult(false); });
     box.querySelectorAll('.swap').forEach(b => b.onclick = () => { const x = RES.plan[+b.dataset.i]; x.i = (x.i + 1) % RES.cands[x.s].length; renderResult(false); });
     $('again').onclick = startQuiz;
-    const ad = $('addall'); if (ad) ad.onclick = () => { inc.forEach(x => SE.Cart.add(cur(x).a.reference, 1)); updateUI(); updateDrawer(); ad.textContent = '✓ Ajouté au panier'; setTimeout(openDrawer, 350); };
+    const ad = $('addall'); if (ad) ad.onclick = () => { inc.forEach(x => SE.Cart.add(cur(x).a.reference, 1)); updateUI(); updateDrawer(); ad.textContent = '✓ Ajouté au panier'; setTimeout(() => { closeRoutine(); setTimeout(openDrawer, 200); }, 450); };
   }
   $('start-q').onclick = startQuiz;
+  /* ── PANNEAU : s'ouvre depuis le bandeau, le bouton flottant, le rappel sous la grille, ou le lien #routine ── */
+  let lastTrigger = null, ready, readyDone; ready = new Promise(r => { readyDone = r; });
+  function openRoutine(from){
+    const p = $('rpanel'); if (!p.hidden) return;
+    lastTrigger = from || null; p.hidden = false; document.body.classList.add('rp-lock');
+    requestAnimationFrame(() => requestAnimationFrame(() => p.classList.add('open')));
+    try{ history.replaceState(null, '', '#routine'); }catch(e){}
+    setTimeout(() => $('rp-close').focus(), 60);
+  }
+  function closeRoutine(){
+    const p = $('rpanel'); if (p.hidden) return;
+    p.classList.remove('open'); document.body.classList.remove('rp-lock');
+    setTimeout(() => { p.hidden = true; }, RM() ? 0 : 380);
+    try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
+    if (lastTrigger && document.contains(lastTrigger)) lastTrigger.focus();
+  }
+  document.querySelectorAll('[data-open-routine]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); openRoutine(b); }));
+  $('rp-close').onclick = closeRoutine; $('rp-overlay').onclick = closeRoutine;
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRoutine(); });
+  /* le bouton flottant n'apparaît qu'une fois le bandeau du haut sorti de l'écran (pas de doublon) */
+  (function(){
+    const bar = $('rbar'), fl = $('rfloat');
+    const upd = () => { const r = bar.getBoundingClientRect(); fl.classList.toggle('on', r.bottom < 0); };
+    window.addEventListener('scroll', upd, { passive: true }); window.addEventListener('resize', upd); upd();
+  })();
+  if (location.hash === '#routine') setTimeout(() => openRoutine(null), 80);
 
   (async () => {
     try{
@@ -1220,8 +1300,8 @@ body.soin{--ac:var(--m-bissap);--ac2:var(--m-bissap-2);--ac-tint:var(--m-tint-bi
           return cardHtml(p, { offre: true, extra });
         }).join(''));
       }
-      renumber();
-    }catch(e){ console.warn('[Soins]', e); $('grid').innerHTML = '<div class="nores"><h3>Chargement impossible</h3><p>Réessaie dans un instant.</p></div>'; }
+      renumber(); readyDone();
+    }catch(e){ console.warn('[Soins]', e); readyDone(); $('grid').innerHTML = '<div class="nores"><h3>Chargement impossible</h3><p>Réessaie dans un instant.</p></div>'; }
   })();
   renumber(); updateUI(); updateDrawer();
 })();
