@@ -540,6 +540,11 @@ body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);bor
 .cat-chip.link{text-decoration:none}
 .soin-note{display:block;margin-top:.35rem;color:var(--ink)}
 .soin-note a{color:var(--m-acc-bissap);font-weight:700}
+
+.seg .on,.seg .off{flex-direction:column;align-items:flex-start;gap:.2rem;padding:.75rem 1.2rem}
+.seg b{font:800 .95rem/1 var(--m-body)}
+.seg small{font:500 .78rem/1.2 var(--m-body);opacity:.85}
+.seg .off small{color:var(--stone);opacity:1}
 </style>
 </head>
 <body class="se-mode cosm" data-part="hub">
@@ -588,7 +593,7 @@ body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);bor
 
 <!-- 01 PAR ENVIE : bandeau sombre pour le contraste -->
 <section class="sec band-soft" id="envies"><div class="container">
-  <nav class="seg" aria-label="Rayons beauté"><span class="on" aria-current="page">Maquillage &amp; parfums</span><a class="off" href="soins.html">Soins : crèmes, sérums, routine <span aria-hidden="true">→</span></a></nav>
+  <nav class="seg" aria-label="Rayons beauté"><span class="on" aria-current="page"><b>Cosmétiques</b><small>maquillage et parfums</small></span><a class="off" href="soins.html"><b>Soins</b><small>crèmes, sérums, routine</small></a></nav>
   <div class="sh"><span class="sh-n">01</span><h2>Par <i>envie</i></h2><span class="mono" id="grid-count"></span></div>
     <div class="cats-strip" id="cats" role="group" aria-label="Choisir un rayon"></div>
   <div class="toolbar" id="toolbar"></div>
@@ -814,7 +819,7 @@ body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);bor
   function drawCats(){
     const chip = (f, label, n) => `<button type="button" class="cat-chip${st.f === f ? ' active' : ''}" data-f="${f}" aria-pressed="${st.f === f}"><span class="ic">${svg(f)}</span><span class="l">${label}</span><small>${n}</small></button>`;
     const soins = `<a class="cat-chip link" href="soins.html"><span class="ic">${svg('peau')}</span><span class="l">Crèmes &amp; soins</span><small>autre page →</small></a>`;
-    $('cats').innerHTML = (ITEMS.length ? chip('all', 'Tout', ITEMS.length) + ZONES.map(z => count(z.k) ? chip(z.k, z.t, count(z.k)) : '').join('') : '') + soins;
+    $('cats').innerHTML = (ITEMS.length ? chip('all', 'Tout', ITEMS.length) + ZONES.map(z => count(z.k) >= 2 ? chip(z.k, z.t, count(z.k)) : '').join('') : '') + soins;
   }
   function drawSub(){
     const subs = SUBS[st.f], base = st.f === 'all' ? [] : ITEMS.filter(a => zoneOf(a) === st.f);
