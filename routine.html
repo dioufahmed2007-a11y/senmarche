@@ -27,7 +27,7 @@
 .btn{font:inherit;font-weight:600;border:0;border-radius:99px;padding:13px 26px;background:var(--or);color:#fff;cursor:pointer}
 .btn[disabled]{opacity:.4;cursor:default}
 .btn.ghost{background:none;color:var(--muted);padding-left:0}
-.nav{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.rnav{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
 .load{text-align:center;margin:auto;padding:40px 0}
 .drop{width:46px;height:46px;margin:0 auto 18px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--or);animation:pulse 1.2s ease-in-out infinite}
 @keyframes pulse{50%{transform:rotate(-45deg) scale(1.25);opacity:.6}}
@@ -179,7 +179,7 @@
     $('v').innerHTML = `<div class="scr"><h2>${esc(q.t)}</h2>${q.hint ? `<p style="margin-bottom:6px">${esc(q.hint)}</p>` : ''}
       <div class="why"><b>Pourquoi cette question ?</b> ${esc(q.why)}</div>
       ${q.o.map(([k, l]) => `<button type="button" class="opt${(q.multi ? cur.includes(k) : cur === k) ? ' on' : ''}" data-k="${k}">${esc(l)}</button>`).join('')}
-      <div class="nav"><button class="btn ghost" id="bk">← Retour</button><button class="btn" id="nx" ${(q.multi ? cur.length : cur) ? '' : 'disabled'}>${qi === Q.length ? 'Voir ma routine' : 'Suivant'}</button></div></div>`;
+      <div class="rnav"><button class="btn ghost" id="bk">← Retour</button><button class="btn" id="nx" ${(q.multi ? cur.length : cur) ? '' : 'disabled'}>${qi === Q.length ? 'Voir ma routine' : 'Suivant'}</button></div></div>`;
     $('bk').onclick = () => { qi--; qi ? ask() : intro(); };
     $('nx').onclick = () => { qi < Q.length ? (qi++, ask()) : analyse(); };
     document.querySelectorAll('.opt').forEach(b => b.onclick = () => {
@@ -225,7 +225,7 @@
       <div class="tot"><span>Routine complète</span><span>${fmt(total)}</span></div>
       <div class="row"><button class="btn" id="addall" ${have.length ? '' : 'disabled'}>Tout ajouter au panier</button>
       <a class="btn" style="background:var(--card2,var(--card));color:var(--ink);border:1.5px solid var(--border)" id="wa" href="${WA}${encodeURIComponent('Ma routine SenMarché :\n' + have.map(x => '• ' + NAME[x.s] + ' : ' + x.p.a.nom + ' (' + fmt(P(x.p.a)) + ')').join('\n') + '\nTotal : ' + fmt(total))}">Envoyer sur WhatsApp</a></div>
-      <div class="nav"><button class="btn ghost" id="redo">Refaire le test</button></div>
+      <div class="rnav"><button class="btn ghost" id="redo">Refaire le test</button></div>
       <p class="warn">${pf.enceinte ? 'Tu as indiqué être enceinte ou allaiter : on a écarté les actifs à éviter. Parles-en aussi à ton médecin avant d’ajouter un soin ciblé. ' : ''}${pf.irritee ? 'Peau irritée ou sous traitement : routine réduite à l’essentiel, demande l’avis de ton médecin. ' : ''}Conseils cosmétiques, pas un avis médical. Si une réaction apparaît, arrête le produit.</p></div>`;
     $('tm').onclick = () => show('M'); $('ts').onclick = () => show('S');
     $('redo').onclick = () => { ans = {}; intro(); };
