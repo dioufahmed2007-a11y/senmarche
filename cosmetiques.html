@@ -587,13 +587,13 @@ body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);bor
 
 <!-- BANDE -->
 <div class="street-tape" aria-hidden="true"><div class="street-track">
-  <span>Lèvres</span><span>Yeux</span><span>Teint</span><span>Ongles</span><span>Parfums</span><span>Accessoires</span>
-  <span>Lèvres</span><span>Yeux</span><span>Teint</span><span>Ongles</span><span>Parfums</span><span>Accessoires</span>
+  <span>Lèvres</span><span>Yeux</span><span>Teint</span><span>Ongles</span><span>Parfums</span><span>Bijoux</span><span>Outils</span>
+  <span>Lèvres</span><span>Yeux</span><span>Teint</span><span>Ongles</span><span>Parfums</span><span>Bijoux</span><span>Outils</span>
 </div></div>
 
 <!-- 01 PAR ENVIE : bandeau sombre pour le contraste -->
 <section class="sec band-soft" id="envies"><div class="container">
-  <nav class="seg" aria-label="Rayons beauté"><span class="on" aria-current="page"><b>Cosmétiques</b><small>maquillage et parfums</small></span><a class="off" href="soins.html"><b>Soins</b><small>crèmes, sérums, routine</small></a></nav>
+  <nav class="seg" aria-label="Rayons"><a class="off" href="tenues.html"><b>Tenues</b><small>abayas, voiles, mode</small></a><span class="on" aria-current="page"><b>Maquillage &amp; bijoux</b><small>maquillage, parfums, bijoux</small></span><a class="off" href="soins.html"><b>Soins</b><small>crèmes, sérums, routine</small></a></nav>
   <div class="sh"><span class="sh-n">01</span><h2>Par <i>envie</i></h2><span class="mono" id="grid-count"></span></div>
     <div class="cats-strip" id="cats" role="group" aria-label="Choisir un rayon"></div>
   <div class="toolbar" id="toolbar"></div>
@@ -775,6 +775,7 @@ body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);bor
     peau: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
     ongles: '<rect x="7" y="10" width="10" height="11" rx="3"/><rect x="9.5" y="3" width="5" height="7" rx="1.5"/>',
     parfums: '<rect x="6" y="11" width="12" height="10" rx="3"/><path d="M9 11V8h6v3M11 8V4h2v4"/>',
+    bij: '<circle cx="12" cy="15" r="5"/><path d="M9.5 6.5L12 3l2.5 3.5L12 8z"/>',
     acc: '<path d="M19 3l2 2-8.5 8.5-2-2z"/><path d="M10.5 12.5C8 12 5.5 13.5 5.5 16.5c0 1.8-.8 3-2 4 3.5.8 7-.5 7.5-4"/>'
   };
   const ZONES = [
@@ -783,7 +784,8 @@ body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);bor
     { k: 'teint', t: 'Teint', re: /teint|poudre|blush|fard a joue|anticerne|correcteur|illuminateur|highlight|contour|\bbb\b|\bcc\b/ },
     { k: 'ongles', t: 'Ongles', re: /vernis|ongle/ },
     { k: 'parfums', t: 'Parfums', re: /parfum|brume|eau de|musc|\boud\b/ },
-    { k: 'acc', t: 'Accessoires', re: /pinceau|eponge|miroir|trousse|bijou|bracelet|collier|elastique|pince|accessoire/ }
+    { k: 'bij', t: 'Bijoux', re: /bijou|bracelet|collier|bague|boucle|parure|chaine|pendentif|montre/ },
+    { k: 'acc', t: 'Outils & accessoires', re: /pinceau|eponge|miroir|trousse|elastique|pince|accessoire/ }
   ];
   /* sous-filtres : seulement quand un rayon est grand (6 produits ou plus) */
   const SUB_MIN = 6;
@@ -799,7 +801,7 @@ body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);bor
   const price = a => a.prix_vente_fcfa || 0, isPetit = a => price(a) > 0 && price(a) <= PETIT;
   const catName = a => (a.categorie && a.categorie.nom) || '';
   /* ordre de priorité : le plus précis d'abord (un vernis « poudré » reste un vernis) */
-  const PRIO = ['ongles', 'parfums', 'levres', 'yeux', 'teint', 'acc'];
+  const PRIO = ['ongles', 'parfums', 'levres', 'yeux', 'teint', 'bij', 'acc'];
   const zoneOf = a => { const n = norm(a.nom); const k = PRIO.find(k => ZONES.find(z => z.k === k).re.test(n)); return k || null; };
   const zname = k => (ZONES.find(z => z.k === k) || {}).t || '';
   const comps = (p, all) => { const d = norm(p.description || ''); return all.filter(a => a !== p && norm(a.nom).length > 5 && d.includes(norm(a.nom))); };
