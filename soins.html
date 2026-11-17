@@ -580,6 +580,9 @@ body.cosm .advice .btn-s{background:var(--ac-on);color:var(--ac);border-color:va
 .qact .btn-o{cursor:pointer}
 .makeup-note{display:block;margin-top:.35rem;color:var(--ink)}
 .makeup-note a{color:var(--ac-acc);font-weight:700}
+.doors{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin:0 0 1.5rem}.door{display:block;padding:1rem 1.2rem;border-radius:var(--r16,16px);background:var(--card);border:1.5px solid color-mix(in srgb,var(--ac2) 50%,transparent);color:var(--ink);text-decoration:none}.door b{display:block}.door small{opacity:.7}.door.main{background:var(--ac);color:var(--ac-on);border-color:var(--ac)}
+@media(max-width:560px){.doors{grid-template-columns:1fr}}
+.morefilt{margin:1rem 0 0}.morefilt summary{cursor:pointer;font-weight:700;list-style:none;display:inline-block;padding:.6rem 1.1rem;border:1.5px solid var(--line,#ddd);border-radius:999px}.morefilt summary::-webkit-details-marker{display:none}.morefilt[open] summary{border-color:var(--ac)}
 .probrow{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:1rem 0 0}
 .probrow .plabel{font:800 .74rem/1 var(--m-body);letter-spacing:.14em;text-transform:uppercase;color:var(--stone);margin-right:.3rem}
 .band-soft .filter-pill{background:var(--card)}
@@ -744,12 +747,13 @@ body.rp-lock{overflow:hidden}
 
 <!-- 02 LES SOINS (panneau de filtres) -->
 <section class="sec band-soft" id="soins"><div class="container">
-  <nav class="seg" aria-label="Rayons beauté"><a class="off" href="cosmetiques.html"><b>Cosmétiques</b><small>maquillage et parfums</small></a><span class="on" aria-current="page"><b>Soins</b><small>crèmes, sérums, routine</small></span></nav>
+  <nav class="seg" aria-label="Rayons"><a class="off" href="tenues.html"><b>Tenues</b><small>abayas, voiles, mode</small></a><a class="off" href="cosmetiques.html"><b>Maquillage &amp; bijoux</b><small>maquillage, parfums, bijoux</small></a><span class="on" aria-current="page"><b>Soins</b><small>crèmes, sérums, routine</small></span></nav>
+  <div class="doors"><a class="door" href="#pieces"><b>Je sais ce que je cherche</b><small>Voir les produits ↓</small></a><a class="door main" href="routine.html"><b>Aide-moi à choisir</b><small>Ma routine sur mesure en 2 minutes →</small></a></div>
   <div class="sh"><span class="sh-n">01</span><h2>Par <i>étape</i></h2><span class="mono" id="grid-count"></span></div>
   <div class="stepbar" id="cats" role="group" aria-label="Choisir une étape"></div>
-  <div class="probrow" id="probrow"></div>
   <div class="toolbar" id="toolbar"></div>
   <div class="subchips" id="subchips"></div>
+  <details class="morefilt" id="morefilt"><summary>Plus de filtres<span id="morecnt"></span></summary><div class="probrow" id="probrow"></div><div class="probrow" id="skinrow"></div></details>
 </div></section>
 
 <section class="sec" id="pieces"><div class="container">
@@ -1062,7 +1066,7 @@ body.rp-lock{overflow:hidden}
     serums: [{ t: 'Sérums', re: /serum/ }, { t: 'Masques', re: /masque/ }],
     cremes: [{ t: 'Visage', re: /visage|\bjour\b|\bnuit\b|contour|teint/ }, { t: 'Corps & mains', re: /corps|\bmains?\b|karite|beurre|\blait\b/ }, { t: 'Baumes', re: /baume/ }]
   };
-  const st = { step: 'all', prob: null, sub: -1, pp: false, q: '', sort: 'default' };
+  const st = { skin: null, step: 'all', prob: null, sub: -1, pp: false, q: '', sort: 'default' };
   let ITEMS = [], PACKS = [], ALLF = [];
   const stepOf = k => STEPS.find(s => s.k === k), probOf = k => PROBS.find(p => p.k === k);
   const isPetit = a => P(a) > 0 && P(a) <= PETIT;
@@ -1072,6 +1076,7 @@ body.rp-lock{overflow:hidden}
     let list = ITEMS.slice();
     if (st.step !== 'all') list = list.filter(stepOf(st.step).fn);
     if (st.prob) list = list.filter(probOf(st.prob).fn);
+    if (st.skin) list = list.filter(a => H(F(a).types_peau, st.skin));
     if (st.sub >= 0 && SUBS[st.step]) list = list.filter(a => SUBS[st.step][st.sub].re.test(norm(a.nom)));
     if (st.pp) list = list.filter(isPetit);
     if (st.q.trim()){ const q = norm(st.q.trim()); list = list.filter(a => norm(a.nom).includes(q)); }
@@ -1085,7 +1090,18 @@ body.rp-lock{overflow:hidden}
     const link = `<a class="stp link" href="cosmetiques.html"><span class="no">${svg('makeup')}</span><span><b>Maquillage</b><small>autre page →</small></span></a>`;
     $('cats').innerHTML = (ITEMS.length ? tile('all', svg('all'), 'Tout', ITEMS.length) + STEPS.map((s, i) => cnt[i] ? tile(s.k, i + 1, s.t, cnt[i]) : '').join('') : '') + link;
   }
-  function drawProbs(){
+  const PEAUX = [['grasse','Grasse'],['mixte','Mixte'],['seche','Sèche'],['normale','Normale'],['sensible','Sensible']];
+  function drawMore(){
+    const rows = PROBS.map(p => ({ k: p.k, t: p.t, n: ITEMS.filter(p.fn).length })).filter(x => x.n > 0);
+    const pe = PEAUX.map(([k, t]) => ({ k, t, n: ITEMS.filter(a => H(F(a).types_peau, k)).length })).filter(x => x.n > 0);
+    const pill = (a, x, on) => `<button type="button" class="filter-pill${on ? ' active' : ''}" data-${a}="${x.k}">${esc(x.t)} · ${x.n}</button>`;
+    $('probrow').innerHTML = rows.length ? '<span class="plabel">Ton souci</span>' + rows.map(x => pill('p', x, st.prob === x.k)).join('') : '';
+    $('skinrow').innerHTML = pe.length ? '<span class="plabel">Ta peau</span>' + pe.map(x => pill('k', x, st.skin === x.k)).join('') : '';
+    const n = (st.prob ? 1 : 0) + (st.skin ? 1 : 0), d = $('morefilt');
+    $('morecnt').textContent = n ? ' · ' + n : ''; if (n) d.open = true; d.hidden = !rows.length && !pe.length;
+  }
+  function drawProbs(){ return drawMore(); }
+  function _oldProbs(){
     const rows = PROBS.map(p => ({ k: p.k, t: p.t, n: ITEMS.filter(p.fn).length })).filter(x => x.n > 0);
     $('probrow').innerHTML = rows.length ? '<span class="plabel">Ton souci</span>' + rows.map(x => `<button type="button" class="filter-pill${st.prob === x.k ? ' active' : ''}" data-p="${x.k}">${esc(x.t)} · ${x.n}</button>`).join('') : '';
   }
@@ -1107,12 +1123,12 @@ body.rp-lock{overflow:hidden}
   }
   const MAKEUP_WORDS = /gloss|mascara|rouge a levres|vernis|fond de teint|eyeliner|\bliner\b|parfum|brume|blush|palette|fard|anticerne|maquillage/;
   function drawGrid(){
-    const list = applyFilter(), on = st.step !== 'all' || st.prob || st.pp || st.q.trim();
+    const list = applyFilter(), on = st.step !== 'all' || st.prob || st.skin || st.pp || st.q.trim();
     $('grid-count').textContent = ITEMS.length + ' soin' + (ITEMS.length > 1 ? 's' : '');
     const makeupQ = st.q.trim() && MAKEUP_WORDS.test(norm(st.q));
     const label = (st.step !== 'all' ? ' · ' + esc(stepOf(st.step).t) : '') + (st.prob ? ' · ' + esc(probOf(st.prob).t) : '') + (st.pp ? ' · petits prix' : '');
     $('activeline').innerHTML = ITEMS.length ? `<span>${list.length} résultat${list.length > 1 ? 's' : ''}${label}${makeupQ ? '<span class="makeup-note">Tu cherches du maquillage ? <a href="cosmetiques.html">C\'est dans Maquillage &amp; parfums →</a></span>' : ''}</span>${on ? '<button type="button" id="reset">Tout afficher</button>' : ''}` : '';
-    const rs = $('reset'); if (rs) rs.addEventListener('click', () => { st.step = 'all'; st.prob = null; st.sub = -1; st.pp = false; st.q = ''; st.sort = 'default'; drawAll(); });
+    const rs = $('reset'); if (rs) rs.addEventListener('click', () => { st.step = 'all'; st.prob = null; st.skin = null; st.sub = -1; st.pp = false; st.q = ''; st.sort = 'default'; drawAll(); });
     if (!list.length){
       $('more').innerHTML = '';
       if (makeupQ){ $('grid').innerHTML = '<div class="nores"><h3>Ça se trouve dans Maquillage</h3><p>Le maquillage et les parfums ont leur propre page, avec leurs filtres.</p><a class="btn-s" href="cosmetiques.html">Aller dans Maquillage →</a></div>'; return; }
@@ -1120,7 +1136,7 @@ body.rp-lock{overflow:hidden}
       $('grid').innerHTML = `<div class="nores"><h3>${none ? 'Bientôt de nouveaux soins' : 'Rien pour ça, pour l\'instant'}</h3><p>${none ? 'Rien ici pour le moment.' : 'Aucun soin ne correspond.'} Dis-nous ce que tu cherches, on te le trouve.</p><a class="btn-s" target="_blank" rel="noopener" href="${WA}${encodeURIComponent('Bonjour SenMarché, je cherche un soin : ' + (st.q || ''))}">Écrire sur WhatsApp</a></div>`;
       return;
     }
-    const key = [st.step, st.prob, st.sub, st.pp, st.q, st.sort].join('|'); if (key !== st.key){ st.more = false; st.key = key; }
+    const key = [st.skin, st.step, st.prob, st.sub, st.pp, st.q, st.sort].join('|'); if (key !== st.key){ st.more = false; st.key = key; }
     const LIMIT = 12, shown = (st.more || list.length <= LIMIT) ? list : list.slice(0, LIMIT);
     fill('grid', shown.map(a => cardHtml(a)).join(''));
     $('more').innerHTML = shown.length < list.length ? `<button type="button" class="btn-s" id="morebtn">Voir les ${list.length - shown.length} autres</button>` : '';
@@ -1128,6 +1144,7 @@ body.rp-lock{overflow:hidden}
   }
   function drawAll(){ drawCats(); drawProbs(); drawSub(); drawTools(); drawGrid(); }
   $('cats').addEventListener('click', e => { const b = e.target.closest('.stp'); if (!b || !b.dataset.f) return; const f = b.dataset.f; st.step = (f === 'all' || st.step === f) ? 'all' : f; st.sub = -1; drawCats(); drawSub(); drawGrid(); });
+  $('skinrow').addEventListener('click', e => { const b = e.target.closest('.filter-pill'); if (!b) return; st.skin = st.skin === b.dataset.k ? null : b.dataset.k; drawProbs(); drawGrid(); });
   $('probrow').addEventListener('click', e => { const b = e.target.closest('.filter-pill'); if (!b) return; st.prob = st.prob === b.dataset.p ? null : b.dataset.p; drawProbs(); drawGrid(); });
   $('subchips').addEventListener('click', e => { const b = e.target.closest('.filter-pill'); if (!b) return; st.sub = parseInt(b.dataset.s, 10); drawSub(); drawGrid(); });
   $('toolbar').addEventListener('change', e => {
