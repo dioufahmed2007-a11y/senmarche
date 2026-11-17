@@ -1272,7 +1272,7 @@ body.rp-lock{overflow:hidden}
     try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
     if (lastTrigger && document.contains(lastTrigger)) lastTrigger.focus();
   }
-  document.querySelectorAll('[data-open-routine]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); openRoutine(b); }));
+  document.querySelectorAll('[data-open-routine]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); location.href = 'routine.html'; }));
   $('rp-close').onclick = closeRoutine; $('rp-overlay').onclick = closeRoutine;
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRoutine(); });
   /* le bouton flottant n'apparaît qu'une fois le bandeau du haut sorti de l'écran (pas de doublon) */
@@ -1281,7 +1281,7 @@ body.rp-lock{overflow:hidden}
     const upd = () => { const r = bar.getBoundingClientRect(); fl.classList.toggle('on', r.bottom < 0); };
     window.addEventListener('scroll', upd, { passive: true }); window.addEventListener('resize', upd); upd();
   })();
-  if (location.hash === '#routine') setTimeout(() => openRoutine(null), 80);
+  if (location.hash === '#routine') location.replace('routine.html');
 
   (async () => {
     try{
