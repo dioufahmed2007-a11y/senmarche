@@ -443,6 +443,7 @@ html{scroll-padding-top:116px}
 .bridge{margin-top:clamp(2rem,5vw,3rem);display:flex;flex-wrap:wrap;gap:.8rem 1.4rem;align-items:center;justify-content:space-between;padding:1.1rem 1.3rem;border-radius:20px;border:1.5px dashed var(--pt2);background:color-mix(in srgb,var(--pt-tint) 60%,var(--bg))}
 .bridge span{font:500 1rem/1.45 var(--m-body);color:var(--ink);max-width:46ch}
 .bridge b{font-weight:800}
+.seg{display:flex;gap:.55rem;flex-wrap:wrap;margin:0 0 1.5rem}.seg .on,.seg .off{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.25rem;border-radius:999px;font:700 .92rem/1.1 var(--m-body);text-decoration:none}.seg .on{background:var(--ac);color:var(--ac-on)}.seg .off{background:var(--card);color:var(--ink);border:1.5px solid color-mix(in srgb,var(--ac2) 50%,transparent);transition:border-color .2s,transform .2s}.seg .off:hover{border-color:var(--ac);transform:translateY(-2px)}.seg .on,.seg .off{flex-direction:column;align-items:flex-start;gap:.2rem;padding:.75rem 1.2rem}.seg b{font:800 .95rem/1 var(--m-body)}.seg small{font:500 .78rem/1.2 var(--m-body);opacity:.85}.seg .off small{color:var(--stone);opacity:1}
 </style>
 </head>
 <body class="se-mode" data-part="hub">
@@ -558,6 +559,7 @@ html{scroll-padding-top:116px}
 
 <!-- COMPLÈTE TON LOOK -->
 <section class="sec"><div class="container">
+  <nav class="seg" aria-label="Rayons"><span class="on" aria-current="page"><b>Tenues</b><small>abayas, voiles, mode</small></span><a class="off" href="cosmetiques.html"><b>Maquillage &amp; bijoux</b><small>maquillage, parfums, bijoux</small></a><a class="off" href="soins.html"><b>Soins</b><small>crèmes, sérums, routine</small></a></nav>
   <div class="sh"><span class="sh-n">01</span><h2>Complète <i>ton look</i></h2><span class="mono">Beauté &amp; soins</span></div>
   <div class="drops">
     <a href="cosmetiques.html" class="drop"><div class="drop-bg" style="background-image:url('cat-cosmetiques.jpg')"></div><div class="drop-body"><span class="drop-tag">Beauté</span><h3 class="drop-title disp">Cosmétiques</h3><p class="drop-desc">Gloss, teint, yeux, ongles, parfums.</p><span class="drop-go">Voir le rayon →</span></div></a>
