@@ -95,6 +95,8 @@ body.dark,html.dark body{--ac:#E24F7E;--ac-on:#1a0a10}
       o: [['imperfections', 'Boutons et marques laissées par les boutons'], ['taches', 'Taches et teint inégal'], ['pores', 'Pores dilatés et peau qui brille'], ['terne', 'Teint terne'], ['secheresse', 'Sécheresse'], ['sensibilite', 'Rougeurs et sensibilité'], ['base', 'Rien de précis, je veux une bonne base']] },
     { k: 'special', multi: true, t: 'Une de ces situations te concerne ?', hint: 'Plusieurs choix possibles', why: 'Certains actifs ne conviennent pas dans ces cas. On adapte, ou on te conseille d’en parler à un médecin.',
       o: [['enceinte', 'Je suis enceinte ou j’allaite'], ['irritee', 'Ma peau est irritée en ce moment'], ['traitement', 'Je suis un traitement pour la peau'], ['aucune', 'Aucune']] },
+    { k: 'traitement', text: true, req: true, if: a => (a.special || []).includes('traitement'), t: 'Quel traitement suis-tu pour ta peau ?', ph: 'Nom sur l’ordonnance ou sur la boîte',
+      why: 'Certains soins ne se mélangent pas avec un traitement. L’équipe SenMarché reçoit cette information pour adapter ta routine. Elle ne remplace jamais l’avis de ton médecin.' },
     { k: 'maquillage', t: 'Tu te maquilles ?', why: 'Maquillage et solaire demandent un nettoyage plus soigné le soir.', o: [['jour', 'Tous les jours'], ['parfois', 'De temps en temps'], ['jamais', 'Presque jamais']] },
     { k: 'niveau', t: 'Ta routine aujourd’hui ?', why: 'Une peau qui débute n’a pas besoin de dix produits. On avance par étapes.',
       o: [['debut', 'Je n’ai presque pas de routine'], ['base', 'J’utilise 1 ou 2 produits'], ['avance', 'Je suis à l’aise avec 3 produits ou plus']] },
@@ -102,6 +104,8 @@ body.dark,html.dark body{--ac:#E24F7E;--ac-on:#1a0a10}
       o: [['sp', 'Sans parfum'], ['leger', 'Texture légère, qui ne colle pas'], ['peu', 'Le moins de produits possible']] },
     { k: 'deja', multi: true, if: a => a.niveau !== 'debut', t: 'Que tu utilises déjà et que tu veux garder ?', hint: 'On ne te le fait pas racheter', why: 'Inutile de payer un produit en double. On complète seulement ce qui te manque.',
       o: [['nettoyant', 'Un nettoyant'], ['creme', 'Une crème hydratante'], ['solaire', 'Une crème solaire'], ['serum', 'Un sérum'], ['rien', 'Rien de tout ça']] },
+    { k: 'produits', text: true, if: a => (a.deja || []).length && !(a.deja || []).includes('rien'), t: 'Lesquels utilises-tu exactement ?', ph: 'Ex : crème Nivea, nettoyant CeraVe…',
+      why: 'Dis-nous la marque et le nom. L’équipe SenMarché reçoit cette information pour adapter ta routine à ce que tu as déjà.' },
     { k: 'budget', t: 'Ton budget pour la routine ?', why: 'On te propose d’abord l’essentiel : nettoyant, crème et solaire. Le soin ciblé vient ensuite.',
       o: [['10000', 'Jusqu’à 10 000 FCFA'], ['20000', 'Jusqu’à 20 000 FCFA'], ['0', 'Peu importe']] },
     { k: 'libre', text: true, t: 'Autre chose à nous dire ?', why: 'Facultatif. Ton texte est ajouté à ta demande de conseil personnalisé et lu par une personne de l’équipe.' }
@@ -206,13 +210,19 @@ body.dark,html.dark body{--ac:#E24F7E;--ac-on:#1a0a10}
 
   const accName = () => { try { const c = SE.Auth.currentClient; return c ? (c.prenom || (c.nom_complet || '').split(' ')[0] || '') : ''; } catch (e) { return ''; } };
   function askText(q) {
+    const last = qi === A().length, v = ans[q.k] || '', INP = 'width:100%;box-sizing:border-box;font:inherit;padding:13px 16px;border-radius:99px;border:1.5px solid var(--border);background:var(--card);color:var(--ink);margin-top:8px';
     $('v').innerHTML = `<div class="scr"><h2>${esc(q.t)}</h2><div class="why"><b>Pourquoi cette question ?</b> ${esc(q.why)}</div>
-      <textarea id="free" rows="4" maxlength="400" placeholder="Ex : je fais du sport le soir, ma peau tire après le rasage…" style="width:100%;font:inherit;padding:12px;border-radius:14px;border:1.5px solid var(--border);background:var(--card);color:var(--ink)">${esc(ans.libre || '')}</textarea>
-      <p class="warn">Évite les informations personnelles sensibles.</p>${accName() ? '' : `<input id="nm" maxlength="20" value="${esc(ans.nom || '')}" placeholder="Ton prénom (facultatif)" style="width:100%;box-sizing:border-box;font:inherit;padding:13px 16px;border-radius:99px;border:1.5px solid var(--border);background:var(--card);color:var(--ink);margin-top:6px">`}
-      <div class="rnav"><button class="btn ghost" id="bk">← Retour</button><button class="btn" id="nx">Voir ma routine</button></div></div>`;
-    const keep = () => { ans.libre = $('free').value.trim(); ans.nom = accName() || ($('nm') ? $('nm').value.trim() : ''); };
+      <textarea id="free" rows="4" maxlength="400" placeholder="${esc(q.ph || 'Ex : je fais du sport le soir, ma peau tire après le rasage…')}" style="width:100%;box-sizing:border-box;font:inherit;padding:12px;border-radius:14px;border:1.5px solid var(--border);background:var(--card);color:var(--ink)">${esc(v)}</textarea>
+      <p class="warn">${q.k === 'libre' ? 'Évite les informations personnelles sensibles.' : 'Ces informations sont transmises à l’équipe SenMarché pour adapter ta routine.'}</p>
+      ${last && !accName() ? `<input id="nm" maxlength="20" value="${esc(ans.nom || '')}" placeholder="Ton prénom (facultatif)" style="${INP}">` : ''}
+      ${last && !accName() && (ans.traitement || ans.produits) ? `<input id="tel" maxlength="20" value="${esc(ans.tel || '')}" placeholder="Ton numéro WhatsApp, pour qu’on te réponde (facultatif)" style="${INP}">` : ''}
+      <div class="rnav"><button class="btn ghost" id="bk">← Retour</button><button class="btn" id="nx" ${q.req && !v ? 'disabled' : ''}>${last ? 'Voir ma routine' : 'Suivant'}</button></div>
+      ${q.req ? '<p class="warn"><a href="#" id="unk">Je ne connais pas le nom</a></p>' : ''}</div>`;
+    const keep = () => { ans[q.k] = $('free').value.trim(); if (last) { ans.nom = accName() || ($('nm') ? $('nm').value.trim() : ''); ans.tel = $('tel') ? $('tel').value.trim() : ''; } };
+    $('free').oninput = () => { if (q.req) $('nx').disabled = !$('free').value.trim(); };
     $('bk').onclick = () => { keep(); qi--; ask(); };
-    $('nx').onclick = () => { keep(); analyse(); };
+    $('nx').onclick = () => { keep(); go(); };
+    if (q.req) $('unk').onclick = e => { e.preventDefault(); $('free').value = 'Nom inconnu'; keep(); go(); };
   }
   const lab = (q, v) => { const f = k => (q.o.find(o => o[0] === k) || [0, k])[1]; return Array.isArray(v) ? v.map(f).join(', ') : f(v); };
   const chips = qs => qs.filter(q => !q.text && ans[q.k] && ans[q.k].length).map(q => '<span class="chip">' + esc(lab(q, ans[q.k])) + '</span>').join('');
@@ -251,9 +261,17 @@ body.dark,html.dark body{--ac:#E24F7E;--ac-on:#1a0a10}
     $('v').innerHTML = `<div class="load scr"><div class="drop"></div><h2 id="lm">${msgs[0]}</h2></div>`;
     let i = 0; const iv = setInterval(() => { i = (i + 1) % msgs.length; const e = $('lm'); if (e) e.textContent = msgs[i]; }, 750);
     await Promise.all([new Promise(r => setTimeout(r, 3000)), POOL.length ? 0 : load().catch(() => {})]);
-    clearInterval(iv); RES = build(); show('M');
+    clearInterval(iv); RES = build(); sendDemande(); show('M');
   }
 
+  function sendDemande() {
+    if (!(ans.traitement || ans.produits || ans.libre)) return;
+    try {
+      const c = SE.Auth.currentClient || null;
+      SE.sb.from('routine_demandes').insert({ prenom: ans.nom || (c && c.nom_complet) || null, client_id: c ? String(c.id) : null, telephone: ans.tel || (c && c.telephone) || null, peau: ans.peau || null, soucis: (ans.souci || []).join(','), traitement: ans.traitement || null, produits_deja: ans.produits || null, remarque: ans.libre || null,
+        routine: STEPS.filter(k => RES.picks[k] && RES.picks[k] !== 'deja').map(k => NAME[k] + ' : ' + RES.picks[k].a.nom).join(' | '), reponses: sumAns() }).then(() => {}, () => {});
+    } catch (e) {}
+  }
   const QTY = { nettoyer: "une noisette de produit, que tu fais mousser dans tes mains", cibler: "3 à 4 gouttes (ou une petite noisette si c'est une crème)", hydrater: "une noisette, pour le visage et le cou", proteger: "environ 2 doigts de produit pour le visage et le cou" };
   async function makePdf(btn) {
     const lbl = btn.textContent;
@@ -313,7 +331,7 @@ body.dark,html.dark body{--ac:#E24F7E;--ac-on:#1a0a10}
     l.push('Après 4 à 6 semaines : regarde ta peau. Si tu n’es pas satisfaite, écris-nous.');
     return '<div class="plan"><b>Ton planning</b>' + l.map(x => '<p>' + x + '</p>').join('') + '</div>';
   }
-  const sumAns = () => Q.map(q => { const v = ans[q.k]; if (!v || !v.length) return ''; if (q.text) return 'Remarque : ' + v; const f = k => (q.o.find(o => o[0] === k) || [0, k])[1]; return '• ' + q.t + ' ' + (Array.isArray(v) ? v.map(f).join(', ') : f(v)); }).filter(Boolean).join('\n');
+  const sumAns = () => A().map(q => { const v = ans[q.k]; if (!v || !v.length) return ''; if (q.text) return (q.k === 'libre' ? 'Remarque' : q.t) + ' : ' + v; const f = k => (q.o.find(o => o[0] === k) || [0, k])[1]; return '• ' + q.t + ' ' + (Array.isArray(v) ? v.map(f).join(', ') : f(v)); }).filter(Boolean).join('\n');
   function done(have, total) {
     $('bar').style.width = '100%'; $('cnt').textContent = '';
     $('v').innerHTML = `<div class="scr" style="text-align:center"><div class="ok">✓</div><h2>Ta routine est dans ton panier</h2>
@@ -348,7 +366,7 @@ body.dark,html.dark body{--ac:#E24F7E;--ac-on:#1a0a10}
       <a class="btn" style="background:var(--card2,var(--card));color:var(--ink);border:1.5px solid var(--border)" href="guide-routine.pdf" download>Guide général (PDF)</a>
       <a class="btn" style="background:var(--card2,var(--card));color:var(--ink);border:1.5px solid var(--border)" id="wa" href="${WA}${encodeURIComponent('Ma routine SenMarché :\n' + have.map(x => '• ' + NAME[x.s] + ' : ' + x.p.a.nom + ' (' + fmt(P(x.p.a)) + ')').join('\n') + '\nTotal : ' + fmt(total) + '\n\nMes réponses :\n' + sumAns() + '\n\nJe voudrais un conseil personnalisé.')}">Demander un conseil perso</a></div>
       <div class="rnav"><button class="btn ghost" id="redo">Refaire le test</button></div>
-      <p class="warn">${pf.enceinte ? 'Tu as indiqué être enceinte ou allaiter : on a écarté les actifs à éviter. Parles-en aussi à ton médecin avant d’ajouter un soin ciblé. ' : ''}${pf.irritee ? 'Peau irritée ou sous traitement : routine réduite à l’essentiel, demande l’avis de ton médecin. ' : ''}Conseils cosmétiques, pas un avis médical. Si une réaction apparaît, arrête le produit.</p></div>`;
+      <p class="warn">${pf.enceinte ? 'Tu as indiqué être enceinte ou allaiter : on a écarté les actifs à éviter. Parles-en aussi à ton médecin avant d’ajouter un soin ciblé. ' : ''}${ans.traitement ? 'Ton traitement a été transmis à l’équipe, qui peut vérifier ta routine avec toi. ' : ''}${pf.irritee ? 'Peau irritée ou sous traitement : routine réduite à l’essentiel, demande l’avis de ton médecin. ' : ''}Conseils cosmétiques, pas un avis médical. Si une réaction apparaît, arrête le produit.</p></div>`;
     $('redo').onclick = () => { ans = {}; intro(); };
     $('mypdf').onclick = e => makePdf(e.target);
     $('addall').onclick = () => { try { have.forEach(x => SE.Cart.add(x.p.a.reference)); done(have, total); } catch (err) {} };
