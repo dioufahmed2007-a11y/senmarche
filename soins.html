@@ -692,6 +692,11 @@ body.rp-lock{overflow:hidden}
 
 /* v5 : filtres repliés, un seul rappel en haut, contraste */
 .rfloat{display:none!important}
+.steprow{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem}.steprow .stepbar{flex:1 1 auto}
+.morebtn{font:inherit;font-weight:700;cursor:pointer;padding:.7rem 1.2rem;border-radius:999px;background:var(--card);color:var(--ink);border:1.5px solid color-mix(in srgb,var(--ink) 25%,transparent)}
+.morebtn[aria-expanded="true"]{border-color:var(--ac)}
+.morepanel{margin:.8rem 0 0}
+#soins.sec{padding-bottom:1rem}#pieces.sec{padding-top:1.2rem}
 .morefilt{margin:1rem 0 0}.morefilt summary{cursor:pointer;font-weight:700;list-style:none;display:inline-block;padding:.6rem 1.1rem;border:1.5px solid color-mix(in srgb,var(--ink) 25%,transparent);border-radius:999px;background:var(--card)}
 .morefilt summary::-webkit-details-marker{display:none}.morefilt[open] summary{border-color:var(--ac)}
 #soins.band-soft{background:var(--card)}
@@ -755,10 +760,10 @@ body.rp-lock{overflow:hidden}
 <section class="sec band-soft" id="soins"><div class="container">
   <nav class="seg" aria-label="Rayons"><a class="off" href="tenues.html"><b>Tenues</b><small>abayas, voiles, mode</small></a><a class="off" href="cosmetiques.html"><b>Maquillage &amp; bijoux</b><small>maquillage, parfums, bijoux</small></a><span class="on" aria-current="page"><b>Soins</b><small>crèmes, sérums, routine</small></span></nav>
   <div class="sh"><span class="sh-n">01</span><h2>Par <i>étape</i></h2><span class="mono" id="grid-count"></span></div>
-  <div class="stepbar" id="cats" role="group" aria-label="Choisir une étape"></div>
-  <div class="toolbar" id="toolbar"></div>
+  <div class="steprow"><div class="stepbar" id="cats" role="group" aria-label="Choisir une étape"></div><button type="button" class="morebtn" id="morebtn" aria-expanded="false">Plus de filtres<span id="morecnt"></span></button></div>
+  <div class="morepanel" id="morefilt" hidden><div class="probrow" id="probrow"></div><div class="probrow" id="skinrow"></div></div>
   <div class="subchips" id="subchips"></div>
-  <details class="morefilt" id="morefilt"><summary>Plus de filtres<span id="morecnt"></span></summary><div class="probrow" id="probrow"></div><div class="probrow" id="skinrow"></div></details>
+  <div class="toolbar" id="toolbar"></div>
 </div></section>
 
 <section class="sec" id="pieces"><div class="container">
@@ -1102,8 +1107,9 @@ body.rp-lock{overflow:hidden}
     const pill = (a, x, on) => `<button type="button" class="filter-pill${on ? ' active' : ''}" data-${a}="${x.k}">${esc(x.t)} · ${x.n}</button>`;
     $('probrow').innerHTML = rows.length ? '<span class="plabel">Ton souci</span>' + rows.map(x => pill('p', x, st.prob === x.k)).join('') : '';
     $('skinrow').innerHTML = pe.length ? '<span class="plabel">Ta peau</span>' + pe.map(x => pill('k', x, st.skin === x.k)).join('') : '';
-    const n = (st.prob ? 1 : 0) + (st.skin ? 1 : 0), d = $('morefilt');
-    $('morecnt').textContent = n ? ' · ' + n : ''; if (n) d.open = true; d.hidden = !rows.length && !pe.length;
+    const n = (st.prob ? 1 : 0) + (st.skin ? 1 : 0), d = $('morefilt'), b = $('morebtn');
+    $('morecnt').textContent = n ? ' · ' + n : ''; b.hidden = !rows.length && !pe.length; if (n) st.moreOpen = true;
+    d.hidden = !st.moreOpen || b.hidden; b.setAttribute('aria-expanded', String(!d.hidden));
   }
   function drawProbs(){ return drawMore(); }
   function _oldProbs(){
@@ -1149,6 +1155,7 @@ body.rp-lock{overflow:hidden}
   }
   function drawAll(){ drawCats(); drawProbs(); drawSub(); drawTools(); drawGrid(); }
   $('cats').addEventListener('click', e => { const b = e.target.closest('.stp'); if (!b || !b.dataset.f) return; const f = b.dataset.f; st.step = (f === 'all' || st.step === f) ? 'all' : f; st.sub = -1; drawCats(); drawSub(); drawGrid(); });
+  $('morebtn').addEventListener('click', () => { st.moreOpen = !st.moreOpen; drawProbs(); });
   $('skinrow').addEventListener('click', e => { const b = e.target.closest('.filter-pill'); if (!b) return; st.skin = st.skin === b.dataset.k ? null : b.dataset.k; drawProbs(); drawGrid(); });
   $('probrow').addEventListener('click', e => { const b = e.target.closest('.filter-pill'); if (!b) return; st.prob = st.prob === b.dataset.p ? null : b.dataset.p; drawProbs(); drawGrid(); });
   $('subchips').addEventListener('click', e => { const b = e.target.closest('.filter-pill'); if (!b) return; st.sub = parseInt(b.dataset.s, 10); drawSub(); drawGrid(); });
