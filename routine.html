@@ -11,43 +11,46 @@
 <link rel="stylesheet" href="styles-dark.css">
 <script src="theme.js"></script>
 <style>
+body{--ac:#A3193F;--ac-on:#fff}
+:root[data-theme="dark"] body{--ac:#E24F7E;--ac-on:#1a0a10}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body{--ac:#E24F7E;--ac-on:#1a0a10}}
 .rt{max-width:640px;margin:0 auto;padding:20px var(--pad,16px) 60px;min-height:100vh;display:flex;flex-direction:column}
 .rt-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .rt-top a{color:var(--muted);text-decoration:none;font-size:.9rem}
 .bar{height:6px;border-radius:99px;background:var(--border);overflow:hidden;margin-bottom:26px}
-.bar i{display:block;height:100%;width:0;background:var(--or);border-radius:99px;transition:width .5s var(--ease,ease)}
-.scr{animation:in .45s var(--ease,ease) both}
+.bar i{display:block;height:100%;width:0;background:var(--ac);border-radius:99px;transition:width .5s var(--ease,ease)}
+.scr{animation:in .65s var(--ease,ease) both}
 @keyframes in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
 .rt h1,.rt h2{font-family:var(--ff-d,inherit);line-height:1.2;margin:0 0 10px;color:var(--ink)}
 .rt p{color:var(--muted);line-height:1.55;margin:0 0 14px}
-.why{font-size:.88rem;background:color-mix(in srgb,var(--or) 10%,var(--card));border-radius:var(--r8,10px);padding:10px 12px;margin:6px 0 16px}
+.why{font-size:.88rem;background:color-mix(in srgb,var(--ac) 10%,var(--card));border-radius:var(--r8,10px);padding:10px 12px;margin:6px 0 16px}
 .opt{display:block;width:100%;text-align:left;font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--border);border-radius:var(--r16,16px);padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:border-color .2s,transform .2s}
-.opt:hover{border-color:var(--or-line,var(--or))}
-.opt.on{border-color:var(--or);background:color-mix(in srgb,var(--or) 14%,var(--card));transform:scale(1.01)}
-.btn{font:inherit;font-weight:600;border:0;border-radius:99px;padding:13px 26px;background:var(--or);color:#fff;cursor:pointer}
+.opt:hover{border-color:var(--or-line,var(--ac))}
+.opt.on{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,var(--card));transform:scale(1.01)}
+.btn{font:inherit;font-weight:600;border:0;border-radius:99px;padding:13px 26px;background:var(--ac);color:var(--ac-on);cursor:pointer}
 .btn[disabled]{opacity:.4;cursor:default}
 .btn.ghost{background:none;color:var(--muted);padding-left:0}
 .rnav{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
 .load{text-align:center;margin:auto;padding:40px 0}
-.drop{width:46px;height:46px;margin:0 auto 18px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--or);animation:pulse 1.2s ease-in-out infinite}
+.drop{width:46px;height:46px;margin:0 auto 18px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--ac);animation:pulse 1.2s ease-in-out infinite}
 @keyframes pulse{50%{transform:rotate(-45deg) scale(1.25);opacity:.6}}
 .tabs{display:flex;gap:8px;margin:6px 0 18px}
 .tab{flex:1;font:inherit;font-weight:600;color:var(--ink);border:1.5px solid var(--border);border-radius:99px;padding:11px;background:var(--card);cursor:pointer}
-.tab.on[data-t=m]{background:color-mix(in srgb,var(--or) 14%,var(--card));border-color:var(--or)}
-.tab.on[data-t=s]{background:color-mix(in srgb,var(--or) 34%,var(--card));border-color:var(--or)}
+.tab.on[data-t=m]{background:color-mix(in srgb,var(--ac) 14%,var(--card));border-color:var(--ac)}
+.tab.on[data-t=s]{background:color-mix(in srgb,var(--ac) 34%,var(--card));border-color:var(--ac)}
 .stp{display:flex;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--r16,16px);padding:12px;margin-bottom:12px;opacity:0;animation:up .5s var(--ease,ease) forwards}
 @keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .stp img{width:84px;height:84px;object-fit:cover;border-radius:var(--r8,10px);background:var(--card2)}
-.stp .no{font-size:.75rem;color:var(--or);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.stp .no{font-size:.75rem;color:var(--ac);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
 .stp b{display:block;color:var(--ink);margin:2px 0}
 .stp small{display:block;color:var(--muted);line-height:1.45;margin-top:4px}
-.stp.na{border-style:dashed}
+.stp.na{border-style:dashed;border-left:4px solid var(--border)}
 .tot{display:flex;justify-content:space-between;font-weight:700;color:var(--ink);margin:16px 0}
-.plan{background:color-mix(in srgb,var(--or) 8%,var(--card));border-radius:var(--r16,16px);padding:14px 16px;margin:6px 0 4px}.plan p{margin:6px 0 0;font-size:.9rem}
+.plan{background:color-mix(in srgb,var(--ac) 8%,var(--card));border-radius:var(--r16,16px);padding:14px 16px;margin:6px 0 4px}.plan p{margin:6px 0 0;font-size:.9rem}
 .rt{width:100%;box-sizing:border-box}#v{min-width:0}.tot{gap:1rem}
-.chip{display:inline-block;font-size:.78rem;padding:4px 10px;border-radius:99px;background:color-mix(in srgb,var(--or) 12%,var(--card));color:var(--ink);margin:0 6px 6px 0}.trail{margin:0 0 10px}
-.opt.pop{animation:pop .32s ease}@keyframes pop{40%{transform:translateY(-6px) scale(1.03)}100%{transform:scale(1.01)}}
-.stp{border-left:4px solid var(--or)}.ph{width:84px;height:84px;flex:none;border-radius:var(--r8,10px);display:flex;align-items:center;justify-content:center;font-size:1.9rem;background:color-mix(in srgb,var(--or) 10%,var(--card))}.stp img{flex:none}
+.chip{display:inline-block;font-size:.78rem;padding:4px 10px;border-radius:99px;background:color-mix(in srgb,var(--ac) 12%,var(--card));color:var(--ink);margin:0 6px 6px 0}.trail{margin:0 0 10px}
+.opt.pop{animation:pop .55s ease}@keyframes pop{40%{transform:translateY(-6px) scale(1.03)}100%{transform:scale(1.01)}}
+.stp{border-left:4px solid var(--ac)}.ph{width:84px;height:84px;flex:none;border-radius:var(--r8,10px);display:flex;align-items:center;justify-content:center;font-size:1.9rem;background:color-mix(in srgb,var(--ac) 10%,var(--card))}.stp img{flex:none}
 .row{flex-direction:column}.row .btn{width:100%;text-align:center;box-sizing:border-box}
 .warn{font-size:.82rem;color:var(--muted);margin-top:18px}
 .row{display:flex;gap:10px;flex-wrap:wrap}
@@ -79,7 +82,7 @@
     { k: 'peau', t: 'Quelques heures après avoir lavé ton visage, ta peau…', why: 'Le type de peau décide de la texture : gel léger si elle brille, crème riche si elle tiraille.',
       o: [['grasse', 'Brille partout'], ['mixte', 'Brille au front, au nez et au menton'], ['seche', 'Tiraille ou est rugueuse'], ['normale', 'Est confortable, ni grasse ni sèche'], ['sensible', 'Rougit ou picote facilement']] },
     { k: 'souci', multi: true, max: 2, t: 'Qu’aimerais-tu voir changer sur ta peau ?', hint: '2 choix maximum', why: 'On soigne d’abord l’essentiel. Trop de soins d’un coup fatiguent la peau.',
-      o: [['imperfections', 'Boutons et imperfections'], ['taches', 'Taches et marques'], ['terne', 'Teint terne'], ['secheresse', 'Sécheresse'], ['sensibilite', 'Rougeurs et sensibilité'], ['base', 'Rien de précis, je veux une bonne base']] },
+      o: [['imperfections', 'Boutons et marques laissées par les boutons'], ['taches', 'Taches et teint inégal'], ['pores', 'Pores dilatés et peau qui brille'], ['terne', 'Teint terne'], ['secheresse', 'Sécheresse'], ['sensibilite', 'Rougeurs et sensibilité'], ['base', 'Rien de précis, je veux une bonne base']] },
     { k: 'special', multi: true, t: 'Une de ces situations te concerne ?', hint: 'Plusieurs choix possibles', why: 'Certains actifs ne conviennent pas dans ces cas. On adapte, ou on te conseille d’en parler à un médecin.',
       o: [['enceinte', 'Je suis enceinte ou j’allaite'], ['irritee', 'Ma peau est irritée en ce moment'], ['traitement', 'Je suis un traitement pour la peau'], ['aucune', 'Aucune']] },
     { k: 'maquillage', t: 'Tu te maquilles ?', why: 'Maquillage et solaire demandent un nettoyage plus soigné le soir.', o: [['jour', 'Tous les jours'], ['parfois', 'De temps en temps'], ['jamais', 'Presque jamais']] },
@@ -94,8 +97,8 @@
     { k: 'libre', text: true, t: 'Autre chose à nous dire ?', why: 'Facultatif. Ton texte est ajouté à ta demande de conseil personnalisé et lu par une personne de l’équipe.' }
   ];
   const SKL = { grasse: 'grasses', mixte: 'mixtes', seche: 'sèches', normale: 'normales', sensible: 'sensibles' };
-  const CL = { imperfections: 'boutons et imperfections', taches: 'taches et marques', terne: 'teint terne', secheresse: 'sécheresse', sensibilite: 'rougeurs et sensibilité' };
-  const KW = { grasse: /grasse|s[ée]bum|purifiant|l[ée]g[èe]re|\bgel\b/i, mixte: /mixte|grasse|l[ée]g[èe]re/i, seche: /s[èe]che|nourrissant|riche|karit[ée]|beurre/i, normale: /normale|tous types/i, sensible: /sensible|apais|rougeur|doux/i,
+  const CL = { pores: 'pores dilatés et brillance', imperfections: 'boutons et imperfections', taches: 'taches et marques', terne: 'teint terne', secheresse: 'sécheresse', sensibilite: 'rougeurs et sensibilité' };
+  const KW = { pores: /pore|s[ée]bum|purifiant|\bmat\b|argile|niacinamide/i, grasse: /grasse|s[ée]bum|purifiant|l[ée]g[èe]re|\bgel\b/i, mixte: /mixte|grasse|l[ée]g[èe]re/i, seche: /s[èe]che|nourrissant|riche|karit[ée]|beurre/i, normale: /normale|tous types/i, sensible: /sensible|apais|rougeur|doux/i,
     imperfections: /imperfection|purifiant|argile|niacinamide|acn[ée]/i, taches: /tache|[ée]clat|vitamine|niacinamide|uniformis/i, terne: /[ée]clat|terne|vitamine|lumi/i, secheresse: /s[èe]che|nourrissant|riche|karit[ée]|hydrat/i, sensibilite: /sensible|apais|rougeur|doux/i };
   const ACTIVE = /acide|\baha\b|\bbha\b|salicyl|glycolique|r[ée]tinol|exfoli|peeling|gommage/i;
   const PREG_NO = /r[ée]tinol|r[ée]tino[iï]d|hydroquinone|arbutin|salicyl|\bbha\b|peeling/i;
@@ -145,10 +148,10 @@
       if (st !== step) return;
       if (f) {
         if (pf.skin && H(f.types_peau, pf.skin)) { s += 2; why.push('Convient aux peaux ' + SKL[pf.skin]); }
-        pf.co.forEach(c => { if (H(f.preoccupations, c)) { s += 3; why.push('Pensé pour : ' + CL[c]); } });
+        pf.co.forEach(c => { if (H(f.preoccupations, c)) { s += 3; why.push(CL[c]); } });
       } else {
         if (pf.skin && KW[pf.skin] && KW[pf.skin].test(t)) { s += 2; why.push('Convient aux peaux ' + SKL[pf.skin]); }
-        pf.co.forEach(c => { if (KW[c] && KW[c].test(t)) { s += 3; why.push('Pensé pour : ' + CL[c]); } });
+        pf.co.forEach(c => { if (KW[c] && KW[c].test(t)) { s += 3; why.push(CL[c]); } });
       }
       if (pf.enceinte && (PREG_NO.test(t) || /enceinte|allait/i.test((f && f.precautions) || ''))) return;
       if (pf.irritee && (step === 'cibler' || ACTIVE.test(t))) return;
@@ -185,28 +188,30 @@
     qi = 0; setBar();
     $('v').innerHTML = `<div class="scr"><h1>Ta routine soin, sur mesure</h1>
       <p>Réponds à quelques questions, en 2 minutes. Tu reçois une routine du matin et du soir avec les produits de la boutique, pourquoi chacun a été choisi et comment l’utiliser. Sans compte.</p>
-      <input id="nm" maxlength="20" placeholder="Ton prénom (facultatif)" style="width:100%;box-sizing:border-box;font:inherit;padding:13px 16px;border-radius:99px;border:1.5px solid var(--border);background:var(--card);color:var(--ink);margin-bottom:14px"><button class="btn" id="go">Commencer</button><p class="warn">Tes choix, sans ton nom ni ton texte, aident à mieux choisir les produits de la boutique.</p></div>`;
-    $('go').onclick = () => { ans.nom = ($('nm').value || '').trim(); qi = 1; ask(); };
+      <button class="btn" id="go">Commencer</button><p class="warn">Tes choix, sans ton nom ni ton texte, aident à mieux choisir les produits de la boutique.</p></div>`;
+    $('go').onclick = () => { qi = 1; ask(); };
   }
 
+  const accName = () => { try { const c = SE.Auth.currentClient; return c ? (c.prenom || (c.nom_complet || '').split(' ')[0] || '') : ''; } catch (e) { return ''; } };
   function askText(q) {
     $('v').innerHTML = `<div class="scr"><h2>${esc(q.t)}</h2><div class="why"><b>Pourquoi cette question ?</b> ${esc(q.why)}</div>
       <textarea id="free" rows="4" maxlength="400" placeholder="Ex : je fais du sport le soir, ma peau tire après le rasage…" style="width:100%;font:inherit;padding:12px;border-radius:14px;border:1.5px solid var(--border);background:var(--card);color:var(--ink)">${esc(ans.libre || '')}</textarea>
-      <p class="warn">Évite les informations personnelles sensibles.</p>
+      <p class="warn">Évite les informations personnelles sensibles.</p>${accName() ? '' : `<input id="nm" maxlength="20" value="${esc(ans.nom || '')}" placeholder="Ton prénom (facultatif)" style="width:100%;box-sizing:border-box;font:inherit;padding:13px 16px;border-radius:99px;border:1.5px solid var(--border);background:var(--card);color:var(--ink);margin-top:6px">`}
       <div class="rnav"><button class="btn ghost" id="bk">← Retour</button><button class="btn" id="nx">Voir ma routine</button></div></div>`;
-    $('bk').onclick = () => { ans.libre = $('free').value.trim(); qi--; ask(); };
-    $('nx').onclick = () => { ans.libre = $('free').value.trim(); analyse(); };
+    const keep = () => { ans.libre = $('free').value.trim(); ans.nom = accName() || ($('nm') ? $('nm').value.trim() : ''); };
+    $('bk').onclick = () => { keep(); qi--; ask(); };
+    $('nx').onclick = () => { keep(); analyse(); };
   }
   const lab = (q, v) => { const f = k => (q.o.find(o => o[0] === k) || [0, k])[1]; return Array.isArray(v) ? v.map(f).join(', ') : f(v); };
   const chips = qs => qs.filter(q => !q.text && ans[q.k] && ans[q.k].length).map(q => '<span class="chip">' + esc(lab(q, ans[q.k])) + '</span>').join('');
   const EXC = ['base', 'aucune', 'rien'], SKN = { grasse: 'grasse', mixte: 'mixte', seche: 'sèche', normale: 'normale', sensible: 'sensible' };
   let lock = 0;
   const go = () => { qi < A().length ? (qi++, ask()) : analyse(); };
-  const adv = () => { if (lock) return; lock = 1; setTimeout(() => { lock = 0; go(); }, 320); };
+  const adv = () => { if (lock) return; lock = 1; setTimeout(() => { lock = 0; go(); }, 580); };
   function ask() {
     const q = A()[qi - 1], cur = ans[q.k] || (q.multi ? [] : null); setBar();
     if (q.text) return askText(q);
-    const tr = chips(A().slice(0, qi - 1));
+    const tr = '';
     $('v').innerHTML = `<div class="scr">${tr ? `<div class="trail">${tr}</div>` : ''}<h2>${esc(q.t)}</h2>${q.hint ? `<p style="margin-bottom:6px">${esc(q.hint)}</p>` : ''}
       <div class="why"><b>Pourquoi cette question ?</b> ${esc(q.why)}</div>
       ${q.o.map(([k, l]) => `<button type="button" class="opt${(q.multi ? cur.includes(k) : cur === k) ? ' on' : ''}" data-k="${k}">${esc(l)}</button>`).join('')}
@@ -258,9 +263,9 @@
       if (!x.p) return `<div class="stp na" ${d}><div><span class="no">${NAME[x.s]}</span><b>Bientôt en boutique</b><small>On n’a pas encore le bon produit pour cette étape. <a href="${WA}${encodeURIComponent('Bonjour, je cherche un produit pour l’étape ' + NAME[x.s] + ' de ma routine')}">Demande-nous sur WhatsApp</a>.</small></div></div>`;
       const a = x.p.a, ph = img(a.photo_url, 200);
       return `<div class="stp" ${d}>${ph ? `<img src="${esc(ph)}" alt="" loading="lazy">` : `<div class="ph">${{ nettoyer: '💧', cibler: '✨', hydrater: '🌿', proteger: '☀️' }[x.s]}</div>`}<div><span class="no">${n}. ${NAME[x.s]}</span><b>${esc(a.nom)}</b><span style="color:var(--ink)">${fmt(P(a))}</span>
-        ${x.p.why.length ? `<small>${esc(x.p.why.join(' · '))}</small>` : ''}<small>${esc(HOW[x.s])}</small></div></div>`;
+        ${x.p.why.length ? `<small>${esc(x.p.why.filter(w => w.startsWith('Convient')).concat(x.p.why.filter(w => !w.startsWith('Convient')).length ? ['Pensé pour : ' + x.p.why.filter(w => !w.startsWith('Convient')).join(', ')] : []).join(' · '))}</small>` : ''}<small>${esc(HOW[x.s])}</small></div></div>`;
     };
-    $('v').innerHTML = `<div class="scr"><h2>${ans.nom ? 'Ta routine, ' + esc(ans.nom) : 'Ta routine'}</h2><div class="trail">${chips(Q)}</div><p>Pour une peau ${SKN[ans.peau] || ''}${pf.co.length ? ' qui veut agir sur : ' + pf.co.map(c => CL[c]).join(' et ') : ''}, on a retenu ${have.length} produit${have.length > 1 ? 's' : ''}${pf.sp ? ', sans parfum' : ''}.</p><p>${tab === 'M' ? 'Le matin : propre, hydratée et protégée.' : 'Le soir : on retire la journée et on soigne.'}</p>
+    $('v').innerHTML = `<div class="scr"><h2>${ans.nom ? 'Ta routine, ' + esc(ans.nom) : 'Ta routine'}</h2><p>Pour une peau ${SKN[ans.peau] || ''}${pf.co.length ? ' qui veut agir sur : ' + pf.co.map(c => CL[c]).join(' et ') : ''}, on a retenu ${have.length} produit${have.length > 1 ? 's' : ''}${pf.sp ? ', sans parfum' : ''}.</p><p>${tab === 'M' ? 'Le matin : propre, hydratée et protégée.' : 'Le soir : on retire la journée et on soigne.'}</p>
       <div class="tabs"><button class="tab${tab === 'M' ? ' on' : ''}" data-t="m" id="tm">☀ Matin</button><button class="tab${tab === 'S' ? ' on' : ''}" data-t="s" id="ts">☾ Soir</button></div>
       ${mine.map(card).join('')}${plan(picks)}
       ${tab === 'S' && pf.jour ? '<p class="warn" style="margin-top:0">Si tu te maquilles ou mets de la crème solaire, nettoie en deux temps : démaquillant, puis nettoyant.</p>' : ''}
