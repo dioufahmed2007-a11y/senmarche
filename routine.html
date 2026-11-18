@@ -44,6 +44,11 @@
 .stp.na{border-style:dashed}
 .tot{display:flex;justify-content:space-between;font-weight:700;color:var(--ink);margin:16px 0}
 .plan{background:color-mix(in srgb,var(--or) 8%,var(--card));border-radius:var(--r16,16px);padding:14px 16px;margin:6px 0 4px}.plan p{margin:6px 0 0;font-size:.9rem}
+.rt{width:100%;box-sizing:border-box}#v{min-width:0}.tot{gap:1rem}
+.chip{display:inline-block;font-size:.78rem;padding:4px 10px;border-radius:99px;background:color-mix(in srgb,var(--or) 12%,var(--card));color:var(--ink);margin:0 6px 6px 0}.trail{margin:0 0 10px}
+.opt.pop{animation:pop .32s ease}@keyframes pop{40%{transform:translateY(-6px) scale(1.03)}100%{transform:scale(1.01)}}
+.stp{border-left:4px solid var(--or)}.ph{width:84px;height:84px;flex:none;border-radius:var(--r8,10px);display:flex;align-items:center;justify-content:center;font-size:1.9rem;background:color-mix(in srgb,var(--or) 10%,var(--card))}.stp img{flex:none}
+.row{flex-direction:column}.row .btn{width:100%;text-align:center;box-sizing:border-box}
 .warn{font-size:.82rem;color:var(--muted);margin-top:18px}
 .row{display:flex;gap:10px;flex-wrap:wrap}
 .row a{text-decoration:none;display:inline-block}
@@ -73,7 +78,7 @@
   const Q = [
     { k: 'peau', t: 'Quelques heures après avoir lavé ton visage, ta peau…', why: 'Le type de peau décide de la texture : gel léger si elle brille, crème riche si elle tiraille.',
       o: [['grasse', 'Brille partout'], ['mixte', 'Brille au front, au nez et au menton'], ['seche', 'Tiraille ou est rugueuse'], ['normale', 'Est confortable, ni grasse ni sèche'], ['sensible', 'Rougit ou picote facilement']] },
-    { k: 'souci', multi: true, max: 2, t: 'Qu’est-ce qui te gêne le plus ?', hint: '2 choix maximum', why: 'On soigne d’abord l’essentiel. Trop de soins d’un coup fatiguent la peau.',
+    { k: 'souci', multi: true, max: 2, t: 'Qu’aimerais-tu voir changer sur ta peau ?', hint: '2 choix maximum', why: 'On soigne d’abord l’essentiel. Trop de soins d’un coup fatiguent la peau.',
       o: [['imperfections', 'Boutons et imperfections'], ['taches', 'Taches et marques'], ['terne', 'Teint terne'], ['secheresse', 'Sécheresse'], ['sensibilite', 'Rougeurs et sensibilité'], ['base', 'Rien de précis, je veux une bonne base']] },
     { k: 'special', multi: true, t: 'Une de ces situations te concerne ?', hint: 'Plusieurs choix possibles', why: 'Certains actifs ne conviennent pas dans ces cas. On adapte, ou on te conseille d’en parler à un médecin.',
       o: [['enceinte', 'Je suis enceinte ou j’allaite'], ['irritee', 'Ma peau est irritée en ce moment'], ['traitement', 'Je suis un traitement pour la peau'], ['aucune', 'Aucune']] },
@@ -180,8 +185,8 @@
     qi = 0; setBar();
     $('v').innerHTML = `<div class="scr"><h1>Ta routine soin, sur mesure</h1>
       <p>Réponds à quelques questions, en 2 minutes. Tu reçois une routine du matin et du soir avec les produits de la boutique, pourquoi chacun a été choisi et comment l’utiliser. Sans compte.</p>
-      <button class="btn" id="go">Commencer</button></div>`;
-    $('go').onclick = () => { qi = 1; ask(); };
+      <input id="nm" maxlength="20" placeholder="Ton prénom (facultatif)" style="width:100%;box-sizing:border-box;font:inherit;padding:13px 16px;border-radius:99px;border:1.5px solid var(--border);background:var(--card);color:var(--ink);margin-bottom:14px"><button class="btn" id="go">Commencer</button><p class="warn">Tes choix, sans ton nom ni ton texte, aident à mieux choisir les produits de la boutique.</p></div>`;
+    $('go').onclick = () => { ans.nom = ($('nm').value || '').trim(); qi = 1; ask(); };
   }
 
   function askText(q) {
@@ -192,34 +197,43 @@
     $('bk').onclick = () => { ans.libre = $('free').value.trim(); qi--; ask(); };
     $('nx').onclick = () => { ans.libre = $('free').value.trim(); analyse(); };
   }
+  const lab = (q, v) => { const f = k => (q.o.find(o => o[0] === k) || [0, k])[1]; return Array.isArray(v) ? v.map(f).join(', ') : f(v); };
+  const chips = qs => qs.filter(q => !q.text && ans[q.k] && ans[q.k].length).map(q => '<span class="chip">' + esc(lab(q, ans[q.k])) + '</span>').join('');
+  const EXC = ['base', 'aucune', 'rien'], SKN = { grasse: 'grasse', mixte: 'mixte', seche: 'sèche', normale: 'normale', sensible: 'sensible' };
+  let lock = 0;
+  const go = () => { qi < A().length ? (qi++, ask()) : analyse(); };
+  const adv = () => { if (lock) return; lock = 1; setTimeout(() => { lock = 0; go(); }, 320); };
   function ask() {
     const q = A()[qi - 1], cur = ans[q.k] || (q.multi ? [] : null); setBar();
     if (q.text) return askText(q);
-    $('v').innerHTML = `<div class="scr"><h2>${esc(q.t)}</h2>${q.hint ? `<p style="margin-bottom:6px">${esc(q.hint)}</p>` : ''}
+    const tr = chips(A().slice(0, qi - 1));
+    $('v').innerHTML = `<div class="scr">${tr ? `<div class="trail">${tr}</div>` : ''}<h2>${esc(q.t)}</h2>${q.hint ? `<p style="margin-bottom:6px">${esc(q.hint)}</p>` : ''}
       <div class="why"><b>Pourquoi cette question ?</b> ${esc(q.why)}</div>
       ${q.o.map(([k, l]) => `<button type="button" class="opt${(q.multi ? cur.includes(k) : cur === k) ? ' on' : ''}" data-k="${k}">${esc(l)}</button>`).join('')}
-      <div class="rnav"><button class="btn ghost" id="bk">← Retour</button><button class="btn" id="nx" ${(q.multi ? cur.length : cur) ? '' : 'disabled'}>${qi === A().length ? 'Voir ma routine' : 'Suivant'}</button></div></div>`;
+      <div class="rnav"><button class="btn ghost" id="bk">← Retour</button>${q.multi ? `<button class="btn" id="nx" ${cur.length ? '' : 'disabled'}>Suivant</button>` : ''}</div></div>`;
     $('bk').onclick = () => { qi--; qi ? ask() : intro(); };
-    $('nx').onclick = () => { qi < A().length ? (qi++, ask()) : analyse(); };
+    if (q.multi) $('nx').onclick = go;
+    const paint = l => document.querySelectorAll('.opt').forEach(o => o.classList.toggle('on', l.includes(o.dataset.k)));
     document.querySelectorAll('.opt').forEach(b => b.onclick = () => {
       const k = b.dataset.k;
-      if (q.multi) {
-        let l = (ans[q.k] || []).slice();
-        if (l.includes(k)) l = l.filter(x => x !== k);
-        else if (['base', 'aucune', 'rien'].includes(k)) l = [k];
-        else { l = l.filter(x => !['base', 'aucune', 'rien'].includes(x)); if (!q.max || l.length < q.max) l.push(k); }
-        ans[q.k] = l;
-      } else ans[q.k] = k;
-      ask();
+      if (!q.multi) { ans[q.k] = k; paint([k]); b.classList.add('pop'); return adv(); }
+      let l = (ans[q.k] || []).slice();
+      if (l.includes(k)) l = l.filter(x => x !== k);
+      else if (EXC.includes(k)) l = [k];
+      else { l = l.filter(x => !EXC.includes(x)); if (!q.max || l.length < q.max) l.push(k); }
+      ans[q.k] = l; paint(l); $('nx').disabled = !l.length;
+      if (EXC.includes(k) && l.includes(k)) { b.classList.add('pop'); adv(); }
     });
   }
 
   async function analyse() {
     qi = A().length + 1; setBar(); $('cnt').textContent = '';
-    const msgs = ['On regarde ta peau…', 'On écarte ce qui ne te convient pas…', 'On compose ta routine…'];
+    try { SE.sb.from('routine_reponses').insert({ peau: ans.peau, souci: (ans.souci || []).join(','), maquillage: ans.maquillage, niveau: ans.niveau, prefs: (ans.prefs || []).join(','), deja: (ans.deja || []).join(','), budget: ans.budget }).then(() => {}, () => {}); } catch (e) {}
+    const p0 = profile();
+    const msgs = [(ans.nom ? ans.nom + ', on' : 'On') + ' regarde ta peau ' + (SKN[ans.peau] || '') + '…', p0.co.length ? 'On cherche ce qui aide pour : ' + p0.co.map(c => CL[c]).join(' et ') + '…' : 'On prépare une bonne base…', p0.sp ? 'On écarte les produits parfumés…' : p0.enceinte ? 'On écarte ce qui est déconseillé pendant la grossesse…' : 'On écarte ce qui ne te convient pas…', 'On compose ta routine…'];
     $('v').innerHTML = `<div class="load scr"><div class="drop"></div><h2 id="lm">${msgs[0]}</h2></div>`;
-    let i = 0; const iv = setInterval(() => { i = (i + 1) % msgs.length; const e = $('lm'); if (e) e.textContent = msgs[i]; }, 900);
-    await Promise.all([new Promise(r => setTimeout(r, 2700)), POOL.length ? 0 : load().catch(() => {})]);
+    let i = 0; const iv = setInterval(() => { i = (i + 1) % msgs.length; const e = $('lm'); if (e) e.textContent = msgs[i]; }, 750);
+    await Promise.all([new Promise(r => setTimeout(r, 3000)), POOL.length ? 0 : load().catch(() => {})]);
     clearInterval(iv); RES = build(); show('M');
   }
 
@@ -243,10 +257,10 @@
       if (x.p === 'deja') return `<div class="stp na" ${d}><div><span class="no">${n}. ${NAME[x.s]}</span><b>Tu as déjà ce produit</b><small>Garde ton produit actuel pour cette étape. ${esc(HOW[x.s])}</small></div></div>`;
       if (!x.p) return `<div class="stp na" ${d}><div><span class="no">${NAME[x.s]}</span><b>Bientôt en boutique</b><small>On n’a pas encore le bon produit pour cette étape. <a href="${WA}${encodeURIComponent('Bonjour, je cherche un produit pour l’étape ' + NAME[x.s] + ' de ma routine')}">Demande-nous sur WhatsApp</a>.</small></div></div>`;
       const a = x.p.a, ph = img(a.photo_url, 200);
-      return `<div class="stp" ${d}>${ph ? `<img src="${esc(ph)}" alt="" loading="lazy">` : ''}<div><span class="no">${n}. ${NAME[x.s]}</span><b>${esc(a.nom)}</b><span style="color:var(--ink)">${fmt(P(a))}</span>
+      return `<div class="stp" ${d}>${ph ? `<img src="${esc(ph)}" alt="" loading="lazy">` : `<div class="ph">${{ nettoyer: '💧', cibler: '✨', hydrater: '🌿', proteger: '☀️' }[x.s]}</div>`}<div><span class="no">${n}. ${NAME[x.s]}</span><b>${esc(a.nom)}</b><span style="color:var(--ink)">${fmt(P(a))}</span>
         ${x.p.why.length ? `<small>${esc(x.p.why.join(' · '))}</small>` : ''}<small>${esc(HOW[x.s])}</small></div></div>`;
     };
-    $('v').innerHTML = `<div class="scr"><h2>Ta routine</h2><p>${tab === 'M' ? 'Le matin : propre, hydratée et protégée.' : 'Le soir : on retire la journée et on soigne.'}</p>
+    $('v').innerHTML = `<div class="scr"><h2>${ans.nom ? 'Ta routine, ' + esc(ans.nom) : 'Ta routine'}</h2><div class="trail">${chips(Q)}</div><p>Pour une peau ${SKN[ans.peau] || ''}${pf.co.length ? ' qui veut agir sur : ' + pf.co.map(c => CL[c]).join(' et ') : ''}, on a retenu ${have.length} produit${have.length > 1 ? 's' : ''}${pf.sp ? ', sans parfum' : ''}.</p><p>${tab === 'M' ? 'Le matin : propre, hydratée et protégée.' : 'Le soir : on retire la journée et on soigne.'}</p>
       <div class="tabs"><button class="tab${tab === 'M' ? ' on' : ''}" data-t="m" id="tm">☀ Matin</button><button class="tab${tab === 'S' ? ' on' : ''}" data-t="s" id="ts">☾ Soir</button></div>
       ${mine.map(card).join('')}${plan(picks)}
       ${tab === 'S' && pf.jour ? '<p class="warn" style="margin-top:0">Si tu te maquilles ou mets de la crème solaire, nettoie en deux temps : démaquillant, puis nettoyant.</p>' : ''}
