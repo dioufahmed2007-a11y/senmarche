@@ -61,6 +61,7 @@ body.dark,html.dark body{--ac:#E24F7E;--ac-on:#1a0a10}
 .btn.big{width:100%;padding:16px;font-size:1rem;box-sizing:border-box}
 .opt{display:flex;align-items:center;gap:12px}.opt::before{content:"";flex:none;width:20px;height:20px;border-radius:50%;border:2px solid var(--border);box-sizing:border-box}
 .opt.on::before{background:var(--ac);border-color:var(--ac);box-shadow:inset 0 0 0 3px var(--card)}
+.ok{width:68px;height:68px;margin:14px auto 18px;border-radius:50%;background:var(--ac);color:var(--ac-on);display:flex;align-items:center;justify-content:center;font-size:2rem;animation:pop .6s ease}
 .warn{font-size:.82rem;color:var(--muted);margin-top:18px}
 .row{display:flex;gap:10px;flex-wrap:wrap}
 .row a{text-decoration:none;display:inline-block}
@@ -313,26 +314,34 @@ body.dark,html.dark body{--ac:#E24F7E;--ac-on:#1a0a10}
     return '<div class="plan"><b>Ton planning</b>' + l.map(x => '<p>' + x + '</p>').join('') + '</div>';
   }
   const sumAns = () => Q.map(q => { const v = ans[q.k]; if (!v || !v.length) return ''; if (q.text) return 'Remarque : ' + v; const f = k => (q.o.find(o => o[0] === k) || [0, k])[1]; return '• ' + q.t + ' ' + (Array.isArray(v) ? v.map(f).join(', ') : f(v)); }).filter(Boolean).join('\n');
+  function done(have, total) {
+    $('bar').style.width = '100%'; $('cnt').textContent = '';
+    $('v').innerHTML = `<div class="scr" style="text-align:center"><div class="ok">✓</div><h2>Ta routine est dans ton panier</h2>
+      <p>${have.length} produit${have.length > 1 ? 's' : ''} · ${fmt(total)}. Il ne te reste qu’à passer commande.</p>
+      <div class="row"><a class="btn" href="panier.html">Voir mon panier et commander</a>
+      <button type="button" class="btn" id="mypdf2" style="background:var(--card);color:var(--ink);border:1.5px solid var(--ac)">Télécharger ma routine en PDF</button></div>
+      <div class="rnav" style="justify-content:center"><a class="btn ghost" href="soins.html">Continuer mes achats</a></div></div>`;
+    $('mypdf2').onclick = e => makePdf(e.target);
+  }
   function show(tab) {
     const { pf, picks } = RES, items = [];
     STEPS.forEach(s => { if (s in picks) items.push({ s, p: picks[s] }); });
     const sl = x => (x.p && x.p !== 'deja') ? slotOf(x.s, x.p.a) : (x.s === 'proteger' ? 'M' : x.s === 'cibler' ? 'S' : 'MS');
-    const mine = items.filter(x => !x.p || sl(x).includes(tab));
+    const mine = items, wh = x => ({ M: 'matin', S: 'soir', MS: 'matin et soir' }[sl(x)]);
     const have = items.filter(x => x.p && x.p !== 'deja');
     const total = have.reduce((n, x) => n + P(x.p.a), 0);
     let n = 0;
     const card = x => {
       n++; const d = 'style="animation-delay:' + (n * 0.18) + 's"';
-      if (x.p === 'deja') return `<div class="stp na" ${d}><div><span class="no">${n}. ${NAME[x.s]}</span><b>Tu as déjà ce produit</b><small>Garde ton produit actuel pour cette étape. ${esc(HOW[x.s])}</small></div></div>`;
+      if (x.p === 'deja') return `<div class="stp na" ${d}><div><span class="no">${n}. ${NAME[x.s]} · ${wh(x)}</span><b>Tu as déjà ce produit</b><small>Garde ton produit actuel pour cette étape. ${esc(HOW[x.s])}</small></div></div>`;
       if (!x.p) return `<div class="stp na" ${d}><div><span class="no">${NAME[x.s]}</span><b>Bientôt en boutique</b><small>On n’a pas encore le bon produit pour cette étape. <a href="${WA}${encodeURIComponent('Bonjour, je cherche un produit pour l’étape ' + NAME[x.s] + ' de ma routine')}">Demande-nous sur WhatsApp</a>.</small></div></div>`;
       const a = x.p.a, ph = img(a.photo_url, 200);
-      return `<div class="stp" ${d}>${ph ? `<img src="${esc(ph)}" alt="" loading="lazy">` : `<div class="ph">${{ nettoyer: '💧', cibler: '✨', hydrater: '🌿', proteger: '☀️' }[x.s]}</div>`}<div><span class="no">${n}. ${NAME[x.s]}</span><b>${esc(a.nom)}</b><span style="color:var(--ink)">${fmt(P(a))}</span>
+      return `<div class="stp" ${d}>${ph ? `<img src="${esc(ph)}" alt="" loading="lazy">` : `<div class="ph">${{ nettoyer: '💧', cibler: '✨', hydrater: '🌿', proteger: '☀️' }[x.s]}</div>`}<div><span class="no">${n}. ${NAME[x.s]} · ${wh(x)}</span><b>${esc(a.nom)}</b><span style="color:var(--ink)">${fmt(P(a))}</span>
         ${x.p.why.length ? `<small>${esc(x.p.why.filter(w => w.startsWith('Convient')).concat(x.p.why.filter(w => !w.startsWith('Convient')).length ? ['Pensé pour : ' + x.p.why.filter(w => !w.startsWith('Convient')).join(', ')] : []).join(' · '))}</small>` : ''}<small>${esc(HOW[x.s])}</small></div></div>`;
     };
-    $('v').innerHTML = `<div class="scr"><h2>${ans.nom ? 'Ta routine, ' + esc(ans.nom) : 'Ta routine'}</h2><p>Pour une peau ${SKN[ans.peau] || ''}${pf.co.length ? ' qui veut agir sur : ' + pf.co.map(c => CL[c]).join(' et ') : ''}, on a retenu ${have.length} produit${have.length > 1 ? 's' : ''}${pf.sp ? ', sans parfum' : ''}.</p><p>${tab === 'M' ? 'Le matin : propre, hydratée et protégée.' : 'Le soir : on retire la journée et on soigne.'}</p>
-      <div class="tabs"><button class="tab${tab === 'M' ? ' on' : ''}" data-t="m" id="tm">☀ Matin</button><button class="tab${tab === 'S' ? ' on' : ''}" data-t="s" id="ts">☾ Soir</button></div>
+    $('v').innerHTML = `<div class="scr"><h2>${ans.nom ? 'Ta routine, ' + esc(ans.nom) : 'Ta routine'}</h2><p>Pour une peau ${SKN[ans.peau] || ''}${pf.co.length ? ' qui veut agir sur : ' + pf.co.map(c => CL[c]).join(' et ') : ''}, on a retenu ${have.length} produit${have.length > 1 ? 's' : ''}${pf.sp ? ', sans parfum' : ''}.</p><p>Voici tes produits, dans l’ordre où les utiliser.</p>
       ${mine.map(card).join('')}${plan(picks)}
-      ${tab === 'S' && pf.jour ? '<p class="warn" style="margin-top:0">Si tu te maquilles ou mets de la crème solaire, nettoie en deux temps : démaquillant, puis nettoyant.</p>' : ''}
+      ${pf.jour ? '<p class="warn" style="margin-top:0">Si tu te maquilles ou mets de la crème solaire, nettoie en deux temps : démaquillant, puis nettoyant.</p>' : ''}
       <div class="tot"><span>Routine complète</span><span>${fmt(total)}</span></div>
       <div class="row"><button class="btn" id="addall" ${have.length ? '' : 'disabled'}>Tout ajouter au panier</button>
       <button type="button" class="btn" id="mypdf" style="background:var(--card);color:var(--ink);border:1.5px solid var(--ac)">Télécharger ma routine en PDF</button>
@@ -340,10 +349,9 @@ body.dark,html.dark body{--ac:#E24F7E;--ac-on:#1a0a10}
       <a class="btn" style="background:var(--card2,var(--card));color:var(--ink);border:1.5px solid var(--border)" id="wa" href="${WA}${encodeURIComponent('Ma routine SenMarché :\n' + have.map(x => '• ' + NAME[x.s] + ' : ' + x.p.a.nom + ' (' + fmt(P(x.p.a)) + ')').join('\n') + '\nTotal : ' + fmt(total) + '\n\nMes réponses :\n' + sumAns() + '\n\nJe voudrais un conseil personnalisé.')}">Demander un conseil perso</a></div>
       <div class="rnav"><button class="btn ghost" id="redo">Refaire le test</button></div>
       <p class="warn">${pf.enceinte ? 'Tu as indiqué être enceinte ou allaiter : on a écarté les actifs à éviter. Parles-en aussi à ton médecin avant d’ajouter un soin ciblé. ' : ''}${pf.irritee ? 'Peau irritée ou sous traitement : routine réduite à l’essentiel, demande l’avis de ton médecin. ' : ''}Conseils cosmétiques, pas un avis médical. Si une réaction apparaît, arrête le produit.</p></div>`;
-    $('tm').onclick = () => show('M'); $('ts').onclick = () => show('S');
     $('redo').onclick = () => { ans = {}; intro(); };
     $('mypdf').onclick = e => makePdf(e.target);
-    $('addall').onclick = e => { try { have.forEach(x => SE.Cart.add(x.p.a.reference)); e.target.textContent = '✓ Ajoutée au panier'; } catch (err) {} };
+    $('addall').onclick = () => { try { have.forEach(x => SE.Cart.add(x.p.a.reference)); done(have, total); } catch (err) {} };
   }
 
   (async () => { try { await new Promise(r => setTimeout(r, 50)); await load(); } catch (e) {} intro(); })();
