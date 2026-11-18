@@ -821,7 +821,8 @@ body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);bor
   function drawCats(){
     const chip = (f, label, n) => `<button type="button" class="cat-chip${st.f === f ? ' active' : ''}" data-f="${f}" aria-pressed="${st.f === f}"><span class="ic">${svg(f)}</span><span class="l">${label}</span><small>${n}</small></button>`;
     const soins = `<a class="cat-chip link" href="soins.html"><span class="ic">${svg('peau')}</span><span class="l">Crèmes &amp; soins</span><small>autre page →</small></a>`;
-    $('cats').innerHTML = (ITEMS.length ? chip('all', 'Tout', ITEMS.length) + ZONES.map(z => count(z.k) >= 2 ? chip(z.k, z.t, count(z.k)) : '').join('') : '') + soins;
+    const bij = count('bij') < 2 ? `<div class="cat-chip link" style="opacity:.75;cursor:default"><span class="ic">${svg('bij')}</span><span class="l">Bijoux</span><small>bientôt</small></div>` : '';
+    $('cats').innerHTML = (ITEMS.length ? chip('all', 'Tout', ITEMS.length) + ZONES.map(z => count(z.k) >= 2 ? chip(z.k, z.t, count(z.k)) : '').join('') : '') + bij + soins;
   }
   function drawSub(){
     const subs = SUBS[st.f], base = st.f === 'all' ? [] : ITEMS.filter(a => zoneOf(a) === st.f);
