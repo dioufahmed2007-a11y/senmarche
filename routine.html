@@ -13,7 +13,7 @@
 <style>
 body{--ac:#A3193F;--ac-on:#fff}
 :root[data-theme="dark"] body{--ac:#E24F7E;--ac-on:#1a0a10}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body{--ac:#E24F7E;--ac-on:#1a0a10}}
+body.dark,html.dark body{--ac:#E24F7E;--ac-on:#1a0a10}
 .rt{max-width:640px;margin:0 auto;padding:20px var(--pad,16px) 60px;min-height:100vh;display:flex;flex-direction:column}
 .rt-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .rt-top a{color:var(--muted);text-decoration:none;font-size:.9rem}
@@ -51,7 +51,16 @@ body{--ac:#A3193F;--ac-on:#fff}
 .chip{display:inline-block;font-size:.78rem;padding:4px 10px;border-radius:99px;background:color-mix(in srgb,var(--ac) 12%,var(--card));color:var(--ink);margin:0 6px 6px 0}.trail{margin:0 0 10px}
 .opt.pop{animation:pop .55s ease}@keyframes pop{40%{transform:translateY(-6px) scale(1.03)}100%{transform:scale(1.01)}}
 .stp{border-left:4px solid var(--ac)}.ph{width:84px;height:84px;flex:none;border-radius:var(--r8,10px);display:flex;align-items:center;justify-content:center;font-size:1.9rem;background:color-mix(in srgb,var(--ac) 10%,var(--card))}.stp img{flex:none}
-.row{flex-direction:column}.row .btn{width:100%;text-align:center;box-sizing:border-box}
+.row{flex-direction:column}.row .btn{width:100%;text-align:center;box-sizing:border-box;white-space:normal;line-height:1.25}
+.hero{background:linear-gradient(155deg,color-mix(in srgb,var(--ac) 16%,var(--card)),var(--card) 70%);border:1px solid color-mix(in srgb,var(--ac) 20%,transparent);border-radius:26px;padding:30px 22px 22px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-50px;top:-50px;width:170px;height:170px;border-radius:50%;background:color-mix(in srgb,var(--ac) 14%,transparent)}
+.hero>*{position:relative;z-index:1}.kick{font-size:.72rem;font-weight:700;letter-spacing:.14em;color:var(--ac)}
+.hero h1{font-size:2.15rem;margin:8px 0 12px}.hero h1 i{color:var(--ac)}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}.pills span{font-size:.8rem;font-weight:600;padding:6px 12px;border-radius:99px;background:var(--card);border:1px solid var(--border);color:var(--ink)}
+.st4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 22px}.st4 div{text-align:center;font-size:.78rem;font-weight:600;color:var(--ink)}.st4 b{display:flex;width:34px;height:34px;margin:0 auto 6px;border-radius:50%;align-items:center;justify-content:center;color:#fff;font-size:.95rem}
+.btn.big{width:100%;padding:16px;font-size:1rem;box-sizing:border-box}
+.opt{display:flex;align-items:center;gap:12px}.opt::before{content:"";flex:none;width:20px;height:20px;border-radius:50%;border:2px solid var(--border);box-sizing:border-box}
+.opt.on::before{background:var(--ac);border-color:var(--ac);box-shadow:inset 0 0 0 3px var(--card)}
 .warn{font-size:.82rem;color:var(--muted);margin-top:18px}
 .row{display:flex;gap:10px;flex-wrap:wrap}
 .row a{text-decoration:none;display:inline-block}
@@ -186,9 +195,11 @@ body{--ac:#A3193F;--ac-on:#fff}
 
   function intro() {
     qi = 0; setBar();
-    $('v').innerHTML = `<div class="scr"><h1>Ta routine soin, sur mesure</h1>
-      <p>Réponds à quelques questions, en 2 minutes. Tu reçois une routine du matin et du soir avec les produits de la boutique, pourquoi chacun a été choisi et comment l’utiliser. Sans compte.</p>
-      <button class="btn" id="go">Commencer</button><p class="warn">Tes choix, sans ton nom ni ton texte, aident à mieux choisir les produits de la boutique.</p></div>`;
+    $('v').innerHTML = `<div class="scr hero"><span class="kick">SENMARCHÉ · SOINS</span><h1>Ta routine soin,<br><i>sur mesure</i></h1>
+      <p>Réponds à quelques questions et reçois une routine du matin et du soir avec les produits de la boutique, et un guide PDF pour savoir comment les utiliser.</p>
+      <div class="pills"><span>2 minutes</span><span>Matin et soir</span><span>Sans compte</span></div>
+      <div class="st4"><div><b style="background:#A3193F">1</b>Nettoyer</div><div><b style="background:#6FA382">2</b>Cibler</div><div><b style="background:#E8905A">3</b>Hydrater</div><div><b style="background:#A3193F">4</b>Protéger</div></div>
+      <button class="btn big" id="go">Commencer</button><p class="warn">Tes choix, sans ton nom ni ton texte, aident à mieux choisir les produits de la boutique.</p></div>`;
     $('go').onclick = () => { qi = 1; ask(); };
   }
 
@@ -242,9 +253,62 @@ body{--ac:#A3193F;--ac-on:#fff}
     clearInterval(iv); RES = build(); show('M');
   }
 
+  const QTY = { nettoyer: "une noisette de produit, que tu fais mousser dans tes mains", cibler: "3 à 4 gouttes (ou une petite noisette si c'est une crème)", hydrater: "une noisette, pour le visage et le cou", proteger: "environ 2 doigts de produit pour le visage et le cou" };
+  async function makePdf(btn) {
+    const lbl = btn.textContent;
+    try {
+      btn.textContent = 'Création du PDF…';
+      if (!window.jspdf) await new Promise((ok, ko) => { const sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'; sc.onload = ok; sc.onerror = ko; document.head.appendChild(sc); });
+      const { pf, picks } = RES, d = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4' }), W = 595, H = 842, M = 40, CW = W - 2 * M;
+      const col = { nettoyer: [163, 25, 63], cibler: [111, 163, 130], hydrater: [232, 144, 90], proteger: [163, 25, 63] }, lt = { nettoyer: [247, 228, 234], cibler: [225, 239, 228], hydrater: [252, 233, 218], proteger: [247, 228, 234] };
+      const T = x => String(x == null ? '' : x).replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/…/g, '...').replace(/[\u202f\u00a0]/g, ' ');
+      const fill = c => d.setFillColor(c[0], c[1], c[2]), tc = c => d.setTextColor(c[0], c[1], c[2]), INK = [42, 26, 31];
+      let y = 0, pg = 1;
+      const bgp = () => { fill([251, 246, 239]); d.rect(0, 0, W, H, 'F'); };
+      const foot = () => { d.setFont('helvetica', 'normal'); d.setFontSize(8.5); tc([95, 79, 84]); d.text(T('SenMarché · Conseils cosmétiques, pas un avis médical'), M, H - 24); d.text(String(pg), W - M, H - 24, { align: 'right' }); };
+      const need = h => { if (y + h > H - 50) { foot(); d.addPage(); pg++; bgp(); y = M; } };
+      const slot = s => picks[s] && picks[s] !== 'deja' ? slotOf(s, picks[s].a) : (s === 'proteger' ? 'M' : s === 'cibler' ? 'S' : 'MS');
+      bgp(); fill([163, 25, 63]); d.rect(0, 0, W, 130, 'F'); fill([184, 48, 90]); d.circle(W - 50, 10, 80, 'F');
+      tc([255, 255, 255]); d.setFont('helvetica', 'bold'); d.setFontSize(26); d.text(T(ans.nom ? 'Ma routine, ' + ans.nom : 'Ma routine soin'), M, 66);
+      d.setFont('helvetica', 'normal'); d.setFontSize(12); d.text(T('Tes produits SenMarché et comment les utiliser, pas à pas'), M, 90);
+      y = 160; tc(INK); d.setFontSize(11.5);
+      const it = d.splitTextToSize(T("Pour une peau " + (SKN[ans.peau] || '') + (pf.co.length ? ' qui veut agir sur : ' + pf.co.map(c => CL[c]).join(' et ') : '') + ". Garde ce guide : il t'explique quoi appliquer, quand, et en quelle quantité."), CW);
+      d.text(it, M, y); y += it.length * 15 + 12;
+      STEPS.forEach((s, i) => {
+        const p = picks[s]; if (!p) return;
+        const a = p === 'deja' ? null : p.a, sl = slot(s), when = sl === 'M' ? 'Le matin' : sl === 'S' ? 'Le soir' : 'Matin et soir';
+        const ln = [['Quand', when], ['Quantité', QTY[s]], ['Comment', HOW[s]]];
+        if (a && p.why.length) ln.push(['Pourquoi ce produit', p.why.join(', ')]);
+        if (a && a.description) ln.push(['À savoir', a.description.replace(/\s+/g, ' ').slice(0, 200)]);
+        const wr = ln.map(([k, v]) => d.splitTextToSize(T(k + ' : ' + v), CW - 36)), h = 56 + wr.reduce((n, w) => n + w.length * 13 + 4, 0);
+        need(h + 12); fill(lt[s]); d.roundedRect(M, y, CW, h, 12, 12, 'F'); fill(col[s]); d.circle(M + 26, y + 28, 13, 'F');
+        tc([255, 255, 255]); d.setFont('helvetica', 'bold'); d.setFontSize(14); d.text(String(i + 1), M + 26, y + 33, { align: 'center' });
+        d.setFontSize(9.5); tc(col[s]); d.text(T(NAME[s].toUpperCase()), M + 48, y + 22);
+        d.setFontSize(13); tc(INK); d.text(T(a ? a.nom : 'Ton produit actuel'), M + 48, y + 39);
+        if (a) { d.setFontSize(11); tc(col[s]); d.text(T(fmt(P(a))), W - M - 16, y + 39, { align: 'right' }); }
+        d.setFont('helvetica', 'normal'); d.setFontSize(10); tc(INK); let yy = y + 62;
+        wr.forEach(w => { d.text(w, M + 18, yy); yy += w.length * 13 + 4; });
+        y += h + 12;
+      });
+      const lst = m => STEPS.filter(s => picks[s] && slot(s).includes(m)).map((s, i) => (i + 1) + '. ' + NAME[s] + ' : ' + (picks[s] === 'deja' ? 'ton produit actuel' : picks[s].a.nom));
+      const cw2 = (CW - 14) / 2, cols = [['Le matin', lst('M'), [252, 233, 218], [232, 144, 90]], ['Le soir', lst('S'), [247, 228, 234], [163, 25, 63]]];
+      const wl = cols.map(c => c[1].map(x => d.splitTextToSize(T(x), cw2 - 28))), hh = 44 + Math.max(...wl.map(w => w.reduce((n, l) => n + l.length * 13 + 5, 0)));
+      need(hh + 40); d.setFont('helvetica', 'bold'); d.setFontSize(15); tc(INK); d.text('Ton ordre, matin et soir', M, y + 14); y += 26;
+      cols.forEach((c, k) => { const x = M + k * (cw2 + 14); fill(c[2]); d.roundedRect(x, y, cw2, hh, 12, 12, 'F'); d.setFont('helvetica', 'bold'); d.setFontSize(12.5); tc(c[3]); d.text(c[0], x + 14, y + 24);
+        d.setFont('helvetica', 'normal'); d.setFontSize(10); tc(INK); let yy = y + 44; wl[k].forEach(w => { d.text(w, x + 14, yy); yy += w.length * 13 + 5; }); });
+      y += hh + 18;
+      const c2 = picks.cibler && picks.cibler !== 'deja', pl = c2 ? ['Semaine 1 : nettoyant, crème et solaire seulement.', 'Semaine 2 : ajoute le soin ciblé 1 soir sur 2.', 'Semaines 3 et 4 : 1 soir sur 2 ou tous les soirs, si ta peau ne tire pas et ne rougit pas.'] : ['Semaines 1 à 4 : garde la même routine tous les jours, sans rien changer.'];
+      pl.push('Après 4 à 6 semaines : regarde ta peau. Pas satisfaite ? Écris-nous sur WhatsApp : 77 803 88 74.', "Avant un nouveau produit : teste-le 24 h derrière l'oreille. Rougeur, démangeaison ou brûlure : arrête.");
+      const wp = pl.map(x => d.splitTextToSize(T(x), CW - 32)), hp = 46 + wp.reduce((n, w) => n + w.length * 13 + 5, 0);
+      need(hp + 10); fill([225, 239, 228]); d.roundedRect(M, y, CW, hp, 12, 12, 'F'); d.setFont('helvetica', 'bold'); d.setFontSize(13); tc([60, 120, 85]); d.text('Ton planning', M + 16, y + 26);
+      d.setFont('helvetica', 'normal'); d.setFontSize(10); tc(INK); let yp = y + 46; wp.forEach(w => { d.text(w, M + 16, yp); yp += w.length * 13 + 5; });
+      foot(); d.save('ma-routine-senmarche.pdf'); btn.textContent = lbl;
+    } catch (e) { btn.textContent = 'PDF indisponible, réessaie'; setTimeout(() => { btn.textContent = lbl; }, 2500); }
+  }
   function plan(pk) {
     const c = pk.cibler && pk.cibler !== 'deja';
     const l = c ? ['Semaine 1 : nettoyant, crème et solaire seulement, pour installer la base.', 'Semaine 2 : ajoute le soin ciblé 1 soir sur 2.', 'Semaines 3 et 4 : 1 soir sur 2 ou tous les soirs, si ta peau ne tire pas et ne rougit pas.'] : ['Semaines 1 à 4 : garde la même routine tous les jours, sans rien changer.'];
+    l.push('Télécharge ta routine en PDF : tes produits, quand les utiliser et en quelle quantité.');
     l.push('Après 4 à 6 semaines : regarde ta peau. Si tu n’es pas satisfaite, écris-nous.');
     return '<div class="plan"><b>Ton planning</b>' + l.map(x => '<p>' + x + '</p>').join('') + '</div>';
   }
@@ -271,11 +335,14 @@ body{--ac:#A3193F;--ac-on:#fff}
       ${tab === 'S' && pf.jour ? '<p class="warn" style="margin-top:0">Si tu te maquilles ou mets de la crème solaire, nettoie en deux temps : démaquillant, puis nettoyant.</p>' : ''}
       <div class="tot"><span>Routine complète</span><span>${fmt(total)}</span></div>
       <div class="row"><button class="btn" id="addall" ${have.length ? '' : 'disabled'}>Tout ajouter au panier</button>
+      <button type="button" class="btn" id="mypdf" style="background:var(--card);color:var(--ink);border:1.5px solid var(--ac)">Télécharger ma routine en PDF</button>
+      <a class="btn" style="background:var(--card2,var(--card));color:var(--ink);border:1.5px solid var(--border)" href="guide-routine.pdf" download>Guide général (PDF)</a>
       <a class="btn" style="background:var(--card2,var(--card));color:var(--ink);border:1.5px solid var(--border)" id="wa" href="${WA}${encodeURIComponent('Ma routine SenMarché :\n' + have.map(x => '• ' + NAME[x.s] + ' : ' + x.p.a.nom + ' (' + fmt(P(x.p.a)) + ')').join('\n') + '\nTotal : ' + fmt(total) + '\n\nMes réponses :\n' + sumAns() + '\n\nJe voudrais un conseil personnalisé.')}">Demander un conseil perso</a></div>
       <div class="rnav"><button class="btn ghost" id="redo">Refaire le test</button></div>
       <p class="warn">${pf.enceinte ? 'Tu as indiqué être enceinte ou allaiter : on a écarté les actifs à éviter. Parles-en aussi à ton médecin avant d’ajouter un soin ciblé. ' : ''}${pf.irritee ? 'Peau irritée ou sous traitement : routine réduite à l’essentiel, demande l’avis de ton médecin. ' : ''}Conseils cosmétiques, pas un avis médical. Si une réaction apparaît, arrête le produit.</p></div>`;
     $('tm').onclick = () => show('M'); $('ts').onclick = () => show('S');
     $('redo').onclick = () => { ans = {}; intro(); };
+    $('mypdf').onclick = e => makePdf(e.target);
     $('addall').onclick = e => { try { have.forEach(x => SE.Cart.add(x.p.a.reference)); e.target.textContent = '✓ Ajoutée au panier'; } catch (err) {} };
   }
 
