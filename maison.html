@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -599,6 +600,19 @@ body.maison .dlv{background:var(--card);border:2px solid var(--ink);border-radiu
  body.maison .subchips .filter-pill,body.maison .subchips .sublabel{flex:0 0 auto;white-space:nowrap}}
 .dlv{display:flex;gap:.7rem;align-items:flex-start;margin:0 0 1.4rem;padding:.9rem 1.1rem;border-radius:var(--r16,16px);background:var(--m-tint-indigo);color:var(--ink);font-size:.92rem;line-height:1.45}
 .dlv b{color:var(--m-indigo)}
+/* v4 : grille nette 4 x 2 sur ordinateur, défilement sur une ligne en dessous de 900 px */
+@media(min-width:901px){
+ body.maison .cats-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;padding:.6rem .4rem 1rem}
+ body.maison .cat-chip{width:auto;justify-content:flex-start;padding:.5rem .9rem .5rem .5rem}
+ body.maison .cat-chip .ic{width:40px;height:40px}
+ body.maison .cat-chip .l{font-size:.92rem}
+ body.maison .cat-chip small{margin-left:auto}
+}
+@media(max-width:900px){
+ body.maison .cats-strip{flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -1rem;padding:.6rem 1rem 1rem;-webkit-mask-image:linear-gradient(90deg,#000 90%,transparent);mask-image:linear-gradient(90deg,#000 90%,transparent)}
+ body.maison .cat-chip{scroll-snap-align:start;white-space:nowrap}
+}
+
 </style>
 </head>
 <body class="se-mode cosm maison" data-part="hub" data-univers="maison">
@@ -833,7 +847,7 @@ body.maison .dlv{background:var(--card);border:2px solid var(--ink);border-radiu
     { k: 'chambre', t: 'Chambre', re: /matelas|\blit\b|oreiller|drap|couette|couverture|armoire|commode|moustiquaire|chambre|housse|traversin/ },
     { k: 'salon', t: 'Salon', re: /canape|fauteuil|table basse|meuble tv|tapis|rideau|coussin|lampe|pouf|salon|etagere|bibliotheque/ },
     { k: 'deco', t: 'Déco', re: /deco|vase|cadre|miroir|bougie|plante|horloge|statue|tableau/ },
-    { k: 'entretien', t: 'Entretien & rangement', re: /balai|seau|serpillere|rangement|panier|poubelle|cintre|nettoy|entretien|boite/ },
+    { k: 'entretien', t: 'Entretien', re: /balai|seau|serpillere|rangement|panier|poubelle|cintre|nettoy|entretien|boite/ },
     { k: 'divers', t: 'Autre', re: /(?!x)x/ }
   ];
   /* sous-filtres : seulement quand un rayon est grand (6 produits ou plus) */
@@ -877,7 +891,7 @@ body.maison .dlv{background:var(--card);border:2px solid var(--ink);border-radiu
     const chip = (f, label, n) => `<button type="button" class="cat-chip${st.f === f ? ' active' : ''}" data-f="${f}" aria-pressed="${st.f === f}"><span class="ic">${svg(f)}</span><span class="l">${label}</span><small>${n}</small></button>`;
     const soins = `<a class="cat-chip link" href="soins.html"><span class="ic">${svg('peau')}</span><span class="l">Crèmes &amp; soins</span><small>autre page →</small></a>`;
     const bij = count('bij') < 2 ? `<div class="cat-chip link" style="opacity:.75;cursor:default"><span class="ic">${svg('bij')}</span><span class="l">Bijoux</span><small>bientôt</small></div>` : '';
-    $('cats').innerHTML = (ITEMS.length ? chip('all', 'Tout', ITEMS.length) + ZONES.map(z => count(z.k) >= 1 ? chip(z.k, z.t, count(z.k)) : '').join('') : '') ;
+    $('cats').innerHTML = (ITEMS.length ? ZONES.map(z => count(z.k) >= 1 ? chip(z.k, z.t, count(z.k)) : '').join('') : '') ;
   }
   function drawSub(){
     const subs = SUBS[st.f], base = st.f === 'all' ? [] : ITEMS.filter(a => grpOf(a) === st.f);
@@ -918,7 +932,7 @@ body.maison .dlv{background:var(--card);border:2px solid var(--ink);border-radiu
   function drawAll(){ drawCats(); drawSub(); drawTools(); drawGrid(); }
   /* choisir un rayon (re-toucher la même puce = tout afficher) */
   function pickZone(k){ st.f = st.f === k ? 'all' : k; st.sub = -1; drawCats(); drawSub(); drawGrid(); }
-  $('cats').addEventListener('click', e => { const b = e.target.closest('.cat-chip'); if (!b || !b.dataset.f) return; const f = b.dataset.f; if (f === 'all'){ st.f = 'all'; st.sub = -1; drawCats(); drawSub(); drawGrid(); } else pickZone(f); });
+  $('cats').addEventListener('click', e => { const b = e.target.closest('.cat-chip'); if (!b || !b.dataset.f) return; const f = b.dataset.f; if (f === 'all'){ st.f = 'all'; st.sub = -1; drawCats(); drawSub(); drawGrid(); } else if (st.f === f){ st.f = 'all'; st.sub = -1; drawCats(); drawSub(); drawGrid(); } else pickZone(f); });
   $('subchips').addEventListener('click', e => { const b = e.target.closest('.filter-pill'); if (!b) return; st.sub = parseInt(b.dataset.s, 10); drawSub(); drawGrid(); });
   $('toolbar').addEventListener('change', e => {
     if (e.target.id === 'sort'){ st.sort = e.target.value; drawGrid(); }
