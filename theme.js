@@ -23,7 +23,7 @@
         '--or-dim': 'rgba(30,20,10,.06)', '--or-line': 'rgba(30,20,10,.15)',
         '--ink': '#1A1208', '--slate': '#3D2E1E', '--stone': '#7A6655', '--muted': '#A89080',
         '--green': '#16A34A', '--red': '#DC2626', '--blue': '#2563EB',
-        '--ff-d': "'DM Sans', system-ui, sans-serif", '--ff-b': "'DM Sans', system-ui, sans-serif",
+        '--ff-d': "'Public Sans', system-ui, sans-serif", '--ff-b': "'Public Sans', system-ui, sans-serif",
         '--hero-bg': 'linear-gradient(150deg, #FAF6F0 0%, #F2EBE0 100%)'
       }
     },
@@ -38,7 +38,7 @@
         '--or-dim': 'rgba(212,175,55,.1)', '--or-line': 'rgba(212,175,55,.2)',
         '--ink': '#F5F5F5', '--slate': '#C0C0C0', '--stone': '#9A9A9A', '--muted': '#6A6A6A',
         '--green': '#4ADE80', '--red': '#F87171', '--blue': '#60A5FA',
-        '--ff-d': "'Cormorant Garamond', Georgia, serif", '--ff-b': "'DM Sans', system-ui, sans-serif",
+        '--ff-d': "'Newsreader', Georgia, serif", '--ff-b': "'Public Sans', system-ui, sans-serif",
         '--hero-bg': 'linear-gradient(150deg, #0F0F0F 0%, #161616 100%)'
       }
     }

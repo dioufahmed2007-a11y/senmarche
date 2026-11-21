@@ -8,9 +8,8 @@
 <meta name="theme-color" content="#FAF6F0">
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="manifest" href="manifest.json">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Fraunces:ital,opsz,wght@1,9..144,400..600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts.css">
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="styles-dark.css">
@@ -21,9 +20,9 @@
    Préfixe --m- pour ne JAMAIS entrer en collision avec les variables
    que theme.js écrit sur <html> (--card, --ff-d, etc.). */
 :root{
-  --m-display:'Bricolage Grotesque',system-ui,sans-serif;
-  --m-serif:'Fraunces',Georgia,serif;
-  --m-body:'Figtree',system-ui,sans-serif;
+  --m-display:'Archivo',system-ui,sans-serif;
+  --m-serif:'Newsreader',Georgia,serif;
+  --m-body:'Public Sans',system-ui,sans-serif;
   --gut:clamp(1.1rem,4.5vw,3rem);
 
   --m-vert:#0E4D3A;   --m-vert-2:#1F9670;

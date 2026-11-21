@@ -5,7 +5,7 @@
    - Cache-first pour les fonts et images
    ═══════════════════════════════════════════════════════════ */
 
-const CACHE_NAME = 'senexport-v1';
+const CACHE_NAME = 'senmarche-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

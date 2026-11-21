@@ -5,9 +5,9 @@
    Mode sombre : theme.js v7 pose data-se-theme="dark" sur <html>.
    ═══════════════════════════════════════════════════════════════ */
 :root{
-  --m-display:'Bricolage Grotesque',system-ui,sans-serif;
-  --m-serif:'Fraunces',Georgia,serif;
-  --m-body:'Figtree',system-ui,sans-serif;
+  --m-display:'Archivo',system-ui,sans-serif;
+  --m-serif:'Newsreader',Georgia,serif;
+  --m-body:'Public Sans',system-ui,sans-serif;
   --m-mono:'JetBrains Mono',ui-monospace,monospace;
   --gut:clamp(1.1rem,4.5vw,3rem);
 

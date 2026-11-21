@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 280"><defs>
+<linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3FB27F"/><stop offset="1" stop-color="#14684A"/></linearGradient></defs>
+<ellipse cx="170" cy="252" rx="140" ry="14" fill="#14684A" opacity=".14"/>
+<rect x="148" y="38" width="44" height="18" rx="6" fill="#1F2D2A"/><rect x="162" y="52" width="16" height="22" fill="#1F2D2A"/>
+<circle cx="170" cy="150" r="88" fill="#fff" stroke="#1F2D2A" stroke-width="8"/><circle cx="170" cy="150" r="70" fill="#DDF3E7"/>
+<path d="M170 150V98M170 150l36 20" stroke="#1F2D2A" stroke-width="8" stroke-linecap="round"/><circle cx="170" cy="150" r="9" fill="#E8741A"/>
+<path d="M170 90v-8M170 218v-8M92 150h8M240 150h8" stroke="#1F2D2A" stroke-width="5" stroke-linecap="round"/>
+<path d="M240 70l22-22" stroke="#1F2D2A" stroke-width="10" stroke-linecap="round"/>
+<circle cx="40" cy="70" r="6" fill="#E8741A"/><circle cx="300" cy="200" r="5" fill="#3FB27F"/><path d="M36 200l8 8m0-8l-8 8" stroke="#14684A" stroke-width="3"/>
+</svg>

@@ -8,9 +8,8 @@
 <meta name="theme-color" content="#FAF6F0">
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="manifest" href="manifest.json">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Figtree:wght@400;500;600;700&family=Parisienne&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts.css">
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="styles-dark.css">
@@ -268,7 +267,7 @@ body.se-mode .hero-row .btn-s{background:var(--m-bissap);color:var(--m-on-bissap
 @keyframes sway{0%,100%{rotate:-1.5deg}50%{rotate:2deg}}
 
 /* ═════════ FILLE v4 — ligne manuscrite sous le titre ═════════ */
-.hero-title .ht-2.out{font-family:'Parisienne','Fraunces',cursive;font-weight:400;font-style:normal;font-variation-settings:normal;text-transform:none;letter-spacing:.01em;-webkit-text-stroke:0;color:var(--m-acc-bissap);font-size:.5em;line-height:1;margin-top:-.04em;padding-left:.04em}
+.hero-title .ht-2.out{font-family:'Parisienne','Newsreader',cursive;font-weight:400;font-style:normal;font-variation-settings:normal;text-transform:none;letter-spacing:.01em;-webkit-text-stroke:0;color:var(--m-acc-bissap);font-size:.5em;line-height:1;margin-top:-.04em;padding-left:.04em}
 
 /* ═════════ TENUES — une page, deux ambiances ═════════
    abayas & voiles = calme, sobre (vert)  |  tendances = plus libre (rose) */
@@ -403,7 +402,7 @@ html{scroll-padding-top:70px}
 .zone-title{margin:.5rem 0 0;font-size:clamp(2.8rem,10vw,6.6rem);line-height:.95;letter-spacing:-.035em}
 .zone-sub{margin:1rem 0 0;max-width:44ch;font:500 clamp(1rem,2vw,1.2rem)/1.5 var(--m-body);opacity:.92}
 .zone[data-zone="abayas"] .zone-title{font-family:var(--m-serif);font-style:italic;font-weight:400;font-variation-settings:normal;text-transform:none}
-.zone[data-zone="tendances"] .zone-sub{font-family:'Parisienne','Fraunces',cursive;font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.05;opacity:1}
+.zone[data-zone="tendances"] .zone-sub{font-family:'Parisienne','Newsreader',cursive;font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.05;opacity:1}
 .zone[data-zone="abayas"] .zone-band .arch{position:absolute;right:clamp(1rem,8vw,8rem);bottom:0;width:clamp(150px,24vw,300px);height:92%;border:1.5px solid color-mix(in srgb,var(--pt-on) 40%,transparent);border-bottom:0;border-radius:999px 999px 0 0;z-index:0}
 .zone[data-zone="abayas"] .zone-band .arch::after{content:'';position:absolute;inset:14px 14px 0;border:1px solid color-mix(in srgb,var(--pt-on) 26%,transparent);border-bottom:0;border-radius:999px 999px 0 0}
 .zone[data-zone="tendances"] .zone-band .deco{right:-2%;bottom:-18%;width:clamp(230px,36vw,500px);z-index:0}

@@ -419,10 +419,10 @@
 /* ══════════════════════════════════════════════════
    OVERRIDES PAR THÈME — chaque thème a son caractère
    ══════════════════════════════════════════════════ */
-body.theme-clair { font-family: 'DM Sans', system-ui, sans-serif; }
+body.theme-clair { font-family: 'Public Sans', system-ui, sans-serif; }
 body.theme-clair .nav { background: rgba(250,246,240,.92); border-bottom-color: rgba(30,20,10,.1); }
 body.theme-clair .nav-logo, body.theme-clair .nav-links a, body.theme-clair .nav-icon { color: #1A1208; }
-body.theme-clair .hero-title, body.theme-clair .sec-title, body.theme-clair .ed-hero-title { font-family: 'DM Sans', system-ui, sans-serif; font-weight: 700; letter-spacing: -.03em; }
+body.theme-clair .hero-title, body.theme-clair .sec-title, body.theme-clair .ed-hero-title { font-family: 'Public Sans', system-ui, sans-serif; font-weight: 700; letter-spacing: -.03em; }
 body.theme-clair .hero-title em, body.theme-clair .sec-title em, body.theme-clair .ed-hero-title em { color: #1A1208; font-style: normal; }
 body.theme-clair .btn-primary { background: #1A1208; color: #FAF6F0; }
 body.theme-clair .btn-ghost { border-color: rgba(30,20,10,.25); color: #1A1208; }
@@ -434,9 +434,9 @@ body.theme-clair .announce-top { background: #1A1208; color: rgba(250,246,240,.7
 body.theme-clair .announce-top strong { color: #FAF6F0; }
 body.theme-clair .loyalty-card-face, body.theme-clair .lc-card-modern { color: #fff !important; }
 
-body.theme-nuit-bleue { font-family: 'DM Sans', system-ui, sans-serif; }
+body.theme-nuit-bleue { font-family: 'Public Sans', system-ui, sans-serif; }
 body.theme-nuit-bleue .nav { background: rgba(8,12,20,.9); border-bottom-color: rgba(56,189,248,.1); }
-body.theme-nuit-bleue .hero-title, body.theme-nuit-bleue .sec-title, body.theme-nuit-bleue .ed-hero-title { font-family: 'DM Sans', system-ui, sans-serif; font-weight: 600; letter-spacing: -.02em; }
+body.theme-nuit-bleue .hero-title, body.theme-nuit-bleue .sec-title, body.theme-nuit-bleue .ed-hero-title { font-family: 'Public Sans', system-ui, sans-serif; font-weight: 600; letter-spacing: -.02em; }
 body.theme-nuit-bleue .hero-title em, body.theme-nuit-bleue .sec-title em, body.theme-nuit-bleue .ed-hero-title em { color: #38BDF8; font-style: normal; }
 body.theme-nuit-bleue .btn-primary { background: #38BDF8; color: #080C14; }
 body.theme-nuit-bleue .announce-top { background: rgba(56,189,248,.08); border-bottom-color: rgba(56,189,248,.12); }
