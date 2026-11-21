@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 380"><defs><linearGradient id="r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F0484B"/><stop offset="1" stop-color="#9B0F18"/></linearGradient><linearGradient id="r2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D62A30"/><stop offset="1" stop-color="#7A0B14"/></linearGradient><g id="gl"><path d="M44 74C44 34 92 22 132 32 172 42 188 84 176 124l-4 30c-2 14-18 22-34 22H74c-16 0-28-10-28-24z" fill="url(#r)"/><path d="M62 84C30 78 18 104 34 120c10 10 26 6 38-8z" fill="url(#r2)"/><rect x="46" y="150" width="126" height="40" rx="12" fill="#1A1A1A"/><rect x="46" y="150" width="126" height="10" rx="5" fill="#fff" opacity=".2"/><path d="M80 52c20-8 50-4 64 14" stroke="#fff" stroke-opacity=".38" stroke-width="8" fill="none" stroke-linecap="round"/></g></defs>
+<ellipse cx="260" cy="344" rx="220" ry="18" fill="#7A0B14" opacity=".18"/>
+<use href="#gl" transform="translate(30 40) rotate(-14 100 100) scale(1.35)"/>
+<use href="#gl" transform="translate(500 40) scale(-1.35 1.35) rotate(-14 100 100)"/>
+<path d="M258 40v34M222 56l12 28M294 56l-12 28" stroke="#E8741A" stroke-width="8" stroke-linecap="round"/><circle cx="60" cy="60" r="7" fill="#E8741A"/><circle cx="470" cy="300" r="6" fill="#C1121F"/>
+</svg>

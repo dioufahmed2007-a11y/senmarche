@@ -132,8 +132,8 @@ body.se-mode .prod-grid .skel{border-radius:18px;aspect-ratio:4/5}
 
 /* ═════════ TEXTES DE VENTE ═════════ */
 .mkt{display:grid;grid-template-columns:1fr;border:1px solid var(--border);border-radius:22px;margin:0 0 1.4rem;background:var(--card);overflow:hidden}
-.mkt-img{min-height:240px;background-size:cover;background-position:center;background-color:var(--m-vert);position:relative}
-.mkt-img::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,color-mix(in srgb,var(--c1,var(--m-vert)) 60%,transparent),transparent 70%)}
+.mkt-img{min-height:240px;background-size:cover;background-position:center;background-color:var(--m-bissap);position:relative}
+.mkt-img::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,color-mix(in srgb,var(--c1,var(--m-bissap)) 60%,transparent),transparent 70%)}
 .mkt-text{padding:clamp(1.5rem,4vw,3rem);display:flex;flex-direction:column;justify-content:center}
 .mkt-text h3{font:800 clamp(2rem,4.4vw,3.2rem)/1.02 var(--m-display);font-variation-settings:"wdth" 92;letter-spacing:-.03em;color:var(--ink);margin:0 0 1rem}
 .mkt-text p{color:var(--stone);line-height:1.75;margin:0 0 1.3rem;font-size:1rem;max-width:46ch}
@@ -269,7 +269,7 @@ body.se-mode .hero-row .btn-s{background:var(--m-bissap);color:var(--m-on-bissap
 
 /* ═════════ TENUES — une page, deux ambiances ═════════
    abayas & voiles = calme, sobre (vert)  |  tendances = plus libre (rose) */
-body[data-part="abayas"]{--pt:var(--m-vert);--pt2:var(--m-vert-2);--pt-on:var(--m-on-vert);--pt-tint:var(--m-tint-vert);--pt-acc:var(--m-acc-vert);--pt-g:var(--m-g-vert)}
+body[data-part="abayas"]{--pt:var(--m-bissap);--pt2:var(--m-bissap-2);--pt-on:var(--m-on-vert);--pt-tint:var(--m-tint-vert);--pt-acc:var(--m-acc-vert);--pt-g:var(--m-g-vert)}
 body[data-part="tendances"]{--pt:var(--m-bissap);--pt2:var(--m-bissap-2);--pt-on:var(--m-on-bissap);--pt-tint:var(--m-tint-bissap);--pt-acc:var(--m-acc-bissap);--pt-g:var(--m-g-bissap)}
 /* un seul hero visible à la fois */
 body[data-part="abayas"] .hero-t,body[data-part="abayas"] .tape-t{display:none}
@@ -299,7 +299,7 @@ body.se-mode .filter-pill.active{background:var(--pt);color:var(--pt-on);border-
 .hero-a .arch{position:absolute;right:clamp(1.2rem,7vw,7rem);bottom:0;width:clamp(170px,25vw,340px);height:80%;border:1.5px solid color-mix(in srgb,var(--pt-acc) 38%,transparent);border-bottom:0;border-radius:999px 999px 0 0;z-index:-1;pointer-events:none}
 .hero-a .arch::after{content:'';position:absolute;inset:14px 14px 0;border:1px solid color-mix(in srgb,var(--pt-acc) 24%,transparent);border-bottom:0;border-radius:999px 999px 0 0}
 .hero-a .d-h2{right:clamp(2rem,9vw,9rem);top:6%;width:clamp(110px,15vw,210px);opacity:.5}
-body[data-part="abayas"] .street-tape{background:var(--m-vert);color:var(--m-on-vert)}
+body[data-part="abayas"] .street-tape{background:var(--m-bissap);color:var(--m-on-vert)}
 body[data-part="abayas"] .street-track span::after{content:'—';color:var(--m-on-vert);opacity:.6;font-size:.9rem}
 body[data-part="abayas"] .sh h2{font-family:var(--m-serif);font-style:italic;font-weight:400;font-variation-settings:normal;text-transform:none;letter-spacing:-.025em}
 body[data-part="abayas"] .sh h2 i::after{content:''}
@@ -310,7 +310,7 @@ body[data-part="abayas"] .drops .drop-title{text-transform:none}
 
 /* ── choix de la partie ── */
 .parts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 1.3rem}
-.part{--c:var(--m-vert);--cg:var(--m-g-vert);--co:var(--m-on-vert);--ct:var(--m-tint-vert);position:relative;text-align:left;padding:1.1rem 1.2rem 1.15rem;border-radius:20px;border:2px solid var(--border);background:var(--ct);color:var(--ink);cursor:pointer;font:inherit;transition:transform .2s,background .25s,border-color .25s}
+.part{--c:var(--m-bissap);--cg:var(--m-g-vert);--co:var(--m-on-vert);--ct:var(--m-tint-vert);position:relative;text-align:left;padding:1.1rem 1.2rem 1.15rem;border-radius:20px;border:2px solid var(--border);background:var(--ct);color:var(--ink);cursor:pointer;font:inherit;transition:transform .2s,background .25s,border-color .25s}
 .part[data-k="tendances"]{--c:var(--m-bissap);--cg:var(--m-g-bissap);--co:var(--m-on-bissap);--ct:var(--m-tint-bissap)}
 .part:hover{transform:translateY(-2px);border-color:var(--c)}
 .part b{display:block;font-size:clamp(1.25rem,3.6vw,2rem);line-height:1}
@@ -390,7 +390,7 @@ html{scroll-padding-top:70px}
 .jump[data-k="tendances"]{background:var(--m-g-bissap);color:var(--m-on-bissap)}
 .jump[data-k="look"]{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
 .zone{position:relative;margin-top:clamp(2.4rem,6vw,4rem);background:var(--pt-tint)}
-.zone[data-zone="abayas"]{--pt:var(--m-vert);--pt2:var(--m-vert-2);--pt-on:var(--m-on-vert);--pt-tint:var(--m-tint-vert);--pt-acc:var(--m-acc-vert);--pt-g:var(--m-g-vert)}
+.zone[data-zone="abayas"]{--pt:var(--m-bissap);--pt2:var(--m-bissap-2);--pt-on:var(--m-on-vert);--pt-tint:var(--m-tint-vert);--pt-acc:var(--m-acc-vert);--pt-g:var(--m-g-vert)}
 .zone[data-zone="tendances"]{--pt:var(--m-bissap);--pt2:var(--m-bissap-2);--pt-on:var(--m-on-bissap);--pt-tint:var(--m-tint-bissap);--pt-acc:var(--m-acc-bissap);--pt-g:var(--m-g-bissap)}
 .zone-band{position:relative;overflow:hidden;isolation:isolate;background:var(--pt-g);color:var(--pt-on);padding:clamp(2.6rem,7vw,4.6rem) 0}
 .zone-band .container{position:relative;z-index:1}
@@ -430,7 +430,7 @@ html{scroll-padding-top:116px}
 .tabbar{position:fixed;top:56px;left:0;right:0;z-index:250;display:flex;justify-content:center;gap:8px;padding:.55rem 1rem;background:color-mix(in srgb,var(--bg) 93%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);transform:translateY(-140%);opacity:0;pointer-events:none;transition:transform .3s ease,opacity .3s ease}
 .tabbar.on{transform:none;opacity:1;pointer-events:auto}
 .tabbar a{flex:1;max-width:250px;text-align:center;padding:.65rem .8rem;border-radius:999px;font:700 .84rem/1 var(--m-body);text-decoration:none;color:var(--ink);border:1.5px solid var(--border);transition:background .2s,color .2s,border-color .2s}
-.tabbar a.active[data-k="abayas"]{background:var(--m-g-vert);color:var(--m-on-vert);border-color:var(--m-vert)}
+.tabbar a.active[data-k="abayas"]{background:var(--m-g-vert);color:var(--m-on-vert);border-color:var(--m-bissap)}
 .tabbar a.active[data-k="tendances"]{background:var(--m-g-bissap);color:var(--m-on-bissap);border-color:var(--m-bissap)}
 .zone-sub{font-size:clamp(1.5rem,3.6vw,2.3rem);line-height:1.1;margin-top:.8rem}
 .zone[data-zone="abayas"] .zone-sub{font-family:var(--m-serif);font-style:italic;font-weight:400;opacity:1}
@@ -546,7 +546,8 @@ body.cosm .advice .btn-s{background:var(--m-on-bissap);color:var(--m-bissap);bor
 .seg .off small{color:var(--stone);opacity:1}
 
 /* ═════════ SPORT — mêmes briques, teinte verte ═════════ */
-body.sport{--m-bissap:var(--m-vert);--m-bissap-2:var(--m-vert-2);--m-on-bissap:var(--m-on-vert);--m-tint-bissap:var(--m-tint-vert);--m-acc-bissap:var(--m-acc-vert);--m-g-bissap:var(--m-g-vert)}
+body.sport{--m-bissap:#C1121F;--m-bissap-2:#E5383B;--m-on-bissap:#fff;--m-tint-bissap:color-mix(in srgb,#C1121F 8%,var(--bg));--m-acc-bissap:#B30F1B;--m-g-bissap:linear-gradient(145deg,#6E0A12,#C1121F 55%,#E5383B)}
+:root[data-theme="dark"] body.sport{--m-bissap:#E5383B;--m-bissap-2:#FF6B6B;--m-acc-bissap:#FF8A8A;--m-tint-bissap:color-mix(in srgb,#E5383B 28%,var(--bg))}
 body.sport .sh h2::after,body.sport .hero-s::before,body.sport .hero-s::after{display:none!important}
 body.sport .sh h2 i::after{content:none!important}
 body.sport .street-track span::after{content:'/'!important;font-weight:400}
@@ -559,13 +560,13 @@ body.sport .cat-chip .ic{background:color-mix(in srgb,var(--cc,#1F2C6B) 12%,var(
 body.sport .cat-chip.active .ic{background:var(--cc);color:#fff;border-color:var(--cc);box-shadow:0 10px 20px color-mix(in srgb,var(--cc) 35%,transparent);transform:translateY(-2px)}
 body.sport .cat-chip.active .l{color:var(--cc)}
 .sublabel{font:700 .7rem/1 var(--m-body);letter-spacing:.14em;text-transform:uppercase;color:var(--stone);align-self:center;margin-right:.2rem}
-body.sport .subchips .filter-pill{border-radius:999px;background:var(--card,#fff);border-color:color-mix(in srgb,var(--m-vert-2) 25%,transparent)}
-body.sport .subchips .filter-pill.active{background:var(--m-vert);color:#fff;border-color:var(--m-vert)}
+body.sport .subchips .filter-pill{border-radius:999px;background:var(--card,#fff);border-color:color-mix(in srgb,var(--m-bissap-2) 25%,transparent)}
+body.sport .subchips .filter-pill.active{background:var(--m-bissap);color:#fff;border-color:var(--m-bissap)}
 body.sport .deco.d-h1{left:auto!important;top:auto!important;right:2.5%!important;bottom:104px!important;width:min(400px,31vw)!important;height:auto!important}
 body.sport .deco.d-h2{left:auto!important;bottom:auto!important;top:76px!important;right:35%!important;width:min(190px,15vw)!important;height:auto!important}
 @media(max-width:900px){body.sport .deco.d-h2{display:none!important}body.sport .deco.d-h1{width:150px!important;bottom:auto!important;top:60px!important;right:2%!important;opacity:.55}}
 .dlv{display:flex;gap:.7rem;align-items:flex-start;margin:0 0 1.4rem;padding:.9rem 1.1rem;border-radius:var(--r16,16px);background:var(--m-tint-vert);color:var(--ink);font-size:.92rem;line-height:1.45}
-.dlv b{color:var(--m-vert)}
+.dlv b{color:var(--m-bissap)}
 /* ── MAISON v5 : filtres simples et légers ── */
 body.sport .band-soft{background:transparent;padding-bottom:0}
 body.sport .cats-strip{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:.5rem;padding:.4rem .2rem .7rem;margin:0 -.2rem;scroll-snap-type:x proximity;scrollbar-width:none}
@@ -593,6 +594,12 @@ body.sport .subchips .filter-pill{border:0;background:none;padding:.3rem 0;borde
 body.sport .subchips .filter-pill.active{color:var(--ink);background:none;box-shadow:inset 0 -2px 0 var(--ink)}
 @media(max-width:700px){body.sport .subchips{flex-wrap:nowrap;overflow-x:auto;margin:.6rem -1rem 0;padding:0 1rem;scrollbar-width:none}body.sport .subchips .filter-pill{flex:0 0 auto;white-space:nowrap}}
 .cat-chip[data-f=velo]{--cc:#1B7F4B}.cat-chip[data-f=ballons]{--cc:#D4640F}.cat-chip[data-f=fitness]{--cc:#C0392B}.cat-chip[data-f=tenues]{--cc:#3F7FD6}.cat-chip[data-f=course]{--cc:#5B4A9A}.cat-chip[data-f=accessoires]{--cc:#A86A00}
+.cat-chip[data-f=combat]{--cc:#C1121F}
+body.sport .hero-title{font-style:italic;text-transform:uppercase;letter-spacing:-.025em}
+body.sport .hero-title .ht-2{text-transform:none;font-style:normal}
+body.sport .cat-chip.active{background:var(--m-bissap);border-color:var(--m-bissap)}
+body.sport .cat-chip.active .ic{background:#fff}
+body.sport .mkt-img.art{background-size:contain!important;background-repeat:no-repeat!important;background-position:center!important;background-color:color-mix(in srgb,var(--m-bissap) 9%,transparent)}
 </style>
 </head>
 <body class="se-mode cosm sport" data-part="hub">
@@ -627,17 +634,17 @@ body.sport .subchips .filter-pill.active{color:var(--ink);background:none;box-sh
 
   <div class="hero-s-bg"></div><div class="hero-s-tint"></div><div class="hero-s-shade"></div>
   <div class="hero-s-top"><span class="crumb"><a href="index.html">Accueil</a> › Sport</span><span class="sticker">Petits<br>prix</span></div>
-  <h1 class="hero-title disp"><span>Sport</span><span class="ht-2 out">du terrain à la salle</span></h1>
+  <h1 class="hero-title disp"><span>Sport</span><span class="ht-2 out">pas d’excuses</span></h1>
   <div class="hero-row">
-    <div class="hero-tags"><span>Foot, fitness, course, vélo</span><span>Vérifié avant envoi</span><span>Paiement à la récupération</span></div>
+    <div class="hero-tags"><span>Foot, combat, fitness, course, vélo</span><span>Vérifié avant envoi</span><span>Paiement à la récupération</span></div>
     <a href="#pieces" class="btn-s">Voir les produits →</a>
   </div>
 </header>
 
 <!-- BANDE -->
 <div class="street-tape" aria-hidden="true"><div class="street-track">
-  <span>Foot</span><span>Fitness</span><span>Course</span><span>Vélo</span><span>Tenues</span>
-<span>Foot</span><span>Fitness</span><span>Course</span><span>Vélo</span><span>Tenues</span>
+  <span>Foot</span><span>Combat</span><span>Fitness</span><span>Course</span><span>Vélo</span><span>Tenues</span>
+<span>Foot</span><span>Combat</span><span>Fitness</span><span>Course</span><span>Vélo</span><span>Tenues</span>
 </div></div>
 
 <!-- 01 PAR ENVIE : bandeau sombre pour le contraste -->
@@ -658,6 +665,26 @@ body.sport .subchips .filter-pill.active{color:var(--ink);background:none;box-sh
 <section class="sec" id="packs-sec" hidden><div class="container">
   <div class="sh"><span class="sh-n">02</span><h2>Coffrets <i>&amp; offres</i></h2><span class="mono">Ensemble, c'est moins cher</span></div>
   <div class="prod-grid" id="grid-packs"></div>
+</div></section>
+
+<!-- MOTIVATION -->
+<section class="sec"><div class="container">
+  <div class="mkt" style="--c1:var(--m-bissap)">
+    <div class="mkt-img art" style="background-image:url('deco-combat.svg')"></div>
+    <div class="mkt-text">
+      <h3>Pas d’excuses. <i>Équipe-toi.</i></h3>
+      <p>Le meilleur moment pour commencer, c’est maintenant. Gants, ballons, haltères : le matériel qu’il te faut, à prix justes, vérifié avant l’envoi.</p>
+      <ul class="mkt-list"><li>Matériel vérifié avant l’envoi</li><li>Stock limité : quand c’est parti, c’est parti</li><li>Paiement à la récupération</li></ul>
+    </div>
+  </div>
+  <div class="mkt reverse" style="--c1:var(--m-bissap-2)">
+    <div class="mkt-img art" style="background-image:url('deco-sport.svg')"></div>
+    <div class="mkt-text">
+      <h3>Du premier jour <i>au dernier round</i></h3>
+      <p>Débutant ou compétiteur, on a de quoi t’équiper. Un doute sur la taille ou le niveau ? Écris-nous sur WhatsApp, on te conseille.</p>
+      <ul class="mkt-list"><li>Foot, combat, fitness, course, vélo</li><li>Conseils par WhatsApp</li><li>Petits prix</li></ul>
+    </div>
+  </div>
 </div></section>
 
 <!-- CONSEIL -->
@@ -821,6 +848,7 @@ body.sport .subchips .filter-pill.active{color:var(--ink);background:none;box-sh
   };
   const ZONES = [
     { k: 'velo', t: 'Vélo', re: /velo|vtt|cycliste|pedale|antivol/ },
+    { k: 'combat', t: 'Sports de combat', re: /boxe|boxing|mma|judo|karate|taekwondo|kimono|muay|sac de frappe|punching|protege.?dents|bandage|bandes de boxe|combat|lutte/ },
     { k: 'ballons', t: 'Ballons & foot', re: /ballon|foot|crampon|gardien|tibia|volley|handball|filet/ },
     { k: 'fitness', t: 'Fitness', re: /haltere|kettlebell|yoga|corde a sauter|banc|musculation|elastique|poids|swiss|abdo|tapis de sol|fitness|barre/ },
     { k: 'tenues', t: 'Tenues', re: /maillot|short|survetement|jogging|legging|brassiere|t-shirt|debardeur|chaussettes|tenue/ },
@@ -831,6 +859,7 @@ body.sport .subchips .filter-pill.active{color:var(--ink);background:none;box-sh
   /* sous-filtres : seulement quand un rayon est grand (6 produits ou plus) */
   const SUB_MIN = 2;
   const SUBS = {
+    combat: [{ t: 'Gants & bandes', re: /gant|bande|bandage/ }, { t: 'Protections', re: /casque|protege|plastron|coquille/ }, { t: 'Kimonos & tenues', re: /kimono|judogi|short/ }, { t: 'Sacs & cibles', re: /sac de frappe|punching|cible|\bpao/ }],
     velo: [{ t: 'Vélos', re: /velo|vtt/ }, { t: 'Accessoires vélo', re: /pedale|antivol|cycliste/ }],
     ballons: [{ t: 'Ballons', re: /ballon/ }, { t: 'Crampons & chaussures', re: /crampon|chaussure/ }, { t: 'Protections', re: /tibia|gardien/ }],
     fitness: [{ t: 'Haltères & poids', re: /haltere|kettlebell|poids|barre/ }, { t: 'Yoga & sol', re: /yoga|tapis/ }, { t: 'Cordes & élastiques', re: /corde|elastique|swiss/ }],
@@ -845,7 +874,7 @@ body.sport .subchips .filter-pill.active{color:var(--ink);background:none;box-sh
   const price = a => a.prix_vente_fcfa || 0, isPetit = a => price(a) > 0 && price(a) <= PETIT;
   const catName = a => (a.categorie && a.categorie.nom) || '';
   /* ordre de priorité : le plus précis d'abord (un vernis « poudré » reste un vernis) */
-  const PRIO = ['velo', 'ballons', 'fitness', 'tenues', 'course', 'accessoires'];
+  const PRIO = ['velo', 'combat', 'ballons', 'fitness', 'tenues', 'course', 'accessoires'];
   const zoneOf = a => { const n = norm(a.nom); const k = PRIO.find(k => ZONES.find(z => z.k === k).re.test(n)); return k || 'divers'; };
   const zname = k => k === 'autre' ? 'Autre' : ((ZONES.find(z => z.k === k) || {}).t || '');
   const comps = (p, all) => { const d = norm(p.description || ''); return all.filter(a => a !== p && norm(a.nom).length > 5 && d.includes(norm(a.nom))); };

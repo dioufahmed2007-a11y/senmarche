@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 440"><defs>
-<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3FB27F"/><stop offset="1" stop-color="#14684A"/></linearGradient>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F0484B"/><stop offset="1" stop-color="#8F1D14"/></linearGradient>
 <radialGradient id="b" cx=".35" cy=".3"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#DCE3EA"/></radialGradient></defs>
-<ellipse cx="330" cy="398" rx="290" ry="26" fill="#14684A" opacity=".14"/>
-<ellipse cx="330" cy="392" rx="250" ry="18" fill="#DDF3E7"/>
+<ellipse cx="330" cy="398" rx="290" ry="26" fill="#8F1D14" opacity=".14"/>
+<ellipse cx="330" cy="392" rx="250" ry="18" fill="#FBE0DC"/>
 <g transform="translate(140 300)"><rect x="0" y="22" width="60" height="96" rx="14" fill="#E8741A"/><rect x="62" y="48" width="170" height="16" rx="8" fill="#1F2D2A"/><rect x="232" y="22" width="60" height="96" rx="14" fill="#E8741A"/><rect x="-26" y="40" width="30" height="60" rx="10" fill="#1F2D2A"/><rect x="288" y="40" width="30" height="60" rx="10" fill="#1F2D2A"/><rect x="12" y="34" width="12" height="70" rx="6" fill="#fff" opacity=".25"/></g>
 <circle cx="250" cy="205" r="110" fill="url(#b)" stroke="#1F2D2A" stroke-width="7"/>
 <path d="M250 150l36 26-14 42h-44l-14-42z" fill="#1F2D2A"/>
 <path d="M250 150v-40M286 176l38-12M272 218l24 34M228 218l-24 34M214 176l-38-12" stroke="#1F2D2A" stroke-width="6" stroke-linecap="round"/>
 <path d="M176 164l-26 26 12 38M324 164l26 26-12 38M204 252l28 24h36l28-24" fill="none" stroke="#1F2D2A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
 <rect x="470" y="170" width="92" height="190" rx="30" fill="url(#g)"/><rect x="494" y="138" width="44" height="40" rx="12" fill="#1F2D2A"/><rect x="486" y="200" width="60" height="70" rx="14" fill="#fff" opacity=".28"/><circle cx="516" cy="300" r="22" fill="#FFD56B"/>
-<circle cx="560" cy="110" r="8" fill="#E8741A"/><circle cx="60" cy="120" r="6" fill="#3FB27F"/><path d="M590 250l8 8m0-8l-8 8" stroke="#14684A" stroke-width="3"/>
+<circle cx="560" cy="110" r="8" fill="#E8741A"/><circle cx="60" cy="120" r="6" fill="#F0484B"/><path d="M590 250l8 8m0-8l-8 8" stroke="#8F1D14" stroke-width="3"/>
 </svg>
