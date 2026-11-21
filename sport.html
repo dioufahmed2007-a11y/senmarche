@@ -600,6 +600,17 @@ body.sport .hero-title .ht-2{text-transform:none;font-style:normal}
 body.sport .cat-chip.active{background:var(--m-bissap);border-color:var(--m-bissap)}
 body.sport .cat-chip.active .ic{background:#fff}
 body.sport .mkt-img.art{background-size:contain!important;background-repeat:no-repeat!important;background-position:center!important;background-color:color-mix(in srgb,var(--m-bissap) 9%,transparent)}
+body.sport .sp-photos{position:absolute;right:3%;bottom:104px;display:flex;gap:12px;align-items:flex-end;z-index:0;pointer-events:none}
+body.sport .sp-photos figure{margin:0;position:relative;width:min(190px,14vw);aspect-ratio:3/4.2;border-radius:14px;overflow:hidden;box-shadow:0 18px 40px rgba(20,4,10,.35)}
+body.sport .sp-photos figure:nth-child(1){transform:rotate(-3deg) translateY(12px)}
+body.sport .sp-photos figure:nth-child(2){transform:translateY(-28px)}
+body.sport .sp-photos figure:nth-child(3){transform:rotate(3deg)}
+body.sport .sp-photos img,body.sport .mkt-img.photos img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1) contrast(1.08)}
+body.sport .sp-photos figure::after,body.sport .mkt-img.photos figure::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(193,18,31,.55),rgba(20,4,10,.28));mix-blend-mode:multiply}
+body.sport .mkt-img.photos{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;background:#14040A!important;background-image:none!important;min-height:340px}
+body.sport .mkt-img.photos figure{margin:0;position:relative;border-radius:12px;overflow:hidden;min-height:0}
+@media(max-width:900px){body.sport .sp-photos{bottom:auto;top:56px;right:2%}body.sport .sp-photos figure{width:84px}body.sport .sp-photos figure:nth-child(3){display:none}}
+@media(max-width:700px){body.sport .mkt-img.photos{min-height:260px}}
 </style>
 </head>
 <body class="se-mode cosm sport" data-part="hub">
@@ -629,8 +640,7 @@ body.sport .mkt-img.art{background-size:contain!important;background-repeat:no-r
 
 <!-- HERO -->
 <header class="hero-s" id="hero">
-<img class="deco d-h1" src="deco-sport.svg" alt="" aria-hidden="true">
-<img class="deco d-h2" src="deco-sport2.svg" alt="" aria-hidden="true">
+<div class="sp-photos" aria-hidden="true"><figure><img src="photos/sport-1.jpg" alt=""></figure><figure><img src="photos/sport-3.jpg" alt=""></figure><figure><img src="photos/sport-6.jpg" alt=""></figure></div>
 
   <div class="hero-s-bg"></div><div class="hero-s-tint"></div><div class="hero-s-shade"></div>
   <div class="hero-s-top"><span class="crumb"><a href="index.html">Accueil</a> › Sport</span><span class="sticker">Petits<br>prix</span></div>
@@ -670,7 +680,7 @@ body.sport .mkt-img.art{background-size:contain!important;background-repeat:no-r
 <!-- MOTIVATION -->
 <section class="sec"><div class="container">
   <div class="mkt" style="--c1:var(--m-bissap)">
-    <div class="mkt-img art" style="background-image:url('deco-combat.svg')"></div>
+    <div class="mkt-img photos"><figure><img src="photos/sport-2.jpg" alt=""></figure><figure><img src="photos/sport-4.jpg" alt=""></figure></div>
     <div class="mkt-text">
       <h3>Pas d’excuses. <i>Équipe-toi.</i></h3>
       <p>Le meilleur moment pour commencer, c’est maintenant. Gants, ballons, haltères : le matériel qu’il te faut, à prix justes, vérifié avant l’envoi.</p>
@@ -678,7 +688,7 @@ body.sport .mkt-img.art{background-size:contain!important;background-repeat:no-r
     </div>
   </div>
   <div class="mkt reverse" style="--c1:var(--m-bissap-2)">
-    <div class="mkt-img art" style="background-image:url('deco-sport.svg')"></div>
+    <div class="mkt-img photos"><figure><img src="photos/sport-5.jpg" alt=""></figure><figure><img src="photos/sport-1.jpg" alt=""></figure></div>
     <div class="mkt-text">
       <h3>Du premier jour <i>au dernier round</i></h3>
       <p>Débutant ou compétiteur, on a de quoi t’équiper. Un doute sur la taille ou le niveau ? Écris-nous sur WhatsApp, on te conseille.</p>

@@ -186,6 +186,9 @@ body.se-home .hero-title .ht-s{font-family:var(--m-serif);font-style:italic;font
 .tile-deco{position:absolute;inset:0;z-index:1;background-image:var(--wax-w);background-size:70px 70px;pointer-events:none}
 .tile-mark{position:absolute;z-index:1;top:7%;right:9%;font:800 clamp(6rem,14vw,9.5rem)/.8 var(--m-display);color:color-mix(in srgb,#fff 18%,transparent);pointer-events:none}
 .tile.has-img .tile-deco,.tile.has-img .tile-mark{display:none}
+#tile-sport{--t1:#C1121F;--t2:#E5383B}
+#tile-sport .tile-bg{filter:grayscale(1) contrast(1.15) brightness(1.25)}
+#tile-sport .tile-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(165deg,rgba(214,28,40,.78),rgba(60,6,14,.55));mix-blend-mode:multiply}
 .tile.has-img::before{content:'';position:absolute;inset:0;z-index:2;background:linear-gradient(160deg,color-mix(in srgb,var(--t1) 55%,transparent),transparent 62%)}
 .tile-shade{position:absolute;inset:0;z-index:2;background:linear-gradient(to top,color-mix(in srgb,var(--m-nuit) 90%,transparent),color-mix(in srgb,var(--m-nuit) 25%,transparent) 55%,transparent)}
 .tile-badge{position:absolute;z-index:3;top:1.1rem;left:1.2rem;font:800 .75rem/1 var(--m-body);color:var(--m-on-safran);background:var(--m-safran);padding:.4rem .75rem;border-radius:999px}
