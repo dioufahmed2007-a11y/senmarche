@@ -150,6 +150,17 @@ form.f{display:grid;gap:.8rem;max-width:520px;margin-top:1rem}
 .rass div::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 .footer h4{color:inherit;opacity:.75}
+.sg{max-width:1100px;margin:2.2rem auto 3rem;padding:0 clamp(1rem,4vw,2rem)}
+.sg h2{font-family:var(--ff-d);font-size:1.5rem;margin:0 0 1rem}
+.sg-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:1.4rem;align-items:start}
+.sg ol{margin:0;padding-left:1.2rem;line-height:1.6}.sg li{margin-bottom:.5rem}
+.sg-calc{border:1px solid rgba(0,0,0,.14);border-radius:14px;padding:1rem;background:var(--card,#fff)}
+.sg-calc label{display:block;font-weight:700;margin-bottom:.5rem}
+.sg-calc input{width:100%;box-sizing:border-box;font:inherit;padding:.8rem 1rem;border:1.5px solid rgba(0,0,0,.2);border-radius:10px}
+#sg-res{margin-top:.8rem;font-size:1.05rem}
+.sg-note{margin:1.2rem 0 .8rem;padding:.9rem 1rem;border-left:4px solid var(--or,#c1121f);background:rgba(0,0,0,.04);border-radius:8px;line-height:1.5}
+.sg-wa{display:inline-block;font-weight:700;text-decoration:underline}
+@media(max-width:700px){.sg-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -227,10 +238,28 @@ function toast(html) { const t = $('toast'); t.innerHTML = html; t.classList.add
 function badge() { try { const n = SE.Cart.count(); const b = $('cart-count'); b.textContent = n; b.classList.toggle('show', n > 0); } catch (e) {} }
 const added = () => { badge(); toast('Ajouté au panier<a href="panier.html">Voir le panier</a>'); };
 
+function sizeGuide(a) {
+  const wa = 'https://wa.me/221778038874?text=' + encodeURIComponent('Bonjour, je veux la bonne pointure pour : ' + a.nom + '. Mon pied mesure ... cm');
+  return `<section class="sg" id="sg"><h2>Comment choisir ta pointure</h2>
+  <div class="sg-grid"><ol><li>Pose ton pied nu sur une feuille, le talon contre un mur.</li><li>Fais un trait au bout de ton orteil le plus long, puis mesure du mur au trait, en cm. Mesure les deux pieds et garde le plus grand.</li><li>Entre ta mesure à côté. Pour voir le tableau complet, ouvre le « Guide des pointures » au-dessus.</li></ol>
+  <div class="sg-calc"><label for="sg-cm">Longueur de ton pied (cm)</label><input id="sg-cm" type="text" inputmode="decimal" placeholder="Ex : 26,5"><div id="sg-res" aria-live="polite">Entre ta mesure pour voir ta pointure.</div></div></div>
+  <p class="sg-note"><b>Crampons et chaussures venus de Chine :</b> la pointure est souvent plus petite que la pointure européenne. Si tu hésites entre deux pointures, prends la plus grande, et garde environ 0,5 cm devant les orteils.</p>
+  <a class="sg-wa" target="_blank" rel="noopener" href="${wa}">Un doute ? Envoie-nous la longueur de ton pied sur WhatsApp</a></section>`;
+}
+function wireSizeGuide() {
+  const i = $('sg-cm'); if (!i) return;
+  i.oninput = () => {
+    const L = parseFloat(i.value.replace(',', '.')), r = $('sg-res');
+    if (!(L >= 20 && L <= 33)) { r.textContent = 'Entre une longueur entre 20 et 33 cm.'; return; }
+    const eu = (L + 1.5) * 1.5, lo = Math.floor(eu), f = eu - lo;
+    r.innerHTML = f < .25 ? 'Pointure conseillée : <b>' + lo + '</b>' : f >= .75 ? 'Pointure conseillée : <b>' + (lo + 1) + '</b>' : 'Tu es entre le <b>' + lo + '</b> et le <b>' + (lo + 1) + '</b> : prends le <b>' + (lo + 1) + '</b> si tu hésites.';
+  };
+}
+
 // Guides de taille par type d'article
 const GUIDES = {
   vet: ['Taille|Poitrine|Taille (cm)', 'S|86-90|70-74', 'M|90-94|74-78', 'L|94-98|78-82', 'XL|98-102|82-86', 'XXL|102-106|86-90'],
-  chaus: ['Pointure|Longueur du pied (cm)', '38|24', '39|24,7', '40|25,3', '41|26', '42|26,7', '43|27,3', '44|28']
+  chaus: ['Pointure|Longueur du pied (cm)', '36|22,5', '37|23,2', '38|23,8', '39|24,5', '40|25,2', '41|25,8', '42|26,5', '43|27,2', '44|27,8', '45|28,5', '46|29,2', '47|29,8']
 };
 function guide(type) {
   const rows = GUIDES[type].map((r, i) => '<tr>' + r.split('|').map(c => i ? `<td>${c}</td>` : `<th>${c}</th>`).join('') + '</tr>').join('');
@@ -258,7 +287,7 @@ async function load() {
 
     const qte = a.quantite || 0, out = qte <= 0, etat = a.etat || '';
     const neuf = /neuf/i.test(etat), seconde = cl.includes('feug') || (etat && !neuf);
-    const chaus = /chaussure|basket|sneaker|sandale|pointure/i.test(cl + ' ' + a.nom) || !!a.pointures;
+    const chaus = /chaussure|basket|sneaker|sandale|pointure|crampon|botte|soulier|running|claquette|mule/i.test(cl + ' ' + a.nom) || !!a.pointures;
     const vet = chaus || SE.needsSize(a);
     let sizes = list(a.tailles).length ? list(a.tailles) : list(a.pointures);
     if (!sizes.length && vet && !chaus) sizes = ['S', 'M', 'L', 'XL'];
@@ -293,6 +322,8 @@ async function load() {
       <button class="btn2 add" id="add">Ajouter au panier</button>
       <div class="rass"><div>Retrait en point de retrait, le lieu exact est confirmé par WhatsApp</div><div>Paiement à la récupération : Wave, Orange Money ou espèces</div><div>Tu vérifies l’article avant de payer</div></div>`}
     </div>`;
+
+    if (chaus) { P.insertAdjacentHTML('afterend', sizeGuide(a)); wireSizeGuide(); }
 
     // Galerie : miniatures + swipe
     if (photos.length > 1) {

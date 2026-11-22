@@ -616,7 +616,7 @@ body.sport .hero-s::before{background:none}
 body.sport .sp-strip{position:absolute;inset:0;z-index:-3;display:flex}
 body.sport .sp-strip img{flex:1 1 0;min-width:0;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.18) brightness(.82)}
 body.sport .hero-s-tint,body.sport .hero-s-shade{display:block}
-body.sport .hero-s-tint{background:linear-gradient(100deg,rgba(8,2,4,.95) 0%,rgba(8,2,4,.62) 40%,rgba(193,18,31,.55) 100%);mix-blend-mode:normal;opacity:1}
+body.sport .hero-s-tint{background:linear-gradient(95deg,rgba(8,2,4,.9) 0%,rgba(8,2,4,.5) 36%,rgba(8,2,4,.12) 70%,rgba(8,2,4,.25) 100%);mix-blend-mode:normal;opacity:1}
 body.sport .hero-s-shade{background:linear-gradient(to top,rgba(8,2,4,.9) 0%,transparent 58%)}
 body.sport .hero-title{color:#fff}
 body.sport .hero-title .ht-2{color:#FF5C61!important;-webkit-text-fill-color:#FF5C61;-webkit-text-stroke:0;text-shadow:0 2px 18px rgba(0,0,0,.55)}
@@ -624,6 +624,24 @@ body.sport .crumb,body.sport .crumb a{color:#fff}
 body.sport .hero-tags span{border-color:rgba(255,255,255,.5);color:#fff}
 body.sport .hero-s .btn-s{background:var(--m-bissap);color:#fff;border-color:var(--m-bissap)}
 @media(max-width:700px){body.sport .sp-strip img:nth-child(n+4){display:none}}
+body.sport .sp-strip{display:none}
+body.sport .sp-split{position:absolute;inset:0;z-index:-3}
+body.sport .sp-pan{position:absolute;inset:0;overflow:hidden}
+body.sport .sp-pan.foot{clip-path:polygon(0 0,57% 0,45% 100%,0 100%);--d1:#23894F;--d2:#04120A}
+body.sport .sp-pan.combat{clip-path:polygon(58.2% 0,100% 0,100% 100%,46.2% 100%);--d1:#D01424;--d2:#14040A}
+body.sport .sp-pan img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12) brightness(1.05)}
+body.sport .sp-pan.foot img{object-position:30% 50%}
+body.sport .sp-pan.combat img{object-position:60% 40%}
+body.sport .sp-pan::after{content:"";position:absolute;inset:0;mix-blend-mode:color;background:var(--d1);opacity:.85}
+body.sport .sp-go{display:flex;flex-wrap:wrap;gap:.6rem;margin:0 0 1rem}
+body.sport .sp-btn{font:800 .82rem/1 var(--m-body);letter-spacing:.06em;text-transform:uppercase;padding:.8rem 1.1rem;border-radius:999px;color:#fff;text-decoration:none;border:2px solid #fff;background:rgba(0,0,0,.25);backdrop-filter:blur(3px)}
+body.sport .sp-btn.foot{border-color:#3FD07F;color:#3FD07F}
+body.sport .sp-btn.combat{border-color:#FF5C61;color:#FF5C61}
+body.sport .sp-btn:hover{background:#fff;color:#111}
+body.sport .mkt-img.photos.col{background:#06140C!important}
+body.sport .mkt-img.photos.col img{filter:saturate(.85) contrast(1.05)}
+body.sport .mkt-img.photos.col figure::after{background:linear-gradient(160deg,rgba(10,90,50,.35),rgba(4,18,10,.3))}
+@media(max-width:700px){body.sport .sp-btn{flex:1 1 40%;text-align:center}}
 </style>
 </head>
 <body class="se-mode cosm sport" data-part="hub">
@@ -653,11 +671,12 @@ body.sport .hero-s .btn-s{background:var(--m-bissap);color:#fff;border-color:var
 
 <!-- HERO -->
 <header class="hero-s" id="hero">
-<div class="sp-strip" aria-hidden="true"><img src="sport-5.jpg" alt=""><img src="sport-3.jpg" alt=""><img src="sport-1.jpg" alt=""><img src="sport-6.jpg" alt=""><img src="sport-2.jpg" alt=""><img src="sport-4.jpg" alt=""></div>
+<div class="sp-split" aria-hidden="true"><div class="sp-pan foot"><img src="sport-foot.jpg" alt=""></div><div class="sp-pan combat"><img src="sport-combat.jpg" alt=""></div></div>
 
   <div class="hero-s-bg"></div><div class="hero-s-tint"></div><div class="hero-s-shade"></div>
   <div class="hero-s-top"><span class="crumb"><a href="index.html">Accueil</a> › Sport</span><span class="sticker">Petits<br>prix</span></div>
   <h1 class="hero-title disp"><span>Sport</span><span class="ht-2 out">pas d’excuses</span></h1>
+  <div class="sp-go"><a href="#pieces" class="sp-btn foot" data-go="ballons">Équipement foot</a><a href="#pieces" class="sp-btn combat" data-go="combat">Équipement combat</a></div>
   <div class="hero-row">
     <div class="hero-tags"><span>Foot, combat, fitness, course, vélo</span><span>Vérifié avant envoi</span><span>Paiement à la récupération</span></div>
     <a href="#pieces" class="btn-s">Voir les produits →</a>
@@ -701,7 +720,7 @@ body.sport .hero-s .btn-s{background:var(--m-bissap);color:#fff;border-color:var
     </div>
   </div>
   <div class="mkt reverse" style="--c1:var(--m-bissap-2)">
-    <div class="mkt-img photos"><figure><img src="sport-5.jpg" alt=""></figure><figure><img src="sport-1.jpg" alt=""></figure></div>
+    <div class="mkt-img photos col"><figure><img src="sport-pitch.jpg" alt=""></figure><figure><img src="sport-run.jpg" alt=""></figure></div>
     <div class="mkt-text">
       <h3>Du premier jour <i>au dernier round</i></h3>
       <p>Débutant ou compétiteur, on a de quoi t’équiper. Un doute sur la taille ou le niveau ? Écris-nous sur WhatsApp, on te conseille.</p>
@@ -961,6 +980,7 @@ body.sport .hero-s .btn-s{background:var(--m-bissap);color:#fff;border-color:var
   function drawAll(){ drawCats(); drawSub(); drawTools(); drawGrid(); }
   /* choisir un rayon (re-toucher la même puce = tout afficher) */
   function pickZone(k){ st.f = st.f === k ? 'all' : k; st.sub = -1; drawCats(); drawSub(); drawGrid(); }
+  document.querySelectorAll('.sp-btn').forEach(b => b.addEventListener('click', e => { e.preventDefault(); try { pickZone(b.dataset.go); } catch (x) {} $('pieces').scrollIntoView({ behavior: 'smooth' }); }));
   $('cats').addEventListener('click', e => { const b = e.target.closest('.cat-chip'); if (!b || !b.dataset.f) return; const f = b.dataset.f; if (f === 'all'){ st.f = 'all'; st.sub = -1; drawCats(); drawSub(); drawGrid(); } else if (st.f === f){ st.f = 'all'; st.sub = -1; drawCats(); drawSub(); drawGrid(); } else pickZone(f); });
   $('subchips').addEventListener('click', e => { const b = e.target.closest('.filter-pill'); if (!b) return; st.sub = parseInt(b.dataset.s, 10); drawSub(); drawGrid(); });
   $('toolbar').addEventListener('change', e => {
