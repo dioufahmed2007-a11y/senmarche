@@ -161,6 +161,9 @@ form.f{display:grid;gap:.8rem;max-width:520px;margin-top:1rem}
 .sg-note{margin:1.2rem 0 .8rem;padding:.9rem 1rem;border-left:4px solid var(--or,#c1121f);background:rgba(0,0,0,.04);border-radius:8px;line-height:1.5}
 .sg-wa{display:inline-block;font-weight:700;text-decoration:underline}
 @media(max-width:700px){.sg-grid{grid-template-columns:1fr}}
+.ld{max-width:1100px;margin:2.2rem auto 0;padding:0 clamp(1rem,4vw,2rem)}
+.ld h2{font-family:var(--ff-d);font-size:1.5rem;margin:0 0 1rem}
+.ld p{line-height:1.7;margin:0 0 .9rem;max-width:760px}
 </style>
 </head>
 <body>
@@ -287,7 +290,10 @@ async function load() {
 
     const qte = a.quantite || 0, out = qte <= 0, etat = a.etat || '';
     const neuf = /neuf/i.test(etat), seconde = cl.includes('feug') || (etat && !neuf);
-    const chaus = /chaussure|basket|sneaker|sandale|pointure|crampon|botte|soulier|running|claquette|mule/i.test(cl + ' ' + a.nom) || !!a.pointures;
+    const nm = String(a.nom || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const chaus = /chaussure|crampon|sneaker|sandale|claquette|soulier|bottine|mocassin|\bbottes?\b|\btongs?\b/.test(nm) || (/\bbaskets?\b/.test(nm) && !/ballon|panier|maillot|short|filet/.test(nm)) || /(^|[^a-z])(chaussures?|sneakers?|baskets?)([^a-z]|$)/.test(String(cl).toLowerCase()) || list(a.pointures).length > 0;
+    const rawD = String(a.description || ''), parts = rawD.split(/\s*(?:\r?\n\s*-{3,}\s*\r?\n|\|\|\|)\s*/);
+    const shortD = a.description_longue ? rawD : parts[0], longD = String(a.description_longue || (parts.length > 1 ? parts.slice(1).join('\n\n') : '')).trim();
     const vet = chaus || SE.needsSize(a);
     let sizes = list(a.tailles).length ? list(a.tailles) : list(a.pointures);
     if (!sizes.length && vet && !chaus) sizes = ['S', 'M', 'L', 'XL'];
@@ -312,7 +318,7 @@ async function load() {
       <h1 class="titre">${esc(a.nom)}</h1>
       <div class="note">${reviews.length ? `<span class="st">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5 - Math.round(avg))}</span>${avg.toFixed(1)} (${reviews.length} avis)` : 'Pas encore d’avis'}</div>
       <div class="pbar"><div class="prix">${SE.fprix(a.prix_vente_fcfa || 0)}</div><div class="stock ${out ? 'out' : ''}">${out ? 'Rupture de stock' : 'En stock'}</div></div>
-      <p class="desc">${esc(a.description || 'Pas de description pour le moment. Écris-nous sur WhatsApp pour plus de détails.')}</p>
+      <p class="desc">${esc(shortD || 'Pas de description pour le moment. Écris-nous sur WhatsApp pour plus de détails.')}</p>
       ${out ? '<button class="btn2" disabled>Indisponible</button>' : `
       ${sizes.length ? `<div><div class="lab"><b>${chaus ? 'Pointure' : 'Taille'}</b>${vet ? `<a id="g-open">Guide des ${chaus ? 'pointures' : 'tailles'}</a>` : ''}</div>
         <div class="sizes" id="sizes">${sizes.map(s => `<button type="button" data-s="${esc(s)}">${esc(s)}</button>`).join('')}</div>
@@ -323,7 +329,9 @@ async function load() {
       <div class="rass"><div>Retrait en point de retrait, le lieu exact est confirmé par WhatsApp</div><div>Paiement à la récupération : Wave, Orange Money ou espèces</div><div>Tu vérifies l’article avant de payer</div></div>`}
     </div>`;
 
-    if (chaus) { P.insertAdjacentHTML('afterend', sizeGuide(a)); wireSizeGuide(); }
+    const ld = longD ? `<section class="ld"><h2>Description détaillée</h2>${longD.split(/\n+/).map(t => '<p>' + esc(t) + '</p>').join('')}</section>` : '';
+    if (ld || chaus) P.insertAdjacentHTML('afterend', ld + (chaus ? sizeGuide(a) : ''));
+    if (chaus) wireSizeGuide();
 
     // Galerie : miniatures + swipe
     if (photos.length > 1) {
