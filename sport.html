@@ -653,6 +653,15 @@ body.sport .mkt-img.photos.one figure[data-video*="foot"] img{object-position:50
 .kit-band b{color:#FF5C61}.kit-go{font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.8rem;border:2px solid #FF5C61;color:#FF5C61;padding:.6rem 1rem;border-radius:999px;white-space:nowrap}
 .kit-band:hover .kit-go{background:#FF5C61;color:#14040A}
 @media(max-width:700px){.kit-band{flex-direction:column;align-items:flex-start}}
+/* v6 : photos qui se fondent entre elles, et dans le texte pour les blocs */
+body.sport .sp-strip{background:#0B0204}
+body.sport .sp-strip img{flex:1 1 32%;min-width:0;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30%,#000 70%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 30%,#000 70%,transparent 100%)}
+body.sport .sp-strip img+img{margin-left:-9%}
+body.sport .sp-strip img:first-child{-webkit-mask-image:linear-gradient(90deg,#000 0,#000 70%,transparent 100%);mask-image:linear-gradient(90deg,#000 0,#000 70%,transparent 100%)}
+body.sport .sp-strip img:last-child{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30%,#000 100%);mask-image:linear-gradient(90deg,transparent 0,#000 30%,#000 100%)}
+body.sport .mkt-img.photos.one{background:transparent!important}
+body.sport .mkt:not(.reverse) .mkt-img.one figure{-webkit-mask-image:linear-gradient(90deg,#000 45%,transparent 100%);mask-image:linear-gradient(90deg,#000 45%,transparent 100%)}
+body.sport .mkt.reverse .mkt-img.one figure{-webkit-mask-image:linear-gradient(270deg,#000 45%,transparent 100%);mask-image:linear-gradient(270deg,#000 45%,transparent 100%)}
 </style>
 </head>
 <body class="se-mode cosm sport" data-part="hub">
@@ -682,7 +691,7 @@ body.sport .mkt-img.photos.one figure[data-video*="foot"] img{object-position:50
 
 <!-- HERO -->
 <header class="hero-s" id="hero">
-<div class="sp-strip" data-video="sport-hero.mp4" aria-hidden="true"><img src="sport-night.jpg" alt=""><img src="sport-pitch.jpg" alt=""><img src="sport-1.jpg" alt=""><img src="sport-3.jpg" alt=""></div>
+<div class="sp-strip" data-video="sport-hero.mp4" aria-hidden="true"><img src="sport-sunset.jpg" alt=""><img src="sport-night.jpg" alt=""><img src="sport-1.jpg" alt=""><img src="sport-3.jpg" alt=""></div>
 
   <div class="hero-s-bg"></div><div class="hero-s-tint"></div><div class="hero-s-shade"></div>
   <div class="hero-s-top"><span class="crumb"><a href="index.html">Accueil</a> › Sport</span><span class="sticker">Petits<br>prix</span></div>
@@ -728,7 +737,7 @@ body.sport .mkt-img.photos.one figure[data-video*="foot"] img{object-position:50
     </div>
   </div>
   <div class="mkt reverse" style="--c1:var(--m-bissap-2)">
-    <div class="mkt-img photos one"><figure data-video="sport-video-foot.mp4"><img src="sport-pitch.jpg" alt=""></figure></div>
+    <div class="mkt-img photos one"><figure data-video="sport-video-foot.mp4"><img src="sport-night.jpg" alt=""></figure></div>
     <div class="mkt-text">
       <h3>Du premier jour <i>au dernier round</i></h3>
       <p>Débutant ou compétiteur, on a de quoi t’équiper. Un doute sur la taille ou le niveau ? Écris-nous sur WhatsApp, on te conseille.</p>
