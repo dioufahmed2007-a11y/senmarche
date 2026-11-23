@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compose ton kit — SenMarché Sport</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="styles-dark.css">
+<script src="theme.js"></script>
+<style>
+body{--ac:#C1121F;--ac-on:#fff}
+:root[data-theme="dark"] body{--ac:#E5383B;--ac-on:#1a0a10}
+body.dark,html.dark body{--ac:#E5383B;--ac-on:#1a0a10}
+.rt{max-width:640px;margin:0 auto;padding:20px var(--pad,16px) 60px;min-height:100vh;display:flex;flex-direction:column}
+.rt-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.rt-top a{color:var(--muted);text-decoration:none;font-size:.9rem}
+.bar{height:6px;border-radius:99px;background:var(--border);overflow:hidden;margin-bottom:26px}
+.bar i{display:block;height:100%;width:0;background:var(--ac);border-radius:99px;transition:width .5s var(--ease,ease)}
+.scr{animation:in .65s var(--ease,ease) both}
+@keyframes in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.rt h1,.rt h2{font-family:var(--ff-d,inherit);line-height:1.2;margin:0 0 10px;color:var(--ink)}
+.rt p{color:var(--muted);line-height:1.55;margin:0 0 14px}
+.why{font-size:.88rem;background:color-mix(in srgb,var(--ac) 10%,var(--card));border-radius:var(--r8,10px);padding:10px 12px;margin:6px 0 16px}
+.opt{display:block;width:100%;text-align:left;font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--border);border-radius:var(--r16,16px);padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:border-color .2s,transform .2s}
+.opt:hover{border-color:var(--or-line,var(--ac))}
+.opt.on{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,var(--card));transform:scale(1.01)}
+.btn{font:inherit;font-weight:600;border:0;border-radius:99px;padding:13px 26px;background:var(--ac);color:var(--ac-on);cursor:pointer}
+.btn[disabled]{opacity:.4;cursor:default}
+.btn.ghost{background:none;color:var(--muted);padding-left:0}
+.rnav{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.load{text-align:center;margin:auto;padding:40px 0}
+.drop{width:46px;height:46px;margin:0 auto 18px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--ac);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{transform:rotate(-45deg) scale(1.25);opacity:.6}}
+.tabs{display:flex;gap:8px;margin:6px 0 18px}
+.tab{flex:1;font:inherit;font-weight:600;color:var(--ink);border:1.5px solid var(--border);border-radius:99px;padding:11px;background:var(--card);cursor:pointer}
+.tab.on[data-t=m]{background:color-mix(in srgb,var(--ac) 14%,var(--card));border-color:var(--ac)}
+.tab.on[data-t=s]{background:color-mix(in srgb,var(--ac) 34%,var(--card));border-color:var(--ac)}
+.stp{display:flex;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--r16,16px);padding:12px;margin-bottom:12px;opacity:0;animation:up .5s var(--ease,ease) forwards}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.stp img{width:84px;height:84px;object-fit:cover;border-radius:var(--r8,10px);background:var(--card2)}
+.stp .no{font-size:.75rem;color:var(--ac);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.stp b{display:block;color:var(--ink);margin:2px 0}
+.stp small{display:block;color:var(--muted);line-height:1.45;margin-top:4px}
+.stp.na{border-style:dashed;border-left:4px solid var(--border)}
+.tot{display:flex;justify-content:space-between;font-weight:700;color:var(--ink);margin:16px 0}
+.plan{background:color-mix(in srgb,var(--ac) 8%,var(--card));border-radius:var(--r16,16px);padding:14px 16px;margin:6px 0 4px}.plan p{margin:6px 0 0;font-size:.9rem}
+.rt{width:100%;box-sizing:border-box}#v{min-width:0}.tot{gap:1rem}
+.chip{display:inline-block;font-size:.78rem;padding:4px 10px;border-radius:99px;background:color-mix(in srgb,var(--ac) 12%,var(--card));color:var(--ink);margin:0 6px 6px 0}.trail{margin:0 0 10px}
+.opt.pop{animation:pop .55s ease}@keyframes pop{40%{transform:translateY(-6px) scale(1.03)}100%{transform:scale(1.01)}}
+.stp{border-left:4px solid var(--ac)}.ph{width:84px;height:84px;flex:none;border-radius:var(--r8,10px);display:flex;align-items:center;justify-content:center;font-size:1.9rem;background:color-mix(in srgb,var(--ac) 10%,var(--card))}.stp img{flex:none}
+.row{flex-direction:column}.row .btn{width:100%;text-align:center;box-sizing:border-box;white-space:normal;line-height:1.25}
+.hero{background:linear-gradient(155deg,color-mix(in srgb,var(--ac) 16%,var(--card)),var(--card) 70%);border:1px solid color-mix(in srgb,var(--ac) 20%,transparent);border-radius:26px;padding:30px 22px 22px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-50px;top:-50px;width:170px;height:170px;border-radius:50%;background:color-mix(in srgb,var(--ac) 14%,transparent)}
+.hero>*{position:relative;z-index:1}.kick{font-size:.72rem;font-weight:700;letter-spacing:.14em;color:var(--ac)}
+.hero h1{font-size:2.15rem;margin:8px 0 12px}.hero h1 i{color:var(--ac)}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}.pills span{font-size:.8rem;font-weight:600;padding:6px 12px;border-radius:99px;background:var(--card);border:1px solid var(--border);color:var(--ink)}
+.st4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 22px}.st4 div{text-align:center;font-size:.78rem;font-weight:600;color:var(--ink)}.st4 b{display:flex;width:34px;height:34px;margin:0 auto 6px;border-radius:50%;align-items:center;justify-content:center;color:#fff;font-size:.95rem}
+.btn.big{width:100%;padding:16px;font-size:1rem;box-sizing:border-box}
+.opt{display:flex;align-items:center;gap:12px}.opt::before{content:"";flex:none;width:20px;height:20px;border-radius:50%;border:2px solid var(--border);box-sizing:border-box}
+.opt.on::before{background:var(--ac);border-color:var(--ac);box-shadow:inset 0 0 0 3px var(--card)}
+.ok{width:68px;height:68px;margin:14px auto 18px;border-radius:50%;background:var(--ac);color:var(--ac-on);display:flex;align-items:center;justify-content:center;font-size:2rem;animation:pop .6s ease}
+.warn{font-size:.82rem;color:var(--muted);margin-top:18px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row a{text-decoration:none;display:inline-block}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}.stp{opacity:1}}
+.szsel{margin-top:.55rem;font:inherit;font-size:.9rem;padding:.5rem .8rem;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--ink)}
+</style>
+</head>
+<body>
+<main class="rt">
+  <div class="rt-top"><a href="sport.html">← Sport</a><span id="cnt" style="color:var(--muted);font-size:.85rem"></span></div>
+  <div class="bar"><i id="bar"></i></div>
+  <div id="v"></div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="images.js"></script>
+<script src="app.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id), WA = 'https://wa.me/221778038874?text=';
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const fmt = n => (n || 0).toLocaleString('fr-FR').replace(/[\u202f\u00a0]/g, ' ') + ' FCFA';
+  const P = a => a.prix_vente_fcfa || 0, img = (u, w) => (typeof window.imgUrl === 'function' ? window.imgUrl(u, w) : u) || '';
+  const list = v => String(v || '').split(/[,;|]/).map(x => x.trim()).filter(Boolean);
+  const S = { foot: [['Crampons', /crampon|chaussure de foot/, 'La base : adhérence et appuis sûrs.', 'shoe'], ['Ballon', /ballon/, 'Pour t’entraîner partout.'], ['Protège-tibias', /tibia/, 'Obligatoire en match.'], ['Maillot', /maillot/, 'Léger et respirant.', 'cloth'], ['Short', /short/, 'Liberté de mouvement.', 'cloth', 1], ['Chaussettes', /chaussette/, 'Pour tenir tout le match.', '', 1], ['Sac', /\bsac\b/, 'Tout ranger au même endroit.', '', 1]],
+    combat: [['Gants', /gants? de boxe|gants? (mma|combat)/, 'Protège tes mains et ton partenaire.'], ['Bandes', /bande/, 'Soutiennent les poignets.'], ['Protège-dents', /protege.?dents/, 'Indispensable dès le premier sparring.'], ['Casque', /casque.*(boxe|combat)|casque de boxe/, 'Pour sparrer en sécurité.', '', 0, 2], ['Kimono', /kimono/, 'Judo et arts martiaux.', 'cloth', 1], ['Sac de frappe', /sac de frappe|punching/, 'S’entraîner chez soi.', '', 1, 2]],
+    fitness: [['Haltères', /haltere|kettlebell/, 'Pour prendre de la force.'], ['Tapis', /tapis|yoga/, 'Confort au sol.'], ['Corde à sauter', /corde/, 'Cardio simple et efficace.'], ['Gourde', /gourde|bouteille/, 'Reste hydraté.', '', 1], ['Tenue', /legging|short|t-shirt/, 'À l’aise pour bouger.', 'cloth', 1]],
+    course: [['Chaussures', /running|chaussure|basket/, 'Amorties et légères.', 'shoe'], ['Tenue', /short|legging|t-shirt/, 'Respirante.', 'cloth'], ['Montre', /montre/, 'Suis tes séances.', '', 1], ['Gourde', /gourde|bouteille/, 'Reste hydraté.', '', 1]],
+    velo: [['Vélo', /velo|vtt/, 'Le cœur du kit.'], ['Casque', /casque/, 'La sécurité d’abord.'], ['Antivol', /antivol/, 'Pour le laisser sans stress.', '', 1]] };
+  const Q = [
+    { k: 'sport', t: 'Quel sport veux-tu pratiquer ?', o: [['foot', 'Football'], ['combat', 'Sports de combat'], ['fitness', 'Fitness et musculation'], ['course', 'Course à pied'], ['velo', 'Vélo']] },
+    { k: 'niveau', t: 'Ton niveau ?', o: [['0', 'Je débute'], ['1', 'Je m’entraîne régulièrement'], ['2', 'Je fais de la compétition']] },
+    { k: 'budget', t: 'Ton budget pour le kit ?', o: [['30000', 'Jusqu’à 30 000 FCFA'], ['60000', 'Jusqu’à 60 000 FCFA'], ['150000', 'Jusqu’à 150 000 FCFA'], ['0', 'Peu importe']] }];
+  let POOL = [], ans = {}, qi = 0, KIT = [], lock = 0;
+  async function load() {
+    const arts = await SE.Articles.load();
+    POOL = arts.filter(a => (a.quantite || 0) > 0 && a.etat !== 'Vendu' && !/fille|maison|soin|cosm|beaut|bijou/i.test((a.categorie && a.categorie.nom) || '') && !/coffret|\bpack\b|\blot de|\bkit\b/i.test(a.nom || ''));
+  }
+  const pick = (re, lvl) => { const c = POOL.filter(a => re.test(norm(a.nom))).sort((x, y) => P(x) - P(y)); if (!c.length) return null; return lvl === 0 ? c[0] : lvl === 1 ? c[Math.floor((c.length - 1) / 2)] : c[c.length - 1]; };
+  function build() {
+    const lvl = +ans.niveau, bud = +ans.budget || 0;
+    const it = S[ans.sport].filter(s => !(s[5] > lvl)).map(s => ({ n: s[0], re: s[1], why: s[2], sz: s[3], opt: s[4], a: pick(s[1], lvl) }));
+    if (bud) { const tot = () => it.reduce((n, i) => n + (i.a ? P(i.a) : 0), 0);
+      it.slice().reverse().forEach(i => { if (i.opt && i.a && tot() > bud) i.a = null; });
+      it.forEach(i => { if (i.a && tot() > bud) { const c = pick(i.re, 0); if (c) i.a = c; } }); }
+    return it.filter(i => i.a || !i.opt);
+  }
+  const setBar = () => { $('bar').style.width = Math.round(qi / (Q.length + 1) * 100) + '%'; $('cnt').textContent = qi > 0 && qi <= Q.length ? 'Question ' + qi + ' / ' + Q.length : ''; };
+  function intro() {
+    qi = 0; setBar();
+    $('v').innerHTML = `<div class="scr hero"><span class="kick">SENMARCHÉ · SPORT</span><h1>Compose<br><i>ton kit</i></h1>
+      <p>Ton sport, ton niveau, ton budget : on te compose l’équipement qu’il te faut avec les produits en stock, et tu ajoutes tout au panier d’un coup.</p>
+      <div class="pills"><span>1 minute</span><span>Sans compte</span><span>Prix en FCFA</span></div><button class="btn big" id="go">Commencer</button></div>`;
+    $('go').onclick = () => { qi = 1; ask(); };
+  }
+  function ask() {
+    const q = Q[qi - 1]; setBar();
+    $('v').innerHTML = `<div class="scr"><h2>${esc(q.t)}</h2>${q.o.map(([k, l]) => `<button type="button" class="opt${ans[q.k] === k ? ' on' : ''}" data-k="${k}">${esc(l)}</button>`).join('')}<div class="rnav"><button class="btn ghost" id="bk">← Retour</button></div></div>`;
+    $('bk').onclick = () => { qi--; qi ? ask() : intro(); };
+    document.querySelectorAll('.opt').forEach(b => b.onclick = () => { if (lock) return; lock = 1; ans[q.k] = b.dataset.k; document.querySelectorAll('.opt').forEach(o => o.classList.toggle('on', o === b)); b.classList.add('pop');
+      setTimeout(() => { lock = 0; qi < Q.length ? (qi++, ask()) : result(); }, 580); });
+  }
+  async function result() {
+    qi = Q.length + 1; setBar(); $('cnt').textContent = '';
+    $('v').innerHTML = '<div class="load scr"><div class="drop"></div><h2 id="lm">On prépare ton kit…</h2></div>';
+    await Promise.all([new Promise(r => setTimeout(r, 1800)), POOL.length ? 0 : load().catch(() => {})]);
+    KIT = build(); show();
+  }
+  const optHtml = i => { if (!i.sz) return ''; const o = list(i.sz === 'shoe' ? i.a.pointures : i.a.tailles); const L = o.length ? o : (i.sz === 'shoe' ? ['38', '39', '40', '41', '42', '43', '44', '45'] : ['S', 'M', 'L', 'XL']); return `<select class="szsel" data-n="${esc(i.n)}"><option value="">${i.sz === 'shoe' ? 'Ta pointure' : 'Ta taille'}</option>${L.map(x => `<option>${esc(x)}</option>`).join('')}</select>`; };
+  function show() {
+    const names = { foot: 'Football', combat: 'Sports de combat', fitness: 'Fitness', course: 'Course', velo: 'Vélo' }, lv = ['Débutant', 'Régulier', 'Compétition'][+ans.niveau];
+    const have = KIT.filter(i => i.a), total = have.reduce((n, i) => n + P(i.a), 0);
+    $('v').innerHTML = `<div class="scr"><h2>Ton kit ${esc(names[ans.sport])}</h2><p>Niveau ${esc(lv.toLowerCase())}${+ans.budget ? ', budget ' + fmt(+ans.budget) : ''}. ${have.length} produit${have.length > 1 ? 's' : ''} pour démarrer.</p>
+      ${KIT.map((i, n) => i.a ? `<div class="stp" style="animation-delay:${n * .15}s">${img(i.a.photo_url, 200) ? `<img src="${esc(img(i.a.photo_url, 200))}" alt="" loading="lazy">` : `<div class="ph">${esc(i.n[0])}</div>`}<div><span class="no">${n + 1}. ${esc(i.n)}</span><b>${esc(i.a.nom)}</b><span style="color:var(--ink)">${fmt(P(i.a))}</span><small>${esc(i.why)}</small>${optHtml(i)}</div></div>`
+        : `<div class="stp na" style="animation-delay:${n * .15}s"><div><span class="no">${n + 1}. ${esc(i.n)}</span><b>Bientôt en boutique</b><small><a href="${WA}${encodeURIComponent('Bonjour, je cherche : ' + i.n + ' (' + names[ans.sport] + ')')}">Demande-nous sur WhatsApp</a>.</small></div></div>`).join('')}
+      <div class="tot"><span>Kit complet</span><span>${fmt(total)}</span></div><p class="warn" id="msg"></p>
+      <div class="row"><button class="btn" id="addall" ${have.length ? '' : 'disabled'}>Tout ajouter au panier</button>
+      <a class="btn" style="background:var(--card);color:var(--ink);border:1.5px solid var(--border)" href="${WA}${encodeURIComponent('Mon kit ' + names[ans.sport] + ' (' + lv + ') :\n' + have.map(i => '• ' + i.n + ' : ' + i.a.nom + ' (' + fmt(P(i.a)) + ')').join('\n') + '\nTotal : ' + fmt(total) + '\nJe voudrais un conseil.')}">Demander un conseil</a></div>
+      <div class="rnav"><button class="btn ghost" id="redo">Refaire le kit</button></div></div>`;
+    $('redo').onclick = () => { ans = {}; intro(); };
+    $('addall').onclick = () => {
+      const miss = [...document.querySelectorAll('.szsel')].filter(s => !s.value);
+      if (miss.length) { miss.forEach(s => s.style.borderColor = 'var(--ac)'); $('msg').textContent = 'Choisis ta taille ou ta pointure pour : ' + miss.map(s => s.dataset.n).join(', ') + '.'; return; }
+      const sel = {}; document.querySelectorAll('.szsel').forEach(s => sel[s.dataset.n] = s.value);
+      try { have.forEach(i => SE.Cart.add(i.a.reference + (sel[i.n] ? '_' + sel[i.n] : ''))); done(have.length, total); } catch (e) {}
+    };
+  }
+  function done(n, total) {
+    $('bar').style.width = '100%';
+    $('v').innerHTML = `<div class="scr" style="text-align:center"><div class="ok">✓</div><h2>Ton kit est dans ton panier</h2><p>${n} produit${n > 1 ? 's' : ''} · ${fmt(total)}. Il ne te reste qu’à passer commande.</p>
+      <div class="row"><a class="btn" href="panier.html">Voir mon panier et commander</a></div><div class="rnav" style="justify-content:center"><a class="btn ghost" href="sport.html">Continuer mes achats</a></div></div>`;
+  }
+  (async () => { try { await new Promise(r => setTimeout(r, 50)); await load(); } catch (e) {} intro(); })();
+})();
+</script>
+</body>
+</html>

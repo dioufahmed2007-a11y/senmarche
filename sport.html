@@ -616,7 +616,9 @@ body.sport .hero-s::before{background:none}
 body.sport .sp-strip{position:absolute;inset:0;z-index:-3;display:flex}
 body.sport .sp-strip img{flex:1 1 0;min-width:0;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.18) brightness(.82)}
 body.sport .hero-s-tint,body.sport .hero-s-shade{display:block}
-body.sport .hero-s-tint{background:linear-gradient(95deg,rgba(8,2,4,.9) 0%,rgba(8,2,4,.5) 36%,rgba(8,2,4,.12) 70%,rgba(8,2,4,.25) 100%);mix-blend-mode:normal;opacity:1}
+body.sport .hero-s-tint{background:linear-gradient(100deg,rgba(8,2,4,.74) 0%,rgba(8,2,4,.34) 42%,rgba(193,18,31,.42) 100%);mix-blend-mode:normal;opacity:1}
+body.sport .hero-title{text-shadow:0 3px 28px rgba(0,0,0,.65)}
+body.sport .sp-strip img{filter:grayscale(1) contrast(1.15) brightness(.95)}
 body.sport .hero-s-shade{background:linear-gradient(to top,rgba(8,2,4,.9) 0%,transparent 58%)}
 body.sport .hero-title{color:#fff}
 body.sport .hero-title .ht-2{color:#FF5C61!important;-webkit-text-fill-color:#FF5C61;-webkit-text-stroke:0;text-shadow:0 2px 18px rgba(0,0,0,.55)}
@@ -624,7 +626,6 @@ body.sport .crumb,body.sport .crumb a{color:#fff}
 body.sport .hero-tags span{border-color:rgba(255,255,255,.5);color:#fff}
 body.sport .hero-s .btn-s{background:var(--m-bissap);color:#fff;border-color:var(--m-bissap)}
 @media(max-width:700px){body.sport .sp-strip img:nth-child(n+4){display:none}}
-body.sport .sp-strip{display:none}
 body.sport .sp-split{position:absolute;inset:0;z-index:-3}
 body.sport .sp-pan{position:absolute;inset:0;overflow:hidden}
 body.sport .sp-pan.foot{clip-path:polygon(0 0,57% 0,45% 100%,0 100%);--d1:#23894F;--d2:#04120A}
@@ -642,6 +643,16 @@ body.sport .mkt-img.photos.col{background:#06140C!important}
 body.sport .mkt-img.photos.col img{filter:saturate(.85) contrast(1.05)}
 body.sport .mkt-img.photos.col figure::after{background:linear-gradient(160deg,rgba(10,90,50,.35),rgba(4,18,10,.3))}
 @media(max-width:700px){body.sport .sp-btn{flex:1 1 40%;text-align:center}}
+body.sport .mkt-img.photos.one{grid-template-columns:1fr;padding:0}
+body.sport .mkt-img.photos.one{height:clamp(300px,32vw,420px);min-height:0}
+body.sport .mkt-img.photos.one figure{border-radius:0;height:100%;min-height:0}
+body.sport .mkt-img.photos.one figure img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 38%}
+body.sport .mkt-img.photos.one figure[data-video*="foot"] img{object-position:50% 82%}
+.sp-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15) brightness(.85)}
+.kit-band{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem clamp(1rem,4vw,3rem);background:#14040A;color:#fff;text-decoration:none;font-size:.98rem}
+.kit-band b{color:#FF5C61}.kit-go{font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.8rem;border:2px solid #FF5C61;color:#FF5C61;padding:.6rem 1rem;border-radius:999px;white-space:nowrap}
+.kit-band:hover .kit-go{background:#FF5C61;color:#14040A}
+@media(max-width:700px){.kit-band{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
 <body class="se-mode cosm sport" data-part="hub">
@@ -671,7 +682,7 @@ body.sport .mkt-img.photos.col figure::after{background:linear-gradient(160deg,r
 
 <!-- HERO -->
 <header class="hero-s" id="hero">
-<div class="sp-split" aria-hidden="true"><div class="sp-pan foot"><img src="sport-foot.jpg" alt=""></div><div class="sp-pan combat"><img src="sport-combat.jpg" alt=""></div></div>
+<div class="sp-strip" data-video="sport-hero.mp4" aria-hidden="true"><img src="sport-pitch.jpg" alt=""><img src="sport-foot.jpg" alt=""><img src="sport-foot2.jpg" alt=""><img src="sport-1.jpg" alt=""><img src="sport-3.jpg" alt=""><img src="sport-6.jpg" alt=""></div>
 
   <div class="hero-s-bg"></div><div class="hero-s-tint"></div><div class="hero-s-shade"></div>
   <div class="hero-s-top"><span class="crumb"><a href="index.html">Accueil</a> › Sport</span><span class="sticker">Petits<br>prix</span></div>
@@ -690,6 +701,7 @@ body.sport .mkt-img.photos.col figure::after{background:linear-gradient(160deg,r
 </div></div>
 
 <!-- 01 PAR ENVIE : bandeau sombre pour le contraste -->
+<a class="kit-band" href="kit.html"><span><b>Compose ton kit</b> en 1 minute : ton sport, ton niveau, ton budget.</span><span class="kit-go">Faire mon kit →</span></a>
 <section class="sec band-soft" id="envies"><div class="container">
   <div class="sh"><span class="sh-n">01</span><h2>Par <i>rayon</i></h2><span class="mono" id="grid-count"></span></div>
     <div class="cats-strip" id="cats" role="group" aria-label="Choisir un rayon"></div>
@@ -712,7 +724,7 @@ body.sport .mkt-img.photos.col figure::after{background:linear-gradient(160deg,r
 <!-- MOTIVATION -->
 <section class="sec"><div class="container">
   <div class="mkt" style="--c1:var(--m-bissap)">
-    <div class="mkt-img photos"><figure><img src="sport-2.jpg" alt=""></figure><figure><img src="sport-4.jpg" alt=""></figure></div>
+    <div class="mkt-img photos one"><figure data-video="sport-video-combat.mp4"><img src="sport-4.jpg" alt=""></figure></div>
     <div class="mkt-text">
       <h3>Pas d’excuses. <i>Équipe-toi.</i></h3>
       <p>Le meilleur moment pour commencer, c’est maintenant. Gants, ballons, haltères : le matériel qu’il te faut, à prix justes, vérifié avant l’envoi.</p>
@@ -720,7 +732,7 @@ body.sport .mkt-img.photos.col figure::after{background:linear-gradient(160deg,r
     </div>
   </div>
   <div class="mkt reverse" style="--c1:var(--m-bissap-2)">
-    <div class="mkt-img photos col"><figure><img src="sport-pitch.jpg" alt=""></figure><figure><img src="sport-run.jpg" alt=""></figure></div>
+    <div class="mkt-img photos one"><figure data-video="sport-video-foot.mp4"><img src="sport-pitch.jpg" alt=""></figure></div>
     <div class="mkt-text">
       <h3>Du premier jour <i>au dernier round</i></h3>
       <p>Débutant ou compétiteur, on a de quoi t’équiper. Un doute sur la taille ou le niveau ? Écris-nous sur WhatsApp, on te conseille.</p>
@@ -733,7 +745,7 @@ body.sport .mkt-img.photos.col figure::after{background:linear-gradient(160deg,r
 <section class="sec"><div class="container">
 <div class="advice">
 <div><h3>Quel équipement <i>pour toi</i> ?</h3><p>Dis-nous ton sport, ton niveau et ton budget, on te conseille sur WhatsApp.</p></div>
-<a class="btn-s" target="_blank" rel="noopener" href="https://wa.me/221778038874?text=Bonjour%20SenMarch%C3%A9%2C%20j%E2%80%99ai%20besoin%20d%E2%80%99un%20conseil%20pour%20du%20sport">Demander conseil</a>
+<a class="btn-s" href="kit.html" style="margin-right:.5rem">Compose ton kit</a><a class="btn-s" target="_blank" rel="noopener" href="https://wa.me/221778038874?text=Bonjour%20SenMarch%C3%A9%2C%20j%E2%80%99ai%20besoin%20d%E2%80%99un%20conseil%20pour%20du%20sport">Demander conseil</a>
 </div>
 </div></section>
 
@@ -1012,6 +1024,19 @@ body.sport .mkt-img.photos.col figure::after{background:linear-gradient(160deg,r
     }catch(e){ console.warn('[Sport]', e); $('grid').innerHTML = '<div class="nores"><h3>Chargement impossible</h3><p>Réessaie dans un instant.</p></div>'; }
   })();
   renumber(); updateUI(); updateDrawer();
+})();
+</script>
+<script>
+/* Vidéos facultatives : dépose sport-hero.mp4, sport-video-combat.mp4 ou sport-video-foot.mp4 à la racine, elles se lancent toutes seules (muettes, en boucle). */
+(function(){
+  var c=navigator.connection||{}; if(c.saveData||/2g/.test(c.effectiveType||'')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  document.querySelectorAll('[data-video]').forEach(function(box){
+    var src=box.getAttribute('data-video');
+    fetch(src,{method:'HEAD'}).then(function(r){
+      if(!r.ok)return; var v=document.createElement('video'); v.className='sp-vid'; v.src=src; v.muted=true; v.loop=true; v.autoplay=true; v.playsInline=true; v.setAttribute('playsinline','');
+      v.addEventListener('canplay',function(){v.play().catch(function(){});}); box.appendChild(v);
+    }).catch(function(){});
+  });
 })();
 </script>
 </body>
