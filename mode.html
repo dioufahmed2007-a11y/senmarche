@@ -827,9 +827,12 @@ body.se-mode .p-badge.fj{background:var(--m-bissap);color:var(--m-on-bissap)}
   const isNewArt = a => { const e = (a.etat || '').toLowerCase(); return !e || e.includes('neuf'); };
   /* Mode = seulement les habits. Tout le reste (cosmétiques, soins, maison…) n'apparaît pas ici.
      Pour l'univers Fille : on garde uniquement ses vêtements (abayas, voiles, tendances…). */
+  const EQUIP = /\bballons? (de|taille)|gants? (de )?(boxe|gardien|mma|combat)|haltere|kettlebell|yoga|protege|casque de|sac de frappe|punching|corde a sauter|gourde|bouteille|montre|\bvelos?\b|\bvtt\b|antivol|crampon|bandes? de boxe|serviette|frigo|refrigerateur|congelateur|machine a laver|climatiseur|ventilateur|aspirateur|bouilloire|mixeur|blender|casserole|poele|matelas|canape|\bvase\b|lampe/;
   const isHabit = a => {
     const n = (a.categorie && a.categorie.nom) || '';
-    if (/cosm[ée]tique|soin|maquillage|beaut[ée]|parfum|maison|[ée]lectrom|d[ée]co/i.test(n)) return false;
+    const nm = String(a.nom || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (/cosm[ée]tique|soin|maquillage|beaut[ée]|parfum|maison|[ée]lectrom|d[ée]co|sport|fitness|football|combat|v[eé]lo|musculation|cuisine|vaisselle|meuble|mobilier|literie|bijou/i.test(n)) return false;
+    if (EQUIP.test(nm)) return false;
     if (/fille/i.test(n)) return /abaya|voile|tendance|robe|[ée]l[ée]gance|tenue|v[eê]tement|ensemble|pantalon/i.test(n);
     return true;
   };
