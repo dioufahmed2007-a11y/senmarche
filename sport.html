@@ -1052,7 +1052,7 @@ body.se-mode.sport .p-image-wrap.noimg::after{color:rgba(255,255,255,.55)}
 <script>
 /* Vidéos facultatives : dépose sport-hero.mp4, sport-video-combat.mp4 ou sport-video-foot.mp4 à la racine, elles se lancent toutes seules (muettes, en boucle). */
 (function(){
-  var VIDEOS_ON=false; /* passe à true quand tu as ajouté tes vidéos */
+  var VIDEOS_ON=true; /* passe à false pour couper les vidéos */
   if(!VIDEOS_ON)return;
   var c=navigator.connection||{}; if(c.saveData||/2g/.test(c.effectiveType||'')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   document.querySelectorAll('[data-video]').forEach(function(box){
