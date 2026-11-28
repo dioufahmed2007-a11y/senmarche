@@ -229,6 +229,7 @@
   .no-print,#invoice-close{display:none!important}
 }
 </style>
+<style>.bt-lbl{font-size:.62rem;line-height:1.2}</style>
 </head>
 <body>
 
@@ -347,32 +348,19 @@ if (!cmdId){
 
 function render(cmd){
   const items = Array.isArray(cmd.articles_json) ? cmd.articles_json : [];
-  const isLivraison = false;
+  const isLivraison = cmd.mode_livraison === 'livraison';
   const isAnnulee = cmd.statut === 'annulee';
   const date = cmd.created_at ? new Date(cmd.created_at).toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
   
   // Mapping statut interne → étape client (4 étapes)
-  const stepMap = {
-    'nouvelle':       0,
-    'confirmee':      1,
-    'en_preparation': 1,
-    'prete_retrait':  2,
-    'en_livraison':   2,
-    'livree':         3,
-  };
+  const stepMap = { 'nouvelle':0, 'confirmee':1, 'en_preparation':2, 'prete_retrait':3, 'en_livraison':3, 'livree':4 };
   const step = stepMap[cmd.statut] !== undefined ? stepMap[cmd.statut] : 0;
   
   // Labels et icônes selon mode
   const stepData = isLivraison ? [
-    {lbl:'Reçue',     icon:'📥'},
-    {lbl:'Confirmée', icon:'✓'},
-    {lbl:'En route',  icon:'🚚'},
-    {lbl:'Livrée',    icon:'✅'},
+    {lbl:'Reçue', icon:'📥'}, {lbl:'Confirmée', icon:'✓'}, {lbl:'Préparation', icon:'🛠'}, {lbl:'En route', icon:'🚚'}, {lbl:'Livrée', icon:'✅'},
   ] : [
-    {lbl:'Reçue',     icon:'📥'},
-    {lbl:'Confirmée', icon:'✓'},
-    {lbl:'Prête au retrait', icon:'🏢'},
-    {lbl:'Récupérée', icon:'✅'},
+    {lbl:'Reçue', icon:'📥'}, {lbl:'Confirmée', icon:'✓'}, {lbl:'Préparation', icon:'🛠'}, {lbl:'Prête', icon:'🏢'}, {lbl:'Récupérée', icon:'✅'},
   ];
   
   // Hero message selon statut
@@ -452,8 +440,8 @@ function render(cmd){
   // Points de retrait — affichés quand la commande est prête (hors livraison)
   // ⚠️ COORDONNÉES PLACEHOLDER pour le dépôt — à remplacer par la vraie position à Thiès
   const DEPOT_LAT = 14.7910, DEPOT_LNG = -16.9359;
-  const DEPOT_ADDR = 'Dépôt SenExport, Thiès, Sénégal';
-  const DEPOT_POINT = { id:'depot', label:'Dépôt SenExport', adresse: DEPOT_ADDR, lat: DEPOT_LAT, lng: DEPOT_LNG };
+  const DEPOT_ADDR = 'Dépôt SenMarché, Thiès, Sénégal';
+  const DEPOT_POINT = { id:'depot', label:'Dépôt SenMarché', adresse: DEPOT_ADDR, lat: DEPOT_LAT, lng: DEPOT_LNG };
 
   // points_retrait : configurés par Ahmed selon la taille du produit (en attendant le
   // logiciel desktop, fixé à la main dans Supabase). S'il n'y en a qu'un ou aucun, pas
@@ -535,12 +523,46 @@ function render(cmd){
   const itemsHTML = items.map(it => `
     <div class="art-row">
       <div class="art-info">
-        <div class="art-name">${it.nom || '—'}</div>
+        <div class="art-name">${escH(it.nom || '—')}</div>
         <div class="art-detail">Quantité : ${it.qte || 1} × ${SE.fprix(it.prix || 0)}</div>
       </div>
       <div class="art-price">${SE.fprix((it.prix||0) * (it.qte||1))}</div>
     </div>`).join('');
   
+  const escH = s => String(s == null ? '' : s).replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+  const waTo = txt => 'https://wa.me/221778038874?text=' + encodeURIComponent(txt);
+  const fmtD = d => new Date(d).toLocaleString('fr-FR', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+  const frais = Number(cmd.frais_livraison) || 0;
+  const netArticles = Math.max(0, (Number(cmd.sous_total) || 0) - (Number(cmd.remise_fidelite) || 0));
+  const due = (Number(cmd.sous_total) ? netArticles + frais : (Number(cmd.total_ttc) || 0) + frais);
+  const noteClean = escH(String(cmd.notes || '').split('\n').filter(l => !/^\s*(LIVRAISON|\[Pr)/.test(l)).join('\n').trim());
+
+  let nextHTML = '';
+  if (!isAnnulee) {
+    const N = {
+      nouvelle:       ['⏳', 'Nous vérifions votre commande', 'Nous la confirmons généralement dans la journée. Vous serez prévenu ici et sur WhatsApp.', 'rien à faire pour l’instant.'],
+      confirmee:      ['✅', 'Votre commande est confirmée', 'Nous rassemblons vos articles.', 'gardez votre téléphone à portée pour d’éventuelles précisions.'],
+      en_preparation: ['🛠', 'Préparation en cours', 'Vos articles sont vérifiés et préparés.', isLivraison ? 'consultez le prix de livraison ci-dessous.' : 'vous serez prévenu dès que c’est prêt.'],
+      prete_retrait:  ['🏢', 'Votre commande est prête', 'Elle vous attend au point de retrait.', 'venez avec le numéro ' + cmd.numero + ' et ' + SE.fprix(due) + ' (espèces, Wave ou Orange Money). Vous vérifiez l’article avant de payer.'],
+      en_livraison:   ['🚚', 'Votre commande est en route', 'Notre livreur va vous contacter.', 'gardez ' + SE.fprix(due) + ' prêts (espèces, Wave ou Orange Money) et votre téléphone allumé.'],
+      livree:         ['🎉', 'Commande terminée', 'Merci pour votre confiance !', 'un avis sur WhatsApp nous aide beaucoup.'],
+    }[cmd.statut];
+    if (N) nextHTML = `<div class="detail-card"><h3>👉 Et maintenant ?</h3><p style="font-size:.95rem;color:var(--ink);margin:0 0 .25rem"><strong>${N[0]} ${N[1]}</strong></p><p style="font-size:.85rem;color:var(--stone);margin:0 0 .5rem">${N[2]}</p><p style="font-size:.85rem;color:var(--ink);margin:0"><strong>Pour vous :</strong> ${N[3]}</p></div>`;
+  }
+  let lateHTML = '';
+  if (cmd.statut === 'nouvelle' && cmd.created_at && (Date.now() - new Date(cmd.created_at).getTime()) > 12 * 3600 * 1000) {
+    lateHTML = `<div class="detail-card"><h3>⏱ Cela prend plus de temps que prévu</h3><p style="font-size:.85rem;color:var(--stone);margin:0 0 .75rem">Votre commande n’est pas encore confirmée. Écrivez-nous pour qu’on la traite en priorité.</p><a class="btn-action btn-wa" target="_blank" rel="noopener" href="${waTo('Bonjour, ma commande ' + cmd.numero + ' n’est pas encore confirmée. Pouvez-vous la traiter ?')}">💬 Relancer sur WhatsApp</a></div>`;
+  }
+  let feeHTML = '';
+  if (isLivraison && !isAnnulee) {
+    feeHTML = frais > 0
+      ? `<div class="detail-card"><h3>🚚 Prix de la livraison</h3><p style="font-size:1.4rem;font-weight:700;color:var(--ink);margin:0 0 .25rem">${SE.fprix(frais)}</p><p style="font-size:.85rem;color:var(--stone);margin:0 0 .75rem">Total à payer à la livraison : <strong>${SE.fprix(due)}</strong> (articles ${SE.fprix(netArticles)} + livraison).</p><div style="display:flex;gap:.6rem;flex-wrap:wrap"><a class="btn-action btn-wa" style="flex:1;text-align:center" target="_blank" rel="noopener" href="${waTo('Bonjour, j’accepte la livraison à ' + SE.fprix(frais) + ' pour la commande ' + cmd.numero)}">✅ J’accepte</a><a class="btn-action btn-back" style="flex:1;text-align:center" target="_blank" rel="noopener" href="${waTo('Bonjour, le prix de livraison de la commande ' + cmd.numero + ' (' + SE.fprix(frais) + ') ne me convient pas. Pouvons-nous en discuter ?')}">❌ Je refuse / discuter</a></div></div>`
+      : `<div class="detail-card"><h3>🚚 Prix de la livraison</h3><p style="font-size:.9rem;color:var(--ink);margin:0 0 .25rem"><strong>En cours de calcul</strong></p><p style="font-size:.85rem;color:var(--stone);margin:0">Notre équipe calcule le prix selon votre adresse. Il s’affichera ici avant 12 h, et vous serez prévenu sur WhatsApp si vous l’avez demandé.</p></div>`;
+  }
+  const cancelHTML = (!isAnnulee && (cmd.statut === 'nouvelle' || cmd.statut === 'confirmee'))
+    ? `<a class="btn-action btn-back" target="_blank" rel="noopener" href="${waTo('Bonjour, je souhaite annuler ma commande ' + cmd.numero)}">✖ Demander l’annulation</a>` : '';
+  const histHTML = `<div class="detail-card" id="hist-card"><h3>🕒 Historique</h3><div id="hist-list" style="font-size:.85rem;color:var(--stone)">Commande passée le ${date}.</div></div>`;
+
   const tel = '221778038874';
   const wamsg = encodeURIComponent(`Bonjour, je vous contacte au sujet de ma commande ${cmd.numero}`);
   
@@ -552,17 +574,21 @@ function render(cmd){
       <p class="sub">${heroSub}</p>
     </div>
     
-    ${etaHTML}
+    ${lateHTML}
     ${trackerHTML}
+    ${nextHTML}
+    ${feeHTML}
     ${mapHTML}
+    ${histHTML}
     ${invoiceHTML}
 
     <div class="detail-card">
       <h3>📦 Vos articles</h3>
       ${itemsHTML}
+      ${cmd.remise_fidelite > 0 ? `<div class="art-row"><div class="art-info"><div class="art-name">Cagnotte utilisée</div></div><div class="art-price">−${SE.fprix(cmd.remise_fidelite)}</div></div>` : ''}${frais > 0 ? `<div class="art-row"><div class="art-info"><div class="art-name">Livraison</div></div><div class="art-price">${SE.fprix(frais)}</div></div>` : ''}
       <div class="total-block">
-        <span class="lbl">Total</span>
-        <span class="val">${SE.fprix(cmd.total_ttc || 0)}</span>
+        <span class="lbl">Total à payer</span>
+        <span class="val">${SE.fprix(due)}</span>
       </div>
     </div>
     
@@ -580,7 +606,7 @@ function render(cmd){
         <span class="icon">📍</span>
         <div class="info">
           <div class="info-label">Adresse de livraison</div>
-          <div class="info-val">${cmd.adresse_livraison}</div>
+          <div class="info-val">${escH(cmd.adresse_livraison)}</div>
         </div>
       </div>` : ''}
       <div class="address-line">
@@ -590,19 +616,19 @@ function render(cmd){
           <div class="info-val">${date}</div>
         </div>
       </div>
-      ${cmd.notes ? `
+      ${noteClean ? `
       <div class="address-line">
         <span class="icon">💬</span>
         <div class="info">
           <div class="info-label">Vos notes</div>
-          <div class="info-val" style="font-style:italic">« ${cmd.notes} »</div>
+          <div class="info-val" style="font-style:italic">« ${noteClean} »</div>
         </div>
       </div>` : ''}
     </div>
     
-    <div class="actions">
+    <div class="actions">${cancelHTML}
       <a href="https://wa.me/${tel}?text=${wamsg}" target="_blank" class="btn-action btn-wa">
-        💬 Contacter SenExport
+        💬 Contacter SenMarché
       </a>
       <a href="compte.html" class="btn-action btn-back">
         ← Retour
@@ -614,6 +640,17 @@ function render(cmd){
   const c = document.getElementById('content');
   c.innerHTML = html;
   c.style.display = 'block';
+
+  /* Historique détaillé des statuts (table commande_historique, voir SQL 01) */
+  (async () => {
+    try {
+      const { data, error } = await SE.sb.from('commande_historique').select('statut,note,created_at').eq('commande_id', cmd.id).order('created_at', { ascending: true });
+      const el = document.getElementById('hist-list');
+      if (error || !data || !data.length || !el) return;
+      const LB = { nouvelle:'Commande reçue', confirmee:'Commande confirmée', en_preparation:'Préparation en cours', prete_retrait:'Prête au retrait', en_livraison:'En route', livree: isLivraison ? 'Livrée' : 'Récupérée', annulee:'Annulée' };
+      el.innerHTML = data.slice().reverse().map(h => `<div style="display:flex;gap:.75rem;padding:.45rem 0;border-bottom:1px solid rgba(255,255,255,.06)"><span style="min-width:104px;color:var(--stone)">${fmtD(h.created_at)}</span><span style="color:var(--ink)">${LB[h.statut] || escH(h.statut)}${h.note ? ' — ' + escH(h.note) : ''}</span></div>`).join('');
+    } catch (e) {}
+  })();
 
   /* Carte du point de retrait — Leaflet + OpenStreetMap (gratuit, sans clé API) */
   const mapCard = document.getElementById('depot-map-card');
@@ -770,7 +807,7 @@ function showInvoice(cmd, items) {
   // de joindre un fichier automatiquement depuis un lien web — seul le texte est pré-rempli)
   const waLines = (items||[]).map(it => `• ${it.nom||'—'} ×${it.qte||1} — ${SE.fprix((it.prix||0)*(it.qte||1))}`).join('\n');
   const waText = encodeURIComponent(
-    `Facture SenExport — ${cmd.numero||''}\n${date}\n\n${waLines}\n\nTotal : ${SE.fprix(cmd.total_ttc||0)}\n\nMerci de votre confiance !`
+    `Facture SenMarché — ${cmd.numero||''}\n${date}\n\n${waLines}\n\nTotal : ${SE.fprix(cmd.total_ttc||0)}\n\nMerci de votre confiance !`
   );
   document.getElementById('invoice-wa').href = `https://wa.me/221778038874?text=${waText}`;
 

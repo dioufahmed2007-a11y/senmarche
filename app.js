@@ -17,6 +17,7 @@ window.SE = window.SE || {};
 SE.SUPABASE_URL  = 'https://axgpohmhzmdgozndlntj.supabase.co';
 SE.SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4Z3BvaG1oem1kZ296bmRsbnRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MTIzOTMsImV4cCI6MjA5MTQ4ODM5M30.gukLxSpuLUPWOivsC-LgbNYIsnTWOuo0_G2ubYur3os';
 SE.WA_NUMBER     = '221778038874';
+try { const _r = new URLSearchParams(location.search).get('ref'); if (_r && /^[A-Za-z0-9]{4,12}$/.test(_r)) localStorage.setItem('se_ref', _r.toUpperCase()); } catch (e) {}
 
 /* ──────────────────────────────────────────────────────────────
    CLIENT SUPABASE
@@ -365,6 +366,14 @@ SE.Auth = {
       console.error('_loadClient:', error);
     }
     this.currentClient = data;
+    /* Parrainage : enregistre le code reçu par lien (?ref=CODE), une seule fois */
+    try {
+      const ref = localStorage.getItem('se_ref');
+      if (data && ref && SE.sb) {
+        const { error: refErr } = await SE.sb.rpc('enregistrer_parrain', { p_code: ref });
+        if (!refErr) localStorage.removeItem('se_ref');
+      }
+    } catch (e) {}
     return data;
   },
 
@@ -969,7 +978,7 @@ SE.Onboarding = {
     { icon:'🛍️', title:'Commandez',           text:'Parcourez le catalogue, choisissez le retrait ou la livraison, et passez commande en quelques clics. Aucun paiement en ligne : vous payez à la récupération ou à la livraison.' },
     { icon:'🗺️', title:'Suivez sur la carte',  text:'Suivez votre commande en temps réel : Reçue → Confirmée → Prête → Récupérée, avec la carte et l\'itinéraire jusqu\'au point de retrait.' },
     { icon:'📦', title:'Récupérez',            text:'Une fois prête, choisissez votre point de retrait, présentez votre QR code et récupérez votre commande.' },
-    { icon:'💰', title:'Profitez de la cagnotte', text:'1% de chaque achat est ajouté à votre cagnotte en FCFA, utilisable sur le site ou au dépôt. Bonus à chaque palier franchi !' },
+    { icon:'💰', title:'Profitez de la cagnotte', text:'Votre cagnotte se débloque à 10 000 FCFA d’achats, puis 1 % de chaque commande vous revient en FCFA (1,5 % et 1 000 F de bonus dès 50 000 F).' },
   ],
 
   maybeShow(){

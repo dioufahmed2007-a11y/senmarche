@@ -6,7 +6,7 @@
 <title>Valider ma commande — SenMarché</title>
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="manifest" href="manifest.json">
-<link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="font-archivo.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="fonts.css">
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="base.css">
@@ -225,7 +225,8 @@ body:not(.theme-clair) .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) br
           <p class="note hid" id="login-hint">Connecte-toi pour enregistrer tes adresses. <a href="compte.html" style="color:var(--or)">Me connecter</a></p>
           
           <p class="stp"><b>3</b> Valide ta commande</p>
-          <p class="note" style="margin:0">Le prix de ta livraison te sera envoyé par WhatsApp avant 12 h. Tu paies à la livraison.</p>
+          <p class="note" style="margin:0">Notre équipe calcule le prix de ta livraison selon ton adresse. Il s’affiche sur le suivi de ta commande avant 12 h. Tu paies à la livraison.</p>
+          <label class="note" style="display:flex;gap:.5rem;align-items:center;margin-top:.6rem;cursor:pointer"><input type="checkbox" id="l-wa" checked> Me prévenir aussi sur WhatsApp quand le prix est prêt</label>
         </div>
         <div class="pick" style="margin-top:1rem"><div>Aucun paiement en ligne : tu paies à la récupération ou à la livraison (espèces, Wave ou Orange Money)</div><div>Tu vérifies l’article avant de payer</div></div>
       </div>
@@ -304,12 +305,14 @@ async function initCagnotte() {
   if (c.telephone && !$('f-tel').value) $('f-tel').value = c.telephone;
   if (c.email && !$('f-email').value) $('f-email').value = c.email;
   $('cag').classList.remove('hid');
+  const dep = c.total_depense || 0, rate = dep >= 50000 ? 0.015 : dep >= 10000 ? 0.01 : 0;
+  const gainTxt = rate > 0 ? 'Tu gagnes ' + SE.fprix(Math.round(sub * rate)) + ' avec cette commande.' : 'Plus que ' + SE.fprix(Math.max(0, 10000 - dep)) + ' d’achats pour débloquer ta cagnotte.';
   if (solde() > 0) {
-    $('cag-info').textContent = SE.fprix(solde()) + ' disponibles';
+    $('cag-info').textContent = SE.fprix(solde()) + ' disponibles · ' + gainTxt;
     $('cag-t').onchange = totals;
   } else {
     $('cag-row').classList.add('hid');
-    $('cag-info').textContent = '· Tu gagnes ' + SE.fprix(Math.round(sub * 0.01)) + ' avec cette commande.';
+    $('cag-info').textContent = '· ' + gainTxt;
   }
 }
 
@@ -572,16 +575,26 @@ async function submit() {
       const p = l.a.prix_vente_fcfa || 0;
       return { reference: l.base, nom: l.a.nom + (l.size ? ' (Taille : ' + l.size + ')' : ''), taille: l.size, prix: p, qte: l.qte, sous_total: p * l.qte };
     });
-    const total = Math.max(0, sub - remise);
-    const r = await SE.Commandes.create({ client: { nom, tel, email, adresse: dest.adresse, ville: dest.ville, quartier: dest.quartier }, mode: dest.mode, items, sous_total: sub, remise_fidelite: remise, frais_livraison: 0, total_ttc: total, notes: (msg ? msg + '\n' : '') + dest.note });
-    if (SE.Track) SE.Track.orderComplete(r.numero, total);
-    if (remise > 0 && SE.Auth.currentClient && SE.sb) {
-      try { const { data, error } = await SE.sb.rpc('use_cagnotte', { p_montant: remise }); if (!error && data && data[0] && data[0].new_solde !== undefined) SE.Auth.currentClient.cagnotte_solde = data[0].new_solde; else if (error) console.error('use_cagnotte:', error); } catch (e) { console.warn(e); }
+    // La cagnotte est débitée AVANT de créer la commande : si le débit échoue, pas de réduction.
+    let remiseOk = remise;
+    if (remise > 0) {
+      remiseOk = 0;
+      try {
+        const { data, error } = await SE.sb.rpc('use_cagnotte', { p_montant: remise });
+        if (!error) { remiseOk = remise; if (data && data[0] && data[0].new_solde !== undefined) SE.Auth.currentClient.cagnotte_solde = data[0].new_solde; }
+        else console.error('use_cagnotte:', error);
+      } catch (e) { console.warn(e); }
+      if (!remiseOk) SE.toast('Ta cagnotte n’a pas pu être utilisée : la commande continue sans réduction.', false);
     }
+    const waNote = dest.mode === 'livraison' ? '\n[Prévenir par WhatsApp quand le prix de livraison est prêt : ' + ($('l-wa') && $('l-wa').checked ? 'oui' : 'non') + ']' : '';
+    const total = Math.max(0, sub - remiseOk);
+    let r;
+    try { r = await SE.Commandes.create({ client: { nom, tel, email, adresse: dest.adresse, ville: dest.ville, quartier: dest.quartier }, mode: dest.mode, items, sous_total: sub, remise_fidelite: remiseOk, frais_livraison: 0, total_ttc: total, notes: (msg ? msg + '\n' : '') + dest.note + waNote }); } catch (ce) { if (remiseOk > 0) SE.toast('Commande non enregistrée. Ta cagnotte a été débitée : écris-nous sur WhatsApp, on te la rend.', false); throw ce; }
+    if (SE.Track) SE.Track.orderComplete(r.numero, total);
     SE.Cart.clear();
     $('wrap').classList.add('hid'); $('bar').classList.add('hid'); document.body.classList.remove('has-bar'); $('head').classList.add('hid');
     $('ok-num').textContent = r.numero;
-    $('ok-s4').innerHTML = dest.mode === 'livraison' ? '<b>Livraison</b><br>On t’envoie le prix de la livraison par WhatsApp avant 12 h. Tu paies à la livraison.' : '<b>Retrait et paiement</b><br>Tu récupères ta commande au point choisi et tu paies sur place.'; $('ok').classList.remove('hid');
+    $('ok-s4').innerHTML = dest.mode === 'livraison' ? '<b>Livraison</b><br>Le prix de la livraison s’affiche sur le suivi de ta commande avant 12 h (et sur WhatsApp si tu l’as coché). Tu paies à la livraison.' : '<b>Retrait et paiement</b><br>Tu récupères ta commande au point choisi et tu paies sur place.'; $('ok').classList.remove('hid');
     if (typeof confetti === 'function') confetti({ particleCount: 120, spread: 70, origin: { y: .7 }, disableForReducedMotion: true });
     scrollTo({ top: 0, behavior: 'smooth' });
   } catch (e) {

@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#C4531A">
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="manifest" href="manifest.json">
-<link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="font-archivo.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="fonts.css">
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="base.css">
@@ -143,12 +143,6 @@
 .tier-or{background:linear-gradient(135deg, #D4A437 0%, #A8801F 50%, #6B4F0F 100%)}
 .tier-or .accent{color:#FFE89A}
 
-.tier-platine{background:linear-gradient(135deg, #2C1F3D 0%, #1A1130 50%, #0D0820 100%)}
-.tier-platine .accent{color:#C8B5FF}
-
-.tier-vip{background:linear-gradient(135deg, #1A1A1A 0%, #0D0D0D 50%, #000000 100%)}
-.tier-vip .accent{color:#FFD700}
-
 /* Patterns décoratifs sur les cartes */
 .loyalty-card-face::before{
   content:'';position:absolute;
@@ -161,10 +155,6 @@
   bottom:-40%;left:-20%;width:60%;height:150%;
   background:radial-gradient(ellipse, rgba(255,255,255,.05) 0%, transparent 60%);
   pointer-events:none;
-}
-/* VIP : effet doré subtil */
-.tier-vip .loyalty-card-face::before{
-  background:radial-gradient(ellipse, rgba(255,215,0,.12) 0%, transparent 60%);
 }
 
 .card-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
@@ -596,11 +586,6 @@
 .lc-card-modern.tier-bronze{background:linear-gradient(135deg, #B07845 0%, #8B5A3C 50%, #4A2B16 100%)}
 .lc-card-modern.tier-argent{background:linear-gradient(135deg, #C8C8C8 0%, #8E8E8E 50%, #4A4A4A 100%)}
 .lc-card-modern.tier-or{background:linear-gradient(135deg, #E6BC54 0%, #B89028 50%, #6B4F0F 100%)}
-.lc-card-modern.tier-platine{background:linear-gradient(135deg, #4A3F6B 0%, #2C1F3D 50%, #0D0820 100%)}
-.lc-card-modern.tier-vip{
-  background:linear-gradient(135deg, #2A2A2A 0%, #0A0A0A 100%);
-  border:1.5px solid #FFD700;
-}
 
 /* Pattern décoratif (cercles abstraits) */
 .lc-pattern{
@@ -700,8 +685,6 @@
 .lc-card-modern.tier-bronze .lc-tier-pill{color:#FFD4A3}
 .lc-card-modern.tier-argent .lc-tier-pill{color:#F0F0F0}
 .lc-card-modern.tier-or .lc-tier-pill{color:#FFE89A}
-.lc-card-modern.tier-platine .lc-tier-pill{color:#C8B5FF}
-.lc-card-modern.tier-vip .lc-tier-pill{color:#FFD700}
 
 /* Infos en dessous (grille 3 colonnes) */
 .lc-info-grid{
@@ -755,6 +738,7 @@
 }
 
 </style>
+<style>.bt-lbl,.tracker-lbl{font-size:.62rem;line-height:1.2}</style>
 </head>
 <body>
 <nav class="nav" id="nav">
@@ -822,7 +806,7 @@ setTimeout(() => {
   <div class="w">
     <div class="breadcrumb"><a href="index.html">Accueil</a><span class="sep">›</span><span>Mon compte</span></div>
     <h1>Bonjour <em id="salut-nom">—</em></h1>
-    <p class="sub">Votre espace client SenExport.</p>
+    <p class="sub">Votre espace client SenMarché.</p>
   </div>
 </div>
 
@@ -844,7 +828,7 @@ setTimeout(() => {
         <div class="loyalty-card-face-3d front" id="loyalty-card">
           <div class="card-shine" id="card-shine"></div>
           <div class="card-top">
-            <div class="card-brand">SenExport<small>Carte Fidélité</small></div>
+            <div class="card-brand">SenMarché<small>Carte Fidélité</small></div>
             <div class="card-tier-badge" id="card-tier">Bronze</div>
           </div>
           <div class="card-chip"><div></div><div></div><div></div><div></div></div>
@@ -868,7 +852,7 @@ setTimeout(() => {
         <!-- VERSO -->
         <div class="loyalty-card-face-3d back" id="card-back">
           <div class="card-back-top">
-            <span class="card-back-brand-small">SenExport <em>Boutique</em></span>
+            <span class="card-back-brand-small">SenMarché <em>Boutique</em></span>
             <div class="card-tier-badge" id="card-tier-back">Bronze</div>
           </div>
           <div class="card-qr-center">
@@ -888,6 +872,7 @@ setTimeout(() => {
 
     <nav class="side-nav">
       <a data-section="overview" class="active">📊 Programme fidélité</a>
+      <a data-section="parrainage">🤝 Parrainage</a>
       <a data-section="commandes">🛒 Mes commandes</a>
       <a data-section="parametres">⚙ Paramètres</a>
       <hr>
@@ -898,8 +883,8 @@ setTimeout(() => {
   <div>
     <!-- Section Overview / Fidélité -->
     <section class="acc-card" id="sec-overview">
-      <h2>💎 Cagnotte SenExport</h2>
-      <p class="sub">1% de chaque achat est automatiquement mis de côté dans votre cagnotte, utilisable au site ou au dépôt.</p>
+      <h2>💎 Cagnotte SenMarché</h2>
+      <p class="sub">Dès 10 000 FCFA d’achats récupérés, 1 % de chaque commande est mis de côté dans votre cagnotte (1,5 % dès 50 000 F), utilisable au site ou au dépôt.</p>
 
       <div class="stats-grid">
         <div class="stat"><div class="stat-v" id="s-points">0 F</div><div class="stat-l">Cagnotte disponible</div></div>
@@ -910,11 +895,11 @@ setTimeout(() => {
       <!-- Barre de progression vers palier suivant -->
       <div class="tier-progress" id="tier-progress">
         <div class="tier-progress-head">
-          <span class="current" id="tier-current">Palier Bronze</span>
-          <span class="next" id="tier-next">→ Argent à 50 000 F</span>
+          <span class="current" id="tier-current">Cagnotte à débloquer</span>
+          <span class="next" id="tier-next">→ Cagnotte à 10 000 F</span>
         </div>
         <div class="tier-progress-bar"><div class="tier-progress-fill" id="tier-fill" style="width:0%"></div></div>
-        <div class="tier-progress-info"><strong id="tier-points-needed">50 000</strong> FCFA d'achats à atteindre pour le palier suivant</div>
+        <div class="tier-progress-info"><strong id="tier-points-needed">10 000</strong> FCFA d'achats à atteindre pour le palier suivant</div>
       </div>
 
       <!-- Historique de la cagnotte -->
@@ -939,7 +924,7 @@ setTimeout(() => {
             <div style="width:36px;height:36px;border-radius:50%;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.2);display:grid;place-items:center;font-size:.75rem;font-weight:700;color:var(--or);flex-shrink:0">1</div>
             <div>
               <p style="font-weight:600;color:var(--ink);font-size:.9rem;margin-bottom:4px">Achetez, gagnez du cash directement</p>
-              <p style="font-size:.82rem;color:var(--stone);line-height:1.6">Chaque commande récupérée vous fait gagner <strong style="color:var(--or)">1% de son montant</strong>, ajouté directement à votre cagnotte en FCFA. Pas de points abstraits, pas de conversion.</p>
+              <p style="font-size:.82rem;color:var(--stone);line-height:1.6">Une fois vos <strong style="color:var(--or)">10 000 F d’achats</strong> atteints, chaque commande récupérée vous fait gagner <strong style="color:var(--or)">1 % de son montant</strong>, ajouté directement à votre cagnotte en FCFA. Pas de points abstraits, pas de conversion.</p>
             </div>
           </div>
 
@@ -947,7 +932,7 @@ setTimeout(() => {
             <div style="width:36px;height:36px;border-radius:50%;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.2);display:grid;place-items:center;font-size:.75rem;font-weight:700;color:var(--or);flex-shrink:0">2</div>
             <div>
               <p style="font-weight:600;color:var(--ink);font-size:.9rem;margin-bottom:4px">Utilisez votre cagnotte</p>
-              <p style="font-size:.82rem;color:var(--stone);line-height:1.6"><strong style="color:var(--ink)">Sur le site</strong> : appliquez tout votre solde au checkout.<br><strong style="color:var(--ink)">Au dépôt</strong> : présentez votre QR code, Ahmed déduit le montant directement.<br>Vous pouvez utiliser tout votre solde d'un coup, aucun bon à imprimer.</p>
+              <p style="font-size:.82rem;color:var(--stone);line-height:1.6"><strong style="color:var(--ink)">Sur le site</strong> : appliquez tout votre solde au checkout.<br><strong style="color:var(--ink)">Au dépôt</strong> : présentez votre QR code, Le vendeur déduit le montant directement.<br>Vous pouvez utiliser tout votre solde d'un coup, aucun bon à imprimer.</p>
             </div>
           </div>
 
@@ -955,11 +940,10 @@ setTimeout(() => {
             <div style="width:36px;height:36px;border-radius:50%;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.2);display:grid;place-items:center;font-size:.75rem;font-weight:700;color:var(--or);flex-shrink:0">3</div>
             <div>
               <p style="font-weight:600;color:var(--ink);font-size:.9rem;margin-bottom:4px">Montez de palier</p>
-              <p style="font-size:.82rem;color:var(--stone);line-height:1.6;margin-bottom:10px">Le palier se base sur le total cumulé de vos achats. Le franchir vous offre un bonus en plus du 1% habituel.</p>
+              <p style="font-size:.82rem;color:var(--stone);line-height:1.6;margin-bottom:10px">Le palier se base sur le total cumulé de vos achats. Le palier Argent vous offre un bonus de 1 000 F et un taux plus élevé.</p>
               <div style="display:flex;flex-direction:column;gap:5px">
-                <div style="display:flex;align-items:center;gap:8px;font-size:.78rem"><span style="padding:2px 10px;border-radius:3px;background:#5C3A1E;color:#FFD4A3;font-weight:600;min-width:70px;text-align:center">🥉 Bronze</span><span style="color:var(--stone)">0 à 49 999 F — <strong style="color:var(--ink)">+500 F bonus</strong></span></div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:.78rem"><span style="padding:2px 10px;border-radius:3px;background:#3A3A3A;color:#E0E0E0;font-weight:600;min-width:70px;text-align:center">🥈 Argent</span><span style="color:var(--stone)">50 000 à 499 999 F — <strong style="color:var(--ink)">+2 000 F bonus</strong></span></div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:.78rem"><span style="padding:2px 10px;border-radius:3px;background:#5C4A10;color:#FFE89A;font-weight:600;min-width:70px;text-align:center">🥇 Or</span><span style="color:var(--stone)">500 000 F et plus — <strong style="color:var(--ink)">+5 000 F bonus</strong></span></div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:.78rem"><span style="padding:2px 10px;border-radius:3px;background:#5C3A1E;color:#FFD4A3;font-weight:600;min-width:70px;text-align:center">🥉 Bronze</span><span style="color:var(--stone)">10 000 F d’achats · 1 % de chaque commande</span></div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:.78rem"><span style="padding:2px 10px;border-radius:3px;background:#3A3A3A;color:#E0E0E0;font-weight:600;min-width:70px;text-align:center">🥈 Argent</span><span style="color:var(--stone)">50 000 F d’achats · bonus 1 000 F + 1,5 %</span></div>
               </div>
             </div>
           </div>
@@ -977,10 +961,30 @@ setTimeout(() => {
     </section>
 
 
+    <!-- Section Parrainage -->
+    <section class="acc-card" id="sec-parrainage" style="display:none">
+      <h2>🤝 Parrainage</h2>
+      <p class="sub">Parrainez vos amis : vous gagnez <strong>500 F</strong> quand un ami récupère une commande de plus de 3 000 F (5 amis maximum).</p>
+      <div class="stats-grid">
+        <div class="stat"><div class="stat-v" id="pa-att">0</div><div class="stat-l">Amis inscrits</div></div>
+        <div class="stat"><div class="stat-v" id="pa-ok">0</div><div class="stat-l">Parrainages validés</div></div>
+        <div class="stat"><div class="stat-v" id="pa-gain">0 F</div><div class="stat-l">Gagné</div></div>
+      </div>
+      <div style="margin-top:18px;padding:16px;border:1px solid rgba(212,175,55,.2);border-radius:10px;background:var(--bg2)">
+        <p style="font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--or);margin:0 0 8px">Votre code</p>
+        <p id="pa-code" style="font-size:1.6rem;font-weight:700;letter-spacing:.2em;color:var(--ink);margin:0 0 12px">—</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a id="pa-wa" target="_blank" rel="noopener" style="padding:11px 18px;border-radius:6px;background:#25D366;color:#fff;font-weight:600;text-decoration:none">💬 Partager sur WhatsApp</a>
+          <button type="button" id="pa-copy" style="padding:11px 18px;border-radius:6px;border:1px solid rgba(212,175,55,.3);background:transparent;color:var(--ink);font-weight:600;cursor:pointer">🔗 Copier mon lien</button>
+        </div>
+      </div>
+      <p style="font-size:.78rem;color:var(--stone);line-height:1.6;margin-top:14px">Votre ami crée son compte avec votre lien. Votre gain est ajouté quand sa commande est récupérée : directement dans votre cagnotte si elle est débloquée, sinon il compte comme 500 F d’achats vers les 10 000 F.</p>
+    </section>
+
     <!-- Section Commandes -->
     <section class="acc-card" id="sec-commandes" style="display:none">
       <h2>🛒 Mes commandes</h2>
-      <p class="sub">Historique de toutes vos commandes SenExport.</p>
+      <p class="sub">Historique de toutes vos commandes SenMarché.</p>
       <div id="cmd-list"><div class="loading">Chargement...</div></div>
     </section>
 
@@ -1036,13 +1040,6 @@ setTimeout(() => {
           </div>
           <input type="checkbox" id="pref-appel" checked style="width:20px;height:20px;accent-color:var(--or);flex-shrink:0">
         </label>
-        <label style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(255,255,255,.04);border:1px solid var(--or-line);border-radius:6px;cursor:pointer;gap:1rem">
-          <div>
-            <p style="font-size:.88rem;font-weight:600;color:var(--ink);margin-bottom:3px">Points de fidélité et récompenses</p>
-            <p style="font-size:.75rem;color:var(--stone)">Être notifié à chaque gain de points et lors d'un passage de niveau</p>
-          </div>
-          <input type="checkbox" id="pref-points" checked style="width:20px;height:20px;accent-color:var(--or);flex-shrink:0">
-        </label>
       </div>
 
       <div class="divider" style="margin:28px 0"></div>
@@ -1068,7 +1065,7 @@ setTimeout(() => {
       <!-- Top : marque + tier -->
       <div class="lc-card-top">
         <div class="lc-brand-block">
-          <div class="lc-brand">SenExport</div>
+          <div class="lc-brand">SenMarché</div>
           <div class="lc-sub">Carte Fidélité</div>
         </div>
         <div class="lc-tier-pill" id="lc-tier-pill">BRONZE</div>
@@ -1156,11 +1153,11 @@ setTimeout(() => {
 document.addEventListener('se:auth-changed', () => SE.Onboarding && SE.Onboarding.maybeShow());
 setTimeout(() => SE.Onboarding && SE.Onboarding.maybeShow(), 1500);
 
-/* Paliers de la cagnotte (matchent le trigger SQL côté Supabase — fn_palier_cagnotte) */
+/* Paliers de la cagnotte (doivent correspondre à fn_cagnotte_apres_commande côté Supabase — 02_cagnotte_nouvelles_regles.sql) */
 const TIERS = [
-  { name:'Bronze', min:0,      class:'tier-bronze', benefit:'+500 F au passage',   next:'Argent', nextAt:50000,  bonus:500 },
-  { name:'Argent', min:50000,  class:'tier-argent', benefit:'+2 000 F au passage', next:'Or',     nextAt:500000, bonus:2000 },
-  { name:'Or',     min:500000, class:'tier-or',     benefit:'+5 000 F au passage', next:null,     nextAt:null,   bonus:5000 },
+  { name:'Membre', min:0,     class:'tier-bronze', benefit:'Cagnotte dès 10 000 F d’achats', next:'Bronze', nextAt:10000, bonus:0,    rate:0 },
+  { name:'Bronze', min:10000, class:'tier-bronze', benefit:'1 % de chaque commande',         next:'Argent', nextAt:50000, bonus:0,    rate:0.01 },
+  { name:'Argent', min:50000, class:'tier-argent', benefit:'1 000 F de bonus + 1,5 %',       next:null,     nextAt:null,  bonus:1000, rate:0.015 },
 ];
 
 // Palier calculé sur le TOTAL DÉPENSÉ cumulé (pas sur le solde de cagnotte)
@@ -1276,6 +1273,7 @@ function fillModalQR(c){
   document.getElementById('side-nom').textContent = nom;
   document.getElementById('side-email').textContent = u.email || u.phone || '';
   
+  renderParrainage(c);
   /* ─── Carte fidélité (cagnotte) ─── */
   const solde = c?.cagnotte_solde || 0;
   const totalDepense = c?.total_depense || 0;
@@ -1347,9 +1345,9 @@ function fillModalQR(c){
   
   /* ─── Progression vers palier suivant ─── */
   const tp = document.getElementById('tier-progress');
-  document.getElementById('tier-current').textContent = `Palier ${tier.name}`;
+  document.getElementById('tier-current').textContent = tier.min === 0 ? 'Cagnotte à débloquer' : `Palier ${tier.name}`;
   if (tier.next){
-    document.getElementById('tier-next').textContent = `→ ${tier.next} à ${SE.fprix(tier.nextAt)}`;
+    document.getElementById('tier-next').textContent = `→ ${tier.min === 0 ? 'Cagnotte' : tier.next} à ${SE.fprix(tier.nextAt)}`;
     const range = tier.nextAt - tier.min;
     const progress = totalDepense - tier.min;
     const pct = Math.min(100, Math.max(0, (progress / range) * 100));
@@ -1361,7 +1359,7 @@ function fillModalQR(c){
     /* Or atteint */
     document.getElementById('tier-next').textContent = '🏆 Palier maximum atteint';
     document.getElementById('tier-fill').style.width = '100%';
-    document.getElementById('tier-points-needed').parentElement.innerHTML = '🥇 Vous bénéficiez du <strong>palier Or</strong>, le plus haut niveau de la cagnotte !';
+    document.getElementById('tier-points-needed').parentElement.innerHTML = '🥈 Vous bénéficiez du <strong>palier Argent</strong>, le plus haut niveau de la cagnotte !';
   }
   
   /* ─── Pré-remplit paramètres ─── */
@@ -1380,7 +1378,6 @@ function fillModalQR(c){
     setCheck('pref-arrivages', 'notif_produits');
     setCheck('pref-commandes', 'notif_commandes');
     setCheck('pref-appel',     'notif_appel');
-    setCheck('pref-points',    'notif_points');
   } else {
     document.getElementById('p-email').value = u.email || '';
     document.getElementById('p-nom').value = u.user_metadata?.full_name || '';
@@ -1424,6 +1421,7 @@ async function renderPointsHistory(){
     bonus_palier:     { icon:'🏆', lbl:'Bonus de palier' },
     utilisation_site: { icon:'🌐', lbl:'Utilisé sur le site' },
     utilisation_depot:{ icon:'🏢', lbl:'Utilisé au dépôt' },
+    parrainage:       { icon:'🤝', lbl:'Parrainage' },
   };
 
   const rows = data.map(m => {
@@ -1478,15 +1476,7 @@ async function loadCommandes(){
     // Le client voit 4 étapes simples : Reçue → Confirmée → En route → Reçue
     // Mode livraison : Reçue → Confirmée → En route → Livrée
     // Mode retrait   : Reçue → Confirmée → Prête au dépôt → Récupérée
-    const map = {
-      'nouvelle':       0,  // Reçue
-      'confirmee':      1,  // Confirmée
-      'en_preparation': 1,  // (vu comme "Confirmée" par le client — il sait pas qu'on prépare)
-      'prete_retrait':  2,  // Prête au retrait (mode retrait)
-      'en_livraison':   2,  // En route (mode livraison)
-      'livree':         3,  // Reçue
-      'annulee':       -1,  // Annulée
-    };
+    const map = { 'nouvelle':0, 'confirmee':1, 'en_preparation':2, 'prete_retrait':3, 'en_livraison':3, 'livree':4, 'annulee':-1 };
     return map[statut] !== undefined ? map[statut] : 0;
   }
   
@@ -1495,13 +1485,13 @@ async function loadCommandes(){
     const itemCount = items.reduce((s,i) => s + (i.qte || 1), 0);
     const date = cmd.created_at ? new Date(cmd.created_at).toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'}) : '';
     const step = getClientStep(cmd.statut, cmd.mode_livraison);
-    const isLivraison = false;
+    const isLivraison = cmd.mode_livraison === 'livraison';
     const isAnnulee = cmd.statut === 'annulee';
     
     // Labels selon mode
     const stepLabels = isLivraison
-      ? ['Reçue', 'Confirmée', 'En route', 'Livrée']
-      : ['Reçue', 'Confirmée', 'Prête au retrait', 'Récupérée'];
+      ? ['Reçue', 'Confirmée', 'Préparation', 'En route', 'Livrée']
+      : ['Reçue', 'Confirmée', 'Préparation', 'Prête', 'Récupérée'];
     
     // Construire le tracker
     let trackerHTML = '';
@@ -1570,6 +1560,24 @@ async function loadCommandes(){
   }).join('');
 }
 
+/* Parrainage : code, lien WhatsApp, compteurs */
+async function renderParrainage(c){
+  const el = document.getElementById('pa-code'); if (!el) return;
+  const code = c && c.code_parrainage;
+  if (!code){ el.textContent = 'Bientôt disponible'; return; }
+  el.textContent = code;
+  const link = location.origin + '/connexion.html?ref=' + code;
+  document.getElementById('pa-wa').href = 'https://wa.me/?text=' + encodeURIComponent('Salut ! Je t’invite sur SenMarché. Crée ton compte avec mon lien : ' + link);
+  document.getElementById('pa-copy').onclick = async () => { try { await navigator.clipboard.writeText(link); SE.toast('Lien copié', true); } catch (e) { SE.toast(link, true); } };
+  try {
+    const { data } = await SE.sb.from('parrainages').select('statut,montant').eq('parrain_id', SE.Auth.currentUser.id);
+    const rows = data || [], ok = rows.filter(r => r.statut === 'credite');
+    document.getElementById('pa-att').textContent = rows.length;
+    document.getElementById('pa-ok').textContent = ok.length;
+    document.getElementById('pa-gain').textContent = SE.fprix(ok.reduce((s, r) => s + (r.montant || 0), 0));
+  } catch (e) {}
+}
+
 /* Navigation entre sections */
 document.querySelectorAll('.side-nav a[data-section]').forEach(a => {
   a.addEventListener('click', e => {
@@ -1577,7 +1585,7 @@ document.querySelectorAll('.side-nav a[data-section]').forEach(a => {
     const sec = a.dataset.section;
     document.querySelectorAll('.side-nav a[data-section]').forEach(x => x.classList.remove('active'));
     a.classList.add('active');
-    ['overview','commandes','parametres'].forEach(s => {
+    ['overview','parrainage','commandes','parametres'].forEach(s => {
       document.getElementById('sec-'+s).style.display = (s===sec) ? 'block' : 'none';
     });
   });
@@ -1591,7 +1599,6 @@ document.getElementById('btn-save').addEventListener('click', async () => {
     notif_produits:   document.getElementById('pref-arrivages')?.checked ?? true,
     notif_commandes:  document.getElementById('pref-commandes')?.checked ?? true,
     notif_appel:      document.getElementById('pref-appel')?.checked ?? true,
-    notif_points:     document.getElementById('pref-points')?.checked ?? true,
   };
 
   const updates = {
@@ -1702,6 +1709,5 @@ document.addEventListener('keydown', (e) => {
 </script>
 <script>if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("/service-worker.js").catch(()=>{}));</script>
 <script src="theme.js"></script>
-<script src="animations.js"></script>
 </body>
 </html>
